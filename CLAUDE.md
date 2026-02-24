@@ -5,8 +5,8 @@
      Keep this file under ~150 lines — Claude loads it every session.
      See the guide at docs/workflow-guide.html for full documentation. -->
 
-**Project:** [YOUR PROJECT NAME]
-**Institution:** [YOUR INSTITUTION]
+**Project:** Intellectual Property Financing, R&D Investment, and Aggregate TFP
+**Institution:** Renmin University of China
 **Branch:** main
 
 ---
@@ -28,16 +28,19 @@
 ├── CLAUDE.MD                    # This file
 ├── .claude/                     # Rules, skills, agents, hooks
 ├── Bibliography_base.bib        # Centralized bibliography
-├── Figures/                     # Figures and images
-├── Preambles/header.tex         # LaTeX headers
-├── Slides/                      # Beamer .tex files
+├── Paper/                       # Paper drafts (LaTeX)
+├── Figures/                     # Figures and tables
+├── Models/                      # Model documentation
+├── Empirical/                   # Empirical analysis scripts
+│   ├── data/                    # Datasets (documented provenance)
+│   └── R/                       # R scripts for analysis
 ├── Quarto/                      # RevealJS .qmd files + theme
 ├── docs/                        # GitHub Pages (auto-generated)
-├── scripts/                     # Utility scripts + R code
+├── scripts/                     # Utility scripts
 ├── quality_reports/             # Plans, session logs, merge reports
 ├── explorations/                # Research sandbox (see rules)
 ├── templates/                   # Session log, quality report templates
-└── master_supporting_docs/      # Papers and existing slides
+└── master_supporting_docs/      # Papers and supporting materials
 ```
 
 ---
@@ -45,11 +48,14 @@
 ## Commands
 
 ```bash
-# LaTeX (3-pass, XeLaTeX only)
-cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-BIBINPUTS=..:$BIBINPUTS bibtex file
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
+# LaTeX Paper (3-pass, XeLaTeX only)
+cd Paper && xelatex -interaction=nonstopmode paper.tex
+BIBINPUTS=..:$BIBINPUTS bibtex paper
+xelatex -interaction=nonstopmode paper.tex
+xelatex -interaction=nonstopmode paper.tex
+
+# Beamer Slides (if needed)
+cd Slides && xelatex -interaction=nonstopmode slides.tex
 
 # Deploy Quarto to GitHub Pages
 ./scripts/sync_to_docs.sh LectureN
@@ -102,32 +108,33 @@ python scripts/quality_score.py Quarto/file.qmd
 
 ## Beamer Custom Environments
 
-| Environment       | Effect        | Use Case       |
-|-------------------|---------------|----------------|
-| `[your-env]`      | [Description] | [When to use]  |
-
-<!-- Example entries (delete and replace with yours):
-| `keybox` | Gold background box | Key points |
-| `highlightbox` | Gold left-accent box | Highlights |
-| `definitionbox[Title]` | Blue-bordered titled box | Formal definitions |
--->
+| Environment | Effect | Use Case |
+|-------------|--------|----------|
+| `modelbox` | Blue-bordered box | Model specifications |
+| `resultbox` | Gold-bordered box | Key empirical results |
+| `assumptionbox` | Gold background box | Model assumptions |
+| `calibbox` | Light blue box | Calibration targets |
+| `keybox` | Gold left-accent box | Key takeaways |
 
 ## Quarto CSS Classes
 
-| Class              | Effect        | Use Case       |
-|--------------------|---------------|----------------|
-| `[.your-class]`    | [Description] | [When to use]  |
-
-<!-- Example entries (delete and replace with yours):
+| Class | Effect | Use Case |
+|-------|--------|----------|
+| `.modelbox` | Blue left border | Model specifications |
+| `.resultbox` | Gold border, light bg | Key empirical results |
+| `.assumptionbox` | Gold border | Model assumptions |
+| `.calibbox` | Light blue background | Calibration targets |
 | `.smaller` | 85% font | Dense content slides |
 | `.positive` | Green bold | Good annotations |
--->
+| `.negative` | Red bold | Problematic results |
 
 ---
 
 ## Current Project State
 
-| Lecture | Beamer | Quarto | Key Content |
-|---------|--------|--------|-------------|
-| 1: [Topic] | `Lecture01_Topic.tex` | `Lecture1_Topic.qmd` | [Brief description] |
-| 2: [Topic] | `Lecture02_Topic.tex` | -- | [Brief description] |
+| Component | Status | Files | Key Content |
+|-----------|--------|-------|-------------|
+| Paper Draft | In Progress | `Paper/paper.tex` | IP financing and TFP framework |
+| Model Documentation | Planned | `Models/` | Theoretical model derivations |
+| Empirical Analysis | Planned | `Empirical/R/` | R&D misallocation quantification |
+| Supporting Slides | Optional | `Quarto/` | Presentation versions |

@@ -53,3 +53,8 @@ Thumbs.db
 # Output artifacts — uncomment lines below based on your preference
 # *.rds
 # output/**/*.rds
+Draft/Main_Finance_RD_draft.pdf
+.gitignore
+Draft/Main_Finance_RD_draft.tex
+quality_reports/Main_Finance_RD_draft_proofread_report.md
+.gitignore

@@ -48,26 +48,26 @@ Repeat
 
 ---
 
-## Non-Negotiables (Customize These)
+## Non-Negotiables (Locked-In Standards)
 
-<!-- Replace with YOUR project's locked-in preferences -->
+<!-- These are immutable for the IP Financing & TFP project -->
 
-- [YOUR PATH CONVENTION] (e.g., `here::here()` for R, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `set.seed()` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
+- **Path convention:** `here::here()` for R scripts, project-relative paths for LaTeX
+- **Seed convention:** `set.seed()` at top of all stochastic simulations, seed documented
+- **Figure standards:** White background, 300 DPI, RUC institutional theme
+- **Color palette:** Primary #AE0B2A (RUC red), secondary #8B6F4E (gold accent)
+- **Tolerance thresholds:** 1e-6 for point estimates, 1e-4 for aggregate statistics
 
 ---
 
 ## Preferences
 
-<!-- Fill in as you discover your working style -->
+<!-- Working style preferences for IP Financing project -->
 
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
+**Visual:** Publication-ready figures, consistent styling across all plots, institutional colors
+**Reporting:** Concise summary with key metrics by default; detailed prose on request
 **Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
+**Replication:** Strict — flag any deviations >1e-6; document all near-misses
 
 ---
 
