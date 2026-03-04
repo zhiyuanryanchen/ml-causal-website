@@ -10,8 +10,8 @@ project:
 
 website:
   title: "机器学习与因果推断"
-  site-url: https://zhiyuanryanchen.github.io/ml-causal-inference
-  repo-url: https://github.com/zhiyuanryanchen/ml-causal-inference
+  site-url: https://zhiyuanryanchen.github.io/ml-causal-website
+  repo-url: https://github.com/zhiyuanryanchen/ml-causal-website
 
   navbar:
     left:
@@ -29,7 +29,7 @@ website:
         file: resources.qmd
     right:
       - icon: github
-        href: https://github.com/zhiyuanryanchen/ml-causal-inference
+        href: https://github.com/zhiyuanryanchen/ml-causal-website
         aria-label: GitHub
 
   page-footer:
@@ -39,7 +39,7 @@ website:
         href: "mailto:chenzhiyuan@rmbs.ruc.edu.cn"
     right:
       - text: "课程仓库"
-        href: https://github.com/zhiyuanryanchen/ml-causal-inference
+        href: https://github.com/zhiyuanryanchen/ml-causal-website
 
   sidebar:
     - title: "课程资料"
