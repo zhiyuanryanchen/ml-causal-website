@@ -1,0 +1,305 @@
+[
+  {
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "学习资源",
+    "section": "",
+    "text": "Angrist, J.D. & Pischke, J.S. (2020)\n经济学因果推断的经典教材，语言通俗，案例丰富。重点阅读第1-5章。\n豆瓣链接\n\n\n\nHuntington-Klein, N. (2022)\n从研究设计的角度系统介绍因果推断，配有R和Stata代码。\n在线阅读\n\n\n\nChernozhukov et al. (2024)\n机器学习与因果推断结合的最新教材，免费在线阅读。\n在线阅读\n\n\n\n\n\nCunningham, S. (2021). Causal Inference: The Mixtape. 在线阅读\nImbens, G.W. & Rubin, D.B. (2015). Causal Inference in Statistics, Social, and Biomedical Sciences"
+  },
+  {
+    "objectID": "resources.html#推荐教材",
+    "href": "resources.html#推荐教材",
+    "title": "学习资源",
+    "section": "",
+    "text": "Angrist, J.D. & Pischke, J.S. (2020)\n经济学因果推断的经典教材，语言通俗，案例丰富。重点阅读第1-5章。\n豆瓣链接\n\n\n\nHuntington-Klein, N. (2022)\n从研究设计的角度系统介绍因果推断，配有R和Stata代码。\n在线阅读\n\n\n\nChernozhukov et al. (2024)\n机器学习与因果推断结合的最新教材，免费在线阅读。\n在线阅读\n\n\n\n\n\nCunningham, S. (2021). Causal Inference: The Mixtape. 在线阅读\nImbens, G.W. & Rubin, D.B. (2015). Causal Inference in Statistics, Social, and Biomedical Sciences"
+  },
+  {
+    "objectID": "resources.html#在线资源",
+    "href": "resources.html#在线资源",
+    "title": "学习资源",
+    "section": "在线资源",
+    "text": "在线资源\n\nPython库\n\n\n\n库名\n用途\n文档链接\n\n\n\n\nEconML\n微软开发的因果推断ML库\n文档\n\n\nDoubleML\n双重机器学习实现\n文档\n\n\nCausalML\nUber开发的因果ML库\n文档\n\n\nDoWhy\n因果推理端到端框架\n文档\n\n\nstatsmodels\n传统计量经济学方法\n文档\n\n\n\n\n\nR包\n\n\n\n包名\n用途\n文档链接\n\n\n\n\nMatchIt\n倾向得分匹配\nCRAN\n\n\nfixest\n固定效应估计\n文档\n\n\ngrf\n广义随机森林\nCRAN\n\n\nDoubleML\n双重机器学习\n文档\n\n\nrdrobust\n断点回归\nCRAN\n\n\n\n\n\n在线课程\n\nHarvard Gov 2003: 因果推断研究生课程\nStanford Econ 293: 机器学习与因果推断\nFast.ai: Practical Deep Learning for Coders（第2部分涉及因果推断）\n\n\n\n博客与文章\n\nAndrew Gelman’s Blog: Statistical Modeling, Causal Inference, and Social Science\nScott Cunningham’s Substack: Causal Inference with C"
+  },
+  {
+    "objectID": "resources.html#数据集资源",
+    "href": "resources.html#数据集资源",
+    "title": "学习资源",
+    "section": "数据集资源",
+    "text": "数据集资源\n\n经典数据集\n\n\n\n数据集\n描述\n用途\n\n\n\n\nLaLonde (1986)\n就业培训项目评估\n匹配法教学\n\n\nCard & Krueger (1994)\n最低工资对就业的影响\nDID教学\n\n\nAbadie et al. (2010)\n加州控烟法案\n合成控制法\n\n\nAngrist & Evans (1998)\n家庭规模与劳动供给\nIV教学\n\n\n\n\n\n数据仓库\n\nKaggle: Datasets\nUCI Machine Learning Repository: Archive\nGoogle Dataset Search: Search\nOur World in Data: Data"
+  },
+  {
+    "objectID": "resources.html#软件安装指南",
+    "href": "resources.html#软件安装指南",
+    "title": "学习资源",
+    "section": "软件安装指南",
+    "text": "软件安装指南\n\nPython环境\n# 推荐使用conda创建虚拟环境\nconda create -n ml-causal python=3.11\nconda activate ml-causal\n\n# 安装核心包\npip install numpy pandas matplotlib seaborn scikit-learn jupyter\n\n# 安装因果推断专用包\npip install econml doubleml causalml dowhy\n\n\nR环境\n# 安装核心包\ninstall.packages(c(\"tidyverse\", \"ggplot2\", \"fixest\", \"MatchIt\", \"grf\"))\n\n# 安装DoubleML\ninstall.packages(\"DoubleML\")\n\n\nJupyter Notebook\n推荐使用JupyterLab作为开发环境：\npip install jupyterlab\njupyter lab\n或使用VS Code + Jupyter插件。"
+  },
+  {
+    "objectID": "resources.html#编程规范",
+    "href": "resources.html#编程规范",
+    "title": "学习资源",
+    "section": "编程规范",
+    "text": "编程规范\n\nPython代码规范\n\n遵循PEP 8风格指南\n使用有意义的变量名\n添加文档字符串（docstrings）\n固定随机种子保证可重复性\n\nimport numpy as np\nimport pandas as pd\n\n# 固定随机种子\nnp.random.seed(42)\n\n# 清晰的变量名\ntreatment_effect = -2.0  # 真实处理效应\nconfounding_strength = 3.0  # 混淆强度\n\n# 添加注释\n# 生成混淆变量：疫情严重程度\nseverity = np.random.normal(0, 1, n_cities)\n\n\nR代码规范\n\n使用tidyverse风格\n管道操作符 |&gt;\n有意义的变量名\n固定随机种子\n\nlibrary(tidyverse)\n\n# 固定随机种子\nset.seed(42)\n\n# 使用管道和清晰命名\ndata &lt;- tibble(\n  severity = rnorm(n),\n  treatment = ifelse(severity &gt; 0, 1, 0)\n) |&gt;\n  mutate(\n    recovery = 10 + severity * 3 + treatment * true_effect\n  )"
+  },
+  {
+    "objectID": "resources.html#ai辅助工具",
+    "href": "resources.html#ai辅助工具",
+    "title": "学习资源",
+    "section": "AI辅助工具",
+    "text": "AI辅助工具\n\n大语言模型\n\nClaude: claude.ai - 代码生成与解释\nChatGPT: chat.openai.com - 概念解释与讨论\nGitHub Copilot: IDE集成，自动补全代码\n\n\n\n使用建议\n\n明确提示：描述清楚数据结构和分析目标\n迭代优化：根据输出逐步调整提示词\n验证结果：始终验证AI生成代码的正确性\n理解原理：不要只复制代码，要理解背后的逻辑"
+  },
+  {
+    "objectID": "resources.html#学术资源",
+    "href": "resources.html#学术资源",
+    "title": "学习资源",
+    "section": "学术资源",
+    "text": "学术资源\n\n顶级期刊\n\nEconometrica: 计量经济学顶级期刊\nJournal of Political Economy: 经济学综合顶刊\nReview of Economic Studies: 理论与实证并重\nJournal of Econometrics: 计量方法专刊\nJournal of Machine Learning Research: 机器学习顶刊\n\n\n\n预印本平台\n\narXiv: stat.ML, econ.EM\nSSRN: 社会科学研究网络\n\n\n\n学术搜索引擎\n\nGoogle Scholar: scholar.google.com\nEconPapers: econpapers.repec.org\nJSTOR: 经济学历史文献"
+  },
+  {
+    "objectID": "resources.html#联系我们",
+    "href": "resources.html#联系我们",
+    "title": "学习资源",
+    "section": "联系我们",
+    "text": "联系我们\n如有资源推荐或链接失效，请通过以下方式联系：\n\n📧 邮箱: chenzhiyuan@rmbs.ruc.edu.cn\n🏢 办公室: 919\n🕒 Office Hours: 周四 14:00-15:00"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "机器学习与因果推断",
+    "section": "",
+    "text": "培养用数据回答”为什么”的能力，而不只是”是什么”",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "index.html#从相关性到因果性",
+    "href": "index.html#从相关性到因果性",
+    "title": "机器学习与因果推断",
+    "section": "",
+    "text": "培养用数据回答”为什么”的能力，而不只是”是什么”",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "index.html#课程信息",
+    "href": "index.html#课程信息",
+    "title": "机器学习与因果推断",
+    "section": "课程信息",
+    "text": "课程信息\n\n\n\n基本信息\n\n课程名称: 机器学习与因果推断\n学分: 3学分\n时间: 周一 14:00-16:30\n地点: 明德商学楼 0105\n学期: 2025-2026学年春季学期\n\n\n\n授课教师\n陈志远 中国人民大学商学院 助理教授（贸易经济系） 📧 chenzhiyuan@rmbs.ruc.edu.cn 🏢 办公室: 919 🕒 Office Hours: 周四 14:00-15:00\n\n\n\n\n快速链接\n\n📋 课程大纲\n📊 第一讲课件\n📖 第一讲详细讲义\n💻 课程代码仓库\n\n\n\n最新公告\n\n\n\n\n\n\n2026-03-04\n第一讲课件和详细讲义已发布！\n📖 查看课件\n📚 查看详细讲义",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "index.html#课程描述",
+    "href": "index.html#课程描述",
+    "title": "机器学习与因果推断",
+    "section": "课程描述",
+    "text": "课程描述\n本课程系统介绍因果推断的理论基础与机器学习方法的结合，培养学生运用数据回答”为什么”的能力。课程分为两大模块：\n\n模块一：经典因果推断方法（前8周）\n\n\n\n周次\n主题\n核心内容\n\n\n\n\n1\n课程导论\n相关vs因果，潜在结果框架入门\n\n\n2-3\n因果推断基础\n潜在结果框架深入，混淆变量，识别策略\n\n\n4\n匹配法\n倾向得分匹配，精确匹配，重叠条件\n\n\n5-6\n双重差分\nDID原理，平行趋势检验，动态效应\n\n\n7\n合成控制法\n合成控制原理，安慰剂检验\n\n\n8\n工具变量法\nIV原理，2SLS，排他性约束\n\n\n\n\n\n模块二：机器学习与因果推断（后6周）\n\n\n\n周次\n主题\n核心内容\n\n\n\n\n9-10\nML基础\n回归，决策树，随机森林，交叉验证\n\n\n11-12\n广义随机森林\n异质性处理效应，置信区间\n\n\n13\n因果森林\n异质性分析，Policy Learning\n\n\n14\n双重机器学习\nDouble ML，Neyman正交性\n\n\n15-16\n项目答辩\n期末展示与点评",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "index.html#为什么要学习因果推断",
+    "href": "index.html#为什么要学习因果推断",
+    "title": "机器学习与因果推断",
+    "section": "为什么要学习因果推断？",
+    "text": "为什么要学习因果推断？\n\n\n\n现实需求\n\n营销投入真的带来销量增长了吗？\n新产品上线真的提升了用户留存吗？\n培训项目真的提高了员工绩效吗？\n政策调整真的促进了经济发展吗？\n\n\n\n\n技术趋势\n\n🚀 AI时代的核心技能\n📊 数据驱动决策的标配\n🌍 学术界与业界的通用语言\n💡 从”跑数”到”洞察”的跃迁",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "index.html#课程特色",
+    "href": "index.html#课程特色",
+    "title": "机器学习与因果推断",
+    "section": "课程特色",
+    "text": "课程特色\n\n\n\n🤖 AI辅助编程\n传统编程与Vibe Coding结合，提升学习效率\n\n\n\n\n🐍 Python + R\n双语言实践，覆盖主流数据科学生态\n\n\n\n\n📚 理论与实践\n经典方法与前沿ML方法并重，案例驱动",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "index.html#推荐教材",
+    "href": "index.html#推荐教材",
+    "title": "机器学习与因果推断",
+    "section": "推荐教材",
+    "text": "推荐教材\n\nAngrist & Pischke (2020). 《基本无害的计量经济学》\nHuntington-Klein (2022). The Effect: An Introduction to Research Design and Causality\nChernozhukov et al. (2024). Applied Causal Inference Powered by ML and AI (在线阅读)\nCunningham (2021). Causal Inference: The Mixtape (在线阅读)",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "index.html#在线资源",
+    "href": "index.html#在线资源",
+    "title": "机器学习与因果推断",
+    "section": "在线资源",
+    "text": "在线资源\n\nEconML文档（微软）\nDoubleML文档\nCausalML (Uber)\n课程Gitee仓库",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "index.html#开始学习",
+    "href": "index.html#开始学习",
+    "title": "机器学习与因果推断",
+    "section": "开始学习",
+    "text": "开始学习\n\n\n📊 查看第一讲课件\n\n\n📖 查看详细讲义",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "syllabus.html",
+    "href": "syllabus.html",
+    "title": "课程大纲",
+    "section": "",
+    "text": "项目\n内容\n\n\n\n\n课程名称\n机器学习与因果推断\n\n\n英文名称\nMachine Learning and Causal Inference\n\n\n学分\n3学分\n\n\n授课时间\n周一 14:00-16:30\n\n\n授课地点\n明德商学楼 0105\n\n\n授课教师\n陈志远\n\n\n邮箱\nchenzhiyuan@rmbs.ruc.edu.cn\n\n\n办公室\n919\n\n\nOffice Hours\n周四 14:00-15:00",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "课程大纲"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#课程基本信息",
+    "href": "syllabus.html#课程基本信息",
+    "title": "课程大纲",
+    "section": "",
+    "text": "项目\n内容\n\n\n\n\n课程名称\n机器学习与因果推断\n\n\n英文名称\nMachine Learning and Causal Inference\n\n\n学分\n3学分\n\n\n授课时间\n周一 14:00-16:30\n\n\n授课地点\n明德商学楼 0105\n\n\n授课教师\n陈志远\n\n\n邮箱\nchenzhiyuan@rmbs.ruc.edu.cn\n\n\n办公室\n919\n\n\nOffice Hours\n周四 14:00-15:00",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "课程大纲"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#课程描述",
+    "href": "syllabus.html#课程描述",
+    "title": "课程大纲",
+    "section": "课程描述",
+    "text": "课程描述\n本课程旨在培养学生运用数据回答”为什么”的能力，系统介绍因果推断的理论基础与机器学习方法的结合。课程分为两大模块：\n模块一（前8周）：经典因果推断方法，包括潜在结果框架、匹配法、双重差分、合成控制法、工具变量法等经济学主流方法。\n模块二（后6周）：机器学习与因果推断的结合，包括广义随机森林、因果森林、双重机器学习等前沿方法。",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "课程大纲"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#学习目标",
+    "href": "syllabus.html#学习目标",
+    "title": "课程大纲",
+    "section": "学习目标",
+    "text": "学习目标\n完成本课程后，学生应能够：\n\n理解相关性与因果性的区别，识别常见偏误来源\n掌握潜在结果框架的核心概念\n应用匹配法、DID、IV等方法进行因果效应估计\n使用机器学习方法估计异质性处理效应\n评估因果推断策略的合理性并进行稳健性检验\n独立完成一个应用研究项目",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "课程大纲"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#考核方式",
+    "href": "syllabus.html#考核方式",
+    "title": "课程大纲",
+    "section": "考核方式",
+    "text": "考核方式\n\n\n\n考核项目\n占比\n说明\n\n\n\n\n平时表现\n10%\n出勤率 + 课堂参与\n\n\n作业（4次）\n40%\n理论题 + 编程实践\n\n\n期末项目\n50%\n小组研究项目 + 课堂答辩\n\n\n\n\n作业安排\n\n作业1（第4周）：潜在结果框架与模拟分析\n作业2（第7周）：匹配法与双重差分应用\n作业3（第11周）：工具变量与合成控制\n作业4（第14周）：机器学习方法实践\n\n\n\n期末项目\n\n组队：3-4人一组\n选题：选择真实商业或政策问题，应用课程方法进行分析\n要求：\n\n提交研究报告（3000-5000字）\n课堂展示（15分钟 + 5分钟问答）\n提供可复现的代码和数据",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "课程大纲"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#课程安排",
+    "href": "syllabus.html#课程安排",
+    "title": "课程大纲",
+    "section": "课程安排",
+    "text": "课程安排\n\n模块一：经典因果推断方法\n\n\n\n\n\n\n\n\n\n\n周次\n日期\n主题\n内容要点\n阅读材料\n\n\n\n\n1\n3/2\n课程导论\n相关vs因果，课程框架，潜在结果框架入门\nMHE Ch.1-2\n\n\n2\n3/9\n潜在结果框架\n因果效应定义，识别假设，随机实验\nMHE Ch.2\n\n\n3\n3/16\n观察性研究\n条件独立假设，重叠条件，反事实预测\nMHE Ch.3\n\n\n4\n3/23\n匹配法\n倾向得分匹配，精确匹配，平衡检验\nMHE Ch.3, Mixtape Ch.5\n\n\n5\n3/30\n双重差分I\nDID原理，平行趋势假设，经典应用\nMHE Ch.5, Mixtape Ch.9\n\n\n6\n4/6\n双重差分II\n交错DID，动态效应，稳健性检验\nACRE Ch.16\n\n\n7\n4/13\n合成控制法\n构造合成对照组，安慰剂检验，案例\nMixtape Ch.10\n\n\n8\n4/20\n工具变量法\nIV原理，2SLS，排他性约束，弱IV\nMHE Ch.4, Mixtape Ch.7\n\n\n\n\n\n模块二：机器学习与因果推断\n\n\n\n\n\n\n\n\n\n\n周次\n日期\n主题\n内容要点\n阅读材料\n\n\n\n\n9\n4/27\nML基础I\n回归树，随机森林，交叉验证\nESL Ch.9, 15\n\n\n10\n5/4\nML基础II\n梯度提升，正则化，模型选择\nESL Ch.10\n\n\n11\n5/11\n广义随机森林\n异质性处理效应，置信区间，应用\nAthey & Wager (2019)\n\n\n12\n5/18\n因果森林\n异质性分析，Policy Learning\nAthey & Imbens (2016)\n\n\n13\n5/25\n双重机器学习\nNeyman正交性，去偏估计，高维控制\nChernozhukov et al. (2018)\n\n\n14\n6/1\n前沿专题\n因果推断与AI，大语言模型的应用\n前沿论文\n\n\n15\n6/8\n项目答辩I\n小组展示与讨论\n-\n\n\n16\n6/15\n项目答辩II\n小组展示与总结\n-\n\n\n\nMHE = Mostly Harmless Econometrics, Mixtape = Causal Inference: The Mixtape, ESL = Elements of Statistical Learning, ACRE = Applied Causal Inference Powered by ML and AI",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "课程大纲"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#推荐教材",
+    "href": "syllabus.html#推荐教材",
+    "title": "课程大纲",
+    "section": "推荐教材",
+    "text": "推荐教材\n\n主要教材\n\nAngrist, J.D. & Pischke, J.S. (2020). 《基本无害的计量经济学》. 中文版.\n\nMostly Harmless Econometrics: An Empiricist’s Companion. 英文原版.\n\nHuntington-Klein, N. (2022). The Effect: An Introduction to Research Design and Causality. Routledge.\n\n在线阅读\n\nChernozhukov, V., Hansen, C., Kallus, N., Spindler, M., & Syrgkanis, V. (2024). Applied Causal Inference Powered by ML and AI.\n\n在线阅读\n\n\n\n\n参考书目\n\nCunningham, S. (2021). Causal Inference: The Mixtape. Yale University Press.\n\n在线阅读\n\nHastie, T., Tibshirani, R., & Friedman, J. (2009). The Elements of Statistical Learning (2nd ed.). Springer.\n\n免费PDF\n\nImbens, G.W. & Rubin, D.B. (2015). Causal Inference in Statistics, Social, and Biomedical Sciences. Cambridge University Press.",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "课程大纲"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#软件与工具",
+    "href": "syllabus.html#软件与工具",
+    "title": "课程大纲",
+    "section": "软件与工具",
+    "text": "软件与工具\n\n编程语言\n\nPython: scikit-learn, pandas, numpy, matplotlib, econml, doubleml\nR: tidyverse, ggplot2, MatchIt, fixest, grf, DoubleML\n\n\n\n环境设置\n推荐使用以下方式之一：\n\n本地安装: Anaconda + Jupyter Notebook/Lab\n云端环境: Google Colab, Kaggle Notebooks\n版本控制: Git + GitHub/Gitee",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "课程大纲"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#学术诚信",
+    "href": "syllabus.html#学术诚信",
+    "title": "课程大纲",
+    "section": "学术诚信",
+    "text": "学术诚信\n\n作业可以讨论，但提交内容必须独立完成\n引用他人代码或成果必须明确标注来源\n抄袭（包括代码和文字）将导致该次作业零分\n期末项目鼓励团队合作，但需明确各成员贡献",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "课程大纲"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#课程政策",
+    "href": "syllabus.html#课程政策",
+    "title": "课程大纲",
+    "section": "课程政策",
+    "text": "课程政策\n\n出勤\n\n出勤率计入平时成绩\n请假需提前邮件告知\n无故缺勤超过3次将影响平时成绩\n\n\n\n作业提交\n\n通过课程网站或指定平台提交\n截止日期后每迟交一天扣10%\n迟交超过3天不予接受（特殊情况除外）\n\n\n\n答疑\n\nOffice Hours: 周四 14:00-15:00，919办公室\n邮件: 通常24小时内回复\n讨论区: 课程网站设有讨论区，鼓励同学互助",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "课程大纲"
+    ]
+  },
+  {
+    "objectID": "syllabus.html#更新日志",
+    "href": "syllabus.html#更新日志",
+    "title": "课程大纲",
+    "section": "更新日志",
+    "text": "更新日志\n\n\n\n日期\n更新内容\n\n\n\n\n2026-03-04\n网站上线，发布第一讲资料\n\n\n\n\n本大纲可能在学期中根据实际情况进行调整，最新版本以课程网站为准。",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "课程大纲"
+    ]
+  }
+]

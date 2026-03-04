@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>课程大纲 – 机器学习与因果推断</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-67e1af7abdb15bd5a2919d83736f6706.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1d3bf4f756b2d7d976d100948599046b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "没有结果",
+    "search-matching-documents-text": "匹配的文档",
+    "search-copy-link-title": "复制搜索链接",
+    "search-hide-matches-text": "隐藏其它匹配结果",
+    "search-more-match-text": "更多匹配结果",
+    "search-more-matches-text": "更多匹配结果",
+    "search-clear-button-title": "清除",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "取消",
+    "search-submit-button-title": "提交",
+    "search-label": "搜索"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">机器学习与因果推断</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="搜索"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="展开或折叠导航栏" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">首页</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./syllabus.html"> 
+<span class="menu-text">课程大纲</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">讲义</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-">    
+        <li>
+    <a class="dropdown-item" href="./Quarto/lecture01_students.html">
+ <span class="dropdown-text">第一讲：课程导论</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Quarto/lecture01_notes.html">
+ <span class="dropdown-text">第一讲：详细讲义</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="./resources.html"> 
+<span class="menu-text">资源</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/zhiyuanryanchen/ml-causal-inference"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">课程信息</a></li><li class="breadcrumb-item"><a href="./syllabus.html">课程大纲</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="展开或折叠侧边栏导航" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">课程信息</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">机器学习与因果推断</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./syllabus.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">课程大纲</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">讲义</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="展开或折叠此栏">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Quarto/lecture01_students.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">第一讲：课程导论</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Quarto/lecture01_notes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">第一讲：详细讲义</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">该页面内容</h2>
+   
+  <ul>
+  <li><a href="#课程基本信息" id="toc-课程基本信息" class="nav-link active" data-scroll-target="#课程基本信息">课程基本信息</a></li>
+  <li><a href="#课程描述" id="toc-课程描述" class="nav-link" data-scroll-target="#课程描述">课程描述</a></li>
+  <li><a href="#学习目标" id="toc-学习目标" class="nav-link" data-scroll-target="#学习目标">学习目标</a></li>
+  <li><a href="#考核方式" id="toc-考核方式" class="nav-link" data-scroll-target="#考核方式">考核方式</a>
+  <ul class="collapse">
+  <li><a href="#作业安排" id="toc-作业安排" class="nav-link" data-scroll-target="#作业安排">作业安排</a></li>
+  <li><a href="#期末项目" id="toc-期末项目" class="nav-link" data-scroll-target="#期末项目">期末项目</a></li>
+  </ul></li>
+  <li><a href="#课程安排" id="toc-课程安排" class="nav-link" data-scroll-target="#课程安排">课程安排</a>
+  <ul class="collapse">
+  <li><a href="#模块一经典因果推断方法" id="toc-模块一经典因果推断方法" class="nav-link" data-scroll-target="#模块一经典因果推断方法">模块一：经典因果推断方法</a></li>
+  <li><a href="#模块二机器学习与因果推断" id="toc-模块二机器学习与因果推断" class="nav-link" data-scroll-target="#模块二机器学习与因果推断">模块二：机器学习与因果推断</a></li>
+  </ul></li>
+  <li><a href="#推荐教材" id="toc-推荐教材" class="nav-link" data-scroll-target="#推荐教材">推荐教材</a>
+  <ul class="collapse">
+  <li><a href="#主要教材" id="toc-主要教材" class="nav-link" data-scroll-target="#主要教材">主要教材</a></li>
+  <li><a href="#参考书目" id="toc-参考书目" class="nav-link" data-scroll-target="#参考书目">参考书目</a></li>
+  </ul></li>
+  <li><a href="#软件与工具" id="toc-软件与工具" class="nav-link" data-scroll-target="#软件与工具">软件与工具</a>
+  <ul class="collapse">
+  <li><a href="#编程语言" id="toc-编程语言" class="nav-link" data-scroll-target="#编程语言">编程语言</a></li>
+  <li><a href="#环境设置" id="toc-环境设置" class="nav-link" data-scroll-target="#环境设置">环境设置</a></li>
+  </ul></li>
+  <li><a href="#学术诚信" id="toc-学术诚信" class="nav-link" data-scroll-target="#学术诚信">学术诚信</a></li>
+  <li><a href="#课程政策" id="toc-课程政策" class="nav-link" data-scroll-target="#课程政策">课程政策</a>
+  <ul class="collapse">
+  <li><a href="#出勤" id="toc-出勤" class="nav-link" data-scroll-target="#出勤">出勤</a></li>
+  <li><a href="#作业提交" id="toc-作业提交" class="nav-link" data-scroll-target="#作业提交">作业提交</a></li>
+  <li><a href="#答疑" id="toc-答疑" class="nav-link" data-scroll-target="#答疑">答疑</a></li>
+  </ul></li>
+  <li><a href="#更新日志" id="toc-更新日志" class="nav-link" data-scroll-target="#更新日志">更新日志</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">课程信息</a></li><li class="breadcrumb-item"><a href="./syllabus.html">课程大纲</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">课程大纲</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> 代码</button></div></div>
+<p class="subtitle lead">Syllabus</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="课程基本信息" class="level2">
+<h2 class="anchored" data-anchor-id="课程基本信息">课程基本信息</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">项目</th>
+<th style="text-align: left;">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>课程名称</strong></td>
+<td style="text-align: left;">机器学习与因果推断</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>英文名称</strong></td>
+<td style="text-align: left;">Machine Learning and Causal Inference</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>学分</strong></td>
+<td style="text-align: left;">3学分</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>授课时间</strong></td>
+<td style="text-align: left;">周一 14:00-16:30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>授课地点</strong></td>
+<td style="text-align: left;">明德商学楼 0105</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>授课教师</strong></td>
+<td style="text-align: left;">陈志远</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>邮箱</strong></td>
+<td style="text-align: left;">chenzhiyuan@rmbs.ruc.edu.cn</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>办公室</strong></td>
+<td style="text-align: left;">919</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Office Hours</strong></td>
+<td style="text-align: left;">周四 14:00-15:00</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="课程描述" class="level2">
+<h2 class="anchored" data-anchor-id="课程描述">课程描述</h2>
+<p>本课程旨在培养学生运用数据回答”为什么”的能力，系统介绍因果推断的理论基础与机器学习方法的结合。课程分为两大模块：</p>
+<p><strong>模块一（前8周）</strong>：经典因果推断方法，包括潜在结果框架、匹配法、双重差分、合成控制法、工具变量法等经济学主流方法。</p>
+<p><strong>模块二（后6周）</strong>：机器学习与因果推断的结合，包括广义随机森林、因果森林、双重机器学习等前沿方法。</p>
+</section>
+<section id="学习目标" class="level2">
+<h2 class="anchored" data-anchor-id="学习目标">学习目标</h2>
+<p>完成本课程后，学生应能够：</p>
+<ol type="1">
+<li>理解相关性与因果性的区别，识别常见偏误来源</li>
+<li>掌握潜在结果框架的核心概念</li>
+<li>应用匹配法、DID、IV等方法进行因果效应估计</li>
+<li>使用机器学习方法估计异质性处理效应</li>
+<li>评估因果推断策略的合理性并进行稳健性检验</li>
+<li>独立完成一个应用研究项目</li>
+</ol>
+</section>
+<section id="考核方式" class="level2">
+<h2 class="anchored" data-anchor-id="考核方式">考核方式</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">考核项目</th>
+<th style="text-align: center;">占比</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">平时表现</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: left;">出勤率 + 课堂参与</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">作业（4次）</td>
+<td style="text-align: center;">40%</td>
+<td style="text-align: left;">理论题 + 编程实践</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">期末项目</td>
+<td style="text-align: center;">50%</td>
+<td style="text-align: left;">小组研究项目 + 课堂答辩</td>
+</tr>
+</tbody>
+</table>
+<section id="作业安排" class="level3">
+<h3 class="anchored" data-anchor-id="作业安排">作业安排</h3>
+<ul>
+<li><strong>作业1</strong>（第4周）：潜在结果框架与模拟分析</li>
+<li><strong>作业2</strong>（第7周）：匹配法与双重差分应用</li>
+<li><strong>作业3</strong>（第11周）：工具变量与合成控制</li>
+<li><strong>作业4</strong>（第14周）：机器学习方法实践</li>
+</ul>
+</section>
+<section id="期末项目" class="level3">
+<h3 class="anchored" data-anchor-id="期末项目">期末项目</h3>
+<ul>
+<li><strong>组队</strong>：3-4人一组</li>
+<li><strong>选题</strong>：选择真实商业或政策问题，应用课程方法进行分析</li>
+<li><strong>要求</strong>：
+<ul>
+<li>提交研究报告（3000-5000字）</li>
+<li>课堂展示（15分钟 + 5分钟问答）</li>
+<li>提供可复现的代码和数据</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="课程安排" class="level2">
+<h2 class="anchored" data-anchor-id="课程安排">课程安排</h2>
+<section id="模块一经典因果推断方法" class="level3">
+<h3 class="anchored" data-anchor-id="模块一经典因果推断方法">模块一：经典因果推断方法</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">周次</th>
+<th style="text-align: center;">日期</th>
+<th style="text-align: left;">主题</th>
+<th style="text-align: left;">内容要点</th>
+<th style="text-align: left;">阅读材料</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">3/2</td>
+<td style="text-align: left;">课程导论</td>
+<td style="text-align: left;">相关vs因果，课程框架，潜在结果框架入门</td>
+<td style="text-align: left;">MHE Ch.1-2</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3/9</td>
+<td style="text-align: left;">潜在结果框架</td>
+<td style="text-align: left;">因果效应定义，识别假设，随机实验</td>
+<td style="text-align: left;">MHE Ch.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">3/16</td>
+<td style="text-align: left;">观察性研究</td>
+<td style="text-align: left;">条件独立假设，重叠条件，反事实预测</td>
+<td style="text-align: left;">MHE Ch.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">3/23</td>
+<td style="text-align: left;">匹配法</td>
+<td style="text-align: left;">倾向得分匹配，精确匹配，平衡检验</td>
+<td style="text-align: left;">MHE Ch.3, Mixtape Ch.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">3/30</td>
+<td style="text-align: left;">双重差分I</td>
+<td style="text-align: left;">DID原理，平行趋势假设，经典应用</td>
+<td style="text-align: left;">MHE Ch.5, Mixtape Ch.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">4/6</td>
+<td style="text-align: left;">双重差分II</td>
+<td style="text-align: left;">交错DID，动态效应，稳健性检验</td>
+<td style="text-align: left;">ACRE Ch.16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">4/13</td>
+<td style="text-align: left;">合成控制法</td>
+<td style="text-align: left;">构造合成对照组，安慰剂检验，案例</td>
+<td style="text-align: left;">Mixtape Ch.10</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">4/20</td>
+<td style="text-align: left;">工具变量法</td>
+<td style="text-align: left;">IV原理，2SLS，排他性约束，弱IV</td>
+<td style="text-align: left;">MHE Ch.4, Mixtape Ch.7</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="模块二机器学习与因果推断" class="level3">
+<h3 class="anchored" data-anchor-id="模块二机器学习与因果推断">模块二：机器学习与因果推断</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">周次</th>
+<th style="text-align: center;">日期</th>
+<th style="text-align: left;">主题</th>
+<th style="text-align: left;">内容要点</th>
+<th style="text-align: left;">阅读材料</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">4/27</td>
+<td style="text-align: left;">ML基础I</td>
+<td style="text-align: left;">回归树，随机森林，交叉验证</td>
+<td style="text-align: left;">ESL Ch.9, 15</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">5/4</td>
+<td style="text-align: left;">ML基础II</td>
+<td style="text-align: left;">梯度提升，正则化，模型选择</td>
+<td style="text-align: left;">ESL Ch.10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">5/11</td>
+<td style="text-align: left;">广义随机森林</td>
+<td style="text-align: left;">异质性处理效应，置信区间，应用</td>
+<td style="text-align: left;">Athey &amp; Wager (2019)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">5/18</td>
+<td style="text-align: left;">因果森林</td>
+<td style="text-align: left;">异质性分析，Policy Learning</td>
+<td style="text-align: left;">Athey &amp; Imbens (2016)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">5/25</td>
+<td style="text-align: left;">双重机器学习</td>
+<td style="text-align: left;">Neyman正交性，去偏估计，高维控制</td>
+<td style="text-align: left;">Chernozhukov et al.&nbsp;(2018)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">6/1</td>
+<td style="text-align: left;">前沿专题</td>
+<td style="text-align: left;">因果推断与AI，大语言模型的应用</td>
+<td style="text-align: left;">前沿论文</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">6/8</td>
+<td style="text-align: left;">项目答辩I</td>
+<td style="text-align: left;">小组展示与讨论</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">6/15</td>
+<td style="text-align: left;">项目答辩II</td>
+<td style="text-align: left;">小组展示与总结</td>
+<td style="text-align: left;">-</td>
+</tr>
+</tbody>
+</table>
+<p><em>MHE = Mostly Harmless Econometrics, Mixtape = Causal Inference: The Mixtape, ESL = Elements of Statistical Learning, ACRE = Applied Causal Inference Powered by ML and AI</em></p>
+</section>
+</section>
+<section id="推荐教材" class="level2">
+<h2 class="anchored" data-anchor-id="推荐教材">推荐教材</h2>
+<section id="主要教材" class="level3">
+<h3 class="anchored" data-anchor-id="主要教材">主要教材</h3>
+<ol type="1">
+<li><strong>Angrist, J.D. &amp; Pischke, J.S.</strong> (2020). 《基本无害的计量经济学》. 中文版.
+<ul>
+<li><em>Mostly Harmless Econometrics: An Empiricist’s Companion</em>. 英文原版.</li>
+</ul></li>
+<li><strong>Huntington-Klein, N.</strong> (2022). <em>The Effect: An Introduction to Research Design and Causality</em>. Routledge.
+<ul>
+<li><a href="https://theeffectbook.net/">在线阅读</a></li>
+</ul></li>
+<li><strong>Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., &amp; Syrgkanis, V.</strong> (2024). <em>Applied Causal Inference Powered by ML and AI</em>.
+<ul>
+<li><a href="https://causalml-book.org/">在线阅读</a></li>
+</ul></li>
+</ol>
+</section>
+<section id="参考书目" class="level3">
+<h3 class="anchored" data-anchor-id="参考书目">参考书目</h3>
+<ol start="4" type="1">
+<li><strong>Cunningham, S.</strong> (2021). <em>Causal Inference: The Mixtape</em>. Yale University Press.
+<ul>
+<li><a href="https://mixtape.scunning.com/">在线阅读</a></li>
+</ul></li>
+<li><strong>Hastie, T., Tibshirani, R., &amp; Friedman, J.</strong> (2009). <em>The Elements of Statistical Learning</em> (2nd ed.). Springer.
+<ul>
+<li><a href="https://hastie.su.domains/ElemStatLearn/">免费PDF</a></li>
+</ul></li>
+<li><strong>Imbens, G.W. &amp; Rubin, D.B.</strong> (2015). <em>Causal Inference in Statistics, Social, and Biomedical Sciences</em>. Cambridge University Press.</li>
+</ol>
+</section>
+</section>
+<section id="软件与工具" class="level2">
+<h2 class="anchored" data-anchor-id="软件与工具">软件与工具</h2>
+<section id="编程语言" class="level3">
+<h3 class="anchored" data-anchor-id="编程语言">编程语言</h3>
+<ul>
+<li><strong>Python</strong>: scikit-learn, pandas, numpy, matplotlib, econml, doubleml</li>
+<li><strong>R</strong>: tidyverse, ggplot2, MatchIt, fixest, grf, DoubleML</li>
+</ul>
+</section>
+<section id="环境设置" class="level3">
+<h3 class="anchored" data-anchor-id="环境设置">环境设置</h3>
+<p>推荐使用以下方式之一：</p>
+<ol type="1">
+<li><strong>本地安装</strong>: Anaconda + Jupyter Notebook/Lab</li>
+<li><strong>云端环境</strong>: Google Colab, Kaggle Notebooks</li>
+<li><strong>版本控制</strong>: Git + GitHub/Gitee</li>
+</ol>
+</section>
+</section>
+<section id="学术诚信" class="level2">
+<h2 class="anchored" data-anchor-id="学术诚信">学术诚信</h2>
+<ul>
+<li>作业可以讨论，但提交内容必须独立完成</li>
+<li>引用他人代码或成果必须明确标注来源</li>
+<li>抄袭（包括代码和文字）将导致该次作业零分</li>
+<li>期末项目鼓励团队合作，但需明确各成员贡献</li>
+</ul>
+</section>
+<section id="课程政策" class="level2">
+<h2 class="anchored" data-anchor-id="课程政策">课程政策</h2>
+<section id="出勤" class="level3">
+<h3 class="anchored" data-anchor-id="出勤">出勤</h3>
+<ul>
+<li>出勤率计入平时成绩</li>
+<li>请假需提前邮件告知</li>
+<li>无故缺勤超过3次将影响平时成绩</li>
+</ul>
+</section>
+<section id="作业提交" class="level3">
+<h3 class="anchored" data-anchor-id="作业提交">作业提交</h3>
+<ul>
+<li>通过课程网站或指定平台提交</li>
+<li>截止日期后每迟交一天扣10%</li>
+<li>迟交超过3天不予接受（特殊情况除外）</li>
+</ul>
+</section>
+<section id="答疑" class="level3">
+<h3 class="anchored" data-anchor-id="答疑">答疑</h3>
+<ul>
+<li>Office Hours: 周四 14:00-15:00，919办公室</li>
+<li>邮件: 通常24小时内回复</li>
+<li>讨论区: 课程网站设有讨论区，鼓励同学互助</li>
+</ul>
+</section>
+</section>
+<section id="更新日志" class="level2">
+<h2 class="anchored" data-anchor-id="更新日志">更新日志</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">日期</th>
+<th style="text-align: left;">更新内容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2026-03-04</td>
+<td style="text-align: left;">网站上线，发布第一讲资料</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><em>本大纲可能在学期中根据实际情况进行调整，最新版本以课程网站为准。</em></p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/zhiyuanryanchen\.github\.io\/ml-causal-inference");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">源代码</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "课程大纲"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Syllabus"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## 课程基本信息</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 项目 <span class="pp">|</span> 内容 <span class="pp">|</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **课程名称** <span class="pp">|</span> 机器学习与因果推断 <span class="pp">|</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **英文名称** <span class="pp">|</span> Machine Learning and Causal Inference <span class="pp">|</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **学分** <span class="pp">|</span> 3学分 <span class="pp">|</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **授课时间** <span class="pp">|</span> 周一 14:00-16:30 <span class="pp">|</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **授课地点** <span class="pp">|</span> 明德商学楼 0105 <span class="pp">|</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **授课教师** <span class="pp">|</span> 陈志远 <span class="pp">|</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **邮箱** <span class="pp">|</span> chenzhiyuan@rmbs.ruc.edu.cn <span class="pp">|</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **办公室** <span class="pp">|</span> 919 <span class="pp">|</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Office Hours** <span class="pp">|</span> 周四 14:00-15:00 <span class="pp">|</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## 课程描述</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>本课程旨在培养学生运用数据回答"为什么"的能力，系统介绍因果推断的理论基础与机器学习方法的结合。课程分为两大模块：</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>**模块一（前8周）**：经典因果推断方法，包括潜在结果框架、匹配法、双重差分、合成控制法、工具变量法等经济学主流方法。</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>**模块二（后6周）**：机器学习与因果推断的结合，包括广义随机森林、因果森林、双重机器学习等前沿方法。</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## 学习目标</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>完成本课程后，学生应能够：</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>理解相关性与因果性的区别，识别常见偏误来源</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>掌握潜在结果框架的核心概念</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>应用匹配法、DID、IV等方法进行因果效应估计</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>使用机器学习方法估计异质性处理效应</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>评估因果推断策略的合理性并进行稳健性检验</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>独立完成一个应用研究项目</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## 考核方式</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 考核项目 <span class="pp">|</span> 占比 <span class="pp">|</span> 说明 <span class="pp">|</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---:|:---|</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 平时表现 <span class="pp">|</span> 10% <span class="pp">|</span> 出勤率 + 课堂参与 <span class="pp">|</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 作业（4次） <span class="pp">|</span> 40% <span class="pp">|</span> 理论题 + 编程实践 <span class="pp">|</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 期末项目 <span class="pp">|</span> 50% <span class="pp">|</span> 小组研究项目 + 课堂答辩 <span class="pp">|</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="fu">### 作业安排</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**作业1**（第4周）：潜在结果框架与模拟分析</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**作业2**（第7周）：匹配法与双重差分应用</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**作业3**（第11周）：工具变量与合成控制</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**作业4**（第14周）：机器学习方法实践</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### 期末项目</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**组队**：3-4人一组</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**选题**：选择真实商业或政策问题，应用课程方法进行分析</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**要求**：</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>提交研究报告（3000-5000字）</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>课堂展示（15分钟 + 5分钟问答）</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>提供可复现的代码和数据</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## 课程安排</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="fu">### 模块一：经典因果推断方法</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 周次 <span class="pp">|</span> 日期 <span class="pp">|</span> 主题 <span class="pp">|</span> 内容要点 <span class="pp">|</span> 阅读材料 <span class="pp">|</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---:|:---:|:---|:---|:---|</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> 3/2 <span class="pp">|</span> 课程导论 <span class="pp">|</span> 相关vs因果，课程框架，潜在结果框架入门 <span class="pp">|</span> MHE Ch.1-2 <span class="pp">|</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> 3/9 <span class="pp">|</span> 潜在结果框架 <span class="pp">|</span> 因果效应定义，识别假设，随机实验 <span class="pp">|</span> MHE Ch.2 <span class="pp">|</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> 3/16 <span class="pp">|</span> 观察性研究 <span class="pp">|</span> 条件独立假设，重叠条件，反事实预测 <span class="pp">|</span> MHE Ch.3 <span class="pp">|</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> 3/23 <span class="pp">|</span> 匹配法 <span class="pp">|</span> 倾向得分匹配，精确匹配，平衡检验 <span class="pp">|</span> MHE Ch.3, Mixtape Ch.5 <span class="pp">|</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> 3/30 <span class="pp">|</span> 双重差分I <span class="pp">|</span> DID原理，平行趋势假设，经典应用 <span class="pp">|</span> MHE Ch.5, Mixtape Ch.9 <span class="pp">|</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 6 <span class="pp">|</span> 4/6 <span class="pp">|</span> 双重差分II <span class="pp">|</span> 交错DID，动态效应，稳健性检验 <span class="pp">|</span> ACRE Ch.16 <span class="pp">|</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 7 <span class="pp">|</span> 4/13 <span class="pp">|</span> 合成控制法 <span class="pp">|</span> 构造合成对照组，安慰剂检验，案例 <span class="pp">|</span> Mixtape Ch.10 <span class="pp">|</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 8 <span class="pp">|</span> 4/20 <span class="pp">|</span> 工具变量法 <span class="pp">|</span> IV原理，2SLS，排他性约束，弱IV <span class="pp">|</span> MHE Ch.4, Mixtape Ch.7 <span class="pp">|</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="fu">### 模块二：机器学习与因果推断</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 周次 <span class="pp">|</span> 日期 <span class="pp">|</span> 主题 <span class="pp">|</span> 内容要点 <span class="pp">|</span> 阅读材料 <span class="pp">|</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---:|:---:|:---|:---|:---|</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 9 <span class="pp">|</span> 4/27 <span class="pp">|</span> ML基础I <span class="pp">|</span> 回归树，随机森林，交叉验证 <span class="pp">|</span> ESL Ch.9, 15 <span class="pp">|</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 5/4 <span class="pp">|</span> ML基础II <span class="pp">|</span> 梯度提升，正则化，模型选择 <span class="pp">|</span> ESL Ch.10 <span class="pp">|</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 11 <span class="pp">|</span> 5/11 <span class="pp">|</span> 广义随机森林 <span class="pp">|</span> 异质性处理效应，置信区间，应用 <span class="pp">|</span> Athey &amp; Wager (2019) <span class="pp">|</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 12 <span class="pp">|</span> 5/18 <span class="pp">|</span> 因果森林 <span class="pp">|</span> 异质性分析，Policy Learning <span class="pp">|</span> Athey &amp; Imbens (2016) <span class="pp">|</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 13 <span class="pp">|</span> 5/25 <span class="pp">|</span> 双重机器学习 <span class="pp">|</span> Neyman正交性，去偏估计，高维控制 <span class="pp">|</span> Chernozhukov et al. (2018) <span class="pp">|</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14 <span class="pp">|</span> 6/1 <span class="pp">|</span> 前沿专题 <span class="pp">|</span> 因果推断与AI，大语言模型的应用 <span class="pp">|</span> 前沿论文 <span class="pp">|</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 15 <span class="pp">|</span> 6/8 <span class="pp">|</span> 项目答辩I <span class="pp">|</span> 小组展示与讨论 <span class="pp">|</span> - <span class="pp">|</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 16 <span class="pp">|</span> 6/15 <span class="pp">|</span> 项目答辩II <span class="pp">|</span> 小组展示与总结 <span class="pp">|</span> - <span class="pp">|</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>*MHE = Mostly Harmless Econometrics, Mixtape = Causal Inference: The Mixtape, ESL = Elements of Statistical Learning, ACRE = Applied Causal Inference Powered by ML and AI*</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## 推荐教材</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="fu">### 主要教材</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Angrist, J.D. &amp; Pischke, J.S.** (2020). 《基本无害的计量经济学》. 中文版.</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>*Mostly Harmless Econometrics: An Empiricist's Companion*. 英文原版.</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Huntington-Klein, N.** (2022). *The Effect: An Introduction to Research Design and Causality*. Routledge.</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="co">[</span><span class="ot">在线阅读</span><span class="co">](https://theeffectbook.net/)</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., &amp; Syrgkanis, V.** (2024). *Applied Causal Inference Powered by ML and AI*.</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="co">[</span><span class="ot">在线阅读</span><span class="co">](https://causalml-book.org/)</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="fu">### 参考书目</span></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Cunningham, S.** (2021). *Causal Inference: The Mixtape*. Yale University Press.</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="co">[</span><span class="ot">在线阅读</span><span class="co">](https://mixtape.scunning.com/)</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Hastie, T., Tibshirani, R., &amp; Friedman, J.** (2009). *The Elements of Statistical Learning* (2nd ed.). Springer.</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="co">[</span><span class="ot">免费PDF</span><span class="co">](https://hastie.su.domains/ElemStatLearn/)</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Imbens, G.W. &amp; Rubin, D.B.** (2015). *Causal Inference in Statistics, Social, and Biomedical Sciences*. Cambridge University Press.</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="fu">## 软件与工具</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="fu">### 编程语言</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Python**: scikit-learn, pandas, numpy, matplotlib, econml, doubleml</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**R**: tidyverse, ggplot2, MatchIt, fixest, grf, DoubleML</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="fu">### 环境设置</span></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>推荐使用以下方式之一：</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**本地安装**: Anaconda + Jupyter Notebook/Lab</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**云端环境**: Google Colab, Kaggle Notebooks</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**版本控制**: Git + GitHub/Gitee</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a><span class="fu">## 学术诚信</span></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>作业可以讨论，但提交内容必须独立完成</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>引用他人代码或成果必须明确标注来源</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>抄袭（包括代码和文字）将导致该次作业零分</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>期末项目鼓励团队合作，但需明确各成员贡献</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## 课程政策</span></span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="fu">### 出勤</span></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>出勤率计入平时成绩</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>请假需提前邮件告知</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>无故缺勤超过3次将影响平时成绩</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a><span class="fu">### 作业提交</span></span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>通过课程网站或指定平台提交</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>截止日期后每迟交一天扣10%</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>迟交超过3天不予接受（特殊情况除外）</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a><span class="fu">### 答疑</span></span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Office Hours: 周四 14:00-15:00，919办公室</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>邮件: 通常24小时内回复</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>讨论区: 课程网站设有讨论区，鼓励同学互助</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a><span class="fu">## 更新日志</span></span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 日期 <span class="pp">|</span> 更新内容 <span class="pp">|</span></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|</span></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2026-03-04 <span class="pp">|</span> 网站上线，发布第一讲资料 <span class="pp">|</span></span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>*本大纲可能在学期中根据实际情况进行调整，最新版本以课程网站为准。*</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 陈志远, 中国人民大学商学院</p>
+</div>   
+    <div class="nav-footer-center">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="mailto:chenzhiyuan@rmbs.ruc.edu.cn">
+<p>联系邮箱</p>
+</a>
+  </li>  
+</ul>
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/zhiyuanryanchen/ml-causal-inference">
+<p>课程仓库</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
