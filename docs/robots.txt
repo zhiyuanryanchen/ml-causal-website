@@ -1,1 +1,1 @@
-Sitemap: https://zhiyuanryanchen.github.io/ml-causal-inference/sitemap.xml
+Sitemap: https://zhiyuanryanchen.github.io/ml-causal-website/sitemap.xml
