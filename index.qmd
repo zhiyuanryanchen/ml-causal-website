@@ -1,0 +1,156 @@
+---
+title: "机器学习与因果推断"
+subtitle: "Machine Learning and Causal Inference"
+date: "2026年春季学期"
+---
+
+::: {.hero-banner}
+## 从相关性到因果性
+
+培养用数据回答"**为什么**"的能力，而不只是"**是什么**"
+:::
+
+## 课程信息
+
+::: {.grid}
+::: {.g-col-6}
+### 基本信息
+
+- **课程名称**: 机器学习与因果推断
+- **学分**: 3学分
+- **时间**: 周一 14:00-16:30
+- **地点**: 明德商学楼 0105
+- **学期**: 2025-2026学年春季学期
+
+### 授课教师
+
+**陈志远**
+中国人民大学商学院
+助理教授（贸易经济系）
+📧 chenzhiyuan@rmbs.ruc.edu.cn
+🏢 办公室: 919
+🕒 Office Hours: 周四 14:00-15:00
+:::
+
+::: {.g-col-6}
+### 快速链接
+
+- [📋 课程大纲](syllabus.qmd)
+- [📊 第一讲课件](Quarto/lecture01_students.html)
+- [📖 第一讲详细讲义](Quarto/lecture01_notes.html)
+- [💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
+
+### 最新公告
+
+::: {.callout-important appearance="simple"}
+**2026-03-04**
+
+第一讲课件和详细讲义已发布！
+
+📖 [查看课件](Quarto/lecture01_students.html)
+
+📚 [查看详细讲义](Quarto/lecture01_notes.html)
+:::
+:::
+:::
+
+## 课程描述
+
+本课程系统介绍**因果推断**的理论基础与**机器学习**方法的结合，培养学生运用数据回答"为什么"的能力。课程分为两大模块：
+
+### 模块一：经典因果推断方法（前8周）
+
+| 周次 | 主题 | 核心内容 |
+|:---:|:---|:---|
+| 1 | 课程导论 | 相关vs因果，潜在结果框架入门 |
+| 2-3 | 因果推断基础 | 潜在结果框架深入，混淆变量，识别策略 |
+| 4 | 匹配法 | 倾向得分匹配，精确匹配，重叠条件 |
+| 5-6 | 双重差分 | DID原理，平行趋势检验，动态效应 |
+| 7 | 合成控制法 | 合成控制原理，安慰剂检验 |
+| 8 | 工具变量法 | IV原理，2SLS，排他性约束 |
+
+### 模块二：机器学习与因果推断（后6周）
+
+| 周次 | 主题 | 核心内容 |
+|:---:|:---|:---|
+| 9-10 | ML基础 | 回归，决策树，随机森林，交叉验证 |
+| 11-12 | 广义随机森林 | 异质性处理效应，置信区间 |
+| 13 | 因果森林 | 异质性分析，Policy Learning |
+| 14 | 双重机器学习 | Double ML，Neyman正交性 |
+| 15-16 | 项目答辩 | 期末展示与点评 |
+
+## 为什么要学习因果推断？
+
+::: {.columns}
+::: {.column width="50%"}
+### 现实需求
+
+- 营销投入**真的**带来销量增长了吗？
+- 新产品上线**真的**提升了用户留存吗？
+- 培训项目**真的**提高了员工绩效吗？
+- 政策调整**真的**促进了经济发展吗？
+:::
+
+::: {.column width="50%"}
+### 技术趋势
+
+- 🚀 AI时代的核心技能
+- 📊 数据驱动决策的标配
+- 🌍 学术界与业界的通用语言
+- 💡 从"跑数"到"洞察"的跃迁
+:::
+:::
+
+## 课程特色
+
+::: {.grid .gap-3}
+::: {.g-col-4}
+::: {.feature-box}
+### 🤖 AI辅助编程
+
+传统编程与Vibe Coding结合，提升学习效率
+:::
+:::
+
+::: {.g-col-4}
+::: {.feature-box}
+### 🐍 Python + R
+
+双语言实践，覆盖主流数据科学生态
+:::
+:::
+
+::: {.g-col-4}
+::: {.feature-box}
+### 📚 理论与实践
+
+经典方法与前沿ML方法并重，案例驱动
+:::
+:::
+:::
+
+## 推荐教材
+
+1. **Angrist & Pischke** (2020). 《基本无害的计量经济学》
+2. **Huntington-Klein** (2022). *The Effect: An Introduction to Research Design and Causality*
+3. **Chernozhukov et al.** (2024). *Applied Causal Inference Powered by ML and AI* ([在线阅读](https://causalml-book.org/))
+4. **Cunningham** (2021). *Causal Inference: The Mixtape* ([在线阅读](https://mixtape.scunning.com/))
+
+## 在线资源
+
+- [EconML文档](https://econml.azurewebsites.net/)（微软）
+- [DoubleML文档](https://docs.doubleml.org/)
+- [CausalML (Uber)](https://causalml.readthedocs.io/)
+- [课程Gitee仓库](https://gitee.com/zhiyuanryanchen/causal-inference-machine-learning)
+
+## 开始学习
+
+::: {.grid .gap-3 .text-center}
+::: {.g-col-6}
+[📊 查看第一讲课件](Quarto/lecture01_students.html){.btn .btn-primary .btn-lg}
+:::
+
+::: {.g-col-6}
+[📖 查看详细讲义](Quarto/lecture01_notes.html){.btn .btn-secondary .btn-lg}
+:::
+:::

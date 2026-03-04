@@ -1,0 +1,75 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - index.qmd
+    - syllabus.qmd
+    - resources.qmd
+    - Quarto/lecture01_students.html
+    - Quarto/lecture01_notes.html
+
+website:
+  title: "机器学习与因果推断"
+  site-url: https://zhiyuanryanchen.github.io/ml-causal-inference
+  repo-url: https://github.com/zhiyuanryanchen/ml-causal-inference
+
+  navbar:
+    left:
+      - text: "首页"
+        file: index.qmd
+      - text: "课程大纲"
+        file: syllabus.qmd
+      - text: "讲义"
+        menu:
+          - text: "第一讲：课程导论"
+            file: Quarto/lecture01_students.html
+          - text: "第一讲：详细讲义"
+            file: Quarto/lecture01_notes.html
+      - text: "资源"
+        file: resources.qmd
+    right:
+      - icon: github
+        href: https://github.com/zhiyuanryanchen/ml-causal-inference
+        aria-label: GitHub
+
+  page-footer:
+    left: "© 2026 陈志远, 中国人民大学商学院"
+    center:
+      - text: "联系邮箱"
+        href: "mailto:chenzhiyuan@rmbs.ruc.edu.cn"
+    right:
+      - text: "课程仓库"
+        href: https://github.com/zhiyuanryanchen/ml-causal-inference
+
+  sidebar:
+    - title: "课程资料"
+      style: "docked"
+      contents:
+        - section: "课程信息"
+          contents:
+            - index.qmd
+            - syllabus.qmd
+        - section: "讲义"
+          contents:
+            - text: "第一讲：课程导论"
+              file: Quarto/lecture01_students.html
+            - text: "第一讲：详细讲义"
+              file: Quarto/lecture01_notes.html
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: false
+    code-fold: false
+    code-tools: true
+    highlight-style: github
+    lang: zh
+
+execute:
+  freeze: auto
+  echo: true
+  warning: false
+  message: false

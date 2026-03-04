@@ -1,0 +1,166 @@
+---
+title: "课程大纲"
+subtitle: "Syllabus"
+---
+
+## 课程基本信息
+
+| 项目 | 内容 |
+|:---|:---|
+| **课程名称** | 机器学习与因果推断 |
+| **英文名称** | Machine Learning and Causal Inference |
+| **学分** | 3学分 |
+| **授课时间** | 周一 14:00-16:30 |
+| **授课地点** | 明德商学楼 0105 |
+| **授课教师** | 陈志远 |
+| **邮箱** | chenzhiyuan@rmbs.ruc.edu.cn |
+| **办公室** | 919 |
+| **Office Hours** | 周四 14:00-15:00 |
+
+## 课程描述
+
+本课程旨在培养学生运用数据回答"为什么"的能力，系统介绍因果推断的理论基础与机器学习方法的结合。课程分为两大模块：
+
+**模块一（前8周）**：经典因果推断方法，包括潜在结果框架、匹配法、双重差分、合成控制法、工具变量法等经济学主流方法。
+
+**模块二（后6周）**：机器学习与因果推断的结合，包括广义随机森林、因果森林、双重机器学习等前沿方法。
+
+## 学习目标
+
+完成本课程后，学生应能够：
+
+1. 理解相关性与因果性的区别，识别常见偏误来源
+2. 掌握潜在结果框架的核心概念
+3. 应用匹配法、DID、IV等方法进行因果效应估计
+4. 使用机器学习方法估计异质性处理效应
+5. 评估因果推断策略的合理性并进行稳健性检验
+6. 独立完成一个应用研究项目
+
+## 考核方式
+
+| 考核项目 | 占比 | 说明 |
+|:---|:---:|:---|
+| 平时表现 | 10% | 出勤率 + 课堂参与 |
+| 作业（4次） | 40% | 理论题 + 编程实践 |
+| 期末项目 | 50% | 小组研究项目 + 课堂答辩 |
+
+### 作业安排
+
+- **作业1**（第4周）：潜在结果框架与模拟分析
+- **作业2**（第7周）：匹配法与双重差分应用
+- **作业3**（第11周）：工具变量与合成控制
+- **作业4**（第14周）：机器学习方法实践
+
+### 期末项目
+
+- **组队**：3-4人一组
+- **选题**：选择真实商业或政策问题，应用课程方法进行分析
+- **要求**：
+  - 提交研究报告（3000-5000字）
+  - 课堂展示（15分钟 + 5分钟问答）
+  - 提供可复现的代码和数据
+
+## 课程安排
+
+### 模块一：经典因果推断方法
+
+| 周次 | 日期 | 主题 | 内容要点 | 阅读材料 |
+|:---:|:---:|:---|:---|:---|
+| 1 | 3/2 | 课程导论 | 相关vs因果，课程框架，潜在结果框架入门 | MHE Ch.1-2 |
+| 2 | 3/9 | 潜在结果框架 | 因果效应定义，识别假设，随机实验 | MHE Ch.2 |
+| 3 | 3/16 | 观察性研究 | 条件独立假设，重叠条件，反事实预测 | MHE Ch.3 |
+| 4 | 3/23 | 匹配法 | 倾向得分匹配，精确匹配，平衡检验 | MHE Ch.3, Mixtape Ch.5 |
+| 5 | 3/30 | 双重差分I | DID原理，平行趋势假设，经典应用 | MHE Ch.5, Mixtape Ch.9 |
+| 6 | 4/6 | 双重差分II | 交错DID，动态效应，稳健性检验 | ACRE Ch.16 |
+| 7 | 4/13 | 合成控制法 | 构造合成对照组，安慰剂检验，案例 | Mixtape Ch.10 |
+| 8 | 4/20 | 工具变量法 | IV原理，2SLS，排他性约束，弱IV | MHE Ch.4, Mixtape Ch.7 |
+
+### 模块二：机器学习与因果推断
+
+| 周次 | 日期 | 主题 | 内容要点 | 阅读材料 |
+|:---:|:---:|:---|:---|:---|
+| 9 | 4/27 | ML基础I | 回归树，随机森林，交叉验证 | ESL Ch.9, 15 |
+| 10 | 5/4 | ML基础II | 梯度提升，正则化，模型选择 | ESL Ch.10 |
+| 11 | 5/11 | 广义随机森林 | 异质性处理效应，置信区间，应用 | Athey & Wager (2019) |
+| 12 | 5/18 | 因果森林 | 异质性分析，Policy Learning | Athey & Imbens (2016) |
+| 13 | 5/25 | 双重机器学习 | Neyman正交性，去偏估计，高维控制 | Chernozhukov et al. (2018) |
+| 14 | 6/1 | 前沿专题 | 因果推断与AI，大语言模型的应用 | 前沿论文 |
+| 15 | 6/8 | 项目答辩I | 小组展示与讨论 | - |
+| 16 | 6/15 | 项目答辩II | 小组展示与总结 | - |
+
+*MHE = Mostly Harmless Econometrics, Mixtape = Causal Inference: The Mixtape, ESL = Elements of Statistical Learning, ACRE = Applied Causal Inference Powered by ML and AI*
+
+## 推荐教材
+
+### 主要教材
+
+1. **Angrist, J.D. & Pischke, J.S.** (2020). 《基本无害的计量经济学》. 中文版.
+   - *Mostly Harmless Econometrics: An Empiricist's Companion*. 英文原版.
+
+2. **Huntington-Klein, N.** (2022). *The Effect: An Introduction to Research Design and Causality*. Routledge.
+   - [在线阅读](https://theeffectbook.net/)
+
+3. **Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., & Syrgkanis, V.** (2024). *Applied Causal Inference Powered by ML and AI*.
+   - [在线阅读](https://causalml-book.org/)
+
+### 参考书目
+
+4. **Cunningham, S.** (2021). *Causal Inference: The Mixtape*. Yale University Press.
+   - [在线阅读](https://mixtape.scunning.com/)
+
+5. **Hastie, T., Tibshirani, R., & Friedman, J.** (2009). *The Elements of Statistical Learning* (2nd ed.). Springer.
+   - [免费PDF](https://hastie.su.domains/ElemStatLearn/)
+
+6. **Imbens, G.W. & Rubin, D.B.** (2015). *Causal Inference in Statistics, Social, and Biomedical Sciences*. Cambridge University Press.
+
+## 软件与工具
+
+### 编程语言
+
+- **Python**: scikit-learn, pandas, numpy, matplotlib, econml, doubleml
+- **R**: tidyverse, ggplot2, MatchIt, fixest, grf, DoubleML
+
+### 环境设置
+
+推荐使用以下方式之一：
+
+1. **本地安装**: Anaconda + Jupyter Notebook/Lab
+2. **云端环境**: Google Colab, Kaggle Notebooks
+3. **版本控制**: Git + GitHub/Gitee
+
+## 学术诚信
+
+- 作业可以讨论，但提交内容必须独立完成
+- 引用他人代码或成果必须明确标注来源
+- 抄袭（包括代码和文字）将导致该次作业零分
+- 期末项目鼓励团队合作，但需明确各成员贡献
+
+## 课程政策
+
+### 出勤
+
+- 出勤率计入平时成绩
+- 请假需提前邮件告知
+- 无故缺勤超过3次将影响平时成绩
+
+### 作业提交
+
+- 通过课程网站或指定平台提交
+- 截止日期后每迟交一天扣10%
+- 迟交超过3天不予接受（特殊情况除外）
+
+### 答疑
+
+- Office Hours: 周四 14:00-15:00，919办公室
+- 邮件: 通常24小时内回复
+- 讨论区: 课程网站设有讨论区，鼓励同学互助
+
+## 更新日志
+
+| 日期 | 更新内容 |
+|:---|:---|
+| 2026-03-04 | 网站上线，发布第一讲资料 |
+
+---
+
+*本大纲可能在学期中根据实际情况进行调整，最新版本以课程网站为准。*

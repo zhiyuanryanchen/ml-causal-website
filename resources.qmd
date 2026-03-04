@@ -1,0 +1,220 @@
+---
+title: "学习资源"
+subtitle: "Resources"
+---
+
+## 推荐教材
+
+### 主要教材（必读）
+
+::: {.card .mb-3}
+#### 《基本无害的计量经济学》
+**Angrist, J.D. & Pischke, J.S.** (2020)
+
+经济学因果推断的经典教材，语言通俗，案例丰富。重点阅读第1-5章。
+
+[豆瓣链接](https://book.douban.com/subject/37285329/)
+:::
+
+::: {.card .mb-3}
+#### *The Effect: An Introduction to Research Design and Causality*
+**Huntington-Klein, N.** (2022)
+
+从研究设计的角度系统介绍因果推断，配有R和Stata代码。
+
+[在线阅读](https://theeffectbook.net/)
+:::
+
+::: {.card .mb-3}
+#### *Applied Causal Inference Powered by ML and AI*
+**Chernozhukov et al.** (2024)
+
+机器学习与因果推断结合的最新教材，免费在线阅读。
+
+[在线阅读](https://causalml-book.org/)
+:::
+
+### 参考书目
+
+- **Cunningham, S.** (2021). *Causal Inference: The Mixtape*. [在线阅读](https://mixtape.scunning.com/)
+- **Imbens, G.W. & Rubin, D.B.** (2015). *Causal Inference in Statistics, Social, and Biomedical Sciences*
+
+## 在线资源
+
+### Python库
+
+| 库名 | 用途 | 文档链接 |
+|:---|:---|:---|
+| **EconML** | 微软开发的因果推断ML库 | [文档](https://econml.azurewebsites.net/) |
+| **DoubleML** | 双重机器学习实现 | [文档](https://docs.doubleml.org/) |
+| **CausalML** | Uber开发的因果ML库 | [文档](https://causalml.readthedocs.io/) |
+| **DoWhy** | 因果推理端到端框架 | [文档](https://www.pywhy.org/dowhy/) |
+| **statsmodels** | 传统计量经济学方法 | [文档](https://www.statsmodels.org/) |
+
+### R包
+
+| 包名 | 用途 | 文档链接 |
+|:---|:---|:---|
+| **MatchIt** | 倾向得分匹配 | [CRAN](https://cran.r-project.org/web/packages/MatchIt/) |
+| **fixest** | 固定效应估计 | [文档](https://lrberge.github.io/fixest/) |
+| **grf** | 广义随机森林 | [CRAN](https://cran.r-project.org/web/packages/grf/) |
+| **DoubleML** | 双重机器学习 | [文档](https://docs.doubleml.org/stable/index.html) |
+| **rdrobust** | 断点回归 | [CRAN](https://cran.r-project.org/web/packages/rdrobust/) |
+
+### 在线课程
+
+- **Harvard Gov 2003**: 因果推断研究生课程
+- **Stanford Econ 293**: 机器学习与因果推断
+- **Fast.ai**: Practical Deep Learning for Coders（第2部分涉及因果推断）
+
+### 博客与文章
+
+- **Andrew Gelman's Blog**: [Statistical Modeling, Causal Inference, and Social Science](https://statmodeling.stat.columbia.edu/)
+- **Scott Cunningham's Substack**: [Causal Inference with C](https://causalinf.substack.com/)
+
+## 数据集资源
+
+### 经典数据集
+
+| 数据集 | 描述 | 用途 |
+|:---|:---|:---|
+| **LaLonde (1986)** | 就业培训项目评估 | 匹配法教学 |
+| **Card & Krueger (1994)** | 最低工资对就业的影响 | DID教学 |
+| **Abadie et al. (2010)** | 加州控烟法案 | 合成控制法 |
+| **Angrist & Evans (1998)** | 家庭规模与劳动供给 | IV教学 |
+
+### 数据仓库
+
+- **Kaggle**: [Datasets](https://www.kaggle.com/datasets)
+- **UCI Machine Learning Repository**: [Archive](https://archive.ics.uci.edu/)
+- **Google Dataset Search**: [Search](https://datasetsearch.research.google.com/)
+- **Our World in Data**: [Data](https://ourworldindata.org/)
+
+## 软件安装指南
+
+### Python环境
+
+```bash
+# 推荐使用conda创建虚拟环境
+conda create -n ml-causal python=3.11
+conda activate ml-causal
+
+# 安装核心包
+pip install numpy pandas matplotlib seaborn scikit-learn jupyter
+
+# 安装因果推断专用包
+pip install econml doubleml causalml dowhy
+```
+
+### R环境
+
+```r
+# 安装核心包
+install.packages(c("tidyverse", "ggplot2", "fixest", "MatchIt", "grf"))
+
+# 安装DoubleML
+install.packages("DoubleML")
+```
+
+### Jupyter Notebook
+
+推荐使用JupyterLab作为开发环境：
+
+```bash
+pip install jupyterlab
+jupyter lab
+```
+
+或使用VS Code + Jupyter插件。
+
+## 编程规范
+
+### Python代码规范
+
+- 遵循PEP 8风格指南
+- 使用有意义的变量名
+- 添加文档字符串（docstrings）
+- 固定随机种子保证可重复性
+
+```python
+import numpy as np
+import pandas as pd
+
+# 固定随机种子
+np.random.seed(42)
+
+# 清晰的变量名
+treatment_effect = -2.0  # 真实处理效应
+confounding_strength = 3.0  # 混淆强度
+
+# 添加注释
+# 生成混淆变量：疫情严重程度
+severity = np.random.normal(0, 1, n_cities)
+```
+
+### R代码规范
+
+- 使用tidyverse风格
+- 管道操作符 `|>`
+- 有意义的变量名
+- 固定随机种子
+
+```r
+library(tidyverse)
+
+# 固定随机种子
+set.seed(42)
+
+# 使用管道和清晰命名
+data <- tibble(
+  severity = rnorm(n),
+  treatment = ifelse(severity > 0, 1, 0)
+) |>
+  mutate(
+    recovery = 10 + severity * 3 + treatment * true_effect
+  )
+```
+
+## AI辅助工具
+
+### 大语言模型
+
+- **Claude**: [claude.ai](https://claude.ai) - 代码生成与解释
+- **ChatGPT**: [chat.openai.com](https://chat.openai.com) - 概念解释与讨论
+- **GitHub Copilot**: IDE集成，自动补全代码
+
+### 使用建议
+
+1. **明确提示**：描述清楚数据结构和分析目标
+2. **迭代优化**：根据输出逐步调整提示词
+3. **验证结果**：始终验证AI生成代码的正确性
+4. **理解原理**：不要只复制代码，要理解背后的逻辑
+
+## 学术资源
+
+### 顶级期刊
+
+- **Econometrica**: 计量经济学顶级期刊
+- **Journal of Political Economy**: 经济学综合顶刊
+- **Review of Economic Studies**: 理论与实证并重
+- **Journal of Econometrics**: 计量方法专刊
+- **Journal of Machine Learning Research**: 机器学习顶刊
+
+### 预印本平台
+
+- **arXiv**: [stat.ML](https://arxiv.org/list/stat.ML/recent), [econ.EM](https://arxiv.org/list/econ.EM/recent)
+- **SSRN**: 社会科学研究网络
+
+### 学术搜索引擎
+
+- **Google Scholar**: [scholar.google.com](https://scholar.google.com)
+- **EconPapers**: [econpapers.repec.org](https://econpapers.repec.org)
+- **JSTOR**: 经济学历史文献
+
+## 联系我们
+
+如有资源推荐或链接失效，请通过以下方式联系：
+
+- 📧 邮箱: chenzhiyuan@rmbs.ruc.edu.cn
+- 🏢 办公室: 919
+- 🕒 Office Hours: 周四 14:00-15:00
