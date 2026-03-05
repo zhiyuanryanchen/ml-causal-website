@@ -50,3 +50,6 @@ __pycache__/
 .Rproj.user/
 .Rhistory
 .RData
+
+/.quarto/
+**/*.quarto_ipynb

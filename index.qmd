@@ -1,7 +1,7 @@
 ---
 title: "机器学习与因果推断"
 subtitle: "Machine Learning and Causal Inference"
-date: "2026年春季学期"
+date: "2026-03-05"
 ---
 
 ::: {.hero-banner}
@@ -17,9 +17,9 @@ date: "2026年春季学期"
 ### 基本信息
 
 - **课程名称**: 机器学习与因果推断
-- **学分**: 3学分
-- **时间**: 周一 14:00-16:30
-- **地点**: 明德商学楼 0105
+- **学分**: 2学分
+- **时间**: 周一 16：00-17：30
+- **地点**: 明德商学楼0207
 - **学期**: 2025-2026学年春季学期
 
 ### 授课教师
@@ -38,6 +38,8 @@ date: "2026年春季学期"
 - [📋 课程大纲](syllabus.qmd)
 - [📊 第一讲课件](Quarto/lecture01_students.html)
 - [📖 第一讲详细讲义](Quarto/lecture01_notes.html)
+- [📊 第二讲课件](Quarto/lecture02_probability_regression_students.html)
+- [📖 第二讲详细讲义](Quarto/lecture02_probability_regression_notes.html)
 - [💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
 
 ### 最新公告
@@ -45,11 +47,15 @@ date: "2026年春季学期"
 ::: {.callout-important appearance="simple"}
 **2026-03-04**
 
-第一讲课件和详细讲义已发布！
+第一讲与第二讲课件和详细讲义已发布！
 
-📖 [查看课件](Quarto/lecture01_students.html)
+📖 [查看第一讲课件](Quarto/lecture01_students.html)
 
-📚 [查看详细讲义](Quarto/lecture01_notes.html)
+📚 [查看第一讲详细讲义](Quarto/lecture01_notes.html)
+
+📖 [查看第二讲课件](Quarto/lecture02_probability_regression_students.html)
+
+📚 [查看第二讲详细讲义](Quarto/lecture02_probability_regression_notes.html)
 :::
 :::
 :::
