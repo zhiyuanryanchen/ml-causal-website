@@ -7,6 +7,8 @@ project:
     - resources.qmd
     - Quarto/lecture01_students.html
     - Quarto/lecture01_notes.html
+    - Quarto/lecture02_probability_regression_students.html
+    - Quarto/lecture02_probability_regression_notes.html
 
 website:
   title: "机器学习与因果推断"
@@ -25,6 +27,10 @@ website:
             file: Quarto/lecture01_students.html
           - text: "第一讲：详细讲义"
             file: Quarto/lecture01_notes.html
+          - text: "第二讲：概率与回归基础"
+            file: Quarto/lecture02_probability_regression_students.html
+          - text: "第二讲：详细讲义"
+            file: Quarto/lecture02_probability_regression_notes.html
       - text: "资源"
         file: resources.qmd
     right:
@@ -55,6 +61,10 @@ website:
               file: Quarto/lecture01_students.html
             - text: "第一讲：详细讲义"
               file: Quarto/lecture01_notes.html
+            - text: "第二讲：概率与回归基础"
+              file: Quarto/lecture02_probability_regression_students.html
+            - text: "第二讲：详细讲义"
+              file: Quarto/lecture02_probability_regression_notes.html
 
 format:
   html:
