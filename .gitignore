@@ -1,25 +1,45 @@
-# ==============================================================================
-# .gitignore for Academic Claude Code Projects
-# ==============================================================================
+# Website-only repository
+# Only website files should be tracked
 
-# LaTeX build artifacts
-*.aux
-*.bbl
-*.blg
-*.fdb_latexmk
-*.fls
-*.log
-*.nav
-*.out
-*.snm
-*.toc
-*.vrb
-*.synctex.gz
-*.run.xml
-*-blx.bib
+# Keep these files:
+# - docs/ (generated website)
+# - _quarto.yml (website config)
+# - index.qmd, syllabus.qmd, resources.qmd (source files)
+# - styles.css (custom styles)
+# - .github/workflows/ (CI/CD)
+# - README.md
+# - .gitignore
 
-# Compiled PDFs (uncomment to track specific PDFs)
-# *.pdf
+# Ignore everything else
+*
+
+# But don't ignore these (website files)
+!docs/
+!docs/**
+!_quarto.yml
+!index.qmd
+!syllabus.qmd
+!resources.qmd
+!styles.css
+!.github/
+!.github/**
+!README.md
+!.gitignore
+
+# Now re-ignore specific things even in allowed directories
+# Quarto cache
+.quarto
+*.quarto_ipynb
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
 # Python
 __pycache__/
@@ -30,31 +50,3 @@ __pycache__/
 .Rproj.user/
 .Rhistory
 .RData
-.Rdata
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Claude Code local files (not shared across machines)
-.claude/settings.local.json
-.claude/state/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Quarto rendering artifacts
-/.quarto/
-
-# Output artifacts — uncomment lines below based on your preference
-# *.rds
-# output/**/*.rds
-Draft/Main_Finance_RD_draft.pdf
-.gitignore
-Draft/Main_Finance_RD_draft.tex
-quality_reports/Main_Finance_RD_draft_proofread_report.md
-.gitignore
