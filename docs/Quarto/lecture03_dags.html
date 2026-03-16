@@ -32,6 +32,72 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
   </style>
   <link rel="stylesheet" href="lecture03_dags_files/libs/revealjs/dist/theme/quarto-ac687b436bd4ed829b8379afeee07e00.css">
   <link rel="stylesheet" href="ruc-theme.scss">
@@ -518,21 +584,14 @@
 <li>与<span class="math inline">I</span>无关的部分（因果路径）→ 估计<span class="math inline">\delta</span></li>
 </ul></li>
 </ol>
-<p><strong>结果</strong>：<span class="math inline">\widehat{\delta}</span> 反映<span class="math inline">I</span>无法解释的那部分<span class="math inline">D</span>对<span class="math inline">Y</span>的影响</p>
+<p><strong>结果</strong> <span class="math inline">\widehat{\delta}</span> 反映<span class="math inline">I</span>无法解释的那部分<span class="math inline">D</span>对<span class="math inline">Y</span>的影响</p>
 </div>
 </div></div>
 </section>
 <section id="人力资本模型完整dag分析" class="slide level2">
 <h2>人力资本模型：完整DAG分析</h2>
 
-<img data-src="diagrams/lecture03/earnings_dag_backdoor-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"><div style="font-size: 0.85em; margin-top: 10px;">
-<p><strong>变量说明</strong>：<span class="math inline">D</span>=大学教育, <span class="math inline">Y</span>=收入, <span class="math inline">PE</span>=父母教育, <span class="math inline">I</span>=家庭收入, <span class="math inline">B</span>=不可观测背景因素</p>
-</div>
-</section>
-<section id="人力资本模型完整dag分析-1" class="slide level2">
-<h2>人力资本模型：完整DAG分析</h2>
-
-<img data-src="diagrams/lecture03/earnings_dag_backdoor-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"><div style="font-size: 0.85em; margin-top: 10px;">
+<img data-src="diagrams/lecture03/earnings_dag_backdoor-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:50.0%"><div style="font-size: 0.85em; margin-top: 10px;">
 <p><strong>变量说明</strong>：<span class="math inline">D</span>=大学教育, <span class="math inline">Y</span>=收入, <span class="math inline">PE</span>=父母教育, <span class="math inline">I</span>=家庭收入, <span class="math inline">B</span>=不可观测背景因素</p>
 </div>
 </section>
@@ -608,7 +667,7 @@
 </ul>
 </div><div class="column" style="width:50%;">
 <div class="concept-box">
-<p><strong>如何”阻断”后门路径？</strong></p>
+<p><strong>如何“阻断”后门路径？</strong></p>
 <p>控制<span class="math inline">I</span>相当于：</p>
 <ul>
 <li>在<span class="math inline">I</span>的每个水平内比较<span class="math inline">D</span>对<span class="math inline">Y</span>的影响</li>
@@ -742,12 +801,12 @@
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>后门路径识别</strong></p>
-<p>从”教育”到”收入”：</p>
+<p>从“教育”到“收入”：</p>
 <ul>
-<li>后门路径1：教育 ← 能力 → 收入</li>
-<li>后门路径2：教育 ← 家庭背景 → 收入</li>
+<li><strong>后门路径1</strong>：教育 ← 能力 → 收入</li>
+<li><strong>后门路径2</strong>：教育 ← 家庭背景 → 收入</li>
+<li><strong>必须控制：</strong> 能力、家庭背景</li>
 </ul>
-<p>必须控制：能力、家庭背景</p>
 </div><div class="column" style="width:50%;">
 <p><strong>不能控制的变量</strong></p>
 <ul>
@@ -820,7 +879,7 @@
 </div></div>
 </section>
 <section id="颜值与演技的权衡" class="slide level2">
-<h2>颜值与演技的”权衡”</h2>
+<h2>颜值与演技的“权衡”</h2>
 
 <img data-src="diagrams/lecture03/beauty_collider.jpg" class="quarto-figure quarto-figure-center r-stretch" style="width:70.0%"><div style="text-align: center; margin-top: 20px;">
 <p><strong>核心洞察</strong>：在明星样本中，颜值和演技看似负相关，</p>
@@ -874,19 +933,6 @@
 </ul>
 <p>控制职业可能掩盖歧视的真实效应！</p>
 </div>
-</div>
-</section>
-<section id="种族歧视的dag分析" class="slide level2">
-<h2>种族歧视的DAG分析</h2>
-
-<img data-src="diagrams/lecture03/racial_bias_dag-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"><div style="font-size: 0.9em; margin-top: 15px;">
-<p><strong>复杂路径</strong> 种族可能通过多种渠道影响就业</p>
-<ul>
-<li>直接歧视</li>
-<li>教育机会不平等</li>
-<li>社交网络差异</li>
-<li>地理位置因素</li>
-</ul>
 </div>
 </section>
 <section id="样本选择作为碰撞偏误" class="slide level2">
@@ -1105,8 +1151,8 @@
 </ul>
 </div>
 </section>
-<section id="实际案例评估培训项目" class="slide level2">
-<h2>实际案例：评估培训项目</h2>
+<section id="案例评估培训项目" class="slide level2">
+<h2>案例：评估培训项目</h2>
 <div class="columns">
 <div class="column" style="width:55%;">
 <p><strong>研究设计</strong></p>
@@ -1133,6 +1179,248 @@
 <li>✗ 留任状态（碰撞）</li>
 <li>✗ 部门分配（可能是结果）</li>
 </ul>
+</div></div>
+</section>
+<section id="实践模拟数据分析" class="slide level2">
+<h2>实践：模拟数据分析</h2>
+<div style="font-size: 0.9em;">
+<div id="79e17bbe" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href=""></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href=""></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb1-4"><a href=""></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href=""></a><span class="im">from</span> matplotlib.patches <span class="im">import</span> FancyArrowPatch</span>
+<span id="cb1-6"><a href=""></a><span class="im">import</span> warnings</span>
+<span id="cb1-7"><a href=""></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
+<span id="cb1-8"><a href=""></a></span>
+<span id="cb1-9"><a href=""></a><span class="co"># 设置中文字体</span></span>
+<span id="cb1-10"><a href=""></a>plt.rcParams[<span class="st">'font.sans-serif'</span>] <span class="op">=</span> [<span class="st">'Source Han Sans SC'</span>, <span class="st">'Noto Sans CJK SC'</span>,</span>
+<span id="cb1-11"><a href=""></a>                                    <span class="st">'WenQuanYi Micro Hei'</span>, <span class="st">'SimHei'</span>, <span class="st">'Arial Unicode MS'</span>]</span>
+<span id="cb1-12"><a href=""></a>plt.rcParams[<span class="st">'axes.unicode_minus'</span>] <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb1-13"><a href=""></a></span>
+<span id="cb1-14"><a href=""></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb1-15"><a href=""></a>n <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb1-16"><a href=""></a>true_effect <span class="op">=</span> <span class="fl">2.0</span></span>
+<span id="cb1-17"><a href=""></a></span>
+<span id="cb1-18"><a href=""></a><span class="co"># 生成变量：C=能力, D=培训, M=技能, Y=绩效, L=留任</span></span>
+<span id="cb1-19"><a href=""></a>C <span class="op">=</span> np.random.normal(<span class="dv">5</span>, <span class="fl">1.5</span>, n)</span>
+<span id="cb1-20"><a href=""></a>D <span class="op">=</span> (np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, n) <span class="op">&lt;</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>np.exp(<span class="op">-</span>(C<span class="op">-</span><span class="dv">5</span>)<span class="op">/</span><span class="dv">2</span>))).astype(<span class="bu">int</span>)</span>
+<span id="cb1-21"><a href=""></a>M <span class="op">=</span> <span class="fl">0.7</span><span class="op">*</span>D <span class="op">+</span> <span class="fl">0.3</span><span class="op">*</span>C <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.5</span>, n)</span>
+<span id="cb1-22"><a href=""></a>Y <span class="op">=</span> true_effect<span class="op">*</span>D <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span>C <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>M <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n)</span>
+<span id="cb1-23"><a href=""></a>L <span class="op">=</span> (np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, n) <span class="op">&lt;</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>np.exp(<span class="op">-</span>(<span class="fl">0.3</span><span class="op">*</span>Y<span class="op">+</span><span class="fl">0.5</span><span class="op">*</span>D<span class="op">-</span><span class="dv">3</span>)))).astype(<span class="bu">int</span>)</span>
+<span id="cb1-24"><a href=""></a></span>
+<span id="cb1-25"><a href=""></a>data <span class="op">=</span> pd.DataFrame({<span class="st">'training'</span>: D, <span class="st">'performance'</span>: Y, <span class="st">'ability'</span>: C,</span>
+<span id="cb1-26"><a href=""></a>                     <span class="st">'skill'</span>: M, <span class="st">'retention'</span>: L})</span>
+<span id="cb1-27"><a href=""></a></span>
+<span id="cb1-28"><a href=""></a><span class="bu">print</span>(<span class="ss">f"样本量: </span><span class="sc">{</span>n<span class="sc">}</span><span class="ss"> | 真实效应: </span><span class="sc">{</span>true_effect<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-29"><a href=""></a><span class="bu">print</span>(data.head())</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>样本量: 1000 | 真实效应: 2.0
+   training  performance   ability     skill  retention
+0         1    10.982069  5.745071  2.268917          1
+1         1     8.773640  4.792604  1.761703          0
+2         0     9.476702  5.971533  1.951047          1
+3         1    14.886038  7.284545  3.555589          1
+4         1    10.146707  4.648770  1.157045          0</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="绘制-dag-结构" class="slide level2">
+<h2>绘制 DAG 结构</h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<p><strong>Python 绘图代码</strong></p>
+<div style="font-size: 0.75em;">
+<div id="4a36e3b7" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="co"># 绘制 DAG 结构</span></span>
+<span id="cb3-2"><a href=""></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="cb3-3"><a href=""></a>ax.set_xlim(<span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb3-4"><a href=""></a>ax.set_ylim(<span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb3-5"><a href=""></a>ax.axis(<span class="st">'off'</span>)</span>
+<span id="cb3-6"><a href=""></a></span>
+<span id="cb3-7"><a href=""></a><span class="co"># 节点位置</span></span>
+<span id="cb3-8"><a href=""></a>positions <span class="op">=</span> {</span>
+<span id="cb3-9"><a href=""></a>    <span class="st">'C'</span>: (<span class="dv">2</span>, <span class="dv">8</span>),    <span class="co"># 能力</span></span>
+<span id="cb3-10"><a href=""></a>    <span class="st">'D'</span>: (<span class="dv">2</span>, <span class="dv">5</span>),    <span class="co"># 培训</span></span>
+<span id="cb3-11"><a href=""></a>    <span class="st">'M'</span>: (<span class="dv">5</span>, <span class="dv">5</span>),    <span class="co"># 技能</span></span>
+<span id="cb3-12"><a href=""></a>    <span class="st">'Y'</span>: (<span class="dv">8</span>, <span class="dv">5</span>),    <span class="co"># 绩效</span></span>
+<span id="cb3-13"><a href=""></a>    <span class="st">'L'</span>: (<span class="dv">5</span>, <span class="dv">2</span>)     <span class="co"># 留任</span></span>
+<span id="cb3-14"><a href=""></a>}</span>
+<span id="cb3-15"><a href=""></a></span>
+<span id="cb3-16"><a href=""></a><span class="co"># 节点颜色配置</span></span>
+<span id="cb3-17"><a href=""></a>colors <span class="op">=</span> {</span>
+<span id="cb3-18"><a href=""></a>    <span class="st">'C'</span>: <span class="st">'#FF6B6B'</span>,  <span class="co"># 红色 - 混淆变量</span></span>
+<span id="cb3-19"><a href=""></a>    <span class="st">'D'</span>: <span class="st">'#4ECDC4'</span>,  <span class="co"># 青色 - 处理变量</span></span>
+<span id="cb3-20"><a href=""></a>    <span class="st">'M'</span>: <span class="st">'#95E1D3'</span>,  <span class="co"># 浅绿 - 中介变量</span></span>
+<span id="cb3-21"><a href=""></a>    <span class="st">'Y'</span>: <span class="st">'#F38181'</span>,  <span class="co"># 粉色 - 结果变量</span></span>
+<span id="cb3-22"><a href=""></a>    <span class="st">'L'</span>: <span class="st">'#FFA07A'</span>   <span class="co"># 橙色 - 碰撞节点</span></span>
+<span id="cb3-23"><a href=""></a>}</span>
+<span id="cb3-24"><a href=""></a></span>
+<span id="cb3-25"><a href=""></a>labels <span class="op">=</span> {</span>
+<span id="cb3-26"><a href=""></a>    <span class="st">'C'</span>: <span class="st">'能力(C)</span><span class="ch">\n</span><span class="st">混杂变量'</span>,</span>
+<span id="cb3-27"><a href=""></a>    <span class="st">'D'</span>: <span class="st">'培训(D)</span><span class="ch">\n</span><span class="st">处理变量'</span>,</span>
+<span id="cb3-28"><a href=""></a>    <span class="st">'M'</span>: <span class="st">'技能(M)</span><span class="ch">\n</span><span class="st">中介变量'</span>,</span>
+<span id="cb3-29"><a href=""></a>    <span class="st">'Y'</span>: <span class="st">'绩效(Y)</span><span class="ch">\n</span><span class="st">结果变量'</span>,</span>
+<span id="cb3-30"><a href=""></a>    <span class="st">'L'</span>: <span class="st">'留任(L)</span><span class="ch">\n</span><span class="st">碰撞节点'</span></span>
+<span id="cb3-31"><a href=""></a>}</span>
+<span id="cb3-32"><a href=""></a></span>
+<span id="cb3-33"><a href=""></a><span class="co"># 绘制节点</span></span>
+<span id="cb3-34"><a href=""></a><span class="cf">for</span> node, (x, y) <span class="kw">in</span> positions.items():</span>
+<span id="cb3-35"><a href=""></a>    circle <span class="op">=</span> plt.Circle((x, y), <span class="fl">0.6</span>, color<span class="op">=</span>colors[node],</span>
+<span id="cb3-36"><a href=""></a>                        ec<span class="op">=</span><span class="st">'black'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, zorder<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb3-37"><a href=""></a>    ax.add_patch(circle)</span>
+<span id="cb3-38"><a href=""></a>    ax.text(x, y, labels[node], ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'center'</span>,</span>
+<span id="cb3-39"><a href=""></a>            fontsize<span class="op">=</span><span class="dv">9</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>, zorder<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb3-40"><a href=""></a></span>
+<span id="cb3-41"><a href=""></a><span class="co"># 绘制箭头</span></span>
+<span id="cb3-42"><a href=""></a>arrows <span class="op">=</span> [(<span class="st">'C'</span>,<span class="st">'D'</span>), (<span class="st">'C'</span>,<span class="st">'Y'</span>), (<span class="st">'D'</span>,<span class="st">'M'</span>), (<span class="st">'M'</span>,<span class="st">'Y'</span>),</span>
+<span id="cb3-43"><a href=""></a>          (<span class="st">'D'</span>,<span class="st">'Y'</span>), (<span class="st">'D'</span>,<span class="st">'L'</span>), (<span class="st">'Y'</span>,<span class="st">'L'</span>)]</span>
+<span id="cb3-44"><a href=""></a></span>
+<span id="cb3-45"><a href=""></a><span class="cf">for</span> start, end <span class="kw">in</span> arrows:</span>
+<span id="cb3-46"><a href=""></a>    x1, y1 <span class="op">=</span> positions[start]</span>
+<span id="cb3-47"><a href=""></a>    x2, y2 <span class="op">=</span> positions[end]</span>
+<span id="cb3-48"><a href=""></a>    dx, dy <span class="op">=</span> x2 <span class="op">-</span> x1, y2 <span class="op">-</span> y1</span>
+<span id="cb3-49"><a href=""></a>    dist <span class="op">=</span> np.sqrt(dx<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> dy<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb3-50"><a href=""></a>    ax.annotate(<span class="st">''</span>, xy<span class="op">=</span>(x2<span class="op">-</span><span class="fl">0.6</span><span class="op">*</span>dx<span class="op">/</span>dist, y2<span class="op">-</span><span class="fl">0.6</span><span class="op">*</span>dy<span class="op">/</span>dist),</span>
+<span id="cb3-51"><a href=""></a>                xytext<span class="op">=</span>(x1<span class="op">+</span><span class="fl">0.6</span><span class="op">*</span>dx<span class="op">/</span>dist, y1<span class="op">+</span><span class="fl">0.6</span><span class="op">*</span>dy<span class="op">/</span>dist),</span>
+<span id="cb3-52"><a href=""></a>                arrowprops<span class="op">=</span><span class="bu">dict</span>(arrowstyle<span class="op">=</span><span class="st">'-&gt;'</span>, lw<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb3-53"><a href=""></a></span>
+<span id="cb3-54"><a href=""></a>ax.set_title(<span class="st">'DAG Structure'</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb3-55"><a href=""></a>plt.tight_layout()</span>
+<span id="cb3-56"><a href=""></a>plt.show()</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div><div class="column" style="width:55%;">
+<p><strong>生成的 DAG 图</strong></p>
+<div style="font-size: 0.9em;">
+<div id="146f16ca" class="cell" data-fig-height="6" data-fig-width="7" data-execution_count="3">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="lecture03_dags_files/figure-revealjs/cell-4-output-1.png"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p><strong>关键洞察：</strong></p>
+<ul>
+<li>能力(C)是<em>混淆变量</em>：影响培训和绩效</li>
+<li>技能(M)是<em>中介变量</em>：培训→技能→绩效</li>
+<li>留任(L)是<em>碰撞节点</em>：受绩效和培训共同影响</li>
+</ul>
+</div></div>
+</section>
+<section id="回归分析不同控制策略比较" class="slide level2">
+<h2>回归分析：不同控制策略比较</h2>
+<div style="font-size: 0.85em;">
+<div id="2ee2248a" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="co"># 5种控制策略的比较</span></span>
+<span id="cb4-2"><a href=""></a>models <span class="op">=</span> {</span>
+<span id="cb4-3"><a href=""></a>    <span class="st">'模型1(不控制)'</span>: sm.OLS(data[<span class="st">'performance'</span>],</span>
+<span id="cb4-4"><a href=""></a>                          sm.add_constant(data[<span class="st">'training'</span>])).fit(),</span>
+<span id="cb4-5"><a href=""></a>    <span class="st">'模型2(控制C)✓'</span>: sm.OLS(data[<span class="st">'performance'</span>],</span>
+<span id="cb4-6"><a href=""></a>                          sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'ability'</span>]])).fit(),</span>
+<span id="cb4-7"><a href=""></a>    <span class="st">'模型3(控制M)✗'</span>: sm.OLS(data[<span class="st">'performance'</span>],</span>
+<span id="cb4-8"><a href=""></a>                          sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'skill'</span>]])).fit(),</span>
+<span id="cb4-9"><a href=""></a>    <span class="st">'模型4(控制C+M)'</span>: sm.OLS(data[<span class="st">'performance'</span>],</span>
+<span id="cb4-10"><a href=""></a>                          sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'ability'</span>,<span class="st">'skill'</span>]])).fit(),</span>
+<span id="cb4-11"><a href=""></a>    <span class="st">'模型5(控制L)✗'</span>: sm.OLS(data[<span class="st">'performance'</span>],</span>
+<span id="cb4-12"><a href=""></a>                          sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'retention'</span>]])).fit()</span>
+<span id="cb4-13"><a href=""></a>}</span>
+<span id="cb4-14"><a href=""></a></span>
+<span id="cb4-15"><a href=""></a><span class="bu">print</span>(<span class="ss">f"真实处理效应: </span><span class="sc">{</span>true_effect<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb4-16"><a href=""></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">65</span>)</span>
+<span id="cb4-17"><a href=""></a></span>
+<span id="cb4-18"><a href=""></a>results <span class="op">=</span> []</span>
+<span id="cb4-19"><a href=""></a><span class="cf">for</span> name, model <span class="kw">in</span> models.items():</span>
+<span id="cb4-20"><a href=""></a>    coef <span class="op">=</span> model.params[<span class="st">'training'</span>]</span>
+<span id="cb4-21"><a href=""></a>    results.append({</span>
+<span id="cb4-22"><a href=""></a>        <span class="st">'模型'</span>: name,</span>
+<span id="cb4-23"><a href=""></a>        <span class="st">'估计值'</span>: <span class="ss">f"</span><span class="sc">{</span>coef<span class="sc">:.3f}</span><span class="ss">"</span>,</span>
+<span id="cb4-24"><a href=""></a>        <span class="st">'偏差'</span>: <span class="ss">f"</span><span class="sc">{</span>coef<span class="op">-</span>true_effect<span class="sc">:+.3f}</span><span class="ss">"</span>,</span>
+<span id="cb4-25"><a href=""></a>        <span class="st">'R²'</span>: <span class="ss">f"</span><span class="sc">{</span>model<span class="sc">.</span>rsquared<span class="sc">:.3f}</span><span class="ss">"</span></span>
+<span id="cb4-26"><a href=""></a>    })</span>
+<span id="cb4-27"><a href=""></a></span>
+<span id="cb4-28"><a href=""></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
+<span id="cb4-29"><a href=""></a><span class="bu">print</span>(results_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>真实处理效应: 2.000
+=================================================================
+        模型   估计值     偏差    R²
+  模型1(不控制) 3.924 +1.924 0.371
+ 模型2(控制C)✓ 2.330 +0.330 0.889
+ 模型3(控制M)✗ 1.295 -0.705 0.675
+模型4(控制C+M) 1.953 -0.047 0.896
+ 模型5(控制L)✗ 3.299 +1.299 0.419</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="结果解释" class="slide level2">
+<h2>结果解释</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>模型评估</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">模型</th>
+<th style="text-align: left;">评估</th>
+<th style="text-align: left;">问题</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">模型1(不控制)</td>
+<td style="text-align: left;">✗ 有偏</td>
+<td style="text-align: left;">包含能力(C)混淆效应</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">模型2(控制C)</td>
+<td style="text-align: left;">✓ <strong>正确</strong></td>
+<td style="text-align: left;">阻断后门路径</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">模型3(控制M)</td>
+<td style="text-align: left;">✗ 低估</td>
+<td style="text-align: left;">阻断间接效应</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">模型4(控制C+M)</td>
+<td style="text-align: left;">△ 部分正确</td>
+<td style="text-align: left;">估计直接效应</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">模型5(控制L)</td>
+<td style="text-align: left;">✗✗ 严重错误</td>
+<td style="text-align: left;">碰撞偏误</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:50%;">
+<p><strong>DAG 指导原则</strong></p>
+<div style="font-size: 0.9em;">
+<ul>
+<li>✓ <strong>控制混淆变量</strong>：阻断后门路径，获得无偏估计</li>
+<li>✗ <strong>不要控制中介变量</strong>：除非只想估计直接效应</li>
+<li>✗✗ <strong>绝对不能控制碰撞变量</strong>：会引入新的偏误</li>
+</ul>
+</div>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p>DAG 是选择控制变量的科学依据！</p>
+</div>
+</div>
+</div>
 </div></div>
 </section></section>
 <section>
