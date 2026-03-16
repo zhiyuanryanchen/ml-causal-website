@@ -9,6 +9,8 @@ project:
     - Quarto/lecture01_notes.html
     - Quarto/lecture02_probability_regression_students.html
     - Quarto/lecture02_probability_regression_notes.html
+    - Quarto/lecture03_dags.html
+    - Quarto/lecture03_dags_notes.html
 
 website:
   title: "机器学习与因果推断"
@@ -31,6 +33,10 @@ website:
             file: Quarto/lecture02_probability_regression_students.html
           - text: "第二讲：详细讲义"
             file: Quarto/lecture02_probability_regression_notes.html
+          - text: "第三讲：有向无环图"
+            file: Quarto/lecture03_dags.html
+          - text: "第三讲：详细讲义"
+            file: Quarto/lecture03_dags_notes.html
       - text: "资源"
         file: resources.qmd
     right:
@@ -65,6 +71,10 @@ website:
               file: Quarto/lecture02_probability_regression_students.html
             - text: "第二讲：详细讲义"
               file: Quarto/lecture02_probability_regression_notes.html
+            - text: "第三讲：有向无环图"
+              file: Quarto/lecture03_dags.html
+            - text: "第三讲：详细讲义"
+              file: Quarto/lecture03_dags_notes.html
 
 format:
   html:
