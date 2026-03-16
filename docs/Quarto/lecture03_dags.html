@@ -235,7 +235,7 @@
 <section id="真实案例教育回报研究" class="slide level2">
 <h2>真实案例：教育回报研究</h2>
 <div class="example-box">
-<p><strong>研究问题:上大学对收入的因果效应</strong></p>
+<p><strong>研究问题</strong> 上大学对收入的因果效应</p>
 <p>传统方法：控制所有可观测变量？</p>
 <ul>
 <li>年龄、性别、种族</li>
@@ -246,7 +246,7 @@
 </div>
 <div class="fragment">
 <div class="warning-box">
-<p><strong>潜在陷阱:控制“职业选择”或“婚姻状况”可能引入<em>碰撞偏误</em>！</strong></p>
+<p><strong>潜在陷阱</strong> 控制“职业选择”或“婚姻状况”可能引入<em>碰撞偏误</em>！</p>
 <ul>
 <li>这些变量可能是<em>教育</em>和<em>收入</em>的共同结果</li>
 <li>控制它们会打开虚假路径</li>
@@ -480,9 +480,19 @@
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>直观理解：比较 vs 对比</strong></p>
-<p>不控制<span class="math inline">I</span>时： - 比较”上大学者”和”没上大学者”的收入 - 两组在”家庭收入”上分布不同 - 观察到的差异 = 教育效应 + 家庭背景差异</p>
+<p>不控制<span class="math inline">I</span>时：</p>
+<ul>
+<li>比较”上大学者”和”没上大学者”的收入</li>
+<li>两组在”家庭收入”上分布不同</li>
+<li>观察到的差异 = 教育效应 + 家庭背景差异</li>
+</ul>
 <p>. . .</p>
-<p>控制<span class="math inline">I</span>时： - <em>在相同家庭收入<span class="math inline">I</span>水平内</em>比较 - 剥离<span class="math inline">I</span>对<span class="math inline">D</span>和<span class="math inline">Y</span>的共同影响 - 只剩教育→收入的因果路径</p>
+<p>控制<span class="math inline">I</span>时：</p>
+<ul>
+<li><em>在相同家庭收入<span class="math inline">I</span>水平内</em>比较</li>
+<li>剥离<span class="math inline">I</span>对<span class="math inline">D</span>和<span class="math inline">Y</span>的共同影响</li>
+<li>只剩教育→收入的因果路径</li>
+</ul>
 </div><div class="column" style="width:50%;">
 <div class="example-box">
 <p><strong>数学机制</strong></p>
@@ -570,15 +580,30 @@
 <div class="column" style="width:50%;">
 <p><strong>步骤1：朴素回归（有偏）</strong></p>
 <p><span class="math display">Y_i = \alpha + \delta D_i + \varepsilon_i</span></p>
-<p>估计结果： - <span class="math inline">\widehat{\delta}_{\text{ols}}</span> = 教育相关效应 - 包含真实效应 + 后门路径偏误 - 可能高估或低估真实效应</p>
+<p>估计结果：</p>
+<ul>
+<li><span class="math inline">\widehat{\delta}_{\text{ols}}</span> = 教育相关效应</li>
+<li>包含真实效应 + 后门路径偏误</li>
+<li>可能高估或低估真实效应</li>
+</ul>
 <p>. . .</p>
 <p><strong>步骤2：控制家庭收入（满足后门准则）</strong></p>
 <p><span class="math display">Y_i = \alpha + \delta D_i + \beta I_i + \varepsilon_i</span></p>
-<p>估计结果： - <span class="math inline">\widehat{\delta}_{\text{causal}}</span> = 因果效应 - 后门路径被阻断 - 无偏估计（假设无其他开放后门）</p>
+<p>估计结果：</p>
+<ul>
+<li><span class="math inline">\widehat{\delta}_{\text{causal}}</span> = 因果效应</li>
+<li>后门路径被阻断</li>
+<li>无偏估计（假设无其他开放后门）</li>
+</ul>
 </div><div class="column" style="width:50%;">
 <div class="concept-box">
 <p><strong>如何”阻断”后门路径？</strong></p>
-<p>控制<span class="math inline">I</span>相当于： - 在<span class="math inline">I</span>的每个水平内比较<span class="math inline">D</span>对<span class="math inline">Y</span>的影响 - 剥离<span class="math inline">I</span>造成的<span class="math inline">D</span>与<span class="math inline">Y</span>的相关性 - 只剩下<span class="math inline">D \rightarrow Y</span>的因果路径</p>
+<p>控制<span class="math inline">I</span>相当于：</p>
+<ul>
+<li>在<span class="math inline">I</span>的每个水平内比较<span class="math inline">D</span>对<span class="math inline">Y</span>的影响</li>
+<li>剥离<span class="math inline">I</span>造成的<span class="math inline">D</span>与<span class="math inline">Y</span>的相关性</li>
+<li>只剩下<span class="math inline">D \rightarrow Y</span>的因果路径</li>
+</ul>
 <p><strong>回归的魔法</strong>：通过将<span class="math inline">I</span>包含在模型中，我们实现了对<span class="math inline">I</span>的条件化，从而阻断了所有经过<span class="math inline">I</span>的后门路径。</p>
 </div>
 </div></div>
@@ -588,8 +613,18 @@
 <div class="columns">
 <div class="column" style="width:55%;">
 <p><strong>后门路径的阻断原理</strong></p>
-<p>后门路径必须通过某个共同原因连接<span class="math inline">D</span>和<span class="math inline">Y</span>： - 路径1：<span class="math inline">D \leftarrow I \rightarrow Y</span>（经过<span class="math inline">I</span>） - 路径2：<span class="math inline">D \leftarrow PE \rightarrow I \rightarrow Y</span>（经过<span class="math inline">I</span>） - 路径3：<span class="math inline">D \leftarrow B \rightarrow PE \rightarrow I \rightarrow Y</span>（经过<span class="math inline">I</span>）</p>
-<p><strong>控制<span class="math inline">I</span>的效果</strong>： - 阻断所有经过<span class="math inline">I</span>的路径 - 不满足后门准则的路径被关闭 - 只剩下因果路径开放</p>
+<p>后门路径必须通过某个共同原因连接<span class="math inline">D</span>和<span class="math inline">Y</span>：</p>
+<ul>
+<li>路径1：<span class="math inline">D \leftarrow I \rightarrow Y</span>（经过<span class="math inline">I</span>）</li>
+<li>路径2：<span class="math inline">D \leftarrow PE \rightarrow I \rightarrow Y</span>（经过<span class="math inline">I</span>）</li>
+<li>路径3：<span class="math inline">D \leftarrow B \rightarrow PE \rightarrow I \rightarrow Y</span>（经过<span class="math inline">I</span>）</li>
+</ul>
+<p><strong>控制<span class="math inline">I</span>的效果</strong></p>
+<ul>
+<li>阻断所有经过<span class="math inline">I</span>的路径</li>
+<li>不满足后门准则的路径被关闭</li>
+<li>只剩下因果路径开放</li>
+</ul>
 </div><div class="column" style="width:45%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -616,7 +651,13 @@
 <div class="fragment">
 <p><strong>回归中的体现</strong>：</p>
 <p><span class="math display">Y_i = \alpha + \delta D_i + \beta I_i + \varepsilon_i</span></p>
-<p>即使控制了<span class="math inline">I</span>，如果<span class="math inline">B</span>直接影响<span class="math inline">Y</span>： - <span class="math inline">\varepsilon_i</span> 包含<span class="math inline">B</span>的影响 - <span class="math inline">B</span>同时影响<span class="math inline">D</span>和<span class="math inline">Y</span> - <span class="math inline">D</span>与<span class="math inline">\varepsilon_i</span>相关 - 内生性偏误仍然存在</p>
+<p>即使控制了<span class="math inline">I</span>，如果<span class="math inline">B</span>直接影响<span class="math inline">Y</span>：</p>
+<ul>
+<li><span class="math inline">\varepsilon_i</span> 包含<span class="math inline">B</span>的影响</li>
+<li><span class="math inline">B</span>同时影响<span class="math inline">D</span>和<span class="math inline">Y</span></li>
+<li><span class="math inline">D</span>与<span class="math inline">\varepsilon_i</span>相关</li>
+<li>内生性偏误仍然存在</li>
+</ul>
 </div>
 </section>
 <section id="人力资本模型控制策略总结" class="slide level2">
@@ -690,7 +731,11 @@
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>后门路径识别</strong></p>
-<p>从”教育”到”收入”： - 后门路径1：教育 ← 能力 → 收入 - 后门路径2：教育 ← 家庭背景 → 收入</p>
+<p>从”教育”到”收入”：</p>
+<ul>
+<li>后门路径1：教育 ← 能力 → 收入</li>
+<li>后门路径2：教育 ← 家庭背景 → 收入</li>
+</ul>
 <p>必须控制：能力、家庭背景</p>
 </div><div class="column" style="width:50%;">
 <p><strong>不能控制的变量</strong></p>
@@ -734,7 +779,11 @@
 <div class="column" style="width:55%;">
 <div class="example-box">
 <p><strong>电影明星案例</strong></p>
-<p>成为电影明星(<span class="math inline">Z</span>)需要： - 美貌(<span class="math inline">X</span>) - 演技(<span class="math inline">Y</span>)</p>
+<p>成为电影明星(<span class="math inline">Z</span>)需要：</p>
+<ul>
+<li>美貌(<span class="math inline">X</span>)</li>
+<li>演技(<span class="math inline">Y</span>)</li>
+</ul>
 <p>如果已有美貌，演技可以差一些</p>
 <p>如果已有演技，美貌可以差一些</p>
 </div>
@@ -765,14 +814,22 @@
 <p><img data-src="diagrams/lecture03/more_example_dag_1-1.png" class="quarto-figure quarto-figure-center" style="width:85.0%"></p>
 </figure>
 </div>
-<p><strong>案例1</strong>：研究幸福感对收入的影响 - 控制”婚姻状态”会引入偏误 - 因为幸福感和收入都影响婚姻</p>
+<p><strong>案例1</strong> 研究幸福感对收入的影响</p>
+<ul>
+<li>控制”婚姻状态”会引入偏误</li>
+<li>因为幸福感和收入都影响婚姻</li>
+</ul>
 </div><div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="diagrams/lecture03/more_example_dag_2-1.png" class="quarto-figure quarto-figure-center" style="width:85.0%"></p>
 </figure>
 </div>
-<p><strong>案例2</strong>：研究教育对健康的效应 - 控制”就业状态”需谨慎 - 可能是教育和健康的共同结果</p>
+<p><strong>案例2</strong> 研究教育对健康的效应</p>
+<ul>
+<li>控制”就业状态”需谨慎</li>
+<li>可能是教育和健康的共同结果</li>
+</ul>
 </div></div>
 </section></section>
 <section>
@@ -793,7 +850,12 @@
 <div class="fragment">
 <div class="warning-box">
 <p><strong>DAG视角</strong></p>
-<p>职业可能是碰撞节点： - 性别 → 职业选择 - 能力/偏好 → 职业选择 - 歧视 → 职业选择</p>
+<p>职业可能是碰撞节点：</p>
+<ul>
+<li>性别 → 职业选择</li>
+<li>能力/偏好 → 职业选择</li>
+<li>歧视 → 职业选择</li>
+</ul>
 <p>控制职业可能掩盖歧视的真实效应！</p>
 </div>
 </div>
@@ -802,7 +864,13 @@
 <h2>种族歧视的DAG分析</h2>
 
 <img data-src="diagrams/lecture03/racial_bias_dag-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"><div style="font-size: 0.9em; margin-top: 15px;">
-<p><strong>复杂路径</strong>：种族可能通过多种渠道影响就业 - 直接歧视 - 教育机会不平等 - 社交网络差异 - 地理位置因素</p>
+<p><strong>复杂路径</strong> 种族可能通过多种渠道影响就业</p>
+<ul>
+<li>直接歧视</li>
+<li>教育机会不平等</li>
+<li>社交网络差异</li>
+<li>地理位置因素</li>
+</ul>
 </div>
 </section>
 <section id="样本选择作为碰撞偏误" class="slide level2">
@@ -815,7 +883,13 @@
 <div class="fragment">
 <div class="example-box">
 <p><strong>研究建议</strong></p>
-<p>使用DAG指导样本选择： 1. 明确目标总体 2. 识别选择机制 3. 评估选择是否基于碰撞节点 4. 必要时使用选择模型纠正</p>
+<p>使用DAG指导样本选择：</p>
+<ol type="1">
+<li>明确目标总体</li>
+<li>识别选择机制</li>
+<li>评估选择是否基于碰撞节点</li>
+<li>必要时使用选择模型纠正</li>
+</ol>
 </div>
 </div>
 </section></section>
