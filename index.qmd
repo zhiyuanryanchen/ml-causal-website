@@ -40,22 +40,28 @@ date: "2026-03-05"
 - [📖 第一讲详细讲义](Quarto/lecture01_notes.html)
 - [📊 第二讲课件](Quarto/lecture02_probability_regression_students.html)
 - [📖 第二讲详细讲义](Quarto/lecture02_probability_regression_notes.html)
+- [📊 第三讲课件](Quarto/lecture03_dags.html)
+- [📖 第三讲详细讲义](Quarto/lecture03_dags_notes.html)
 - [💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
 
 ### 最新公告
 
 ::: {.callout-important appearance="simple"}
-**2026-03-04**
+**2026-03-16**
+
+第三讲课件和详细讲义已发布！
+
+📖 [查看第三讲课件：有向无环图](Quarto/lecture03_dags.html)
+
+📚 [查看第三讲详细讲义](Quarto/lecture03_dags_notes.html)
+
+---
 
 第一讲与第二讲课件和详细讲义已发布！
 
-📖 [查看第一讲课件](Quarto/lecture01_students.html)
+📖 [查看第一讲课件](Quarto/lecture01_students.html) | 📚 [查看详细讲义](Quarto/lecture01_notes.html)
 
-📚 [查看第一讲详细讲义](Quarto/lecture01_notes.html)
-
-📖 [查看第二讲课件](Quarto/lecture02_probability_regression_students.html)
-
-📚 [查看第二讲详细讲义](Quarto/lecture02_probability_regression_notes.html)
+📖 [查看第二讲课件](Quarto/lecture02_probability_regression_students.html) | 📚 [查看详细讲义](Quarto/lecture02_probability_regression_notes.html)
 :::
 :::
 :::
@@ -152,11 +158,15 @@ date: "2026-03-05"
 ## 开始学习
 
 ::: {.grid .gap-3 .text-center}
-::: {.g-col-6}
-[📊 查看第一讲课件](Quarto/lecture01_students.html){.btn .btn-primary .btn-lg}
+::: {.g-col-4}
+[📊 第一讲](Quarto/lecture01_students.html){.btn .btn-primary .btn-lg}
 :::
 
-::: {.g-col-6}
-[📖 查看详细讲义](Quarto/lecture01_notes.html){.btn .btn-secondary .btn-lg}
+::: {.g-col-4}
+[📊 第二讲](Quarto/lecture02_probability_regression_students.html){.btn .btn-primary .btn-lg}
+:::
+
+::: {.g-col-4}
+[📊 第三讲](Quarto/lecture03_dags.html){.btn .btn-primary .btn-lg}
 :::
 :::
