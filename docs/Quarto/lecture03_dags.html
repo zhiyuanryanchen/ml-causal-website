@@ -171,6 +171,10 @@
 <ul>
 <li><a href="#/为什么需要dag" id="/toc-为什么需要dag">为什么需要DAG？</a></li>
 <li><a href="#/dag基础符号" id="/toc-dag基础符号">DAG基础符号</a></li>
+<li><a href="#/后门准则" id="/toc-后门准则">后门准则</a></li>
+<li><a href="#/碰撞节点与碰撞偏误" id="/toc-碰撞节点与碰撞偏误">碰撞节点与碰撞偏误</a></li>
+<li><a href="#/真实应用歧视与碰撞偏误" id="/toc-真实应用歧视与碰撞偏误">真实应用：歧视与碰撞偏误</a></li>
+<li><a href="#/两种因果框架的比较" id="/toc-两种因果框架的比较">两种因果框架的比较</a></li>
 <li><a href="#/如何用dag指导研究设计" id="/toc-如何用dag指导研究设计">如何用DAG指导研究设计</a></li>
 <li><a href="#/总结" id="/toc-总结">总结</a></li>
 </ul>
@@ -207,13 +211,13 @@
 <div class="column" style="width:50%;">
 <p><strong>之前的问题</strong></p>
 <ul>
-<li><strong>混淆变量(Confounder)</strong>导致选择偏误</li>
-<li><strong>遗漏变量(Omitted Variable)</strong>使估计有偏</li>
-<li>如何判断需要那些<strong>控制变量(Control Variables)</strong>？</li>
+<li><em>混淆变量(Confounder)</em>导致选择偏误</li>
+<li><em>遗漏变量(Omitted Variable)</em>使估计有偏</li>
+<li>如何判断需要那些<em>控制变量(Control Variables)</em>？</li>
 </ul>
 <div class="warning-box">
 <p><strong>关键问题</strong></p>
-<p>控制更多变量总是更好吗？</p>
+<p><em>控制更多变量总是更好吗？</em></p>
 </div>
 </div><div class="column" style="width:50%;">
 <p><strong>DAG的解决方案</strong></p>
@@ -283,8 +287,9 @@
 <li><span class="math inline">Z</span>：中介变量（如职业技能）</li>
 <li><span class="math inline">Y</span>：结果变量（如收入）</li>
 </ul>
-<p>控制<span class="math inline">Z</span>会<em>阻断<span class="math inline">D</span>对<span class="math inline">Y</span>的真实因果效应</em> ::</p>
-<p>. . .</p>
+<p>控制<span class="math inline">Z</span>会<em>阻断<span class="math inline">D</span>对<span class="math inline">Y</span>的真实因果效应</em></p>
+</div>
+<div class="fragment">
 <div class="example-box">
 <p><strong>教育回报的例子</strong></p>
 <p>上大学(<span class="math inline">D</span>) → 获得技能(<span class="math inline">Z</span>) → 更高收入(<span class="math inline">Y</span>)</p>
@@ -294,6 +299,8 @@
 <li>若想估计<em>直接</em>效应，才需要<em>控制中介变量</em></li>
 </ul>
 </div>
+</div>
+</section>
 <section id="分叉结构混淆变量" class="slide level2">
 <h2>分叉结构：混淆变量</h2>
 <div class="concept-box">
@@ -316,7 +323,8 @@
 </ul>
 </div>
 </div>
-</section>
+</section></section>
+<section>
 <section id="后门准则" class="title-slide slide level1 center" data-background-color="#AE0B2A">
 <h1>后门准则</h1>
 
@@ -343,8 +351,7 @@
 <li>路径最终到达<span class="math inline">Y</span></li>
 <li>包含任何方向的边（<span class="math inline">\rightarrow</span> 或 <span class="math inline">\leftarrow</span>）</li>
 </ol>
-<p><span class="math display">开放的后门路径 = 混淆偏误的来源 = 遗漏变量偏误</span></p>
-<p><strong>我们的目标</strong>：找到变量集合<span class="math inline">Z</span>，使得控制<span class="math inline">Z</span>后，所有后门路径都被阻断。</p>
+<p>若<span class="math inline">Z</span>满足后门准则，则： <span class="math display">P(Y|do(D)) = \sum_z P(Y|D,Z)P(Z)</span></p>
 </div>
 </section>
 <section id="后门路径的类型举例" class="slide level2">
@@ -371,9 +378,9 @@
 </div>
 <ul>
 <li>Becker 人力资本模型(Becker, 1964): <em>教育投资</em>(<span class="math inline">D</span>)受<em>家庭收入</em>（<span class="math inline">I</span>)、<em>父母教育水平</em>(<span class="math inline">E</span>)和其他<em>不可观测因素</em>（<span class="math inline">B</span>，e.g.,能力，基因，家庭氛围等）影响</li>
-<li><strong>教育水平与家庭收入共同作用于收入</strong>(<span class="math inline">Y</span>)。</li>
+<li><em>教育水平与家庭收入共同作用于收入</em>(<span class="math inline">Y</span>)。</li>
 <li><span class="math inline">B</span> 是混淆变量</li>
-<li><strong>思考</strong>: <span class="math inline">B</span>会直接影响<span class="math inline">Y</span>吗？</li>
+<li><em>思考</em>: <span class="math inline">B</span>会直接影响<span class="math inline">Y</span>吗？</li>
 </ul>
 </div><div class="column" style="width:33%;">
 <p><strong>碰撞结构</strong></p>
@@ -384,7 +391,7 @@
 </div>
 <ul>
 <li>后门路径：<span class="math inline">D \leftarrow X \rightarrow Y</span></li>
-<li><span class="math inline">X</span>是<strong>碰撞节点</strong>: 当有两个变量共同影响一个结果变量时，称该变量是<em>碰撞节点（Collider）</em></li>
+<li><span class="math inline">X</span>是<em>碰撞节点</em>: 当有两个变量共同影响一个结果变量时，称该变量是<em>碰撞节点（Collider）</em></li>
 <li>当控制碰撞节点<span class="math inline">X</span>时，<span class="math inline">D</span>和<span class="math inline">Y</span>会变得相关，即使它们原本没有任何关系！</li>
 </ul>
 </div></div>
@@ -439,41 +446,21 @@
 <h2>后门准则的直观理解</h2>
 <div class="concept-box">
 <p><strong>为什么叫”后门”？</strong></p>
-<p>想象你要从<span class="math inline">D</span>走到<span class="math inline">Y</span>： - <strong>前门</strong>是因果路径：<span class="math inline">D \rightarrow Y</span>（你想走的正路） - <strong>后门</strong>是混淆路径：<span class="math inline">D \leftarrow \dots \rightarrow Y</span>（偷偷绕进来的偏误）</p>
-<p><strong>开放的后门路径 = 系统性的非因果相关 = 遗漏变量偏误</strong></p>
+<p>想象你要从<span class="math inline">D</span>走到<span class="math inline">Y</span>：</p>
+<ul>
+<li><em>前门</em>是因果路径：<span class="math inline">D \rightarrow Y</span>（你想走的正路）</li>
+<li><em>后门</em>是混淆路径：<span class="math inline">D \leftarrow \dots \rightarrow Y</span>（偷偷绕进来的偏误）</li>
+</ul>
 </div>
 <div class="fragment">
 <div class="example-box">
 <p><strong>关键洞察</strong></p>
-<p>后门路径造成<span class="math inline">D</span>与<span class="math inline">Y</span>的<strong>虚假相关(spurious correlation)</strong>： - 我们看到<span class="math inline">D</span>和<span class="math inline">Y</span>相关 - 但这可能是通过后门路径的相关，而非真正的因果 - 控制适当的变量可以”关闭”后门，只留下因果路径</p>
-</div>
-</div>
-</section>
-<section id="后门准则的正式定义" class="slide level2">
-<h2>后门准则的正式定义</h2>
-<div class="concept-box">
-<p><strong>后门准则（Backdoor Criterion）</strong></p>
-<p>变量集合<span class="math inline">Z</span>满足后门准则，如果：</p>
-<ol type="1">
-<li><span class="math inline">Z</span>阻断了所有从<span class="math inline">D</span>到<span class="math inline">Y</span>的后门路径</li>
-<li><span class="math inline">Z</span>不包含<span class="math inline">D</span>的任何后代（包括<span class="math inline">D</span>本身）</li>
-</ol>
-<p>若<span class="math inline">Z</span>满足后门准则，则： <span class="math display">P(Y|do(D)) = \sum_z P(Y|D,Z)P(Z)</span></p>
-</div>
-<div class="fragment">
-<div class="callout callout-tip callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>提示</strong></p>
-</div>
-<div class="callout-content">
-<p><strong>实际含义</strong></p>
-<p>一旦控制满足后门准则的变量<span class="math inline">Z</span>，<span class="math inline">\widehat{\delta}</span>（回归中<span class="math inline">D</span>的系数）就获得了<strong>因果解释</strong>。</p>
-</div>
-</div>
+<p>后门路径造成<span class="math inline">D</span>与<span class="math inline">Y</span>的<em>虚假相关(spurious correlation)</em>：</p>
+<ul>
+<li>我们看到<span class="math inline">D</span>和<span class="math inline">Y</span>相关</li>
+<li>但这可能是通过后门路径的相关，而非真正的因果</li>
+<li>控制适当的变量可以“关闭”后门，只留下因果路径</li>
+</ul>
 </div>
 </div>
 </section>
@@ -495,7 +482,7 @@
 <p><strong>直观理解：比较 vs 对比</strong></p>
 <p>不控制<span class="math inline">I</span>时： - 比较”上大学者”和”没上大学者”的收入 - 两组在”家庭收入”上分布不同 - 观察到的差异 = 教育效应 + 家庭背景差异</p>
 <p>. . .</p>
-<p>控制<span class="math inline">I</span>时： - <strong>在相同家庭收入<span class="math inline">I</span>水平内</strong>比较 - 剥离<span class="math inline">I</span>对<span class="math inline">D</span>和<span class="math inline">Y</span>的共同影响 - 只剩教育→收入的因果路径</p>
+<p>控制<span class="math inline">I</span>时： - <em>在相同家庭收入<span class="math inline">I</span>水平内</em>比较 - 剥离<span class="math inline">I</span>对<span class="math inline">D</span>和<span class="math inline">Y</span>的共同影响 - 只剩教育→收入的因果路径</p>
 </div><div class="column" style="width:50%;">
 <div class="example-box">
 <p><strong>数学机制</strong></p>
@@ -509,7 +496,7 @@
 <li>与<span class="math inline">I</span>无关的部分（因果路径）→ 估计<span class="math inline">\delta</span></li>
 </ul></li>
 </ol>
-<p><strong>结果</strong>：<span class="math inline">\widehat{\delta}</span> 反映<span class="math inline">I</span>无法解释的那部分<span class="math inline">D</span>对<span class="math inline">Y</span>的影响</p>
+<p>*<strong>结果</strong>：<span class="math inline">\widehat{\delta}</span> 反映<span class="math inline">I</span>无法解释的那部分<span class="math inline">D</span>对<span class="math inline">Y</span>的影响</p>
 </div>
 </div></div>
 </section>
@@ -571,9 +558,9 @@
 </div><div class="column" style="width:40%;">
 <div class="example-box">
 <p><strong>关键发现</strong></p>
-<p>所有后门路径都经过<strong>家庭收入<span class="math inline">I</span></strong>！</p>
-<p>因此，<strong>仅控制<span class="math inline">I</span>就足以满足后门准则</strong>。</p>
-<p>这是<strong>最小充分调整策略</strong>。</p>
+<p>所有后门路径都经过<em>家庭收入<span class="math inline">I</span></em>！</p>
+<p>因此，<em>仅控制<span class="math inline">I</span>就足以满足后门准则</em>。</p>
+<p>这是<em>最小充分调整策略</em>。</p>
 </div>
 </div></div>
 </section>
@@ -621,8 +608,8 @@
 <p>如果在DAG中加入 <span class="math inline">B \rightarrow Y</span>：</p>
 <ul>
 <li>新后门路径：<span class="math inline">D \leftarrow B \rightarrow Y</span></li>
-<li>这条路径<strong>不经过<span class="math inline">I</span></strong></li>
-<li>仅控制<span class="math inline">I</span> <strong>无法</strong>阻断这条路径</li>
+<li>这条路径<em>不经过<span class="math inline">I</span></em></li>
+<li>仅控制<span class="math inline">I</span> <em>无法</em>阻断这条路径</li>
 <li>估计仍然有偏！</li>
 </ul>
 </div>
@@ -688,7 +675,7 @@
 <div class="warning-box">
 <p><strong>实践启示</strong></p>
 <ul>
-<li>找到<strong>最小充分调整集</strong>是关键</li>
+<li>找到<em>最小充分调整集</em>是关键</li>
 <li>控制不必要的变量会降低统计功效</li>
 <li>遗漏关键混淆变量会导致偏误</li>
 <li>DAG帮助我们系统化地识别关键变量</li>
@@ -714,8 +701,8 @@
 </ul>
 </div></div>
 </div>
-</section>
-
+</section></section>
+<section>
 <section id="碰撞节点与碰撞偏误" class="title-slide slide level1 center" data-background-color="#AE0B2A">
 <h1>碰撞节点与碰撞偏误</h1>
 
@@ -752,7 +739,7 @@
 <p>如果已有演技，美貌可以差一些</p>
 </div>
 <p>. . .</p>
-<p>在明星群体中： - 美貌与演技<strong>负相关</strong> - 但这只是选择效应！</p>
+<p>在明星群体中： - 美貌与演技<em>负相关</em> - 但这只是选择效应！</p>
 </div><div class="column" style="width:45%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -765,7 +752,7 @@
 <h2>美貌与才华的”权衡”</h2>
 
 <img data-src="diagrams/lecture03/beauty_collider.jpg" class="quarto-figure quarto-figure-center r-stretch" style="width:70.0%"><div style="text-align: center; margin-top: 20px;">
-<p><strong>核心洞察</strong>：在明星样本中，美貌和才华看似负相关，</p>
+<p><em>核心洞察</em>：在明星样本中，美貌和才华看似负相关，</p>
 <p>但这只是碰撞偏误——两者都是成为明星的原因！</p>
 </div>
 </section>
@@ -787,8 +774,8 @@
 </div>
 <p><strong>案例2</strong>：研究教育对健康的效应 - 控制”就业状态”需谨慎 - 可能是教育和健康的共同结果</p>
 </div></div>
-</section>
-
+</section></section>
+<section>
 <section id="真实应用歧视与碰撞偏误" class="title-slide slide level1 center" data-background-color="#AE0B2A">
 <h1>真实应用：歧视与碰撞偏误</h1>
 
@@ -831,8 +818,8 @@
 <p>使用DAG指导样本选择： 1. 明确目标总体 2. 识别选择机制 3. 评估选择是否基于碰撞节点 4. 必要时使用选择模型纠正</p>
 </div>
 </div>
-</section>
-
+</section></section>
+<section>
 <section id="两种因果框架的比较" class="title-slide slide level1 center" data-background-color="#AE0B2A">
 <h1>两种因果框架的比较</h1>
 
@@ -869,27 +856,27 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><strong>表达形式</strong></td>
+<td style="text-align: left;"><em>表达形式</em></td>
 <td style="text-align: left;">数学公式</td>
 <td style="text-align: left;">图形结构</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><strong>核心问题</strong></td>
+<td style="text-align: left;"><em>核心问题</em></td>
 <td style="text-align: left;">平均处理效应是多少？</td>
 <td style="text-align: left;">哪些路径造成偏误？</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><strong>识别条件</strong></td>
+<td style="text-align: left;"><em>识别条件</em></td>
 <td style="text-align: left;">条件独立假设(CIA)</td>
 <td style="text-align: left;">后门准则、<span class="math inline">d</span>-分离</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><strong>变量选择</strong></td>
+<td style="text-align: left;"><em>变量选择</em></td>
 <td style="text-align: left;">基于理论判断</td>
 <td style="text-align: left;">基于路径分析</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><strong>最佳应用</strong></td>
+<td style="text-align: left;"><em>最佳应用</em></td>
 <td style="text-align: left;">估计和推断</td>
 <td style="text-align: left;">研究设计和假设</td>
 </tr>
@@ -907,7 +894,7 @@
 </div>
 <div class="callout-content">
 <p><strong>本课程的观点</strong></p>
-<p>两种框架互补： - <strong>设计阶段</strong>：用DAG理清因果结构 - <strong>分析阶段</strong>：用潜在结果框架进行估计</p>
+<p>两种框架互补： - <em>设计阶段</em>：用DAG理清因果结构 - <em>分析阶段</em>：用潜在结果框架进行估计</p>
 </div>
 </div>
 </div>
@@ -933,9 +920,7 @@
 <p>控制碰撞节点打开虚假路径</p>
 <p><span class="math inline">\rightarrow</span> 即使该变量”看起来”相关，也不能控制</p>
 </div></div>
-</section>
-
-</div>
+<p>:::</p>
 </section></section>
 <section>
 <section id="如何用dag指导研究设计" class="title-slide slide level1 center" data-background-color="#AE0B2A">
@@ -1039,9 +1024,9 @@
 <div class="callout-content">
 <p><strong>推荐工具</strong></p>
 <ul>
-<li><strong>dagitty.net</strong>：在线DAG分析和路径识别</li>
-<li><strong>ggdag</strong>（R包）：绘制和分析DAG</li>
-<li><strong>CausalGraph</strong>（Python）：构建和分析因果图</li>
+<li><em>dagitty.net</em>：在线DAG分析和路径识别</li>
+<li><em>ggdag</em>（R包）：绘制和分析DAG</li>
+<li><em>CausalGraph</em>（Python）：构建和分析因果图</li>
 </ul>
 </div>
 </div>
