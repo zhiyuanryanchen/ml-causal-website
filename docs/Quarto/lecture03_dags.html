@@ -469,14 +469,27 @@
 <div class="concept-box">
 <p><strong>人力资本模型的回归实现</strong></p>
 <p>Becker模型中，识别教育(<span class="math inline">D</span>)对收入(<span class="math inline">Y</span>)的因果效应：</p>
-<p><strong>朴素回归（有偏误）</strong>： <span class="math display">Y_i = \alpha + \delta D_i + \varepsilon_i</span> <span class="math inline">\widehat{\delta}</span> 包含教育效应 + 所有后门路径的偏误</p>
-<p>. . .</p>
-<p><strong>满足后门准则的回归</strong>： <span class="math display">Y_i = \alpha + \delta D_i + \beta_1 I_i + \varepsilon_i</span></p>
+<p><strong>朴素回归（有偏误）</strong> <span class="math display">Y_i = \alpha + \delta D_i + \varepsilon_i</span> <span class="math inline">\widehat{\delta}</span> 包含教育效应 + 所有后门路径的偏误</p>
+</div>
+<div class="fragment">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>重要</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>满足后门准则的回归</strong> <span class="math display">Y_i = \alpha + \delta D_i + \beta_1 I_i + \varepsilon_i</span></p>
 <p>通过控制家庭收入<span class="math inline">I</span>，我们阻断了所有以<span class="math inline">I</span>为节点的后门路径，<span class="math inline">\widehat{\delta}</span> 成为因果效应的无偏估计。</p>
+</div>
+</div>
+</div>
 </div>
 </section>
 <section id="回归如何阻断后门路径" class="slide level2">
-<h2>回归如何”阻断”后门路径？</h2>
+<h2>回归如何“阻断”后门路径？</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>直观理解：比较 vs 对比</strong></p>
@@ -486,7 +499,6 @@
 <li>两组在”家庭收入”上分布不同</li>
 <li>观察到的差异 = 教育效应 + 家庭背景差异</li>
 </ul>
-<p>. . .</p>
 <p>控制<span class="math inline">I</span>时：</p>
 <ul>
 <li><em>在相同家庭收入<span class="math inline">I</span>水平内</em>比较</li>
@@ -506,7 +518,7 @@
 <li>与<span class="math inline">I</span>无关的部分（因果路径）→ 估计<span class="math inline">\delta</span></li>
 </ul></li>
 </ol>
-<p>*<strong>结果</strong>：<span class="math inline">\widehat{\delta}</span> 反映<span class="math inline">I</span>无法解释的那部分<span class="math inline">D</span>对<span class="math inline">Y</span>的影响</p>
+<p><strong>结果</strong>：<span class="math inline">\widehat{\delta}</span> 反映<span class="math inline">I</span>无法解释的那部分<span class="math inline">D</span>对<span class="math inline">Y</span>的影响</p>
 </div>
 </div></div>
 </section>
@@ -586,7 +598,6 @@
 <li>包含真实效应 + 后门路径偏误</li>
 <li>可能高估或低估真实效应</li>
 </ul>
-<p>. . .</p>
 <p><strong>步骤2：控制家庭收入（满足后门准则）</strong></p>
 <p><span class="math display">Y_i = \alpha + \delta D_i + \beta I_i + \varepsilon_i</span></p>
 <p>估计结果：</p>
@@ -604,7 +615,7 @@
 <li>剥离<span class="math inline">I</span>造成的<span class="math inline">D</span>与<span class="math inline">Y</span>的相关性</li>
 <li>只剩下<span class="math inline">D \rightarrow Y</span>的因果路径</li>
 </ul>
-<p><strong>回归的魔法</strong>：通过将<span class="math inline">I</span>包含在模型中，我们实现了对<span class="math inline">I</span>的条件化，从而阻断了所有经过<span class="math inline">I</span>的后门路径。</p>
+<p><strong>回归的魔法</strong> 通过将<span class="math inline">I</span>包含在模型中，我们实现了对<span class="math inline">I</span>的条件化，从而阻断了所有经过<span class="math inline">I</span>的后门路径。</p>
 </div>
 </div></div>
 </section>
@@ -755,11 +766,11 @@
 <section id="什么是碰撞节点" class="slide level2">
 <h2>什么是碰撞节点？</h2>
 <div class="concept-box">
-<p><strong>碰撞结构：<span class="math inline">X \rightarrow Z \leftarrow Y</span></strong></p>
+<p><strong>碰撞结构：<span class="math inline">D \rightarrow X \leftarrow Y</span></strong></p>
 <ul>
-<li><span class="math inline">Z</span>是碰撞节点（Collider）</li>
-<li><span class="math inline">X</span>和<span class="math inline">Y</span>原本独立（无因果路径）</li>
-<li>但一旦控制<span class="math inline">Z</span>，<span class="math inline">X</span>和<span class="math inline">Y</span>会虚假相关！</li>
+<li><span class="math inline">X</span>是碰撞节点（Collider）</li>
+<li><span class="math inline">D</span>和<span class="math inline">Y</span>原本独立（无因果路径）</li>
+<li>但一旦控制<span class="math inline">X</span>，<span class="math inline">D</span>和<span class="math inline">Y</span>会虚假相关！</li>
 </ul>
 </div>
 <div class="fragment">
@@ -779,16 +790,27 @@
 <div class="column" style="width:55%;">
 <div class="example-box">
 <p><strong>电影明星案例</strong></p>
-<p>成为电影明星(<span class="math inline">Z</span>)需要：</p>
+<p>成为电影明星(<span class="math inline">X</span>)需要：</p>
 <ul>
-<li>美貌(<span class="math inline">X</span>)</li>
+<li>颜值(<span class="math inline">D</span>)</li>
 <li>演技(<span class="math inline">Y</span>)</li>
 </ul>
-<p>如果已有美貌，演技可以差一些</p>
-<p>如果已有演技，美貌可以差一些</p>
+<p><em>如果已有颜值，演技可以差一些</em></p>
+<p><em>如果已有演技，颜值可以差一些</em></p>
 </div>
-<p>. . .</p>
-<p>在明星群体中： - 美貌与演技<em>负相关</em> - 但这只是选择效应！</p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>注记</strong></p>
+</div>
+<div class="callout-content">
+<p>在明星群体中：颜值与演技<em>负相关</em>, 但这只是选择效应！</p>
+</div>
+</div>
+</div>
 </div><div class="column" style="width:45%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -797,11 +819,11 @@
 </div>
 </div></div>
 </section>
-<section id="美貌与才华的权衡" class="slide level2">
-<h2>美貌与才华的”权衡”</h2>
+<section id="颜值与演技的权衡" class="slide level2">
+<h2>颜值与演技的”权衡”</h2>
 
 <img data-src="diagrams/lecture03/beauty_collider.jpg" class="quarto-figure quarto-figure-center r-stretch" style="width:70.0%"><div style="text-align: center; margin-top: 20px;">
-<p><em>核心洞察</em>：在明星样本中，美貌和才华看似负相关，</p>
+<p><strong>核心洞察</strong>：在明星样本中，颜值和演技看似负相关，</p>
 <p>但这只是碰撞偏误——两者都是成为明星的原因！</p>
 </div>
 </section>
@@ -809,27 +831,21 @@
 <h2>更多碰撞偏误的例子</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="diagrams/lecture03/more_example_dag_1-1.png" class="quarto-figure quarto-figure-center" style="width:85.0%"></p>
-</figure>
-</div>
-<p><strong>案例1</strong> 研究幸福感对收入的影响</p>
+<div class="example-box">
+<p><strong>案例1: 研究幸福感对收入的影响</strong></p>
 <ul>
 <li>控制”婚姻状态”会引入偏误</li>
 <li>因为幸福感和收入都影响婚姻</li>
 </ul>
-</div><div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="diagrams/lecture03/more_example_dag_2-1.png" class="quarto-figure quarto-figure-center" style="width:85.0%"></p>
-</figure>
 </div>
-<p><strong>案例2</strong> 研究教育对健康的效应</p>
+</div><div class="column" style="width:50%;">
+<div class="example-box">
+<p><strong>案例2: 研究教育对健康的效应</strong></p>
 <ul>
 <li>控制”就业状态”需谨慎</li>
 <li>可能是教育和健康的共同结果</li>
 </ul>
+</div>
 </div></div>
 </section></section>
 <section>
@@ -878,7 +894,7 @@
 <div class="concept-box">
 <p><strong>样本选择偏误</strong></p>
 <p>当样本本身是基于碰撞节点选择时，即使不”控制”任何变量，偏误也已存在。</p>
-<p><strong>例子</strong>：只在明星样本中研究美貌与才华的关系</p>
+<p><strong>例子</strong> 只在明星样本中研究颜值与演技的关系</p>
 </div>
 <div class="fragment">
 <div class="example-box">
@@ -905,15 +921,35 @@
 <div class="concept-box">
 <p><strong>潜在结果框架</strong></p>
 <p><em>Rubin因果模型</em></p>
-<p><strong>核心概念</strong> - 每个个体的<span class="math inline">Y(0)</span>和<span class="math inline">Y(1)</span> - 因果效应：<span class="math inline">\tau_i = Y_i(1) - Y_i(0)</span> - 识别假设：无混淆、正向性、SUTVA</p>
-<p><strong>优势</strong> - 精确的数学表达 - 清晰的识别条件 - 估计方法丰富</p>
+<p><strong>核心概念</strong></p>
+<ul>
+<li>每个个体的<span class="math inline">Y(0)</span>和<span class="math inline">Y(1)</span></li>
+<li>因果效应：<span class="math inline">\tau_i = Y_i(1) - Y_i(0)</span></li>
+<li>识别假设：无混淆、正向性、SUTVA</li>
+</ul>
+<p><strong>优势</strong></p>
+<ul>
+<li>精确的数学表达</li>
+<li>清晰的识别条件</li>
+<li>估计方法丰富</li>
+</ul>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="concept-box">
 <p><strong>DAG框架</strong></p>
 <p><em>Pearl因果图</em></p>
-<p><strong>核心概念</strong> - 节点和有向边 - 路径：链式、分叉、碰撞 - 后门准则、do-演算</p>
-<p><strong>优势</strong> - 可视化因果关系 - 系统化识别偏误来源 - 指导变量选择</p>
+<p><strong>核心概念</strong></p>
+<ul>
+<li>节点和有向边</li>
+<li>路径：链式、分叉、碰撞</li>
+<li>后门准则、do-演算</li>
+</ul>
+<p><strong>优势</strong></p>
+<ul>
+<li>可视化因果关系</li>
+<li>系统化识别偏误来源</li>
+<li>指导变量选择</li>
+</ul>
 </div>
 </div></div>
 </section>
@@ -958,17 +994,20 @@
 </table>
 </div>
 <div class="fragment">
-<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>提示</strong></p>
+<p><strong>重要</strong></p>
 </div>
 <div class="callout-content">
-<p><strong>本课程的观点</strong></p>
-<p>两种框架互补： - <em>设计阶段</em>：用DAG理清因果结构 - <em>分析阶段</em>：用潜在结果框架进行估计</p>
+<p><strong>本课程的观点：两种框架互补</strong></p>
+<ul>
+<li><strong>设计阶段</strong>：用DAG理清因果结构</li>
+<li><strong>分析阶段</strong>：用潜在结果框架进行估计</li>
+</ul>
 </div>
 </div>
 </div>
@@ -981,20 +1020,41 @@
 <p><strong>混淆偏误</strong></p>
 <p><em>潜在结果框架</em>： <span class="math display">E[Y(0)|D=1] \neq E[Y(0)|D=0]</span></p>
 <p>处理组和对照组的反事实不同</p>
-<p>. . .</p>
 <p><em>DAG框架</em>：</p>
 <p>存在从<span class="math inline">D</span>到<span class="math inline">Y</span>的开放后门路径</p>
-<p><span class="math inline">\rightarrow</span> 需要通过控制变量阻断</p>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p>需要通过控制变量阻断</p>
+</div>
+</div>
+</div>
 </div><div class="column" style="width:50%;">
 <p><strong>碰撞偏误</strong></p>
 <p><em>潜在结果框架</em>：</p>
 <p>条件化导致样本选择，破坏可比性</p>
-<p>. . .</p>
 <p><em>DAG框架</em>：</p>
 <p>控制碰撞节点打开虚假路径</p>
-<p><span class="math inline">\rightarrow</span> 即使该变量”看起来”相关，也不能控制</p>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p>即使该变量”看起来”相关，也不能控制</p>
+</div>
+</div>
+</div>
 </div></div>
-<p>:::</p>
 </section></section>
 <section>
 <section id="如何用dag指导研究设计" class="title-slide slide level1 center" data-background-color="#AE0B2A">
@@ -1003,28 +1063,46 @@
 </section>
 <section id="dag分析的五步法" class="slide level2">
 <h2>DAG分析的五步法</h2>
-<div class="example-box">
 <p><strong>步骤1：绘制DAG</strong></p>
-<p>列出所有相关变量及其因果关系 - 基于理论和先验知识 - 包含可观测和不可观测变量 - 与同事讨论完善</p>
-</div>
+<p>列出所有相关变量及其因果关系:</p>
+<ul>
+<li>基于理论和先验知识</li>
+<li>包含可观测和不可观测变量</li>
+<li>讨论完善</li>
+</ul>
 <div class="fragment">
 <p><strong>步骤2：识别目标路径</strong></p>
-<p>从处理变量到结果变量的直接因果路径 - 这是你想估计的效应 - 不要阻断这条路径！</p>
+<p>从处理变量到结果变量的直接因果路径：</p>
+<ul>
+<li>想估计的效应</li>
+<li>不要阻断这条路径！</li>
+</ul>
 </div>
 <div class="fragment">
 <p><strong>步骤3：识别后门路径</strong></p>
-<p>找出所有非因果路径 - 以后门箭头开始 - 标记开放的后门路径</p>
+<p>找出所有非因果路径:</p>
+<ul>
+<li>以后门箭头开始</li>
+<li>标记开放的后门路径</li>
+</ul>
 </div>
 </section>
 <section id="dag分析的五步法续" class="slide level2">
 <h2>DAG分析的五步法（续）</h2>
-<div class="example-box">
 <p><strong>步骤4：确定控制策略</strong></p>
-<p>找出满足后门准则的变量集合 - 阻断所有后门路径 - 不包含碰撞节点 - 不包含中介变量（除非估计直接效应）</p>
-</div>
+<p>找出满足后门准则的变量集合:</p>
+<ul>
+<li>阻断所有后门路径</li>
+<li>不包含碰撞节点</li>
+<li>不包含中介变量（除非估计直接效应）</li>
+</ul>
 <div class="fragment">
 <p><strong>步骤5：敏感性分析</strong></p>
-<p>考虑不可观测混淆因素 - 如果有未观测的混淆变量怎么办？ - 效应估计对遗漏变量有多敏感？</p>
+<p>考虑不可观测混淆因:</p>
+<ul>
+<li>如果有未观测的混淆变量怎么办？</li>
+<li>效应估计对遗漏变量有多敏感？</li>
+</ul>
 </div>
 </section>
 <section id="实际案例评估培训项目" class="slide level2">
@@ -1033,13 +1111,29 @@
 <div class="column" style="width:55%;">
 <p><strong>研究设计</strong></p>
 <p>某公司想评估新员工培训的效果：</p>
-<p>变量列表： - 处理：参加培训 - 结果：工作绩效 - 可能的混杂：能力、动机、经验 - 可能的中介：技能掌握 - 可能的碰撞：留任状态</p>
+<p>变量列表：</p>
+<ul>
+<li>处理变量<span class="math inline">D</span>：参加培训</li>
+<li>结果变量<span class="math inline">Y</span>：工作绩效</li>
+<li>可能的混杂变量<span class="math inline">C</span>：能力、动机、经验</li>
+<li>可能的中介变量<span class="math inline">M</span>：技能掌握</li>
+<li>可能的碰撞变量<span class="math inline">L</span>：留任状态</li>
+</ul>
 </div><div class="column" style="width:45%;">
 <p><strong>DAG指导</strong></p>
-<p>应该控制： - ✓ 入职前能力测试 - ✓ 工作经验 - ✓ 教育背景</p>
-<p>不应该控制： - ✗ 技能掌握（中介） - ✗ 留任状态（碰撞） - ✗ 部门分配（可能是结果）</p>
+<p>应该控制：</p>
+<ul>
+<li>✓ 入职前能力测试</li>
+<li>✓ 工作经验</li>
+<li>✓ 教育背景</li>
+</ul>
+<p>不应该控制：</p>
+<ul>
+<li>✗ 技能掌握（中介）</li>
+<li>✗ 留任状态（碰撞）</li>
+<li>✗ 部门分配（可能是结果）</li>
+</ul>
 </div></div>
-<p>:::</p>
 </section></section>
 <section>
 <section id="总结" class="title-slide slide level1 center" data-background-color="#AE0B2A">
