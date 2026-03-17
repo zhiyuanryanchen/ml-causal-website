@@ -1184,8 +1184,8 @@
 <section id="实践模拟数据分析" class="slide level2">
 <h2>实践：模拟数据分析</h2>
 <div style="font-size: 0.9em;">
-<div id="961a28af" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<div id="508ec8e3" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" data-code-line-numbers="914-920"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href=""></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href=""></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb1-4"><a href=""></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -1232,7 +1232,7 @@
 <div class="column" style="width:45%;">
 <p><strong>Python 绘图代码</strong></p>
 <div style="font-size: 0.75em;">
-<div id="7eb83f4c" class="cell" data-execution_count="2">
+<div id="5db6adb2" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="co"># 绘制 DAG 结构</span></span>
 <span id="cb3-2"><a href=""></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
 <span id="cb3-3"><a href=""></a>ax.set_xlim(<span class="dv">0</span>, <span class="dv">10</span>)</span>
@@ -1294,7 +1294,7 @@
 </div><div class="column" style="width:55%;">
 <p><strong>生成的 DAG 图</strong></p>
 <div style="font-size: 0.9em;">
-<div id="5ff1cdcb" class="cell" data-fig-height="6" data-fig-width="7" data-execution_count="3">
+<div id="048de445" class="cell" data-fig-height="6" data-fig-width="7" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -1314,97 +1314,53 @@
 </section>
 <section id="使用-causalgraph-包绘制-dag" class="slide level2">
 <h2>使用 CausalGraph 包绘制 DAG</h2>
-<div style="font-size: 0.85em;">
-<div id="58cdd76c" class="cell" data-fig-height="6" data-fig-width="8" data-execution_count="4">
+<div style="font-size: 0.75em;">
+<div id="c7bb6a94" class="cell" data-fig-height="4.5" data-fig-width="7" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
 <span id="cb4-2"><a href=""></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb4-3"><a href=""></a></span>
-<span id="cb4-4"><a href=""></a><span class="co"># 创建有向图 (CausalGraph 基于 networkx.MultiDiGraph)</span></span>
+<span id="cb4-4"><a href=""></a><span class="co"># 创建有向图</span></span>
 <span id="cb4-5"><a href=""></a>G <span class="op">=</span> nx.DiGraph()</span>
-<span id="cb4-6"><a href=""></a></span>
-<span id="cb4-7"><a href=""></a><span class="co"># 添加节点，标注节点类型</span></span>
-<span id="cb4-8"><a href=""></a>nodes <span class="op">=</span> [</span>
-<span id="cb4-9"><a href=""></a>    (<span class="st">'C'</span>, {<span class="st">'label'</span>: <span class="st">'能力(C)'</span>, <span class="st">'type'</span>: <span class="st">'confounder'</span>, <span class="st">'color'</span>: <span class="st">'#FF6B6B'</span>}),</span>
-<span id="cb4-10"><a href=""></a>    (<span class="st">'D'</span>, {<span class="st">'label'</span>: <span class="st">'培训(D)'</span>, <span class="st">'type'</span>: <span class="st">'treatment'</span>, <span class="st">'color'</span>: <span class="st">'#4ECDC4'</span>}),</span>
-<span id="cb4-11"><a href=""></a>    (<span class="st">'M'</span>, {<span class="st">'label'</span>: <span class="st">'技能(M)'</span>, <span class="st">'type'</span>: <span class="st">'mediator'</span>, <span class="st">'color'</span>: <span class="st">'#95E1D3'</span>}),</span>
-<span id="cb4-12"><a href=""></a>    (<span class="st">'Y'</span>, {<span class="st">'label'</span>: <span class="st">'绩效(Y)'</span>, <span class="st">'type'</span>: <span class="st">'outcome'</span>, <span class="st">'color'</span>: <span class="st">'#F38181'</span>}),</span>
-<span id="cb4-13"><a href=""></a>    (<span class="st">'L'</span>, {<span class="st">'label'</span>: <span class="st">'留任(L)'</span>, <span class="st">'type'</span>: <span class="st">'collider'</span>, <span class="st">'color'</span>: <span class="st">'#FFA07A'</span>})</span>
-<span id="cb4-14"><a href=""></a>]</span>
-<span id="cb4-15"><a href=""></a></span>
-<span id="cb4-16"><a href=""></a>G.add_nodes_from([(n, attr) <span class="cf">for</span> n, attr <span class="kw">in</span> nodes])</span>
-<span id="cb4-17"><a href=""></a></span>
-<span id="cb4-18"><a href=""></a><span class="co"># 添加因果边</span></span>
-<span id="cb4-19"><a href=""></a>edges <span class="op">=</span> [</span>
-<span id="cb4-20"><a href=""></a>    (<span class="st">'C'</span>, <span class="st">'D'</span>, <span class="st">'C→D'</span>),      <span class="co"># 能力影响培训</span></span>
-<span id="cb4-21"><a href=""></a>    (<span class="st">'C'</span>, <span class="st">'Y'</span>, <span class="st">'C→Y'</span>),      <span class="co"># 能力影响绩效（混淆）</span></span>
-<span id="cb4-22"><a href=""></a>    (<span class="st">'D'</span>, <span class="st">'M'</span>, <span class="st">'D→M'</span>),      <span class="co"># 培训影响技能</span></span>
-<span id="cb4-23"><a href=""></a>    (<span class="st">'M'</span>, <span class="st">'Y'</span>, <span class="st">'M→Y'</span>),      <span class="co"># 技能影响绩效（中介）</span></span>
-<span id="cb4-24"><a href=""></a>    (<span class="st">'D'</span>, <span class="st">'Y'</span>, <span class="st">'D→Y'</span>),      <span class="co"># 培训直接影响绩效</span></span>
-<span id="cb4-25"><a href=""></a>    (<span class="st">'D'</span>, <span class="st">'L'</span>, <span class="st">'D→L'</span>),      <span class="co"># 培训影响留任</span></span>
-<span id="cb4-26"><a href=""></a>    (<span class="st">'Y'</span>, <span class="st">'L'</span>, <span class="st">'Y→L'</span>)       <span class="co"># 绩效影响留任（碰撞）</span></span>
-<span id="cb4-27"><a href=""></a>]</span>
-<span id="cb4-28"><a href=""></a></span>
-<span id="cb4-29"><a href=""></a><span class="cf">for</span> u, v, label <span class="kw">in</span> edges:</span>
-<span id="cb4-30"><a href=""></a>    G.add_edge(u, v, label<span class="op">=</span>label)</span>
-<span id="cb4-31"><a href=""></a></span>
-<span id="cb4-32"><a href=""></a><span class="co"># 绘制图形</span></span>
-<span id="cb4-33"><a href=""></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
-<span id="cb4-34"><a href=""></a></span>
-<span id="cb4-35"><a href=""></a><span class="co"># 使用分层布局</span></span>
-<span id="cb4-36"><a href=""></a>pos <span class="op">=</span> {</span>
-<span id="cb4-37"><a href=""></a>    <span class="st">'C'</span>: (<span class="dv">0</span>, <span class="dv">2</span>),    <span class="co"># 顶层：混淆变量</span></span>
-<span id="cb4-38"><a href=""></a>    <span class="st">'D'</span>: (<span class="op">-</span><span class="fl">1.5</span>, <span class="dv">1</span>), <span class="co"># 中层左：处理</span></span>
-<span id="cb4-39"><a href=""></a>    <span class="st">'M'</span>: (<span class="dv">0</span>, <span class="dv">1</span>),    <span class="co"># 中层中：中介</span></span>
-<span id="cb4-40"><a href=""></a>    <span class="st">'Y'</span>: (<span class="fl">1.5</span>, <span class="dv">1</span>),  <span class="co"># 中层右：结果</span></span>
-<span id="cb4-41"><a href=""></a>    <span class="st">'L'</span>: (<span class="dv">0</span>, <span class="dv">0</span>)     <span class="co"># 底层：碰撞节点</span></span>
-<span id="cb4-42"><a href=""></a>}</span>
+<span id="cb4-6"><a href=""></a>nodes <span class="op">=</span> [</span>
+<span id="cb4-7"><a href=""></a>    (<span class="st">'C'</span>, {<span class="st">'label'</span>: <span class="st">'能力(C)'</span>, <span class="st">'type'</span>: <span class="st">'confounder'</span>, <span class="st">'color'</span>: <span class="st">'#FF6B6B'</span>}),</span>
+<span id="cb4-8"><a href=""></a>    (<span class="st">'D'</span>, {<span class="st">'label'</span>: <span class="st">'培训(D)'</span>, <span class="st">'type'</span>: <span class="st">'treatment'</span>, <span class="st">'color'</span>: <span class="st">'#4ECDC4'</span>}),</span>
+<span id="cb4-9"><a href=""></a>    (<span class="st">'M'</span>, {<span class="st">'label'</span>: <span class="st">'技能(M)'</span>, <span class="st">'type'</span>: <span class="st">'mediator'</span>, <span class="st">'color'</span>: <span class="st">'#95E1D3'</span>}),</span>
+<span id="cb4-10"><a href=""></a>    (<span class="st">'Y'</span>, {<span class="st">'label'</span>: <span class="st">'绩效(Y)'</span>, <span class="st">'type'</span>: <span class="st">'outcome'</span>, <span class="st">'color'</span>: <span class="st">'#F38181'</span>}),</span>
+<span id="cb4-11"><a href=""></a>    (<span class="st">'L'</span>, {<span class="st">'label'</span>: <span class="st">'留任(L)'</span>, <span class="st">'type'</span>: <span class="st">'collider'</span>, <span class="st">'color'</span>: <span class="st">'#FFA07A'</span>})</span>
+<span id="cb4-12"><a href=""></a>]</span>
+<span id="cb4-13"><a href=""></a>G.add_nodes_from([(n, attr) <span class="cf">for</span> n, attr <span class="kw">in</span> nodes])</span>
+<span id="cb4-14"><a href=""></a></span>
+<span id="cb4-15"><a href=""></a>edges <span class="op">=</span> [(<span class="st">'C'</span>,<span class="st">'D'</span>), (<span class="st">'C'</span>,<span class="st">'Y'</span>), (<span class="st">'D'</span>,<span class="st">'M'</span>), (<span class="st">'M'</span>,<span class="st">'Y'</span>), (<span class="st">'D'</span>,<span class="st">'Y'</span>), (<span class="st">'D'</span>,<span class="st">'L'</span>), (<span class="st">'Y'</span>,<span class="st">'L'</span>)]</span>
+<span id="cb4-16"><a href=""></a><span class="cf">for</span> u, v <span class="kw">in</span> edges:</span>
+<span id="cb4-17"><a href=""></a>    G.add_edge(u, v)</span>
+<span id="cb4-18"><a href=""></a></span>
+<span id="cb4-19"><a href=""></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="fl">4.5</span>))</span>
+<span id="cb4-20"><a href=""></a>pos <span class="op">=</span> {<span class="st">'C'</span>: (<span class="dv">0</span>, <span class="dv">2</span>), <span class="st">'D'</span>: (<span class="op">-</span><span class="fl">1.5</span>, <span class="dv">1</span>), <span class="st">'M'</span>: (<span class="dv">0</span>, <span class="fl">1.2</span>), <span class="st">'Y'</span>: (<span class="fl">1.5</span>, <span class="dv">1</span>), <span class="st">'L'</span>: (<span class="dv">0</span>, <span class="dv">0</span>)}</span>
+<span id="cb4-21"><a href=""></a>node_colors <span class="op">=</span> [G.nodes[n][<span class="st">'color'</span>] <span class="cf">for</span> n <span class="kw">in</span> G.nodes()]</span>
+<span id="cb4-22"><a href=""></a></span>
+<span id="cb4-23"><a href=""></a>nx.draw_networkx_nodes(G, pos, node_color<span class="op">=</span>node_colors, node_size<span class="op">=</span><span class="dv">2000</span>,</span>
+<span id="cb4-24"><a href=""></a>                       edgecolors<span class="op">=</span><span class="st">'black'</span>, linewidths<span class="op">=</span><span class="dv">2</span>, ax<span class="op">=</span>ax)</span>
+<span id="cb4-25"><a href=""></a>nx.draw_networkx_edges(G, pos, edge_color<span class="op">=</span><span class="st">'#333333'</span>, width<span class="op">=</span><span class="fl">2.5</span>, arrows<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb4-26"><a href=""></a>                       arrowstyle<span class="op">=</span><span class="st">'-|&gt;'</span>, arrowsize<span class="op">=</span><span class="dv">28</span>, ax<span class="op">=</span>ax,</span>
+<span id="cb4-27"><a href=""></a>                       connectionstyle<span class="op">=</span><span class="st">'arc3,rad=0.10'</span>)</span>
+<span id="cb4-28"><a href=""></a>labels <span class="op">=</span> {n: G.nodes[n][<span class="st">'label'</span>] <span class="cf">for</span> n <span class="kw">in</span> G.nodes()}</span>
+<span id="cb4-29"><a href=""></a>nx.draw_networkx_labels(G, pos, labels, font_size<span class="op">=</span><span class="dv">9</span>, font_weight<span class="op">=</span><span class="st">'bold'</span>, ax<span class="op">=</span>ax)</span>
+<span id="cb4-30"><a href=""></a></span>
+<span id="cb4-31"><a href=""></a>ax.set_title(<span class="st">'NetworkX/CausalGraph 绘制 DAG'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb4-32"><a href=""></a>ax.axis(<span class="st">'off'</span>)</span>
+<span id="cb4-33"><a href=""></a>ax.set_xlim(<span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>)</span>
+<span id="cb4-34"><a href=""></a>ax.set_ylim(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">2.5</span>)</span>
+<span id="cb4-35"><a href=""></a></span>
+<span id="cb4-36"><a href=""></a><span class="co"># 图例（右下角）</span></span>
+<span id="cb4-37"><a href=""></a>legend_text <span class="op">=</span> <span class="st">'节点类型：红色=混淆(C) 青色=处理(D) 浅绿=中介(M) 粉色=结果(Y) 橙色=碰撞(L)'</span></span>
+<span id="cb4-38"><a href=""></a>ax.text(<span class="fl">2.3</span>, <span class="op">-</span><span class="fl">0.3</span>, legend_text, ha<span class="op">=</span><span class="st">'right'</span>, va<span class="op">=</span><span class="st">'bottom'</span>, fontsize<span class="op">=</span><span class="dv">7</span>,</span>
+<span id="cb4-39"><a href=""></a>        bbox<span class="op">=</span><span class="bu">dict</span>(boxstyle<span class="op">=</span><span class="st">'round'</span>, facecolor<span class="op">=</span><span class="st">'wheat'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>))</span>
+<span id="cb4-40"><a href=""></a></span>
+<span id="cb4-41"><a href=""></a>plt.tight_layout()</span>
+<span id="cb4-42"><a href=""></a>plt.show()</span>
 <span id="cb4-43"><a href=""></a></span>
-<span id="cb4-44"><a href=""></a><span class="co"># 获取节点颜色</span></span>
-<span id="cb4-45"><a href=""></a>node_colors <span class="op">=</span> [G.nodes[n][<span class="st">'color'</span>] <span class="cf">for</span> n <span class="kw">in</span> G.nodes()]</span>
-<span id="cb4-46"><a href=""></a></span>
-<span id="cb4-47"><a href=""></a><span class="co"># 绘制节点</span></span>
-<span id="cb4-48"><a href=""></a>nx.draw_networkx_nodes(G, pos, node_color<span class="op">=</span>node_colors,</span>
-<span id="cb4-49"><a href=""></a>                       node_size<span class="op">=</span><span class="dv">2500</span>, edgecolors<span class="op">=</span><span class="st">'black'</span>,</span>
-<span id="cb4-50"><a href=""></a>                       linewidths<span class="op">=</span><span class="dv">2</span>, ax<span class="op">=</span>ax)</span>
-<span id="cb4-51"><a href=""></a></span>
-<span id="cb4-52"><a href=""></a><span class="co"># 绘制边</span></span>
-<span id="cb4-53"><a href=""></a>nx.draw_networkx_edges(G, pos, edge_color<span class="op">=</span><span class="st">'#333333'</span>,</span>
-<span id="cb4-54"><a href=""></a>                       width<span class="op">=</span><span class="fl">2.5</span>, arrows<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb4-55"><a href=""></a>                       arrowsize<span class="op">=</span><span class="dv">20</span>, ax<span class="op">=</span>ax,</span>
-<span id="cb4-56"><a href=""></a>                       connectionstyle<span class="op">=</span><span class="st">'arc3,rad=0.1'</span>)</span>
-<span id="cb4-57"><a href=""></a></span>
-<span id="cb4-58"><a href=""></a><span class="co"># 绘制标签</span></span>
-<span id="cb4-59"><a href=""></a>labels <span class="op">=</span> {n: G.nodes[n][<span class="st">'label'</span>] <span class="cf">for</span> n <span class="kw">in</span> G.nodes()}</span>
-<span id="cb4-60"><a href=""></a>nx.draw_networkx_labels(G, pos, labels, font_size<span class="op">=</span><span class="dv">10</span>,</span>
-<span id="cb4-61"><a href=""></a>                        font_weight<span class="op">=</span><span class="st">'bold'</span>, ax<span class="op">=</span>ax)</span>
-<span id="cb4-62"><a href=""></a></span>
-<span id="cb4-63"><a href=""></a>ax.set_title(<span class="st">'使用 NetworkX/CausalGraph 绘制 DAG'</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb4-64"><a href=""></a>ax.axis(<span class="st">'off'</span>)</span>
-<span id="cb4-65"><a href=""></a>ax.set_xlim(<span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>)</span>
-<span id="cb4-66"><a href=""></a>ax.set_ylim(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">2.5</span>)</span>
-<span id="cb4-67"><a href=""></a></span>
-<span id="cb4-68"><a href=""></a><span class="co"># 添加图例（右下角）</span></span>
-<span id="cb4-69"><a href=""></a>legend_text <span class="op">=</span> <span class="st">'''节点类型说明：</span></span>
-<span id="cb4-70"><a href=""></a><span class="st">红色：混淆变量 (C)</span></span>
-<span id="cb4-71"><a href=""></a><span class="st">青色：处理变量 (D)</span></span>
-<span id="cb4-72"><a href=""></a><span class="st">浅绿：中介变量 (M)</span></span>
-<span id="cb4-73"><a href=""></a><span class="st">粉色：结果变量 (Y)</span></span>
-<span id="cb4-74"><a href=""></a><span class="st">橙色：碰撞节点 (L)'''</span></span>
-<span id="cb4-75"><a href=""></a></span>
-<span id="cb4-76"><a href=""></a>ax.text(<span class="fl">2.3</span>, <span class="op">-</span><span class="fl">0.3</span>, legend_text, ha<span class="op">=</span><span class="st">'right'</span>, va<span class="op">=</span><span class="st">'bottom'</span>,</span>
-<span id="cb4-77"><a href=""></a>        fontsize<span class="op">=</span><span class="dv">8</span>, bbox<span class="op">=</span><span class="bu">dict</span>(boxstyle<span class="op">=</span><span class="st">'round'</span>, facecolor<span class="op">=</span><span class="st">'wheat'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>))</span>
-<span id="cb4-78"><a href=""></a></span>
-<span id="cb4-79"><a href=""></a>plt.tight_layout()</span>
-<span id="cb4-80"><a href=""></a>plt.show()</span>
-<span id="cb4-81"><a href=""></a></span>
-<span id="cb4-82"><a href=""></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">DAG 统计信息:"</span>)</span>
-<span id="cb4-83"><a href=""></a><span class="bu">print</span>(<span class="ss">f"节点数: </span><span class="sc">{</span>G<span class="sc">.</span>number_of_nodes()<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb4-84"><a href=""></a><span class="bu">print</span>(<span class="ss">f"边数: </span><span class="sc">{</span>G<span class="sc">.</span>number_of_edges()<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb4-85"><a href=""></a><span class="bu">print</span>(<span class="ss">f"后门路径数: 2 (C→D, C→Y)"</span>)</span>
-<span id="cb4-86"><a href=""></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">CausalGraph 包特点:"</span>)</span>
-<span id="cb4-87"><a href=""></a><span class="bu">print</span>(<span class="st">"• 基于 networkx.MultiDiGraph"</span>)</span>
-<span id="cb4-88"><a href=""></a><span class="bu">print</span>(<span class="st">"• 支持时间序列因果分析"</span>)</span>
-<span id="cb4-89"><a href=""></a><span class="bu">print</span>(<span class="st">"• 兼容 ggdag 和 Tigramite"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-44"><a href=""></a><span class="bu">print</span>(<span class="ss">f"DAG统计: </span><span class="sc">{</span>G<span class="sc">.</span>number_of_nodes()<span class="sc">}</span><span class="ss">节点, </span><span class="sc">{</span>G<span class="sc">.</span>number_of_edges()<span class="sc">}</span><span class="ss">边, 2条后门路径"</span>)</span>
+<span id="cb4-45"><a href=""></a><span class="bu">print</span>(<span class="st">"CausalGraph特点: 基于networkx.MultiDiGraph | 支持时序因果 | 兼容ggdag"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -1413,56 +1369,43 @@
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-DAG 统计信息:
-节点数: 5
-边数: 7
-后门路径数: 2 (C→D, C→Y)
-
-CausalGraph 包特点:
-• 基于 networkx.MultiDiGraph
-• 支持时间序列因果分析
-• 兼容 ggdag 和 Tigramite</code></pre>
+<pre><code>DAG统计: 5节点, 7边, 2条后门路径
+CausalGraph特点: 基于networkx.MultiDiGraph | 支持时序因果 | 兼容ggdag</code></pre>
 </div>
 </div>
 </div>
 </section>
 <section id="回归分析不同控制策略比较" class="slide level2">
 <h2>回归分析：不同控制策略比较</h2>
-<div style="font-size: 0.85em;">
-<div id="c889795f" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href=""></a><span class="co"># 5种控制策略的比较</span></span>
+<div style="font-size: 0.75em; max-height: 380px; overflow-y: auto;">
+<div id="0b9c906a" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href=""></a><span class="co"># 5种控制策略比较</span></span>
 <span id="cb6-2"><a href=""></a>models <span class="op">=</span> {</span>
-<span id="cb6-3"><a href=""></a>    <span class="st">'模型1(不控制)'</span>: sm.OLS(data[<span class="st">'performance'</span>],</span>
-<span id="cb6-4"><a href=""></a>                          sm.add_constant(data[<span class="st">'training'</span>])).fit(),</span>
-<span id="cb6-5"><a href=""></a>    <span class="st">'模型2(控制C)✓'</span>: sm.OLS(data[<span class="st">'performance'</span>],</span>
-<span id="cb6-6"><a href=""></a>                          sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'ability'</span>]])).fit(),</span>
-<span id="cb6-7"><a href=""></a>    <span class="st">'模型3(控制M)✗'</span>: sm.OLS(data[<span class="st">'performance'</span>],</span>
-<span id="cb6-8"><a href=""></a>                          sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'skill'</span>]])).fit(),</span>
-<span id="cb6-9"><a href=""></a>    <span class="st">'模型4(控制C+M)'</span>: sm.OLS(data[<span class="st">'performance'</span>],</span>
-<span id="cb6-10"><a href=""></a>                          sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'ability'</span>,<span class="st">'skill'</span>]])).fit(),</span>
-<span id="cb6-11"><a href=""></a>    <span class="st">'模型5(控制L)✗'</span>: sm.OLS(data[<span class="st">'performance'</span>],</span>
-<span id="cb6-12"><a href=""></a>                          sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'retention'</span>]])).fit()</span>
-<span id="cb6-13"><a href=""></a>}</span>
-<span id="cb6-14"><a href=""></a></span>
-<span id="cb6-15"><a href=""></a><span class="bu">print</span>(<span class="ss">f"真实处理效应: </span><span class="sc">{</span>true_effect<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb6-16"><a href=""></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">65</span>)</span>
-<span id="cb6-17"><a href=""></a></span>
-<span id="cb6-18"><a href=""></a>results <span class="op">=</span> []</span>
-<span id="cb6-19"><a href=""></a><span class="cf">for</span> name, model <span class="kw">in</span> models.items():</span>
-<span id="cb6-20"><a href=""></a>    coef <span class="op">=</span> model.params[<span class="st">'training'</span>]</span>
-<span id="cb6-21"><a href=""></a>    results.append({</span>
-<span id="cb6-22"><a href=""></a>        <span class="st">'模型'</span>: name,</span>
-<span id="cb6-23"><a href=""></a>        <span class="st">'估计值'</span>: <span class="ss">f"</span><span class="sc">{</span>coef<span class="sc">:.3f}</span><span class="ss">"</span>,</span>
-<span id="cb6-24"><a href=""></a>        <span class="st">'偏差'</span>: <span class="ss">f"</span><span class="sc">{</span>coef<span class="op">-</span>true_effect<span class="sc">:+.3f}</span><span class="ss">"</span>,</span>
-<span id="cb6-25"><a href=""></a>        <span class="st">'R²'</span>: <span class="ss">f"</span><span class="sc">{</span>model<span class="sc">.</span>rsquared<span class="sc">:.3f}</span><span class="ss">"</span></span>
-<span id="cb6-26"><a href=""></a>    })</span>
-<span id="cb6-27"><a href=""></a></span>
-<span id="cb6-28"><a href=""></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
-<span id="cb6-29"><a href=""></a><span class="bu">print</span>(results_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-3"><a href=""></a>    <span class="st">'模型1(不控制)'</span>: sm.OLS(data[<span class="st">'performance'</span>], sm.add_constant(data[<span class="st">'training'</span>])).fit(),</span>
+<span id="cb6-4"><a href=""></a>    <span class="st">'模型2(控制C)✓'</span>: sm.OLS(data[<span class="st">'performance'</span>], sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'ability'</span>]])).fit(),</span>
+<span id="cb6-5"><a href=""></a>    <span class="st">'模型3(控制M)✗'</span>: sm.OLS(data[<span class="st">'performance'</span>], sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'skill'</span>]])).fit(),</span>
+<span id="cb6-6"><a href=""></a>    <span class="st">'模型4(控制C+M)'</span>: sm.OLS(data[<span class="st">'performance'</span>], sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'ability'</span>,<span class="st">'skill'</span>]])).fit(),</span>
+<span id="cb6-7"><a href=""></a>    <span class="st">'模型5(控制L)✗'</span>: sm.OLS(data[<span class="st">'performance'</span>], sm.add_constant(data[[<span class="st">'training'</span>,<span class="st">'retention'</span>]])).fit()</span>
+<span id="cb6-8"><a href=""></a>}</span>
+<span id="cb6-9"><a href=""></a></span>
+<span id="cb6-10"><a href=""></a><span class="bu">print</span>(<span class="ss">f"真实效应: </span><span class="sc">{</span>true_effect<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb6-11"><a href=""></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">62</span>)</span>
+<span id="cb6-12"><a href=""></a></span>
+<span id="cb6-13"><a href=""></a>results <span class="op">=</span> []</span>
+<span id="cb6-14"><a href=""></a><span class="cf">for</span> name, model <span class="kw">in</span> models.items():</span>
+<span id="cb6-15"><a href=""></a>    coef <span class="op">=</span> model.params[<span class="st">'training'</span>]</span>
+<span id="cb6-16"><a href=""></a>    results.append({</span>
+<span id="cb6-17"><a href=""></a>        <span class="st">'模型'</span>: name,</span>
+<span id="cb6-18"><a href=""></a>        <span class="st">'估计值'</span>: <span class="ss">f"</span><span class="sc">{</span>coef<span class="sc">:.3f}</span><span class="ss">"</span>,</span>
+<span id="cb6-19"><a href=""></a>        <span class="st">'偏差'</span>: <span class="ss">f"</span><span class="sc">{</span>coef<span class="op">-</span>true_effect<span class="sc">:+.3f}</span><span class="ss">"</span>,</span>
+<span id="cb6-20"><a href=""></a>        <span class="st">'R²'</span>: <span class="ss">f"</span><span class="sc">{</span>model<span class="sc">.</span>rsquared<span class="sc">:.3f}</span><span class="ss">"</span></span>
+<span id="cb6-21"><a href=""></a>    })</span>
+<span id="cb6-22"><a href=""></a></span>
+<span id="cb6-23"><a href=""></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
+<span id="cb6-24"><a href=""></a><span class="bu">print</span>(results_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>真实处理效应: 2.000
-=================================================================
+<pre><code>真实效应: 2.000
+==============================================================
         模型   估计值     偏差    R²
   模型1(不控制) 3.924 +1.924 0.371
  模型2(控制C)✓ 2.330 +0.330 0.889
