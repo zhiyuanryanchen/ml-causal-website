@@ -43,6 +43,7 @@ date: "2026-03-05"
 - [📊 第三讲课件](Quarto/lecture03_dags.html)
 - [📖 第三讲详细讲义](Quarto/lecture03_dags_notes.html)
 - [📊 第四讲课件](Quarto/lecture04_matching.html)
+- [📖 第四讲详细讲义](Quarto/lecture04_matching_notes.html)
 - [💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
 
 ### 最新公告
@@ -50,9 +51,11 @@ date: "2026-03-05"
 ::: {.callout-important appearance="simple"}
 **2026-03-30**
 
-第四讲课件已发布！
+第四讲课件和详细讲义已发布！
 
 📖 [查看第四讲课件：匹配与分层](Quarto/lecture04_matching.html)
+
+📚 [查看第四讲详细讲义](Quarto/lecture04_matching_notes.html)
 
 ---
 

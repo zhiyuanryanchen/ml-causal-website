@@ -32,6 +32,7 @@ Claude will automatically read the configuration files in `.claude/` and follow 
 ### 3. Project Configuration
 
 All project settings are in `CLAUDE.md`:
+
 - **Project:** Machine Learning and Causal Inference Course
 - **Institution:** Renmin University of China
 - **Domain:** Econometrics, Causal Inference, Machine Learning
@@ -101,6 +102,7 @@ You describe a teaching task. For complex or ambiguous requests, Claude creates 
 ### Quality Gates
 
 Every deliverable gets a score (0–100):
+
 - **80** — commit threshold (save progress)
 - **90** — PR threshold (share with students)
 - **95** — excellence (publication-ready)
@@ -196,6 +198,7 @@ python scripts/quality_score.py Quarto/file.qmd
 ## Documentation
 
 See `.claude/rules/` for detailed workflow documentation:
+
 - `knowledge-base-ml-causal.md` — Domain knowledge and notation
 - `constitutional-governance.md` — Immutable teaching principles
 - `plan-first-workflow.md` — When and how to use plan mode

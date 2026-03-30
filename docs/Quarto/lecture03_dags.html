@@ -1184,7 +1184,7 @@
 <section id="实践模拟数据分析" class="slide level2">
 <h2>实践：模拟数据分析</h2>
 <div style="font-size: 0.9em;">
-<div id="2f07ac7e" class="cell" data-execution_count="1">
+<div id="eebb1734" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" data-code-line-numbers="914-920"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href=""></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href=""></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
@@ -1232,7 +1232,7 @@
 <div class="column" style="width:45%;">
 <p><strong>Python 绘图代码</strong></p>
 <div style="font-size: 0.75em;">
-<div id="b9fb9aeb" class="cell" data-execution_count="2">
+<div id="392ab844" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="co"># 绘制 DAG 结构</span></span>
 <span id="cb3-2"><a href=""></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
 <span id="cb3-3"><a href=""></a>ax.set_xlim(<span class="dv">0</span>, <span class="dv">10</span>)</span>
@@ -1294,7 +1294,7 @@
 </div><div class="column" style="width:55%;">
 <p><strong>生成的 DAG 图</strong></p>
 <div style="font-size: 0.9em;">
-<div id="4ac36c9b" class="cell" data-fig-height="6" data-fig-width="7" data-execution_count="3">
+<div id="27a491cc" class="cell" data-fig-height="6" data-fig-width="7" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -1315,7 +1315,7 @@
 <section id="使用-causalgraph-包绘制-dag" class="slide level2">
 <h2>使用 CausalGraph 包绘制 DAG</h2>
 <div style="font-size: 0.75em;">
-<div id="147cfda2" class="cell" data-fig-height="4.5" data-fig-width="7" data-execution_count="4">
+<div id="7a10c67d" class="cell" data-fig-height="4.5" data-fig-width="7" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
 <span id="cb4-2"><a href=""></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb4-3"><a href=""></a></span>
@@ -1378,7 +1378,7 @@ CausalGraph特点: 基于networkx.MultiDiGraph | 支持时序因果 | 兼容ggda
 <section id="回归分析不同控制策略比较" class="slide level2">
 <h2>回归分析：不同控制策略比较</h2>
 <div style="font-size: 1em; max-height: 380px; overflow-y: auto;">
-<div id="a1129236" class="cell" data-execution_count="5">
+<div id="7f3cb6e7" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" data-code-line-numbers="1153-1160"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href=""></a><span class="co"># 5种控制策略比较</span></span>
 <span id="cb6-2"><a href=""></a>models <span class="op">=</span> {</span>
 <span id="cb6-3"><a href=""></a>    <span class="st">'模型1(不控制)'</span>: sm.OLS(data[<span class="st">'performance'</span>], sm.add_constant(data[<span class="st">'training'</span>])).fit(),</span>
