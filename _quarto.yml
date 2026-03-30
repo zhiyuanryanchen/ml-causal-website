@@ -11,6 +11,7 @@ project:
     - Quarto/lecture02_probability_regression_notes.html
     - Quarto/lecture03_dags.html
     - Quarto/lecture03_dags_notes.html
+    - Quarto/lecture04_matching.html
 
 website:
   title: "机器学习与因果推断"
@@ -37,6 +38,8 @@ website:
             file: Quarto/lecture03_dags.html
           - text: "第三讲：详细讲义"
             file: Quarto/lecture03_dags_notes.html
+          - text: "第四讲：匹配与分层"
+            file: Quarto/lecture04_matching.html
       - text: "资源"
         file: resources.qmd
     right:
@@ -75,6 +78,8 @@ website:
               file: Quarto/lecture03_dags.html
             - text: "第三讲：详细讲义"
               file: Quarto/lecture03_dags_notes.html
+            - text: "第四讲：匹配与分层"
+              file: Quarto/lecture04_matching.html
 
 format:
   html:
