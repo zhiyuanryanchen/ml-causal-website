@@ -621,7 +621,7 @@
 <section id="数据生成与探索" class="slide level2">
 <h2>数据生成与探索</h2>
 <div style="font-size: 0.75em;">
-<div id="f2bef4c4" class="cell" data-execution_count="1">
+<div id="fe9d97d0" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href=""></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href=""></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -716,7 +716,7 @@
 <section id="协变量平衡性检查匹配前" class="slide level2">
 <h2>协变量平衡性检查（匹配前）</h2>
 <div style="font-size: 0.75em;">
-<div id="28b01330" class="cell" data-execution_count="2">
+<div id="79e6e1ce" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="co"># 计算匹配前的标准化偏差</span></span>
 <span id="cb3-2"><a href=""></a>covariates <span class="op">=</span> [<span class="st">'age'</span>, <span class="st">'education'</span>, <span class="st">'black'</span>, <span class="st">'hispanic'</span>, <span class="st">'married'</span>, <span class="st">'nodegree'</span>, <span class="st">'re74'</span>, <span class="st">'re75'</span>]</span>
 <span id="cb3-3"><a href=""></a></span>
@@ -763,7 +763,7 @@ education         9.64        10.71   -0.440
 <section id="倾向得分估计" class="slide level2">
 <h2>倾向得分估计</h2>
 <div style="font-size: 0.75em;">
-<div id="bd9f242d" class="cell" data-fig-height="4.5" data-fig-width="7" data-execution_count="3">
+<div id="6bfd4641" class="cell" data-fig-height="4.5" data-fig-width="7" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="co"># 使用Logistic回归估计倾向得分</span></span>
 <span id="cb5-2"><a href=""></a>X <span class="op">=</span> data[[<span class="st">'age'</span>, <span class="st">'education'</span>, <span class="st">'black'</span>, <span class="st">'hispanic'</span>, <span class="st">'married'</span>, <span class="st">'nodegree'</span>, <span class="st">'re74'</span>, <span class="st">'re75'</span>]]</span>
 <span id="cb5-3"><a href=""></a>y <span class="op">=</span> data[<span class="st">'treat'</span>]</span>
@@ -836,7 +836,7 @@ education    -0.216995
 <section id="最近邻匹配" class="slide level2">
 <h2>最近邻匹配</h2>
 <div style="font-size: 0.75em;">
-<div id="10ccdbe1" class="cell" data-execution_count="4">
+<div id="86d860f4" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href=""></a><span class="co"># 分离处理组和对照组</span></span>
 <span id="cb8-2"><a href=""></a>treated <span class="op">=</span> data[data[<span class="st">'treat'</span>] <span class="op">==</span> <span class="dv">1</span>].copy()</span>
 <span id="cb8-3"><a href=""></a>control <span class="op">=</span> data[data[<span class="st">'treat'</span>] <span class="op">==</span> <span class="dv">0</span>].copy()</span>
@@ -869,7 +869,7 @@ education    -0.216995
 <section id="匹配后平衡性检查" class="slide level2">
 <h2>匹配后平衡性检查</h2>
 <div style="font-size: 0.75em;">
-<div id="61098232" class="cell" data-fig-height="5" data-fig-width="8" data-execution_count="5">
+<div id="bf7f8474" class="cell" data-fig-height="5" data-fig-width="8" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href=""></a><span class="co"># 计算匹配后的标准化偏差</span></span>
 <span id="cb10-2"><a href=""></a>balance_after <span class="op">=</span> []</span>
 <span id="cb10-3"><a href=""></a><span class="cf">for</span> var <span class="kw">in</span> covariates:</span>
@@ -936,7 +936,7 @@ education    -0.440       -0.086531
 <section id="匹配后处理效应估计" class="slide level2">
 <h2>匹配后处理效应估计</h2>
 <div style="font-size: 0.75em;">
-<div id="63717c69" class="cell" data-execution_count="6">
+<div id="698f83a3" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href=""></a><span class="co"># 匹配前的朴素估计</span></span>
 <span id="cb12-2"><a href=""></a>naive_est <span class="op">=</span> data[data[<span class="st">'treat'</span>]<span class="op">==</span><span class="dv">1</span>][<span class="st">'re78'</span>].mean() <span class="op">-</span> data[data[<span class="st">'treat'</span>]<span class="op">==</span><span class="dv">0</span>][<span class="st">'re78'</span>].mean()</span>
 <span id="cb12-3"><a href=""></a></span>
@@ -1014,7 +1014,7 @@ education    -0.440       -0.086531
 <li>广义矩估计框架</li>
 <li>更好的平衡性保证</li>
 </ul>
-</div><div class="column" style="width:&quot;50%;">
+</div><div class="column" style="width:50%;">
 <p><strong>熵平衡 (Entropy Balancing)</strong></p>
 <p>Hainmueller (2012)</p>
 <ul>
