@@ -87,7 +87,7 @@ html-math-method: katex
 
 ## 匹配法的局限性
 
-**匹配法的核心假设**：
+**匹配法的核心假设**
 
 条件可忽略性假设要求所有混淆变量都被观测到：
 $$D \perp \{Y(0), Y(1)\} | X$$
@@ -117,7 +117,7 @@ $$Y = \alpha + \beta D + \varepsilon, \quad Cov(D, \varepsilon) \neq 0$$
 
 . . .
 
-**造成内生性（内生性/Endogeneity）的原因**：
+**造成内生性（内生性/Endogeneity）的原因**
 
 1. **遗漏变量**（Omitted Variables）：未观测的混淆因素
 2. **反向因果**（Simultaneity）：$Y$ 和 $D$ 互相影响
@@ -135,7 +135,7 @@ $$Y = \alpha + \beta D + \varepsilon, \quad Cov(D, \varepsilon) \neq 0$$
 ::: {.concept-box}
 **阿基米德原理的启示**
 
-"给我一个支点，我可以撬动地球"——利用一个“好”的工具变量，我们可以识别任何因果效应。
+“给我一个支点，我可以撬动地球”——利用一个“好”的工具变量，我们可以识别任何因果效应。
 :::
 
 . . .
@@ -151,7 +151,7 @@ $$Y = \alpha + \beta D + \varepsilon, \quad Cov(D, \varepsilon) \neq 0$$
 
 *类比理解*
 
-就像在随机实验中，随机分配 $Z$ 决定了谁接受处理 $D$。工具变量 $Z$ 提供了 $D$ 中"外生"的变异。
+就像在随机实验中，随机分配 $Z$ 决定了谁接受处理 $D$。工具变量 $Z$ 提供了 $D$ 中“外生”的变异。
 
 # 工具变量的两个条件 {background-color="#AE0B2A"}
 
@@ -190,7 +190,7 @@ $$Cov(Z, \varepsilon) = 0$$
 
 *直观理解*
 
-$Z$ 是一个"奇怪"的变量——它与结果 $Y$ 相关，但*仅仅*是因为它影响了处理 $D$。
+$Z$ 是一个“奇怪”的变量——它与结果 $Y$ 相关，但*仅仅*是因为它影响了处理 $D$。
 
 . . .
 
@@ -213,17 +213,17 @@ $Z$ 是一个"奇怪"的变量——它与结果 $Y$ 相关，但*仅仅*是因�
 - $Z$ 提供了一个外生变异，绕过 $U$ 的影响
 - $Z$ 只影响 $Y$ 通过 $D$（没有其他路径）
 
-## "好"工具变量的特征
+## “好”工具变量的特征
 
 ::: {.example-box}
-**好的工具变量是"令人惊讶"的**
+**好的工具变量是“令人惊讶”的**
 
 好的工具变量往往看起来有些奇怪——因为排他性要求它与结果没有其他关联。
 :::
 
 . . .
 
-**经典例子**：
+**经典例子**
 
 | 研究问题 | 工具变量 | 为什么有效？ |
 |:---|:---|:---|
@@ -251,7 +251,7 @@ $Z$ 是一个"奇怪"的变量——它与结果 $Y$ 相关，但*仅仅*是因�
 
 ## 2SLS 的数学推导
 
-**第一阶段**：
+**第一阶段**
 $$D_i = \pi_0 + \pi_1 Z_i + \nu_i$$
 
 得到拟合值：
@@ -259,7 +259,7 @@ $$\hat{D}_i = \hat{\pi}_0 + \hat{\pi}_1 Z_i$$
 
 . . .
 
-**第二阶段**：
+**第二阶段**
 $$Y_i = \alpha + \beta \hat{D}_i + \varepsilon_i$$
 
 . . .
@@ -284,13 +284,13 @@ $$\hat{\beta}_{IV} \xrightarrow{p} \beta$$
 
 $$\hat{\beta}_{IV} = \frac{Cov(Y, Z)}{Cov(D, Z)} = \frac{\text{Reduced Form}}{\text{First Stage}}$$
 
-- **简约式（Reduced Form）**：$Z$ 对 $Y$ 的总效应
+- *简约式（Reduced Form）*：$Z$ 对 $Y$ 的总效应
 - **第一阶段（First Stage）**：$Z$ 对 $D$ 的效应
 - **两者之比**：$D$ 对 $Y$ 的因果效应
 
 ## Python 实现：2SLS
 
-::: {style="font-size: 0.75em;"}
+::: {style="font-size: 1em;"}
 ```{python}
 #| echo: true
 #| eval: true
@@ -335,7 +335,7 @@ print(f"真实处理效应: {true_effect}")
 
 ## OLS vs 2SLS 比较
 
-::: {style="font-size: 0.75em;"}
+::: {style="font-size: 1em;"}
 ```{python}
 #| echo: true
 #| eval: true
@@ -377,7 +377,7 @@ print("=" * 50)
 
 ## 第一阶段结果分析
 
-::: {style="font-size: 0.75em;"}
+::: {style="font-size: 1em;"}
 ```{python}
 #| echo: true
 #| eval: true
@@ -435,7 +435,7 @@ $$E[\hat{\beta}_{2SLS} - \beta] \approx \frac{\sigma_{\varepsilon\nu}}{\sigma_{\
 ::: {.example-box}
 **F 统计量 > 10**
 
-如果第一阶段的 F 统计量大于 10，工具变量被认为是"强"的。
+如果第一阶段的 F 统计量大于 10，工具变量被认为是“强”的。
 :::
 
 . . .
@@ -450,7 +450,7 @@ $$E[\hat{\beta}_{2SLS} - \beta] \approx \frac{\sigma_{\varepsilon\nu}}{\sigma_{\
 
 ## 弱工具变量的模拟演示
 
-::: {style="font-size: 0.75em;"}
+::: {style="font-size: 1em;"}
 ```{python}
 #| echo: true
 #| eval: true
@@ -645,7 +645,7 @@ Compliers 可能是教育回报最高或最低的人，我们无法确定。
 
 ## 数据与变量
 
-::: {style="font-size: 0.75em;"}
+::: {style="font-size: 1em;"}
 ```{python}
 #| echo: true
 #| eval: true
@@ -696,7 +696,7 @@ print(ak_data.groupby('quarter')['education'].mean())
 
 ## OLS vs 2SLS 估计对比
 
-::: {style="font-size: 0.75em;"}
+::: {style="font-size: 1em;"}
 ```{python}
 #| echo: true
 #| eval: true

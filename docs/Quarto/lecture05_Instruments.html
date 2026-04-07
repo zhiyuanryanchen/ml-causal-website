@@ -276,7 +276,7 @@
 </section>
 <section id="匹配法的局限性" class="slide level2">
 <h2>匹配法的局限性</h2>
-<p><strong>匹配法的核心假设</strong>：</p>
+<p><strong>匹配法的核心假设</strong></p>
 <p>条件可忽略性假设要求所有混淆变量都被观测到： <span class="math display">D \perp \{Y(0), Y(1)\} | X</span></p>
 <div class="fragment">
 <div class="warning-box">
@@ -297,7 +297,7 @@
 <p><strong>内生性的来源</strong></p>
 <p>当处理变量 <span class="math inline">D</span> 与误差项 <span class="math inline">\varepsilon</span> 相关时： <span class="math display">Y = \alpha + \beta D + \varepsilon, \quad Cov(D, \varepsilon) \neq 0</span></p>
 <div class="fragment">
-<p><strong>造成内生性（内生性/Endogeneity）的原因</strong>：</p>
+<p><strong>造成内生性（内生性/Endogeneity）的原因</strong></p>
 <ol type="1">
 <li><strong>遗漏变量</strong>（Omitted Variables）：未观测的混淆因素</li>
 <li><strong>反向因果</strong>（Simultaneity）：<span class="math inline">Y</span> 和 <span class="math inline">D</span> 互相影响</li>
@@ -328,7 +328,7 @@
 </div>
 <div class="fragment">
 <p><em>类比理解</em></p>
-<p>就像在随机实验中，随机分配 <span class="math inline">Z</span> 决定了谁接受处理 <span class="math inline">D</span>。工具变量 <span class="math inline">Z</span> 提供了 <span class="math inline">D</span> 中”外生”的变异。</p>
+<p>就像在随机实验中，随机分配 <span class="math inline">Z</span> 决定了谁接受处理 <span class="math inline">D</span>。工具变量 <span class="math inline">Z</span> 提供了 <span class="math inline">D</span> 中“外生”的变异。</p>
 </div>
 </section></section>
 <section>
@@ -361,7 +361,7 @@
 </div>
 <div class="fragment">
 <p><em>直观理解</em></p>
-<p><span class="math inline">Z</span> 是一个”奇怪”的变量——它与结果 <span class="math inline">Y</span> 相关，但<em>仅仅</em>是因为它影响了处理 <span class="math inline">D</span>。</p>
+<p><span class="math inline">Z</span> 是一个“奇怪”的变量——它与结果 <span class="math inline">Y</span> 相关，但<em>仅仅</em>是因为它影响了处理 <span class="math inline">D</span>。</p>
 </div>
 <div class="fragment">
 <div class="warning-box">
@@ -391,11 +391,11 @@
 <section id="好工具变量的特征" class="slide level2">
 <h2>“好”工具变量的特征</h2>
 <div class="example-box">
-<p><strong>好的工具变量是”令人惊讶”的</strong></p>
+<p><strong>好的工具变量是“令人惊讶”的</strong></p>
 <p>好的工具变量往往看起来有些奇怪——因为排他性要求它与结果没有其他关联。</p>
 </div>
 <div class="fragment">
-<p><strong>经典例子</strong>：</p>
+<p><strong>经典例子</strong></p>
 <table class="caption-top">
 <colgroup>
 <col style="width: 33%">
@@ -457,10 +457,10 @@
 </section>
 <section id="sls-的数学推导" class="slide level2">
 <h2>2SLS 的数学推导</h2>
-<p><strong>第一阶段</strong>： <span class="math display">D_i = \pi_0 + \pi_1 Z_i + \nu_i</span></p>
+<p><strong>第一阶段</strong> <span class="math display">D_i = \pi_0 + \pi_1 Z_i + \nu_i</span></p>
 <p>得到拟合值： <span class="math display">\hat{D}_i = \hat{\pi}_0 + \hat{\pi}_1 Z_i</span></p>
 <div class="fragment">
-<p><strong>第二阶段</strong>： <span class="math display">Y_i = \alpha + \beta \hat{D}_i + \varepsilon_i</span></p>
+<p><strong>第二阶段</strong> <span class="math display">Y_i = \alpha + \beta \hat{D}_i + \varepsilon_i</span></p>
 </div>
 <div class="fragment">
 <p><strong>IV 估计量</strong>（可以证明等价于 2SLS）： <span class="math display">\hat{\beta}_{IV} = \frac{Cov(Y, Z)}{Cov(D, Z)} = \frac{Cov(Y, Z)}{Cov(\hat{D}, Z)}</span></p>
@@ -477,7 +477,7 @@
 <p><strong>与 OLS 的关系</strong></p>
 <p><span class="math display">\hat{\beta}_{IV} = \frac{Cov(Y, Z)}{Cov(D, Z)} = \frac{\text{Reduced Form}}{\text{First Stage}}</span></p>
 <ul>
-<li><strong>简约式（Reduced Form）</strong>：<span class="math inline">Z</span> 对 <span class="math inline">Y</span> 的总效应</li>
+<li><em>简约式（Reduced Form）</em>：<span class="math inline">Z</span> 对 <span class="math inline">Y</span> 的总效应</li>
 <li><strong>第一阶段（First Stage）</strong>：<span class="math inline">Z</span> 对 <span class="math inline">D</span> 的效应</li>
 <li><strong>两者之比</strong>：<span class="math inline">D</span> 对 <span class="math inline">Y</span> 的因果效应</li>
 </ul>
@@ -485,8 +485,8 @@
 </section>
 <section id="python-实现2sls" class="slide level2">
 <h2>Python 实现：2SLS</h2>
-<div style="font-size: 0.75em;">
-<div id="1ac70bd4" class="cell" data-execution_count="1">
+<div style="font-size: 1em;">
+<div id="2cfee1d6" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href=""></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href=""></a><span class="im">from</span> linearmodels.iv <span class="im">import</span> IV2SLS</span>
@@ -530,8 +530,8 @@
 </section>
 <section id="ols-vs-2sls-比较" class="slide level2">
 <h2>OLS vs 2SLS 比较</h2>
-<div style="font-size: 0.75em;">
-<div id="d9699527" class="cell" data-execution_count="2">
+<div style="font-size: 1em;">
+<div id="48c71223" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="co"># OLS 估计（有偏，因为忽略了 U）</span></span>
 <span id="cb3-2"><a href=""></a>X_ols <span class="op">=</span> sm.add_constant(data[<span class="st">'D'</span>])</span>
 <span id="cb3-3"><a href=""></a>model_ols <span class="op">=</span> sm.OLS(data[<span class="st">'Y'</span>], X_ols).fit()</span>
@@ -576,8 +576,8 @@ OLS 估计:    3.043  (偏差: 1.043)
 </section>
 <section id="第一阶段结果分析" class="slide level2">
 <h2>第一阶段结果分析</h2>
-<div style="font-size: 0.75em;">
-<div id="b5fddf4d" class="cell" data-execution_count="3">
+<div style="font-size: 1em;">
+<div id="387571de" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="co"># 第一阶段回归结果</span></span>
 <span id="cb5-2"><a href=""></a><span class="bu">print</span>(<span class="st">"第一阶段回归结果:"</span>)</span>
 <span id="cb5-3"><a href=""></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">50</span>)</span>
@@ -635,7 +635,7 @@ F 统计量: 251.72</code></pre>
 <p><strong>经验法则</strong> (Stock &amp; Yogo, 2005)：</p>
 <div class="example-box">
 <p><strong>F 统计量 &gt; 10</strong></p>
-<p>如果第一阶段的 F 统计量大于 10，工具变量被认为是”强”的。</p>
+<p>如果第一阶段的 F 统计量大于 10，工具变量被认为是“强”的。</p>
 </div>
 <div class="fragment">
 <p><em>如果 F &lt; 10 怎么办？</em></p>
@@ -652,8 +652,8 @@ F 统计量: 251.72</code></pre>
 </section>
 <section id="弱工具变量的模拟演示" class="slide level2">
 <h2>弱工具变量的模拟演示</h2>
-<div style="font-size: 0.75em;">
-<div id="50a695e0" class="cell" data-execution_count="4">
+<div style="font-size: 1em;">
+<div id="5a792db2" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="co"># 模拟不同工具变量强度下的表现</span></span>
 <span id="cb7-2"><a href=""></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb7-3"><a href=""></a>n <span class="op">=</span> <span class="dv">500</span></span>
@@ -859,8 +859,8 @@ F 统计量: 251.72</code></pre>
 </section>
 <section id="数据与变量" class="slide level2">
 <h2>数据与变量</h2>
-<div style="font-size: 0.75em;">
-<div id="202e5a6a" class="cell" data-execution_count="6">
+<div style="font-size: 1em;">
+<div id="25e8f80a" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href=""></a><span class="co"># 模拟 Angrist &amp; Krueger (1991) 的数据结构</span></span>
 <span id="cb9-2"><a href=""></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb9-3"><a href=""></a>n <span class="op">=</span> <span class="dv">5000</span></span>
@@ -925,8 +925,8 @@ Name: education, dtype: float64</code></pre>
 </section>
 <section id="ols-vs-2sls-估计对比" class="slide level2">
 <h2>OLS vs 2SLS 估计对比</h2>
-<div style="font-size: 0.75em;">
-<div id="dca6c40e" class="cell" data-execution_count="7">
+<div style="font-size: 1em;">
+<div id="997ce243" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href=""></a><span class="co"># OLS 估计</span></span>
 <span id="cb11-2"><a href=""></a>X_ols <span class="op">=</span> sm.add_constant(ak_data[<span class="st">'education'</span>])</span>
 <span id="cb11-3"><a href=""></a>ols_model <span class="op">=</span> sm.OLS(ak_data[<span class="st">'log_earnings'</span>], X_ols).fit()</span>
