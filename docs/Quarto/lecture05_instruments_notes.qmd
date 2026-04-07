@@ -1,0 +1,744 @@
+---
+title: "机器学习与因果推断 - 第五讲：工具变量法"
+subtitle: "处理未观测混淆变量的识别策略：完整讲义"
+author: "陈志远"
+institute: "中国人民大学商学院"
+date: "2026-03-30"
+format:
+  html:
+    theme: cosmo
+    css: lecture-notes.css
+    html-math-method: mathml
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    highlight-style: github
+    self-contained: true
+    embed-resources: true
+    page-layout: article
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: false
+  cache: false
+  fig-width: 10
+  fig-height: 6
+  dpi: 150
+lang: zh
+---
+
+# 引言：当匹配法失效时 {#sec-intro}
+
+## 匹配法的局限 {#sec-matching-limitation}
+
+匹配法的核心假设是**条件可忽略性**：
+
+$$D \perp \{Y(0), Y(1)\} | X$$
+
+这要求所有混淆变量都被观测到。但在实践中，许多重要因素无法观测：
+
+- **能力**：认知能力、非认知能力
+- **动机**：求职动机、学习动机
+- **偏好**：风险偏好、时间偏好
+- **信息**：信息获取渠道、网络资源
+
+当存在**未观测混淆变量**时，匹配法无法消除选择偏差。
+
+## 内生性问题的来源 {#sec-endogeneity}
+
+在回归框架下，内生性意味着处理变量与误差项相关：
+
+$$Y = \alpha + \beta D + \varepsilon, \quad Cov(D, \varepsilon) \neq 0$$
+
+造成内生性的三个主要原因：
+
+1. **遗漏变量**：未观测的混淆因素同时影响 $D$ 和 $Y$
+2. **双向因果**：$Y$ 和 $D$ 互相影响（ simultaneity）
+3. **测量误差**：$D$ 被错误测量，导致衰减偏误
+
+## 工具变量的启示 {#sec-iv-insight}
+
+**核心问题**：当 $D$ 与 $\varepsilon$ 相关时，OLS 估计有偏且不一致。我们需要一种方法，能够利用 $D$ 中与 $\varepsilon$ 无关的变异部分。
+
+**工具变量法的洞察**：
+
+找到一个变量 $Z$，它：
+
+1. 与 $D$ 相关（提供变异）
+2. 与 $\varepsilon$ 不相关（外生性）
+3. 只通过 $D$ 影响 $Y$（排他性）
+
+这样的 $Z$ 提供了 $D$ 中"干净"的变异，使我们能够识别因果效应。
+
+# 工具变量的两个条件 {#sec-two-conditions}
+
+## 条件一：相关性（Relevance） {#sec-relevance}
+
+**定义**：工具变量 $Z$ 必须与处理变量 $D$ 相关。
+
+$$Cov(Z, D) \neq 0$$
+
+这保证了 $Z$ 能够产生足够的变异来"撬动" $D$。
+
+### 第一阶段回归
+
+相关性条件可以通过第一阶段回归来检验：
+
+$$D_i = \pi_0 + \pi_1 Z_i + \nu_i$$
+
+其中 $\pi_1$ 是第一阶段系数。我们需要 $\pi_1 \neq 0$。
+
+### F统计量检验
+
+**Stock & Yogo (2005)** 提出使用第一阶段F统计量检验工具变量强度：
+
+$$F = \frac{(R^2_{first}/k)}{(1-R^2_{first})/(n-k-1)}$$
+
+经验法则：$F > 10$ 表示工具变量足够强。
+
+## 条件二：排他性（Exclusion Restriction） {#sec-exclusion}
+
+**定义**：工具变量 $Z$ 必须满足：
+
+$$Cov(Z, \varepsilon) = 0$$
+
+这意味着 $Z$ 只通过 $D$ 影响 $Y$，没有其他直接或间接路径。
+
+### 排他性的直观理解
+
+排他性约束要求 $Z$ 是一个"奇怪"的变量——它与结果 $Y$ 相关，但**仅仅**是因为它影响了处理 $D$。
+
+**例子**：
+
+- 出生季度影响教育年数（通过义务教育法），但不直接影响收入
+- 到大学的距离影响上学决策，但不直接影响收入能力
+- 抽签号码影响是否入伍，但不直接影响未来收入
+
+### 排他性无法直接检验
+
+::: {.callout-warning appearance="simple"}
+**重要警告**
+
+排他性是一个基于**理论和领域知识**的假设，无法直接用数据检验。研究者需要论证为什么 $Z$ 满足排他性。
+
+可能的威胁：
+- $Z$ 通过其他变量影响 $Y$（违反排他性）
+- $Z$ 与未观测混淆变量相关（违反外生性）
+:::
+
+## 工具变量的因果图 {#sec-iv-dag}
+
+```
+Z ──→ D ──→ Y
+      ↑     ↑
+      └─────┘
+          U (未观测混淆)
+```
+
+在这个图中：
+
+- $U$ 是未观测混淆变量，造成 $D$ 和 $Y$ 的内生关联
+- $Z$ 提供了一个外生变异，绕过 $U$ 的影响
+- $Z$ 只影响 $Y$ 通过 $D$（没有其他路径）
+
+**关键洞察**：工具变量 $Z$ 提供的变异与 $U$ 无关，因此使用 $Z$ 诱导的变异可以消除选择偏差。
+
+# 两阶段最小二乘法（2SLS） {#sec-2sls}
+
+## 2SLS的直观理解 {#sec-2sls-intuition}
+
+**基本思想**：
+
+1. **第一阶段**：用 $Z$ 预测 $D$，得到 $D$ 中由 $Z$ 解释的部分 $\hat{D}$
+2. **第二阶段**：用预测的 $\hat{D}$ 代替 $D$ 估计对 $Y$ 的效应
+
+**为什么这样可行？**
+
+- $\hat{D}$ 只包含 $D$ 中与 $Z$ 相关的变异
+- 由于 $Z$ 是外生的，$\hat{D}$ 也是外生的
+- 用 $\hat{D}$ 估计的效应没有内生性偏误
+
+## 2SLS的数学推导 {#sec-2sls-derivation}
+
+### 第一阶段
+
+$$D_i = \pi_0 + \pi_1 Z_i + \nu_i$$
+
+得到拟合值：
+$$\hat{D}_i = \hat{\pi}_0 + \hat{\pi}_1 Z_i$$
+
+### 第二阶段
+
+$$Y_i = \alpha + \beta \hat{D}_i + \varepsilon_i$$
+
+### IV估计量的等价形式
+
+可以证明，2SLS估计量等价于Wald估计量：
+
+$$\hat{\beta}_{IV} = \frac{Cov(Y, Z)}{Cov(D, Z)} = \frac{\text{简约式效应}}{\text{第一阶段效应}}$$
+
+这个公式揭示了IV估计的直观含义：
+
+- **分子** ($Cov(Y, Z)$)：$Z$ 对 $Y$ 的总效应（简约式）
+- **分母** ($Cov(D, Z)$)：$Z$ 对 $D$ 的效应（第一阶段）
+- **比值**：$D$ 对 $Y$ 的因果效应
+
+## 2SLS估计量的一致性 {#sec-consistency}
+
+在工具变量相关性和排他性条件下：
+
+$$\hat{\beta}_{IV} \xrightarrow{p} \beta$$
+
+**证明概要**：
+
+$$\begin{aligned}
+\hat{\beta}_{IV} &= \frac{Cov(Y, Z)}{Cov(D, Z)} \\
+&= \frac{Cov(\alpha + \beta D + \varepsilon, Z)}{Cov(D, Z)} \\
+&= \beta + \frac{Cov(\varepsilon, Z)}{Cov(D, Z)}
+\end{aligned}$$
+
+由于 $Cov(Z, \varepsilon) = 0$（排他性），第二项趋于零，因此 $\hat{\beta}_{IV} \to \beta$。
+
+## 2SLS与OLS的关系 {#sec-2sls-vs-ols}
+
+**重要性质**：当 $Cov(D, \varepsilon) > 0$（正的选择偏差）时：
+
+- OLS 估计：$\hat{\beta}_{OLS} = \beta + \frac{Cov(D, \varepsilon)}{Var(D)} > \beta$
+- 2SLS 估计：$\hat{\beta}_{IV} \to \beta$（一致）
+
+这意味着在有正选择偏差的情况下，OLS 会**高估**处理效应，而2SLS提供了一致的估计。
+
+# 弱工具变量问题 {#sec-weak-instruments}
+
+## 什么是弱工具变量？ {#sec-what-is-weak}
+
+**定义**：当工具变量 $Z$ 与处理变量 $D$ 的相关性很弱时，即：
+
+$$Cov(Z, D) \approx 0$$
+
+或第一阶段F统计量很小（$F < 10$）。
+
+## 弱工具变量的后果 {#sec-weak-consequences}
+
+### 1. 方差增大
+
+IV估计量的方差为：
+
+$$Var(\hat{\beta}_{IV}) = \frac{\sigma^2_\varepsilon}{n \cdot Cov(D, Z)^2 / Var(Z)}$$
+
+当 $Cov(Z, D) \to 0$ 时，$Var(\hat{\beta}_{IV}) \to \infty$。
+
+### 2. 偏差严重
+
+**Bound, Jaeger & Baker (1995)** 证明：
+
+$$E[\hat{\beta}_{2SLS} - \beta] \approx \frac{\sigma_{\varepsilon\nu}}{\sigma_{\nu}^2} \cdot \frac{1}{F + 1}$$
+
+当 $F \to 0$ 时，偏差趋近于 OLS 偏差！
+
+### 3. 分布非正态
+
+弱工具变量下，2SLS估计量的抽样分布不再是正态分布，基于正态分布的假设检验失效。
+
+## 弱工具变量的识别与应对 {#sec-weak-solutions}
+
+### 识别弱工具变量
+
+**经验法则** (Stock & Yogo, 2005)：
+
+| F统计量 | 解释 |
+|:---|:---|
+| $F < 10$ | 弱工具变量警告 |
+| $F \geq 10$ | 工具变量强度可接受 |
+| $F \geq 104.7$ | 最大相对偏差 ≤ 10%（1个工具变量） |
+
+### 应对策略
+
+1. **寻找更强的工具变量**
+2. **使用弱工具变量稳健方法**：
+   - Anderson-Rubin 检验
+   - Kleibergen-Paap 统计量
+   - 条件似然比（CLR）检验
+3. **使用LIML**（Limited Information Maximum Likelihood）：比2SLS更稳健
+4. **增加样本量**：提高统计功效
+
+# 局部平均处理效应（LATE） {#sec-late}
+
+## 异质性处理效应框架 {#sec-heterogeneous-effects}
+
+当处理效应在不同个体间存在异质性时，我们需要扩展潜在结果框架。
+
+**定义潜在处理变量**：
+
+- $D_i(1)$：当 $Z_i = 1$ 时个体 $i$ 的处理状态
+- $D_i(0)$：当 $Z_i = 0$ 时个体 $i$ 的处理状态
+
+**四种个体类型** (Imbens & Angrist, 1994)：
+
+| 类型 | 定义 | $D_i(1)$ | $D_i(0)$ | 描述 |
+|:---|:---|:---:|:---:|:---|
+| **Always-takers** | 总是接受处理 | 1 | 1 | 无论工具变量如何都接受处理 |
+| **Never-takers** | 从不接受处理 | 0 | 0 | 无论工具变量如何都不接受处理 |
+| **Compliers** | 依从者 | 1 | 0 | 工具变量=1时接受，工具变量=0时不接受 |
+| **Defiers** | 违背者 | 0 | 1 | 工具变量=1时不接受，工具变量=0时接受 |
+
+## LATE的定义 {#sec-late-def}
+
+**局部平均处理效应 (LATE)**
+
+IV估计量识别的是**依从者**（Compliers）的平均处理效应：
+
+$$\tau_{LATE} = E[Y_i(1) - Y_i(0) | D_i(1) = 1, D_i(0) = 0]$$
+
+**关键洞察**：
+
+- IV估计的不是总体的ATE，而是特定子群体（Compliers）的效应
+- 对于Always-takers和Never-takers，我们无法识别其处理效应
+- 如果存在Defiers，LATE的解释更复杂（需要单调性假设）
+
+## LATE识别的五个假设 {#sec-late-assumptions}
+
+1. **SUTVA**：没有溢出效应，潜在结果定义良好
+2. **随机分配**：$Z$ 与潜在结果独立
+3. **排他性**：$Z$ 只通过 $D$ 影响 $Y$
+4. **第一阶段**：$E[D(1) - D(0)] \neq 0$
+5. **单调性**：$D_i(1) \geq D_i(0)$（没有Defiers）
+
+**单调性的重要性**：
+
+- 确保Compliers的定义明确
+- 排除Defiers的存在（否则LATE公式失效）
+- 在大多数应用中，单调性是合理的
+
+## LATE的直观例子 {#sec-late-example}
+
+**Angrist & Krueger (1991)：出生季度对教育的影响**
+
+- **工具变量**：出生季度（由于义务教育法，不同季度出生的人上学年数不同）
+- **Compliers**：那些因为出生季度而多上一年学的人
+- **LATE**：这些Compliers的教育回报
+
+::: {.callout-note appearance="simple"}
+**重要局限**
+
+"IV估计的是那些因为出生季度而多上一年学的人的效应"——不是对所有人的效应。
+
+Compliers可能是教育回报最高或最低的人，我们无法确定。
+:::
+
+# 经典案例与应用 {#sec-applications}
+
+## 案例一：Angrist & Krueger (1991) {#sec-ak91}
+
+**研究问题**：教育的因果回报是多少？
+
+**工具变量**：出生季度
+
+- 美国义务教育法要求学生在特定年龄入学
+- 不同季度出生的孩子在入学时年龄不同
+- 这导致不同季度出生的人平均教育年数略有差异
+- 出生季度与能力、动机等无关（排他性）
+
+**主要发现**：
+
+- OLS估计：约7.1%
+- 2SLS估计：约8.9%
+
+**解读**：教育回报略高于OLS估计，可能说明OLS低估了教育回报（能力偏差为负），或者Compliers的教育回报确实更高。
+
+## 案例二：Card (1995) - 到大学的距离 {#sec-card95}
+
+**研究设计**：
+
+- **工具变量**：到最近大学的距离
+- **结果**：大学毕业生收入更高
+- **发现**：2SLS估计约12.4%，高于OLS的7.1%
+
+**为什么距离是好的工具变量？**
+
+1. **相关性**：地理距离影响上学成本（时间、金钱）
+2. **排他性**：距离本身不直接影响收入（只通过教育）
+
+**LATE解释**：估计的是那些因为离家近而上大学的人的效应。
+
+## 案例三：Angrist (1990) - 越南战争抽签 {#sec-angrist90}
+
+**研究设计**：
+
+- **背景**：越南战争期间，美国通过抽签决定谁入伍
+- **工具变量**：抽签号码（随机分配）
+- **处理变量**：是否服兵役
+- **结果变量**：后来的收入
+
+**为什么抽签是好的工具变量？**
+
+1. **相关性**：低号码更可能被征召入伍
+2. **排他性**：抽签号码完全随机，与能力、健康等无关
+
+**发现**：服兵役导致收入下降约15%。
+
+## 案例四：Cunningham & Finlay (2012) {#sec-cf12}
+
+**研究问题**：甲基苯丙胺（冰毒）使用对寄养儿童数量的影响
+
+**工具变量**：甲基苯丙胺前体化学品的价格冲击
+
+**发现**：
+
+- 冰毒入院率增加10% → 寄养儿童数量增加约15%
+- 说明药物滥用对家庭破裂有显著因果效应
+
+# Python实现：2SLS估计 {#sec-python-implementation}
+
+## 基础模拟：工具变量有效性 {#sec-basic-simulation}
+
+```python
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+from linearmodels.iv import IV2SLS
+import matplotlib.pyplot as plt
+import warnings
+warnings.filterwarnings('ignore')
+
+# 设置中文字体
+plt.rcParams['font.sans-serif'] = ['Source Han Sans SC', 'Noto Sans CJK SC',
+                                    'WenQuanYi Micro Hei', 'SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+
+# 设置随机种子
+np.random.seed(42)
+n = 1000
+
+# 生成数据：D是内生的，Z是工具变量
+Z = np.random.normal(0, 1, n)  # 工具变量（外生）
+U = np.random.normal(0, 1, n)  # 未观测混淆变量
+
+# 第一阶段：D受Z和U影响
+D = 0.5 * Z + 0.8 * U + np.random.normal(0, 0.5, n)
+
+# 真实因果效应
+true_effect = 2.0
+
+# 结果变量：Y受D和U影响（U造成内生性）
+Y = true_effect * D + 1.5 * U + np.random.normal(0, 0.5, n)
+
+# 创建数据框
+data = pd.DataFrame({
+    'Y': Y,
+    'D': D,
+    'Z': Z,
+    'U': U  # 现实中不可观测
+})
+
+print(f"样本量: {n}")
+print(f"真实处理效应: {true_effect}")
+```
+
+## OLS vs 2SLS比较 {#sec-ols-vs-2sls}
+
+```python
+# OLS估计（有偏，因为忽略了U）
+X_ols = sm.add_constant(data['D'])
+model_ols = sm.OLS(data['Y'], X_ols).fit()
+ols_est = model_ols.params['D']
+
+# 2SLS估计（使用Z作为工具变量）
+# 注意：linearmodels需要显式添加常数项
+iv_model = IV2SLS(
+    dependent=data['Y'],
+    exog=pd.DataFrame({'const': np.ones(n)}),
+    endog=data['D'],
+    instruments=data['Z']
+).fit()
+iv_est = iv_model.params['D']
+
+# 手动计算2SLS（验证）
+# 第一阶段
+X_first = sm.add_constant(data['Z'])
+model_first = sm.OLS(data['D'], X_first).fit()
+data['D_hat'] = model_first.predict(X_first)
+
+# 第二阶段
+X_second = sm.add_constant(data['D_hat'])
+model_second = sm.OLS(data['Y'], X_second).fit()
+iv_est_manual = model_second.params['D_hat']
+
+print("\n估计结果对比:")
+print("=" * 50)
+print(f"真实效应:    {true_effect:.3f}")
+print(f"OLS估计:     {ols_est:.3f}  (偏差: {ols_est - true_effect:.3f})")
+print(f"2SLS估计:    {iv_est:.3f}  (偏差: {iv_est - true_effect:.3f})")
+print(f"手动2SLS:    {iv_est_manual:.3f}  (偏差: {iv_est_manual - true_effect:.3f})")
+print("=" * 50)
+```
+
+## 第一阶段诊断 {#sec-first-stage}
+
+```python
+# 第一阶段回归结果
+print("\n第一阶段回归结果:")
+print("=" * 50)
+print(f"Z的系数: {model_first.params['Z']:.4f}")
+print(f"标准误:   {model_first.bse['Z']:.4f}")
+print(f"t统计量: {model_first.tvalues['Z']:.4f}")
+print(f"R-squared: {model_first.rsquared:.4f}")
+
+# 计算F统计量
+f_stat = (model_first.params['Z'] / model_first.bse['Z']) ** 2
+print(f"F统计量: {f_stat:.2f}")
+
+if f_stat > 10:
+    print("✓ 工具变量强度足够 (F > 10)")
+else:
+    print("⚠ 弱工具变量警告 (F ≤ 10)")
+```
+
+## 弱工具变量模拟 {#sec-weak-iv-sim}
+
+```python
+# 模拟不同工具变量强度下的表现
+np.random.seed(42)
+n = 500
+results = []
+
+for pi1 in [0.05, 0.1, 0.3, 0.5, 1.0]:  # 不同的第一阶段系数
+    temp_results = {'pi1': pi1, 'f_stats': [], 'iv_biases': [], 'ols_biases': []}
+
+    for _ in range(200):  # 200次模拟
+        Z = np.random.normal(0, 1, n)
+        U = np.random.normal(0, 1, n)
+        D = pi1 * Z + 0.8 * U + np.random.normal(0, 0.5, n)
+        Y = 2.0 * D + 1.5 * U + np.random.normal(0, 0.5, n)
+
+        # OLS
+        X_ols = sm.add_constant(D)
+        ols_est = sm.OLS(Y, X_ols).fit().params[1]
+
+        # IV
+        X_first = sm.add_constant(Z)
+        first_stage = sm.OLS(D, X_first).fit()
+        f_stat = (first_stage.params[1] / first_stage.bse[1]) ** 2
+
+        D_hat = first_stage.predict(X_first)
+        X_second = sm.add_constant(D_hat)
+        iv_est = sm.OLS(Y, X_second).fit().params[1]
+
+        temp_results['f_stats'].append(f_stat)
+        temp_results['iv_biases'].append(iv_est - 2.0)
+        temp_results['ols_biases'].append(ols_est - 2.0)
+
+    results.append({
+        '第一阶段系数': pi1,
+        '平均F统计量': np.mean(temp_results['f_stats']),
+        'IV平均偏差': np.mean(temp_results['iv_biases']),
+        'OLS平均偏差': np.mean(temp_results['ols_biases'])
+    })
+
+results_df = pd.DataFrame(results)
+print("\n弱工具变量模拟结果:")
+print("=" * 70)
+print(results_df.to_string(index=False, float_format='%.3f'))
+```
+
+## Angrist & Krueger (1991)模拟 {#sec-ak91-simulation}
+
+```python
+# 改进的Angrist & Krueger (1991)模拟
+np.random.seed(42)
+n = 5000
+
+# 出生季度（1-4，均匀分布）
+quarter = np.random.choice([1, 2, 3, 4], n)
+
+# 能力（不可观测，与教育相关）
+ability = np.random.normal(0, 1, n)
+
+# 教育年数：受出生季度和能力影响
+# 义务教育法导致不同季度出生的人教育年数有系统性差异
+# 第四季度出生的人入学时年龄较小，被迫多上一年学
+# 第一季度出生的人入学时年龄较大，可以早一年退学
+quarter_effect = np.where(quarter == 1, -0.3,
+                 np.where(quarter == 4, 0.3, 0))
+education = 12 + quarter_effect + 0.4 * ability + np.random.normal(0, 1.0, n)
+
+# 真实教育回报（对数收入）
+true_return = 0.08
+
+# 对数收入（周收入）
+log_earnings = 5 + true_return * education + 0.15 * ability + np.random.normal(0, 0.35, n)
+
+# 创建数据
+ak_data = pd.DataFrame({
+    'log_earnings': log_earnings,
+    'education': education,
+    'quarter': quarter,
+    'ability': ability  # 现实中不可观测
+})
+
+print("Angrist & Krueger (1991)模拟数据:")
+print("=" * 50)
+print(f"样本量: {n}")
+print(f"各季度样本量:")
+print(ak_data['quarter'].value_counts().sort_index())
+print(f"\n平均教育年数（按季度）:")
+print(ak_data.groupby('quarter')['education'].mean().round(3))
+
+# OLS估计
+X_ols = sm.add_constant(ak_data['education'])
+ols_model = sm.OLS(ak_data['log_earnings'], X_ols).fit()
+ols_return = ols_model.params['education']
+
+# 2SLS估计（使用出生季度作为工具变量）
+# 创建季度虚拟变量
+quarter_dummies = pd.get_dummies(ak_data['quarter'], prefix='q', drop_first=True)
+ak_data = pd.concat([ak_data, quarter_dummies], axis=1)
+
+# 使用linearmodels（显式添加常数项）
+iv_model = IV2SLS(
+    dependent=ak_data['log_earnings'],
+    exog=pd.DataFrame({'const': np.ones(n)}),
+    endog=ak_data['education'],
+    instruments=ak_data[['q_2', 'q_3', 'q_4']]
+).fit()
+
+# 第一阶段结果
+X_first = sm.add_constant(ak_data[['q_2', 'q_3', 'q_4']])
+first_model = sm.OLS(ak_data['education'], X_first).fit()
+
+print("\n教育回报估计结果对比:")
+print("=" * 60)
+print(f"真实回报:     {true_return:.2%}")
+print(f"OLS估计:     {ols_return:.2%}  (偏差: {ols_return - true_return:+.3f})")
+print(f"2SLS估计:    {iv_model.params['education']:.2%}  (偏差: {iv_model.params['education'] - true_return:+.3f})")
+print("=" * 60)
+print(f"\n第一阶段回归系数:")
+print(f"  q_2: {first_model.params['q_2']:.3f} (vs Q1)")
+print(f"  q_3: {first_model.params['q_3']:.3f} (vs Q1)")
+print(f"  q_4: {first_model.params['q_4']:.3f} (vs Q1)")
+print(f"\n第一阶段F统计量: {first_model.fvalue:.2f}")
+print(f"第一阶段R²: {first_model.rsquared:.4f}")
+if first_model.fvalue > 10:
+    print("✓ 工具变量强度足够 (F > 10)")
+else:
+    print("⚠ 弱工具变量警告 (F ≤ 10)")
+```
+
+# 工具变量法的局限与拓展 {#sec-limitations}
+
+## 主要局限 {#sec-main-limitations}
+
+### 1. 排他性无法检验
+
+工具变量的排他性是一个基于理论的假设，无法直接用数据检验。需要依赖领域知识和定性论证。
+
+### 2. LATE的外推问题
+
+IV只识别Compliers的效应，Compliers可能只是总体的一小部分。效应能否推广到其他人存在疑问。
+
+### 3. 弱工具变量风险
+
+如果工具变量太弱，2SLS估计可能有严重偏差，甚至不如OLS。
+
+## 多重工具变量 {#sec-multiple-iv}
+
+**过度识别（Over-identification）**
+
+如果有多个工具变量 $Z_1, Z_2, ..., Z_k$（$k > 1$），可以进行过度识别检验。
+
+**Sargan-Hansen检验**：
+
+- 原假设：所有工具变量都满足排他性
+- 如果拒绝原假设：至少有一个工具变量无效
+- 局限：只能检验过度识别的情况（$k > 1$）
+
+**好处**：
+
+- 提高第一阶段强度
+- 可以进行过度识别检验
+- 估计更精确
+
+## 控制变量的使用 {#sec-control-variables}
+
+**在2SLS中加入外生控制变量**：
+
+$$Y = \alpha + \beta D + \gamma X + \varepsilon$$
+
+- 第一阶段：$D = \pi_0 + \pi_1 Z + \pi_2 X + \nu$
+- 第二阶段：$Y = \alpha + \beta \hat{D} + \gamma X + \varepsilon$
+
+**为什么加入控制变量？**
+
+1. 提高估计精度（控制无关变异）
+2. 放松排他性假设（$Z$ 可以通过 $X$ 影响 $Y$）
+3. 处理异质性（条件LATE）
+
+::: {.callout-tip appearance="simple"}
+**控制变量的选择**
+
+只加入**外生**控制变量（不受 $D$ 影响）。不要加入可能的中介变量或碰撞变量。
+:::
+
+# 总结 {#sec-summary}
+
+## 本讲要点 {#sec-key-points}
+
+1. **工具变量法原理**
+   - 处理未观测混淆变量的问题
+   - 利用外生变异识别因果效应
+   - 两个关键条件：相关性和排他性
+
+2. **2SLS估计**
+   - 第一阶段：$D \sim Z$
+   - 第二阶段：$Y \sim \hat{D}$
+   - IV估计量 = 简约式效应 / 第一阶段效应
+
+3. **弱工具变量**
+   - F统计量 < 10时估计不可靠
+   - 偏差可能接近OLS
+   - 需要寻找更强的工具变量或使用稳健方法
+
+4. **LATE框架**
+   - 识别Compliers的处理效应
+   - 单调性假设排除Defiers
+   - 外推到总体需谨慎
+
+## 实践建议 {#sec-practical-advice}
+
+**使用工具变量法的检查清单**：
+
+- [ ] 明确说明为什么存在内生性问题
+- [ ] 论证工具变量满足相关性（报告第一阶段F统计量）
+- [ ] 论证工具变量满足排他性（基于理论）
+- [ ] 检验弱工具变量问题（F > 10）
+- [ ] 报告OLS和2SLS结果对比
+- [ ] 解释LATE的含义（谁是Compliers？）
+- [ ] 进行稳健性检验（不同样本、不同控制变量）
+
+**推荐工具**：
+
+- **linearmodels** (Python)：IV2SLS, IVGMM
+- **statsmodels** (Python)：基础回归
+- **econml** (Python)：更高级的因果推断方法
+- **ivreg** (R)：2SLS估计
+- **fixest** (R)：快速固定效应和IV
+
+## 下一步学习 {#sec-next-steps}
+
+下一讲将介绍**双重差分法（Difference-in-Differences）**：
+
+- 利用面板数据识别因果效应
+- 平行趋势假设
+- 事件研究法
+- 交错DID的新进展
+
+**核心思想**：
+
+比较处理组和对照组在处理前后的变化：
+
+$$\Delta Y_{treatment} - \Delta Y_{control}$$
+
+这种方法能够控制不随时间变化的混淆因素。
