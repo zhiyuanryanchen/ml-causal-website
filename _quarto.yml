@@ -13,6 +13,8 @@ project:
     - Quarto/lecture03_dags_notes.html
     - Quarto/lecture04_matching.html
     - Quarto/lecture04_matching_notes.html
+    - Quarto/lecture05_Instruments.html
+    - Quarto/lecture05_instruments_notes.html
 
 website:
   title: "机器学习与因果推断"
@@ -43,6 +45,10 @@ website:
             file: Quarto/lecture04_matching.html
           - text: "第四讲：详细讲义"
             file: Quarto/lecture04_matching_notes.html
+          - text: "第五讲：工具变量法"
+            file: Quarto/lecture05_Instruments.html
+          - text: "第五讲：详细讲义"
+            file: Quarto/lecture05_instruments_notes.html
       - text: "资源"
         file: resources.qmd
     right:
@@ -85,6 +91,10 @@ website:
               file: Quarto/lecture04_matching.html
             - text: "第四讲：详细讲义"
               file: Quarto/lecture04_matching_notes.html
+            - text: "第五讲：工具变量法"
+              file: Quarto/lecture05_Instruments.html
+            - text: "第五讲：详细讲义"
+              file: Quarto/lecture05_instruments_notes.html
 
 format:
   html:

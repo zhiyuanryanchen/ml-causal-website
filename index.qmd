@@ -44,11 +44,23 @@ date: "2026-03-05"
 - [📖 第三讲详细讲义](Quarto/lecture03_dags_notes.html)
 - [📊 第四讲课件](Quarto/lecture04_matching.html)
 - [📖 第四讲详细讲义](Quarto/lecture04_matching_notes.html)
+- [📊 第五讲课件](Quarto/lecture05_Instruments.html)
+- [📖 第五讲详细讲义](Quarto/lecture05_instruments_notes.html)
 - [💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
 
 ### 最新公告
 
 ::: {.callout-important appearance="simple"}
+**2026-04-07**
+
+第五讲课件和详细讲义已发布！
+
+📖 [查看第五讲课件：工具变量法](Quarto/lecture05_Instruments.html)
+
+📚 [查看第五讲详细讲义](Quarto/lecture05_instruments_notes.html)
+
+---
+
 **2026-03-30**
 
 第四讲课件和详细讲义已发布！
@@ -167,20 +179,24 @@ date: "2026-03-05"
 
 ## 开始学习
 
-::: {.grid .gap-3 .text-center}
-::: {.g-col-3}
-[📊 第一讲](Quarto/lecture01_students.html){.btn .btn-primary .btn-lg}
+::: {.learning-grid .text-center}
+::: {.learning-grid-item}
+[📊 第一讲](Quarto/lecture01_students.html){.btn .btn-primary .course-start-btn}
 :::
 
-::: {.g-col-3}
-[📊 第二讲](Quarto/lecture02_probability_regression_students.html){.btn .btn-primary .btn-lg}
+::: {.learning-grid-item}
+[📊 第二讲](Quarto/lecture02_probability_regression_students.html){.btn .btn-primary .course-start-btn}
 :::
 
-::: {.g-col-3}
-[📊 第三讲](Quarto/lecture03_dags.html){.btn .btn-primary .btn-lg}
+::: {.learning-grid-item}
+[📊 第三讲](Quarto/lecture03_dags.html){.btn .btn-primary .course-start-btn}
 :::
 
-::: {.g-col-3}
-[📊 第四讲](Quarto/lecture04_matching.html){.btn .btn-primary .btn-lg}
+::: {.learning-grid-item}
+[📊 第四讲](Quarto/lecture04_matching.html){.btn .btn-primary .course-start-btn}
+:::
+
+::: {.learning-grid-item}
+[📊 第五讲](Quarto/lecture05_Instruments.html){.btn .btn-primary .course-start-btn}
 :::
 :::
