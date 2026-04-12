@@ -15,6 +15,8 @@ project:
     - Quarto/lecture04_matching_notes.html
     - Quarto/lecture05_Instruments.html
     - Quarto/lecture05_instruments_notes.html
+    - Quarto/lecture06_panel_did.html
+    - Quarto/lecture06_panel_did_notes.html
 
 website:
   title: "机器学习与因果推断"
@@ -49,6 +51,10 @@ website:
             file: Quarto/lecture05_Instruments.html
           - text: "第五讲：详细讲义"
             file: Quarto/lecture05_instruments_notes.html
+          - text: "第六讲：面板数据与双重差分"
+            file: Quarto/lecture06_panel_did.html
+          - text: "第六讲：详细讲义"
+            file: Quarto/lecture06_panel_did_notes.html
       - text: "资源"
         file: resources.qmd
     right:
@@ -95,6 +101,10 @@ website:
               file: Quarto/lecture05_Instruments.html
             - text: "第五讲：详细讲义"
               file: Quarto/lecture05_instruments_notes.html
+            - text: "第六讲：面板数据与双重差分"
+              file: Quarto/lecture06_panel_did.html
+            - text: "第六讲：详细讲义"
+              file: Quarto/lecture06_panel_did_notes.html
 
 format:
   html:

@@ -46,11 +46,23 @@ date: "2026-03-05"
 - [📖 第四讲详细讲义](Quarto/lecture04_matching_notes.html)
 - [📊 第五讲课件](Quarto/lecture05_Instruments.html)
 - [📖 第五讲详细讲义](Quarto/lecture05_instruments_notes.html)
-- [💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
+- [� 第六讲课件](Quarto/lecture06_panel_did.html)
+- [📖 第六讲详细讲义](Quarto/lecture06_panel_did_notes.html)
+- [�💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
 
 ### 最新公告
 
 ::: {.callout-important appearance="simple"}
+**2026-04-12**
+
+第六讲课件和详细讲义已发布！
+
+📊 [查看第六讲课件：面板数据与双重差分法](Quarto/lecture06_panel_did.html)
+
+📚 [查看第六讲详细讲义](Quarto/lecture06_panel_did_notes.html)
+
+---
+
 **2026-04-07**
 
 第五讲课件和详细讲义已发布！

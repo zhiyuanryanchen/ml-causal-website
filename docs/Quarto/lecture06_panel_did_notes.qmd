@@ -1,0 +1,1071 @@
+---
+title: "机器学习与因果推断 - 第六讲：面板数据与双重差分法"
+subtitle: "利用时间维度识别因果效应：完整讲义"
+author: "陈志远"
+institute: "中国人民大学商学院"
+date: "2026-04-14"
+format:
+  html:
+    theme: cosmo
+    css: lecture-notes.css
+    html-math-method: mathml
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    highlight-style: github
+    self-contained: true
+    embed-resources: true
+    page-layout: article
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: true
+  cache: false
+  fig-width: 10
+  fig-height: 6
+  dpi: 150
+lang: zh
+jupyter: python3
+---
+
+```{python}
+#| echo: false
+#| output: false
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+
+# Set up matplotlib for Chinese display
+plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['figure.dpi'] = 150
+
+# Set random seed for reproducibility
+np.random.seed(42)
+```
+
+# 引言 {#sec-intro}
+
+本讲介绍三种利用**时间维度**识别因果效应的方法：面板数据分析（Panel Data）、双重差分法（Difference-in-Differences, DiD）以及合成控制法（Synthetic Control Method）。这些方法在经济学、公共政策评估和社会科学研究中有着广泛的应用，也是当前实证研究中最常用的因果识别策略之一。
+
+本讲对应教材 Mixtape Ch. 8-10 的内容。
+
+## 上节课回顾 {#sec-review}
+
+在上一讲中，我们学习了**工具变量法**（Instrumental Variables, IV）来处理不可观测的混淆变量问题。工具变量法的核心在于找到一个满足两个条件的变量：
+
+1. **相关性条件**：工具变量 $Z$ 与处理变量 $D$ 相关，$Cov(Z, D) \neq 0$
+2. **排他性约束**：工具变量 $Z$ 只通过处理变量 $D$ 影响结果 $Y$
+
+然而，工具变量法的一个重要局限是，好的工具变量往往很难找到。当我们无法找到合适的工具变量时，**面板数据方法**提供了一个替代方案——通过利用数据的时间维度，控制那些不随时间变化的混淆变量。
+
+# 第一部分：面板数据与固定效应 {#sec-panel}
+
+## 什么是面板数据？ {#sec-panel-intro}
+
+**面板数据**（Panel Data），也称为纵向数据（Longitudinal Data），是指对相同个体（个人、企业、地区、国家等）在多个时间点上进行重复观测的数据。面板数据的一般形式为：
+
+$$Y_{it}, \quad i = 1, \ldots, N, \quad t = 1, \ldots, T$$
+
+其中，$i$ 表示个体（cross-sectional unit），$t$ 表示时间（time period）。
+
+与面板数据相对的两种基本数据类型是：
+
+| 数据类型 | 观测方式 | 典型例子 |
+|:---|:---|:---|
+| 截面数据（Cross-sectional） | 不同个体在同一时间点 | 2020 年全国人口普查 |
+| 时间序列（Time Series） | 同一对象在多个时间点 | 中国 GDP 年度数据 |
+| **面板数据**（Panel Data） | **相同个体在多个时间点** | **各省份 2000–2020 年 GDP** |
+
+面板数据同时兼具截面数据和时间序列数据的特征，这使其在因果推断中具有独特的优势。
+
+## 面板数据的优势 {#sec-panel-advantage}
+
+面板数据的核心优势在于它允许我们控制**不随时间变化的个体特征**（time-invariant unobserved heterogeneity），从而解决遗漏变量偏误问题。
+
+### 传统截面回归的问题
+
+考虑一个简单的截面回归：
+
+$$Y_i = \alpha + \beta D_i + \varepsilon_i$$
+
+如果存在未观测的混淆变量 $U_i$ 同时影响 $D_i$ 和 $Y_i$，则 $U_i$ 被吸收进误差项 $\varepsilon_i$，导致 $Cov(D_i, \varepsilon_i) \neq 0$，OLS 估计有偏。
+
+### 面板数据的解决方案
+
+面板数据模型将误差项分解为两个部分：
+
+$$Y_{it} = \delta D_{it} + u_i + \varepsilon_{it}$$
+
+其中：
+
+- $Y_{it}$：个体 $i$ 在时间 $t$ 的结果变量
+- $D_{it}$：处理变量（可能随时间和个体变化）
+- $u_i$：**个体固定效应**（individual fixed effect）——不随时间变化的个体特征，如能力、偏好、地理位置等
+- $\varepsilon_{it}$：时变误差项（idiosyncratic error）
+
+关键洞察：即使 $u_i$ 与 $D_{it}$ 相关（这正是传统截面回归有偏的原因），面板数据方法也可以通过**去均值化**消除 $u_i$ 的影响。
+
+## 固定效应（Within）估计量 {#sec-fe}
+
+### 去均值化的完整推导
+
+固定效应估计量的核心思想是对原始模型进行**去均值化**（demeaning），也称为组内变换（within transformation）。
+
+**第一步**：对原始模型
+
+$$Y_{it} = \delta D_{it} + u_i + \varepsilon_{it}$$
+
+**第二步**：对每个个体 $i$，计算所有时间的平均值
+
+$$\bar{Y}_i = \frac{1}{T}\sum_{t=1}^{T} Y_{it} = \delta \bar{D}_i + u_i + \bar{\varepsilon}_i$$
+
+注意 $u_i$ 的均值仍然是 $u_i$（因为它不随时间变化）。
+
+**第三步**：用 (1) 减去 (2)
+
+$$Y_{it} - \bar{Y}_i = \delta(D_{it} - \bar{D}_i) + (u_i - u_i) + (\varepsilon_{it} - \bar{\varepsilon}_i)$$
+
+$$\tilde{Y}_{it} = \delta \tilde{D}_{it} + \tilde{\varepsilon}_{it}$$
+
+其中，波浪号 $\tilde{\cdot}$ 表示去均值后的变量。关键之处在于：
+
+$$u_i - u_i = 0$$
+
+个体固定效应被**完全消除**！对变换后的模型 (3) 进行 OLS 回归，即可得到 $\delta$ 的一致估计量——这就是**组内估计量**（within estimator）。
+
+### 直观理解
+
+固定效应模型的核心思想是"**自己跟自己比**"。例如，在研究教育对收入的影响时：
+
+- 截面回归比较的是：张三（高学历）vs 李四（低学历）的收入差异——但张三和李四可能先天能力不同
+- 固定效应比较的是：张三获得额外教育**前后**的收入变化——自动控制了张三的先天能力
+
+这种方法自动控制了所有不随时间变化的个体差异（先天能力、家庭背景、地理位置等），无论这些差异是否可观测。
+
+## 固定效应的关键假设与局限 {#sec-fe-limitations}
+
+### 严格外生性假设
+
+固定效应模型的核心假设是**严格外生性**（Strict Exogeneity）：
+
+$$E[\varepsilon_{it} \mid D_{i1}, D_{i2}, \ldots, D_{iT}, u_i] = 0$$
+
+这意味着时变误差项 $\varepsilon_{it}$ 与**所有时期**的处理变量都不相关。这是一个相当强的假设，它排除了以下情况：
+
+- **反馈效应**：过去的结果 $Y_{it-1}$ 影响当前的处理 $D_{it}$（动态面板）
+- **预期效应**：未来的处理 $D_{it+1}$ 影响当前的结果 $Y_{it}$
+
+::: {.callout-warning}
+## 严格外生性 vs 同期外生性
+
+严格外生性要求误差项与**所有时期**的处理变量无关，而同期外生性（contemporaneous exogeneity）只要求 $E[\varepsilon_{it} \mid D_{it}, u_i] = 0$——即误差项与**同期**处理变量无关。固定效应估计量的一致性需要严格外生性（在 $T$ 固定的情况下）。
+:::
+
+### 三大局限
+
+1. **无法解决反向因果**：如果 $Y_{it}$ 同时影响 $D_{it}$（同时性），固定效应无法解决。例如，犯罪率高的城市会部署更多警察——固定效应无法消除这种反向因果。
+
+2. **无法处理时变混淆变量**：固定效应只能消除不随时间变化的混淆变量。如果存在时变混淆变量 $X_{it}$ 同时影响 $D_{it}$ 和 $Y_{it}$，估计仍然有偏。
+
+3. **无法估计时不变变量的效应**：如性别、种族等在固定效应模型中被消除，其效应无法估计。
+
+### 何时使用固定效应
+
+::: {.callout-tip}
+## 适用场景
+
+- 存在不随时间变化的个体特征（能力、偏好、地理位置）
+- 这些特征与处理变量相关（即存在 $Cov(u_i, D_{it}) \neq 0$）
+- 处理变量在个体内有变异（有人从 0 变 1，或从 1 变 0）
+- 严格外生性假设合理（无反馈效应）
+:::
+
+# 第二部分：双重差分法 {#sec-did}
+
+## 核心思想 {#sec-did-idea}
+
+**双重差分法**（Difference-in-Differences, DiD）是一种利用**自然实验**或**准实验**来估计因果效应的方法。它的基本思想是：比较处理组和对照组在处理前后的**变化差异**。
+
+$$\hat{\delta}_{DiD} = \underbrace{(\bar{Y}_{T,post} - \bar{Y}_{T,pre})}_{\text{处理组的变化}} - \underbrace{(\bar{Y}_{C,post} - \bar{Y}_{C,pre})}_{\text{对照组的变化}}$$
+
+直观地说：
+
+- 第一层差分消除了组间的**固定差异**（组间异质性）
+- 第二层差分消除了**共同时间趋势**
+- 剩下的就是处理效应
+
+## 历史溯源：John Snow 与霍乱 {#sec-snow}
+
+DiD 的思想可以追溯到 1854 年伦敦霍乱爆发期间 John Snow 的研究。当时主流观点认为霍乱通过"瘴气"（miasma）传播，而 Snow 假设霍乱通过受污染的水传播。
+
+Snow 利用了一个**自然实验**：伦敦有两家自来水公司——Lambeth 公司和 Southwark & Vauxhall 公司。两家公司的供水区域在地理上高度重叠，但取水位置不同：
+
+- **Lambeth 公司**：在 1852 年将取水口搬到了泰晤士河上游（远离污水排放口）
+- **Southwark & Vauxhall 公司**：仍在下游取水（靠近污水排放口）
+
+Snow 比较了两家公司用户的霍乱死亡率变化——这就是 DiD 的早期应用。Lambeth 用户的死亡率从 130/10,000 降至接近 0，而 S&V 用户的死亡率保持在高水平。
+
+## 2×2 DiD 设计 {#sec-2x2}
+
+标准的 DiD 设计涉及**四组**比较：
+
+| | 处理前（Pre） | 处理后（Post） | 变化 |
+|:---|:---:|:---:|:---:|
+| 处理组（Treatment） | $\bar{Y}_{T,pre}$ | $\bar{Y}_{T,post}$ | $\Delta_T = \bar{Y}_{T,post} - \bar{Y}_{T,pre}$ |
+| 对照组（Control） | $\bar{Y}_{C,pre}$ | $\bar{Y}_{C,post}$ | $\Delta_C = \bar{Y}_{C,post} - \bar{Y}_{C,pre}$ |
+| **DiD** | | | $\hat{\delta} = \Delta_T - \Delta_C$ |
+
+DiD 估计量也可以等价地表示为：
+
+$$\hat{\delta}_{DiD} = (\bar{Y}_{T,post} - \bar{Y}_{C,post}) - (\bar{Y}_{T,pre} - \bar{Y}_{C,pre})$$
+
+即"处理后组间差异"减去"处理前组间差异"。
+
+## 平行趋势假设 {#sec-parallel-trends}
+
+DiD 识别的关键假设是**平行趋势假设**（Parallel Trends Assumption）：
+
+> 如果没有处理，处理组和对照组的结果变量会遵循**相同的时间趋势**。
+
+形式上：
+
+$$E[Y(0)_{T,post} - Y(0)_{T,pre}] = E[Y(0)_{C,post} - Y(0)_{C,pre}]$$
+
+其中 $Y(0)$ 表示没有处理时的潜在结果。
+
+### 为什么平行趋势如此重要？
+
+平行趋势假设的本质是：对照组的变化提供了处理组在**没有处理时本来会经历的变化**（反事实）。如果这个假设不成立——比如处理组本身就有更快的增长趋势——那么 DiD 会将这部分趋势差异错误地归因于处理效应。
+
+### 不可检验性
+
+::: {.callout-warning}
+## 平行趋势假设无法直接检验
+
+我们只能观察处理前的趋势是否平行（这是必要条件），但这并不能保证处理后趋势也平行。处理前平行只是支持该假设的**间接证据**，而非充分条件。
+:::
+
+实践中的应对方案包括：
+
+1. 绘制**事件研究图**，检验处理前系数是否接近零
+2. **安慰剂检验**：假设处理发生在更早时期
+3. 使用不同的对照组进行**稳健性检验**
+
+## 双向固定效应（TWFE）模型 {#sec-twfe}
+
+DiD 可以通过以下**双向固定效应**（Two-Way Fixed Effects, TWFE）模型来估计：
+
+$$Y_{it} = \alpha + \delta D_{it} + \gamma_i + \lambda_t + \varepsilon_{it}$$
+
+其中：
+
+- $\gamma_i$：**个体固定效应**——控制不随时间变化的个体特征
+- $\lambda_t$：**时间固定效应**——控制所有个体共同面对的时间冲击（如宏观经济波动）
+- $D_{it}$：处理变量（处理组且处理后 $= 1$，否则 $= 0$）
+- $\delta$：处理效应（DiD 估计量）
+
+### DiD 与 TWFE 的等价性
+
+对于标准的 2×2 DiD（两组、两期），TWFE 回归系数 $\hat{\delta}$ 恰好等于"差分之差"。简要证明如下：
+
+在 TWFE 中，$\gamma_i$ 吸收了组间的固定差异，$\lambda_t$ 吸收了共同的时间趋势。去掉这两层固定效应后，$D_{it}$ 的系数捕捉的就是：处理组相对于对照组、在处理后相对于处理前的"额外"变化——这正是 DiD 估计量。
+
+## 经典案例：Card & Krueger (1994) {#sec-ck}
+
+### 研究背景
+
+这篇论文是劳动经济学中最具影响力的实证研究之一。研究问题是：**最低工资提高会导致失业增加吗？**
+
+传统经济学理论（竞争性劳动力市场模型）预测：最低工资提高 → 劳动力成本上升 → 企业裁员 → 就业下降。
+
+### 研究设计
+
+Card & Krueger 利用了一个经典的自然实验：
+
+- **处理组**：新泽西州（NJ）快餐店——1992 年 4 月，新泽西州将最低工资从 \$4.25 提高到 \$5.05
+- **对照组**：宾夕法尼亚州（PA）东部快餐店——最低工资保持不变（\$4.25）
+- **数据**：在最低工资提高前（1992 年 2 月）和提高后（1992 年 11 月）分别调查两州 410 家快餐店（Burger King、KFC、Wendy's、Roy Rogers）的全职当量员工数（Full-Time Equivalent, FTE）
+
+### 研究结果
+
+| | 新泽西州（NJ） | 宾夕法尼亚州（PA） | 差异 |
+|:---|:---:|:---:|:---:|
+| 处理前（2 月） | 20.44 FTE | 23.33 FTE | -2.89 |
+| 处理后（11 月） | 21.03 FTE | 21.17 FTE | -0.14 |
+| **变化** | **+0.59** | **-2.16** | **+2.75** |
+
+**DiD 估计**：$\hat{\delta} = (+0.59) - (-2.16) = +2.75$ FTE
+
+::: {.callout-note}
+## 惊人发现
+
+新泽西州就业**增加**了 0.59 FTE，而宾夕法尼亚州就业**减少**了 2.16 FTE。DiD 估计为 +2.75 FTE（统计不显著），表明没有证据支持最低工资提高减少就业的传统观点。这一发现挑战了竞争性劳动力市场模型，推动了买方垄断（monopsony）模型等替代理论的发展。
+:::
+
+### 争议与后续
+
+这篇论文引发了巨大争议。Neumark & Wascher (2000) 使用薪资数据（而非电话调查数据）重新分析，得出了相反的结论。但后续大量研究（包括使用 administrative data 的分析）总体上支持了 Card & Krueger 的发现：适度的最低工资提高对就业的负面影响很小甚至不存在。
+
+## 推断挑战：聚类标准误 {#sec-clustering}
+
+面板数据中，同一个体的观测值往往存在**序列相关**（serial correlation）：
+
+$$Cov(\varepsilon_{it}, \varepsilon_{is}) \neq 0 \quad \text{当 } t \neq s$$
+
+这意味着传统的 OLS 标准误会**严重低估**真实的标准误，导致过多的假阳性（Bertrand, Duflo & Mullainathan, 2004）。
+
+### 解决方案：聚类标准误
+
+在个体层面进行**聚类**（clustered standard errors）：
+
+- 允许同一个体内的误差项任意相关
+- 提供更保守（更大）的标准误
+- 在 DiD 中几乎是**必须的**
+
+::: {.callout-warning}
+## 聚类层级的选择
+
+聚类应在处理发生的层级进行。例如，若政策在「州」层面实施，则应在州层面聚类，而非在个体层面。聚类数量过少（< 50）时，可考虑使用野生自举法（wild bootstrap）。
+:::
+
+## 事件研究设计 {#sec-event-study}
+
+### 动态处理效应
+
+处理效应可能随时间变化：
+
+- **立即效应**：处理后立即出现
+- **滞后效应**：处理一段时间后才出现
+- **预期效应**：处理前就有反应（anticipation）
+
+事件研究设计（Event Study Design）正是用来刻画这种**动态处理效应**的。
+
+### 事件研究模型
+
+$$Y_{it} = \alpha + \sum_{k=-m}^{-2} \beta_k D_{it}^k + \sum_{k=0}^{n} \beta_k D_{it}^k + \gamma_i + \lambda_t + \varepsilon_{it}$$
+
+其中：
+
+- $D_{it}^k$：指示变量，表示个体 $i$ 在处理后 $k$ 期（$k \geq 0$）或处理前 $|k|$ 期（$k < 0$）
+- 通常省略 $k = -1$（处理前一期）作为参照基准（base period）
+- 处理前系数 $\beta_k$（$k < 0$）用于**检验平行趋势**
+- 处理后系数 $\beta_k$（$k \geq 0$）揭示**动态处理效应**
+
+### 如何解读事件研究图
+
+事件研究图的横轴是相对于处理的时间（事件时间），纵轴是处理效应大小。理想中：
+
+- 处理前系数应**统计不显著**、接近零 → 支持平行趋势
+- 处理后系数揭示效应出现的时间和持续性
+
+如果预处理系数显著不为零或呈明显趋势，说明平行趋势假设可能不成立，DiD 估计可能有偏。
+
+## 案例：ACA 医疗补助扩展 {#sec-aca}
+
+Miller et al. (2019) 研究了《平价医疗法案》（Affordable Care Act, ACA）中医疗补助（Medicaid）扩展对保险覆盖率和死亡率的影响。
+
+### 研究设计
+
+- **处理组**：2014 年采纳 ACA 医疗补助扩展的州
+- **对照组**：未采纳扩展的州
+- **方法**：事件研究 + DiD
+
+### 主要发现
+
+1. **保险覆盖率**：扩展州的 Medicaid 覆盖率在扩展后显著提高，处理前系数接近零（支持平行趋势）
+2. **死亡率**：扩展州的死亡率在扩展后下降约 0.13 百分点，尤其是与医疗可及性相关的死因（如心血管疾病、糖尿病）
+
+这一研究有力地说明了医疗保险覆盖扩展对健康结局的正面影响。
+
+## 安慰剂检验 {#sec-placebo}
+
+安慰剂检验是一种强有力的**稳健性检验**方法。
+
+### 实施步骤
+
+1. 随机选择"假处理组"（保持处理组大小不变）
+2. 估计 DiD
+3. 重复多次（如 1,000 次）
+4. 构建**安慰剂分布**（placebo distribution）
+5. 比较真实估计与安慰剂分布
+
+### 解释
+
+如果真实估计落在安慰剂分布的**尾部**（如 5% 以外），说明在随机分配处理的情况下，不太可能得到如此极端的估计值，从而间接支持了真实效应的存在。这种推断逻辑类似于 Fisher 的精确检验（randomization inference）。
+
+## 三重差分（DDD） {#sec-ddd}
+
+### 何时使用
+
+当平行趋势假设在简单的 DiD 中不成立时，可以添加**第三个维度**进行比较。三重差分利用了一个不受政策影响的子群体作为额外对照。
+
+### 模型设定
+
+$$Y_{it} = \alpha + \beta_1 Treat_i + \beta_2 Post_t + \beta_3 Group_i + \delta(Treat_i \times Post_t \times Group_i) + \text{controls} + \varepsilon_{it}$$
+
+### Gruber (1994) 案例
+
+这是最经典的 DDD 应用之一。
+
+**研究问题**：强制产假福利（mandated maternity benefits）对工资和就业的影响。
+
+**研究设计**：
+
+- **第一重差分**：通过产假法的州 vs 未通过的州（处理 vs 对照）
+- **第二重差分**：法律通过前 vs 通过后（前 vs 后）
+- **第三重差分**：已婚育龄女性（直接受益群体）vs 其他群体（不受影响的群体）
+
+**发现**：强制产假福利导致已婚育龄女性的工资下降约 5%，说明福利成本被**转嫁**给了目标群体的员工（而非由雇主承担）。这一结论证实了税收归宿理论的预测。
+
+## 现代 DiD：交错处理的问题 {#sec-staggered}
+
+### 现实复杂性
+
+现实中，大多数政策并非在所有地区同时实施，而是"**交错**"（staggered）的——不同州或不同企业在不同时间采纳政策。
+
+### 传统 TWFE 的问题
+
+Goodman-Bacon (2021) 的开创性工作揭示了传统 TWFE 在交错处理下的严重问题：
+
+传统 TWFE 估计量实际上是多个 2×2 DiD 的**加权平均**，但权重可能不合理——特别是，**已经接受处理的单位会被隐含地用作后来处理单位的"对照组"**。如果处理效应随时间变化（例如，效应逐渐增强或减弱），这会导致估计偏误，甚至可能产生**负权重**，使得估计的符号与真实效应相反。
+
+### 现代 DiD 方法
+
+针对交错处理，近年来发展了一系列新方法：
+
+| 方法 | 核心思想 |
+|:---|:---|
+| Callaway & Sant'Anna (2021) | 以"组-时间"为单位估计 ATT，使用从未处理或尚未处理的单位作为对照 |
+| Sun & Abraham (2021) | 交互加权（IW）估计量，避免"已处理对照"问题 |
+| Gardner (2021) | 两步法：先估计固定效应，再估计处理后效应 |
+| Borusyak, Jaravel & Spiess (2024) | 插补法（imputation），构建反事实后直接比较 |
+
+::: {.callout-tip}
+## 实践建议
+
+如果你的研究涉及交错处理时间，强烈建议: (1) 先报告传统 TWFE 结果；(2) 使用至少一种现代 DiD 方法进行稳健性检验；(3) 报告 Goodman-Bacon 分解以展示 TWFE 权重结构。
+:::
+
+## Python 实现：DiD 模拟 {#sec-did-python}
+
+### 数据生成与 TWFE 估计
+
+```{python}
+#| code-fold: show
+#| code-summary: "点击查看完整代码：DiD 模拟与 TWFE 估计"
+#| fig-cap: "双重差分可视化：处理组与对照组在处理前后的变化"
+
+import statsmodels.api as sm
+
+# ── 数据生成 ──
+np.random.seed(42)
+n_units = 200
+n_periods = 10
+
+units = np.repeat(np.arange(n_units), n_periods)
+periods = np.tile(np.arange(n_periods), n_units)
+treatment = (units < n_units // 2).astype(int)
+post = (periods >= 5).astype(int)
+D = treatment * post
+
+unit_fe = np.repeat(np.random.normal(0, 1, n_units), n_periods)
+time_fe = np.tile(np.linspace(0, 2, n_periods), n_units)
+true_effect = 2.0
+
+Y = unit_fe + time_fe + true_effect * D + np.random.normal(0, 0.5, len(units))
+
+data = pd.DataFrame({
+    'unit': units, 'period': periods, 'Y': Y,
+    'D': D, 'treatment': treatment, 'post': post
+})
+
+# ── TWFE 估计 ──
+from linearmodels.panel import PanelOLS
+
+panel = data.set_index(['unit', 'period'])
+model = PanelOLS(
+    dependent=panel['Y'],
+    exog=sm.add_constant(panel['D']),
+    entity_effects=True,
+    time_effects=True
+)
+result = model.fit(cov_type='clustered', cluster_entity=True)
+
+print("=" * 55)
+print("TWFE 估计结果")
+print("=" * 55)
+print(f"  真实处理效应:   {true_effect:.3f}")
+print(f"  估计处理效应:   {result.params['D']:.3f}")
+print(f"  聚类标准误:     {result.std_errors['D']:.3f}")
+print(f"  t 统计量:       {result.tstats['D']:.3f}")
+print(f"  p 值:           {result.pvalues['D']:.6f}")
+print("=" * 55)
+
+# ── 可视化：四面板图 ──
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+# 面板 1：组别均值的时间趋势
+means = data.groupby(['period', 'treatment'])['Y'].mean().unstack()
+axes[0, 0].plot(means.index, means[1], 'o-', color='#AE0B2A', label='处理组', linewidth=2)
+axes[0, 0].plot(means.index, means[0], 's--', color='#2E86C1', label='对照组', linewidth=2)
+axes[0, 0].axvline(x=4.5, color='gray', linestyle=':', alpha=0.7, label='处理时间')
+axes[0, 0].set_xlabel('时间')
+axes[0, 0].set_ylabel('Y 均值')
+axes[0, 0].set_title('(a) 组别均值的时间趋势')
+axes[0, 0].legend()
+
+# 面板 2：组间差异的时间变化
+diff = means[1] - means[0]
+axes[0, 1].bar(diff.index, diff, color=['#2E86C1']*5 + ['#AE0B2A']*5, alpha=0.7)
+axes[0, 1].axhline(y=0, color='black', linewidth=0.5)
+axes[0, 1].axvline(x=4.5, color='gray', linestyle=':', alpha=0.7)
+axes[0, 1].set_xlabel('时间')
+axes[0, 1].set_ylabel('组间差异')
+axes[0, 1].set_title('(b) 处理组 − 对照组 均值差')
+
+# 面板 3：DiD 示意图
+pre_treat = means[1].iloc[:5].mean()
+post_treat = means[1].iloc[5:].mean()
+pre_ctrl = means[0].iloc[:5].mean()
+post_ctrl = means[0].iloc[5:].mean()
+
+axes[1, 0].bar(['处理组\n(前)', '处理组\n(后)', '对照组\n(前)', '对照组\n(后)'],
+               [pre_treat, post_treat, pre_ctrl, post_ctrl],
+               color=['#AE0B2A', '#E74C3C', '#2E86C1', '#5DADE2'], alpha=0.8)
+axes[1, 0].set_ylabel('Y 均值')
+axes[1, 0].set_title(f'(c) DiD 四格均值')
+
+# 面板 4：DiD 分解
+delta_t = post_treat - pre_treat
+delta_c = post_ctrl - pre_ctrl
+did_est = delta_t - delta_c
+
+bars = axes[1, 1].bar(['处理组\n变化 ΔT', '对照组\n变化 ΔC', 'DiD\nΔT − ΔC'],
+                       [delta_t, delta_c, did_est],
+                       color=['#AE0B2A', '#2E86C1', '#27AE60'], alpha=0.8)
+axes[1, 1].axhline(y=0, color='black', linewidth=0.5)
+axes[1, 1].set_ylabel('变化量')
+axes[1, 1].set_title(f'(d) DiD 分解（真实效应 = {true_effect}）')
+for bar, val in zip(bars, [delta_t, delta_c, did_est]):
+    axes[1, 1].text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.05,
+                    f'{val:.2f}', ha='center', fontsize=11, fontweight='bold')
+
+plt.tight_layout()
+plt.show()
+```
+
+### 事件研究图
+
+```{python}
+#| code-fold: show
+#| code-summary: "点击查看完整代码：事件研究图绘制"
+#| fig-cap: "事件研究图：处理效应的动态变化，预处理系数应接近零"
+
+# ── 构建事件研究数据 ──
+data_es = data.copy()
+data_es['treat_period'] = 5  # 所有处理组在第5期受到处理
+
+# 事件时间
+data_es['event_time'] = data_es['period'] - data_es['treat_period']
+
+# 只对处理组构建事件时间哑变量
+event_dummies = pd.get_dummies(data_es['event_time'], prefix='k').astype(int)
+# 与 treatment 交互
+for col in event_dummies.columns:
+    event_dummies[col] = event_dummies[col] * data_es['treatment']
+
+# 去掉 k=-1 作为基准期
+event_dummies = event_dummies.drop('k_-1', axis=1)
+data_es = pd.concat([data_es.reset_index(drop=True), event_dummies], axis=1)
+
+# 加入个体和时间哑变量
+unit_dummies = pd.get_dummies(data_es['unit'], prefix='unit', drop_first=True)
+time_dummies = pd.get_dummies(data_es['period'], prefix='time', drop_first=True)
+
+k_cols = [c for c in event_dummies.columns]
+X = pd.concat([data_es[k_cols], unit_dummies, time_dummies], axis=1).astype(float)
+X = sm.add_constant(X)
+
+model_es = sm.OLS(data_es['Y'], X).fit(
+    cov_type='cluster', cov_kwds={'groups': data_es['unit']}
+)
+
+# 提取事件时间系数
+event_times = sorted([int(c.split('_')[1]) for c in k_cols])
+coefs = [model_es.params[f'k_{k}'] for k in event_times]
+ci_low = [model_es.conf_int().loc[f'k_{k}', 0] for k in event_times]
+ci_high = [model_es.conf_int().loc[f'k_{k}', 1] for k in event_times]
+
+# 加入基准期（k=-1，系数=0）
+event_times_full = sorted(event_times + [-1])
+idx_base = event_times_full.index(-1)
+coefs.insert(idx_base, 0)
+ci_low.insert(idx_base, 0)
+ci_high.insert(idx_base, 0)
+
+# ── 绘图 ──
+fig, ax = plt.subplots(figsize=(12, 6))
+
+ax.fill_between(event_times_full, ci_low, ci_high, alpha=0.2, color='#AE0B2A')
+ax.plot(event_times_full, coefs, 'o-', color='#AE0B2A', linewidth=2, markersize=7, label='估计系数')
+ax.axhline(y=0, color='black', linewidth=0.8)
+ax.axvline(x=-0.5, color='gray', linestyle='--', alpha=0.7, label='处理时间')
+ax.axhline(y=true_effect, color='#27AE60', linestyle=':', alpha=0.7, label=f'真实效应 = {true_effect}')
+
+ax.set_xlabel('事件时间（相对于处理）', fontsize=13)
+ax.set_ylabel('估计系数 β_k', fontsize=13)
+ax.set_title('事件研究图：检验平行趋势与动态处理效应', fontsize=14)
+ax.legend(fontsize=11)
+ax.set_xticks(event_times_full)
+
+# 标注区域
+ax.annotate('预处理期\n（应接近零）', xy=(-3, 0.3), fontsize=10, color='#2E86C1',
+            ha='center', fontweight='bold')
+ax.annotate('处理后\n（显示效应）', xy=(2.5, true_effect - 0.3), fontsize=10, color='#AE0B2A',
+            ha='center', fontweight='bold')
+
+plt.tight_layout()
+plt.show()
+```
+
+### 安慰剂检验分布
+
+```{python}
+#| code-fold: show
+#| code-summary: "点击查看完整代码：安慰剂检验"
+#| fig-cap: "安慰剂检验：随机分配处理后的 DiD 分布，红线为真实估计值"
+
+# ── 安慰剂检验 ──
+n_placebo = 1000
+placebo_estimates = []
+
+for _ in range(n_placebo):
+    # 随机分配处理组
+    fake_treatment = np.zeros(n_units, dtype=int)
+    fake_treatment[np.random.choice(n_units, n_units // 2, replace=False)] = 1
+    fake_treatment_full = np.repeat(fake_treatment, n_periods)
+    fake_D = fake_treatment_full * post
+
+    # 简单 DiD 计算
+    fake_data = pd.DataFrame({
+        'Y': Y, 'D': fake_D,
+        'treatment': fake_treatment_full, 'post': np.tile(post[:n_periods], n_units)
+    })
+    means_t = fake_data[fake_data['treatment'] == 1].groupby('post')['Y'].mean()
+    means_c = fake_data[fake_data['treatment'] == 0].groupby('post')['Y'].mean()
+
+    if len(means_t) == 2 and len(means_c) == 2:
+        did_p = (means_t.iloc[1] - means_t.iloc[0]) - (means_c.iloc[1] - means_c.iloc[0])
+        placebo_estimates.append(did_p)
+
+placebo_estimates = np.array(placebo_estimates)
+
+# 真实 DiD 估计
+real_means_t = data[data['treatment'] == 1].groupby('post')['Y'].mean()
+real_means_c = data[data['treatment'] == 0].groupby('post')['Y'].mean()
+real_did = (real_means_t.iloc[1] - real_means_t.iloc[0]) - (real_means_c.iloc[1] - real_means_c.iloc[0])
+
+# p值
+p_value = np.mean(np.abs(placebo_estimates) >= np.abs(real_did))
+
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.hist(placebo_estimates, bins=50, density=True, alpha=0.7, color='#BDC3C7', edgecolor='white',
+        label='安慰剂分布')
+ax.axvline(x=real_did, color='#AE0B2A', linewidth=3, label=f'真实 DiD = {real_did:.3f}')
+ax.axvline(x=0, color='black', linewidth=0.8, linestyle='--')
+
+ax.set_xlabel('DiD 估计值', fontsize=13)
+ax.set_ylabel('密度', fontsize=13)
+ax.set_title(f'安慰剂检验（{n_placebo} 次随机化，p = {p_value:.4f}）', fontsize=14)
+ax.legend(fontsize=12)
+
+plt.tight_layout()
+plt.show()
+
+print(f"真实 DiD 估计: {real_did:.4f}")
+print(f"安慰剂 p 值:   {p_value:.4f}")
+print(f"安慰剂均值:    {placebo_estimates.mean():.4f}")
+print(f"安慰剂标准差:  {placebo_estimates.std():.4f}")
+```
+
+## R 语言对照 {#sec-did-r}
+
+以下是使用 R 实现相同分析的代码，供熟悉 R 的读者参考。
+
+### 使用 fixest 包进行 TWFE 估计
+
+```r
+# 安装（如果需要）
+# install.packages("fixest")
+
+library(fixest)
+
+# TWFE 估计
+did_model <- feols(Y ~ D | unit + period, data = panel_data,
+                   cluster = ~unit)
+summary(did_model)
+
+# 事件研究
+es_model <- feols(Y ~ i(event_time, treatment, ref = -1) | unit + period,
+                  data = panel_data, cluster = ~unit)
+iplot(es_model, main = "事件研究图")
+```
+
+### 使用 did 包进行 Callaway & Sant'Anna 估计
+
+```r
+# install.packages("did")
+library(did)
+
+# Callaway & Sant'Anna (2021)
+cs_result <- att_gt(
+  yname = "Y",
+  tname = "period",
+  idname = "unit",
+  gname = "first_treat",  # 首次处理时间
+  data = panel_data,
+  control_group = "notyettreated"  # 使用"尚未处理"组作对照
+)
+summary(cs_result)
+
+# 汇总为总体 ATT
+agg_cs <- aggte(cs_result, type = "simple")
+summary(agg_cs)
+
+# 动态效应
+agg_dynamic <- aggte(cs_result, type = "dynamic")
+ggdid(agg_dynamic)
+```
+
+# 第三部分：合成控制法 {#sec-synth}
+
+## 从 DiD 到合成控制 {#sec-synth-motivation}
+
+DiD 方法在多数情况下表现良好，但当**只有一个（或极少数）处理单位**时面临挑战：
+
+- 一个省份实施了独特的政策
+- 一家公司被收购
+- 一个国家经历了制度变迁
+
+此时，对照组的选择具有很大的**主观性**——选择不同的对照组可能得到截然不同的结果。
+
+## 合成控制法的核心思想 {#sec-synth-idea}
+
+**合成控制法**（Synthetic Control Method, SCM）由 Abadie & Gardeazabal (2003) 和 Abadie, Diamond & Hainmueller (2010) 提出，其核心思想是：
+
+> 不要选择单一的对照组，而是用多个对照单位的**加权组合**来**构建**一个"合成"的对照——使其在处理前的特征和趋势上尽可能接近处理单位。
+
+### 优势
+
+- **数据驱动**的权重选择，避免了研究者的主观选择
+- 合成单位与处理单位在处理前的**预测变量**上相似
+- **透明**：可以清楚地看到哪些单位贡献了多少权重
+
+## 经典案例：California Proposition 99 {#sec-prop99}
+
+### 研究背景
+
+Abadie, Diamond & Hainmueller (2010) 研究了 1988 年加州通过 Proposition 99 对香烟消费的影响。Proposition 99 大幅提高了加州的香烟税（每包增加 25 美分），使加州成为当时控烟力度最大的州之一。
+
+**挑战**：加州是**唯一**的处理单位，无法直接使用传统 DiD。
+
+### 合成控制的构建
+
+使用 38 个没有在同期大幅提高香烟税的州作为"**捐赠池**"（donor pool），寻找最优权重组合来合成一个"假加州"——即加州如果没有通过 Proposition 99 时的反事实。
+
+### 主要发现
+
+- 合成加州与真实加州在 1988 年前的香烟消费趋势**高度吻合**
+- 1988 年后，真实加州的香烟消费开始显著低于合成加州
+- 估计效应：Proposition 99 使加州的人均香烟消费**减少约 20–30 包/人/年**
+- 主要贡献权重的州包括犹他州、内华达州、蒙大拿州和科罗拉多州
+
+## 形式化框架 {#sec-synth-formal}
+
+### 优化问题
+
+给定 $J$ 个对照单位（捐赠池），寻找权重向量 $\mathbf{W} = (w_2, \ldots, w_{J+1})'$ 最小化处理单位与合成单位在处理前预测变量上的差距：
+
+$$\min_{\mathbf{W}} \|\mathbf{X}_1 - \mathbf{X}_0 \mathbf{W}\|_V = \sqrt{(\mathbf{X}_1 - \mathbf{X}_0 \mathbf{W})' \mathbf{V} (\mathbf{X}_1 - \mathbf{X}_0 \mathbf{W})}$$
+
+**约束条件**：
+
+$$w_j \geq 0 \quad \text{（非负权重）}, \qquad \sum_{j=2}^{J+1} w_j = 1 \quad \text{（权重之和为 1）}$$
+
+其中：
+
+- $\mathbf{X}_1$：处理单位的预测变量向量（维度 $K \times 1$）
+- $\mathbf{X}_0$：对照单位的预测变量矩阵（维度 $K \times J$）
+- $\mathbf{V}$：预测变量重要性的对角矩阵（通常通过交叉验证选择）
+
+### 处理效应估计
+
+处理后 $t$ 期的处理效应为：
+
+$$\hat{\tau}_t = Y_{1t} - \sum_{j=2}^{J+1} w_j^* Y_{jt} = Y_{1t} - Y_{1t}^{synth}$$
+
+即处理单位的实际结果减去合成对照的预测结果。
+
+## 安慰剂推断（Placebo Inference） {#sec-synth-placebo}
+
+由于只有一个处理单位，无法使用传统的统计推断（大样本理论不适用）。合成控制法使用**空间安慰剂检验**：
+
+1. 依次将捐赠池中的**每个单位**视为"假处理单位"
+2. 为每个"假处理单位"构建合成控制
+3. 估计"假处理效应"
+4. 比较**真实效应与安慰剂分布**
+
+如果真实效应远大于大部分安慰剂效应，则说明效应是"异常的"——不太可能仅由噪声产生。
+
+更正式地，可以构建以下检验统计量：
+
+$$\text{RMSPE ratio} = \frac{RMSPE_{post}}{RMSPE_{pre}}$$
+
+其中 $RMSPE$ 是均方根预测误差（Root Mean Squared Prediction Error）。预处理拟合好（$RMSPE_{pre}$ 小）但处理后偏差大（$RMSPE_{post}$ 大）的单位，其比值会很大。
+
+## Python 实现：合成控制模拟 {#sec-synth-python}
+
+```{python}
+#| code-fold: show
+#| code-summary: "点击查看完整代码：合成控制法模拟"
+#| fig-cap: "合成控制法模拟：真实处理单位 vs 合成对照"
+
+from scipy.optimize import minimize
+
+np.random.seed(42)
+
+# ── 参数设置 ──
+n_donors = 20       # 捐赠池大小
+n_pre = 15           # 处理前期数
+n_post = 10          # 处理后期数
+T = n_pre + n_post
+treatment_effect = 3.0  # 真实处理效应
+
+# ── 生成数据 ──
+# 处理单位的潜在结果 (无处理)
+trend = np.linspace(50, 65, T)
+treated_y0 = trend + np.random.normal(0, 1, T)
+# 处理后加入效应
+treated_y = treated_y0.copy()
+treated_y[n_pre:] += treatment_effect
+
+# 捐赠池（每个单位有自己的截距和微弱趋势差异）
+donor_y = np.zeros((n_donors, T))
+for j in range(n_donors):
+    intercept = np.random.normal(0, 5)
+    slope_diff = np.random.normal(0, 0.1)
+    donor_y[j] = trend + intercept + slope_diff * np.arange(T) + np.random.normal(0, 1, T)
+
+# ── 求解合成控制权重 ──
+X1_pre = treated_y[:n_pre]
+X0_pre = donor_y[:, :n_pre]
+
+def objective(w):
+    synth = X0_pre.T @ w
+    return np.sum((X1_pre - synth) ** 2)
+
+constraints = {'type': 'eq', 'fun': lambda w: np.sum(w) - 1}
+bounds = [(0, 1)] * n_donors
+w0 = np.ones(n_donors) / n_donors
+
+result_opt = minimize(objective, w0, method='SLSQP', bounds=bounds, constraints=constraints)
+w_star = result_opt.x
+
+# 合成对照的完整时间序列
+synth_y = donor_y.T @ w_star
+
+# ── 可视化 ──
+fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+# 面板 1：真实 vs 合成
+time = np.arange(T)
+axes[0].plot(time, treated_y, '-', color='#AE0B2A', linewidth=2.5, label='处理单位（真实）')
+axes[0].plot(time, synth_y, '--', color='#2E86C1', linewidth=2.5, label='合成对照')
+axes[0].axvline(x=n_pre - 0.5, color='gray', linestyle=':', alpha=0.7)
+axes[0].fill_between([n_pre - 0.5, T - 1], axes[0].get_ylim()[0], axes[0].get_ylim()[1],
+                     alpha=0.05, color='#AE0B2A')
+axes[0].set_xlabel('时间')
+axes[0].set_ylabel('结果变量')
+axes[0].set_title('(a) 处理单位 vs 合成对照')
+axes[0].legend()
+axes[0].text(n_pre / 2, axes[0].get_ylim()[1] * 0.95, '处理前', ha='center', fontsize=10, color='gray')
+axes[0].text(n_pre + n_post / 2, axes[0].get_ylim()[1] * 0.95, '处理后', ha='center', fontsize=10, color='gray')
+
+# 面板 2：处理效应（Gap）
+gap = treated_y - synth_y
+axes[1].plot(time, gap, 'o-', color='#AE0B2A', linewidth=2, markersize=5)
+axes[1].axhline(y=0, color='black', linewidth=0.8)
+axes[1].axvline(x=n_pre - 0.5, color='gray', linestyle=':', alpha=0.7)
+axes[1].axhline(y=treatment_effect, color='#27AE60', linestyle='--', alpha=0.7,
+                label=f'真实效应 = {treatment_effect}')
+axes[1].set_xlabel('时间')
+axes[1].set_ylabel('Gap（真实 − 合成）')
+axes[1].set_title('(b) 处理效应估计')
+axes[1].legend()
+
+# 面板 3：权重分布
+nonzero_mask = w_star > 0.01
+labels = [f'捐赠{i+1}' for i in range(n_donors)]
+nonzero_weights = w_star[nonzero_mask]
+nonzero_labels = [labels[i] for i in range(n_donors) if nonzero_mask[i]]
+
+axes[2].barh(range(len(nonzero_weights)), nonzero_weights, color='#2E86C1', alpha=0.8)
+axes[2].set_yticks(range(len(nonzero_weights)))
+axes[2].set_yticklabels(nonzero_labels)
+axes[2].set_xlabel('权重')
+axes[2].set_title(f'(c) 合成控制权重（非零: {nonzero_mask.sum()}/{n_donors}）')
+
+plt.tight_layout()
+plt.show()
+
+# 输出统计
+print(f"\n处理后平均 gap: {gap[n_pre:].mean():.3f}（真实效应: {treatment_effect}）")
+print(f"处理前 RMSPE:   {np.sqrt(np.mean(gap[:n_pre]**2)):.3f}")
+print(f"处理后 RMSPE:   {np.sqrt(np.mean(gap[n_pre:]**2)):.3f}")
+```
+
+## R 语言对照：合成控制 {#sec-synth-r}
+
+```r
+# install.packages("Synth")
+library(Synth)
+
+# 准备数据（Synth 包格式）
+dataprep_out <- dataprep(
+  foo = panel_data,
+  predictors = c("predictor1", "predictor2", "predictor3"),
+  predictors.op = "mean",
+  dependent = "outcome",
+  unit.variable = "unit_id",
+  time.variable = "year",
+  treatment.identifier = 1,       # 处理单位 ID
+  controls.identifier = 2:39,      # 捐赠池 ID
+  time.predictors.prior = 1970:1987,
+  time.optimize.ssr = 1970:1987,
+  time.plot = 1970:2000
+)
+
+# 运行合成控制
+synth_out <- synth(dataprep_out)
+
+# 绘图
+path.plot(synth_out, dataprep_out,
+          Main = "处理单位 vs 合成对照")
+gaps.plot(synth_out, dataprep_out,
+          Main = "处理效应（Gap）")
+
+# 查看权重
+synth.tables(synth_out, dataprep_out)$tab.w
+```
+
+# 总结 {#sec-summary}
+
+## 三种方法比较 {#sec-comparison}
+
+本讲介绍了三种利用时间维度识别因果效应的方法。它们各有特点和适用场景：
+
+| 方法 | 核心假设 | 适用场景 | 主要优势 | 主要局限 |
+|:---|:---|:---|:---|:---|
+| **固定效应** | 严格外生性 | 面板数据，时变处理 | 控制时不变混淆 | 无法处理反向因果和时变混淆 |
+| **DiD** | 平行趋势 | 政策评估，自然实验 | 直观，易于实施 | 依赖平行趋势（不可检验） |
+| **合成控制** | 合成单位近似反事实 | 单一处理单位 | 数据驱动，透明 | 需要大捐赠池、长时间序列 |
+
+## 方法选择指南
+
+1. **多个处理单位 + 面板数据** → DiD（标准选择）
+2. **单一处理单位 + 时间序列** → 合成控制法
+3. **处理在单位内有变异** → 固定效应
+4. **政策 staggered adoption** → 现代 DiD 方法（Callaway & Sant'Anna 等）
+
+## 关键公式汇总 {#sec-formulas}
+
+| 概念 | 公式 | 说明 |
+|:---|:---|:---|
+| 面板数据模型 | $Y_{it} = \delta D_{it} + u_i + \varepsilon_{it}$ | $u_i$ 为个体固定效应 |
+| 去均值变换 | $\tilde{Y}_{it} = \delta \tilde{D}_{it} + \tilde{\varepsilon}_{it}$ | 消除 $u_i$ |
+| DiD 估计量 | $\hat{\delta} = (\bar{Y}_{T,post} - \bar{Y}_{T,pre}) - (\bar{Y}_{C,post} - \bar{Y}_{C,pre})$ | 差分之差 |
+| TWFE | $Y_{it} = \alpha + \delta D_{it} + \gamma_i + \lambda_t + \varepsilon_{it}$ | 双向固定效应 |
+| 平行趋势 | $E[Y(0)_{T,post} - Y(0)_{T,pre}] = E[Y(0)_{C,post} - Y(0)_{C,pre}]$ | 核心识别假设 |
+| 合成控制权重 | $\min_{\mathbf{W}} \|\mathbf{X}_1 - \mathbf{X}_0 \mathbf{W}\|$ s.t. $w_j \geq 0, \sum w_j = 1$ | 数据驱动构建反事实 |
+
+## 关键检查清单
+
+以下是使用本讲方法时应检查的核心事项：
+
+**固定效应模型**：
+
+- [ ] 严格外生性假设是否合理？
+- [ ] 是否存在反向因果？
+- [ ] 处理变量在个体内是否有足够变异？
+
+**双重差分法**：
+
+- [ ] 平行趋势假设是否合理？
+- [ ] 是否绘制了事件研究图？
+- [ ] 标准误是否在适当层级进行了聚类？
+- [ ] 是否进行了安慰剂检验？
+- [ ] 如涉及交错处理，是否使用了现代 DiD 方法？
+
+**合成控制法**：
+
+- [ ] 捐赠池是否足够大？
+- [ ] 处理前拟合是否良好（$RMSPE_{pre}$ 小）？
+- [ ] 是否进行了空间安慰剂检验？
+
+## 下一讲预告 {#sec-next}
+
+**第七讲：断点回归设计（Regression Discontinuity Design）**
+
+当处理在某个**分数/阈值**处发生不连续变化时，我们可以利用断点附近个体的局部随机性来估计因果效应。下一讲将涵盖：
+
+- 清晰断点（Sharp RD）vs 模糊断点（Fuzzy RD）
+- 带宽选择与局部多项式回归
+- 稳健性检验（McCrary 密度检验、敏感性分析）
+- 经典应用案例
+
+## 课后思考 {#sec-questions}
+
+1. **在你的研究领域**，能否找到一个适合用 DiD 方法分析的自然实验？处理组和对照组是什么？平行趋势假设是否合理？
+
+2. **关于 TWFE 的局限**：假设你正在研究一项在不同省份、不同年份先后实施的环保政策对 GDP 的影响。为什么传统 TWFE 可能给出有偏的估计？你会使用哪种现代 DiD 方法来应对？
+
+3. **关于合成控制的"不要外推"**：为什么合成控制法要求权重非负且和为 1？违反这些约束可能导致什么问题？在什么情况下，你可能会考虑放松这些约束？
+
+# 参考文献 {#sec-references}
+
+1. Abadie, A., Diamond, A., & Hainmueller, J. (2010). Synthetic Control Methods for Comparative Case Studies: Estimating the Effect of California's Tobacco Control Program. *Journal of the American Statistical Association*, 105(490), 493-505.
+
+2. Abadie, A., & Gardeazabal, J. (2003). The Economic Costs of Conflict: A Case Study of the Basque Country. *American Economic Review*, 93(1), 113-132.
+
+3. Angrist, J. D., & Pischke, J. S. (2009). *Mostly Harmless Econometrics: An Empiricist's Companion*. Princeton University Press.
+
+4. Bertrand, M., Duflo, E., & Mullainathan, S. (2004). How Much Should We Trust Differences-in-Differences Estimates? *Quarterly Journal of Economics*, 119(1), 249-275.
+
+5. Borusyak, K., Jaravel, X., & Spiess, J. (2024). Revisiting Event-Study Designs: Robust and Efficient Estimation. *Review of Economic Studies*, 91(6), 3253-3285.
+
+6. Callaway, B., & Sant'Anna, P. H. (2021). Difference-in-Differences with Multiple Time Periods. *Journal of Econometrics*, 225(2), 200-230.
+
+7. Card, D., & Krueger, A. B. (1994). Minimum Wages and Employment: A Case Study of the Fast-Food Industry in New Jersey and Pennsylvania. *American Economic Review*, 84(4), 772-793.
+
+8. Goodman-Bacon, A. (2021). Difference-in-Differences with Variation in Treatment Timing. *Journal of Econometrics*, 225(2), 254-277.
+
+9. Gruber, J. (1994). The Incidence of Mandated Maternity Benefits. *American Economic Review*, 84(3), 622-641.
+
+10. Miller, S., Johnson, N., & Wherry, L. R. (2021). Medicaid and Mortality: New Evidence From Linked Survey and Administrative Data. *Quarterly Journal of Economics*, 136(3), 1783-1829.
+
+11. Sun, L., & Abraham, S. (2021). Estimating Dynamic Treatment Effects in Event Studies with Heterogeneous Treatment Effects. *Journal of Econometrics*, 225(2), 175-199.
+
+---
+
+**联系方式**
+
+- 邮箱：chenzhiyuan@rmbs.ruc.edu.cn
+- 办公室：919
+- Office Hours：邮件或微信预约
+
+*本讲义基于 Angrist & Pischke (2009) "Mostly Harmless Econometrics" 和 Cunningham (2021) "Causal Inference: The Mixtape" Ch. 8-10 整理而成。*
