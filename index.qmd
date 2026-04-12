@@ -211,4 +211,8 @@ date: "2026-03-05"
 ::: {.learning-grid-item}
 [📊 第五讲](Quarto/lecture05_Instruments.html){.btn .btn-primary .course-start-btn}
 :::
+
+::: {.learning-grid-item}
+[📊 第六讲](Quarto/lecture06_panel_did.html){.btn .btn-primary .course-start-btn}
+:::
 :::
