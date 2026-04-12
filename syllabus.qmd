@@ -98,6 +98,11 @@ subtitle: "Syllabus"
 3. **Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., & Syrgkanis, V.** (2024). *Applied Causal Inference Powered by ML and AI*.
    - [在线阅读](https://causalml-book.org/)
 
+4. **James, G., Witten, D., Hastie, T., & Tibshirani, R.** (2021). *An Introduction to Statistical Learning: with Applications in R*. Springer.
+   - [在线阅读](https://www.statlearning.com/)
+
+5. **James, G., Witten, D., Hastie, T., & Tibshirani, R.** (2021). *An Introduction to Statistical Learning: with Applications in Python*. Springer.
+
 ### 参考书目
 
 4. **Cunningham, S.** (2021). *Causal Inference: The Mixtape*. Yale University Press.
