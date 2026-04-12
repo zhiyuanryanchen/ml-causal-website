@@ -48,9 +48,9 @@ date: "2026-03-05"
 - [📖 第五讲详细讲义](Quarto/lecture05_instruments_notes.html)
 - [📊 第六讲课件](Quarto/lecture06_panel_did.html)
 - [📖 第六讲详细讲义](Quarto/lecture06_panel_did_notes.html)
-- [� 第七讲课件](Quarto/lecture07_ml_basics.html)
+- [📊 第七讲课件](Quarto/lecture07_ml_basics.html)
 - [📖 第七讲详细讲义](Quarto/lecture07_ml_basics_notes.html)
-- [�💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
+- [💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
 
 ### 最新公告
 
@@ -230,5 +230,9 @@ date: "2026-03-05"
 
 ::: {.learning-grid-item}
 [📊 第六讲](Quarto/lecture06_panel_did.html){.btn .btn-primary .course-start-btn}
+:::
+
+::: {.learning-grid-item}
+[📊 第七讲](Quarto/lecture07_ml_basics.html){.btn .btn-primary .course-start-btn}
 :::
 :::
