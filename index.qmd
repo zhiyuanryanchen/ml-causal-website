@@ -46,9 +46,9 @@ date: "2026-03-05"
 - [📖 第四讲详细讲义](Quarto/lecture04_matching_notes.html)
 - [📊 第五讲课件](Quarto/lecture05_Instruments.html)
 - [📖 第五讲详细讲义](Quarto/lecture05_instruments_notes.html)
-- [� 第六讲课件](Quarto/lecture06_panel_did.html)
+- [📊 第六讲课件](Quarto/lecture06_panel_did.html)
 - [📖 第六讲详细讲义](Quarto/lecture06_panel_did_notes.html)
-- [�💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
+- [💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
 
 ### 最新公告
 
@@ -143,7 +143,7 @@ date: "2026-03-05"
 - 🚀 AI时代的核心技能
 - 📊 数据驱动决策的标配
 - 🌍 学术界与业界的通用语言
-- 💡 从"跑数"到"洞察"的跃迁
+- 💡 从“跑数”到“洞察”的跃迁
 :::
 :::
 
@@ -181,9 +181,13 @@ date: "2026-03-05"
 2. **Huntington-Klein** (2022). *The Effect: An Introduction to Research Design and Causality*
 3. **Chernozhukov et al.** (2024). *Applied Causal Inference Powered by ML and AI* ([在线阅读](https://causalml-book.org/))
 4. **Cunningham** (2021). *Causal Inference: The Mixtape* ([在线阅读](https://mixtape.scunning.com/))
+5. **James, Witten, Hastie, Tibshirani, Taylor** (2021). *An Introduction to Statistical Learning: with Applications in Python* ([在线阅读](https://www.statlearning.com/))
+6. **James, Witten, Hastie, Tibshirani** (2021). *An Introduction to Statistical Learning: with Applications in R* ([在线阅读](https://www.statlearning.com/))
 
 ## 在线资源
-
+- [Scikit-Learn文档](https://scikit-learn.org/stable/)（Python机器学习库）
+- [ISL-Python资源](https://www.statlearning.com/resources-python)（《统计学习导论》Python库）
+- [ISL-R资源](https://www.statlearning.com/resources-r)（《统计学习导论》R库）
 - [EconML文档](https://econml.azurewebsites.net/)（微软）
 - [DoubleML文档](https://docs.doubleml.org/)
 - [CausalML (Uber)](https://causalml.readthedocs.io/)
