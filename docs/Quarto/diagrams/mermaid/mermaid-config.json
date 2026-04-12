@@ -1,0 +1,18 @@
+{
+  "theme": "default",
+  "flowchart": {
+    "useMaxWidth": false,
+    "htmlLabels": true,
+    "nodeSpacing": 110,
+    "rankSpacing": 95,
+    "curve": "basis"
+  },
+  "themeVariables": {
+    "fontFamily": "Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif",
+    "fontSize": "26px",
+    "primaryColor": "#FAF8F5",
+    "primaryBorderColor": "#AE0B2A",
+    "lineColor": "#AE0B2A",
+    "tertiaryColor": "#FFF5E6"
+  }
+}

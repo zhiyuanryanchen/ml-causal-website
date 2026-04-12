@@ -1,0 +1,13 @@
+flowchart LR
+    S1[第1阶段\n随机实验与A/B测试] --> S2[第2阶段\n匹配法]
+    S2 --> S3[第3阶段\n双重差分 DID]
+    S3 --> S4[第4阶段\n工具变量/合成控制]
+    S4 --> S5[第5阶段\n因果森林/Double ML]
+    S5 --> S6[第6阶段\n项目答辩与复盘]
+
+    style S1 fill:#FFE6E6,stroke:#AE0B2A,stroke-width:2px
+    style S2 fill:#F5F5F5,stroke:#333,stroke-width:2px
+    style S3 fill:#F5F5F5,stroke:#333,stroke-width:2px
+    style S4 fill:#F5F5F5,stroke:#333,stroke-width:2px
+    style S5 fill:#FFF5E6,stroke:#8B6F4E,stroke-width:2px
+    style S6 fill:#FFF5E6,stroke:#8B6F4E,stroke-width:2px

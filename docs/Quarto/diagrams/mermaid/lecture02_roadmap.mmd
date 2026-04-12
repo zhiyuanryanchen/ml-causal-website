@@ -1,0 +1,21 @@
+flowchart TB
+    A[随机变量与分布] --> B[期望与方差]
+    B --> C[大数定律/CLT]
+    A --> D[条件概率]
+    D --> E[条件期望 CEF]
+    E --> F[迭代期望定律 LIE]
+    
+    F --> G[回归=CEF的线性近似]
+    G --> H[OLS最小二乘]
+    H --> I[多元回归]
+    
+    I --> J{应用目标}
+    J -->|预测| K[预测 Y]
+    J -->|因果| L[估计处理效应]
+    
+    L --> M[回归≠因果]
+    M --> N[需要外生性假设]
+    
+    style N fill:#AE0B2A,color:#fff
+    style E fill:#FDB515,color:#000
+    style G fill:#FDB515,color:#000

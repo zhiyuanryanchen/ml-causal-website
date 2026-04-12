@@ -1,0 +1,17 @@
+flowchart LR
+    A[气温上升] --> B[冰淇淋销量上升]
+    A --> C[溺水风险上升]
+    B -.观察相关.-> C
+    C --> D[误判为因果]
+
+    D --> E[控制混淆变量]
+    E --> F[比较可比样本]
+    F --> G[得到因果结论]
+
+    style A fill:#8B6F4E,stroke:#333,stroke-width:2px,color:#fff
+    style B fill:#FAF8F5,stroke:#AE0B2A,stroke-width:2px
+    style C fill:#FAF8F5,stroke:#AE0B2A,stroke-width:2px
+    style D fill:#FFF0F0,stroke:#AE0B2A,stroke-width:2px
+    style E fill:#FAF8F5,stroke:#AE0B2A,stroke-width:2px
+    style F fill:#FAF8F5,stroke:#AE0B2A,stroke-width:2px
+    style G fill:#FFF5E6,stroke:#8B6F4E,stroke-width:2px
