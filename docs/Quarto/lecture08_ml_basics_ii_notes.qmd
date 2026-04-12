@@ -1,0 +1,956 @@
+---
+title: "机器学习与因果推断 - 第八讲：机器学习基础 II"
+subtitle: "梯度提升、正则化与模型选择：完整讲义"
+author: "陈志远"
+institute: "中国人民大学商学院"
+date: "2026-05-12"
+format:
+  html:
+    theme: cosmo
+    css: lecture-notes.css
+    html-math-method: mathml
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    highlight-style: github
+    self-contained: true
+    embed-resources: true
+    page-layout: article
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: true
+  cache: false
+  fig-width: 10
+  fig-height: 6
+  dpi: 150
+lang: zh
+jupyter: python3
+---
+
+```{python}
+#| echo: false
+#| output: false
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+
+# Set up matplotlib for Chinese display
+plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['figure.dpi'] = 150
+
+np.random.seed(42)
+```
+
+# 引言 {#sec-intro}
+
+本讲是机器学习基础的第二部分。上一讲我们学习了偏差-方差权衡、交叉验证、回归树和随机森林——这些构成了理解现代预测方法的基石。本讲将在此基础上展开三个核心主题：**正则化线性回归**（Ridge、LASSO）、**梯度提升**（Gradient Boosting）以及**模型选择与评估**方法。
+
+这三个主题不仅在预测领域有着广泛应用，而且在因果推断中扮演着关键角色。特别是 LASSO 在高维控制变量选择中的应用，以及梯度提升在构建因果森林中的思想启发，都将在后续课程中深入展开。
+
+本讲对应教材 ISL (James et al., 2021) Chapters 6 和 8 的内容，同时参考 Hastie, Tibshirani & Friedman (2009) 的 Elements of Statistical Learning 第 10 章关于 Boosting 的内容。
+
+## 上节课回顾 {#sec-review}
+
+在第七讲中，我们建立了机器学习的核心概念框架：
+
+- **偏差-方差权衡**：测试误差 $= \text{Bias}^2 + \text{Variance} + \text{不可约误差}$。模型复杂度增加时，偏差下降但方差上升，测试误差呈 U 形曲线。
+- **交叉验证**：通过 $K$ 折 CV 在不使用测试集的情况下估计样本外预测误差。
+- **回归树**：通过递归二元分裂和代价复杂度剪枝产生可解释的分段常数预测。
+- **随机森林**：对 Bagging 树引入随机特征选择来去相关——有效降低方差。
+
+本讲将在这些概念基础上，引入正则化和集成学习的另一条路径——Boosting。
+
+# 第一部分：正则化线性回归 {#sec-regularization}
+
+## 高维回归的困境 {#sec-high-dim}
+
+线性回归是计量经济学中最常用的模型。OLS 估计量 $\hat{\beta}_{OLS} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}$ 在经典条件下是最优线性无偏估计（BLUE）。然而，当特征数量 $p$ 相对于样本量 $n$ 较大时，OLS 面临严重挑战：
+
+1. **当 $p > n$ 时**，$\mathbf{X}'\mathbf{X}$ 是一个 $p \times p$ 矩阵但秩至多为 $n < p$，因此不可逆，OLS 没有唯一解。
+2. **当 $p/n$ 较大但 $p < n$ 时**，$\mathbf{X}'\mathbf{X}$ 虽然可逆，但可能接近奇异，导致估计的方差极大——这正是偏差-方差权衡的表现。
+3. **多重共线性**也会放大估计的不稳定性。
+
+正则化的核心思想是：**通过引入偏差来换取方差的大幅降低**，从而使得整体预测误差（MSE）更低。
+
+$$\min_{\beta} \underbrace{\sum_{i=1}^{n}(y_i - X_i'\beta)^2}_{\text{拟合优度（RSS）}} + \underbrace{\lambda \cdot \text{Penalty}(\beta)}_{\text{复杂度惩罚}}$$
+
+惩罚参数 $\lambda \geq 0$ 控制正则化的强度：$\lambda = 0$ 退化为 OLS，$\lambda \to \infty$ 将所有系数压缩为零。
+
+## 正则化的统一框架 {#sec-unified}
+
+不同的惩罚形式定义了不同的正则化方法。可以将它们统一表示为：
+
+$$\min_{\beta} \sum_{i=1}^{n}(y_i - X_i'\beta)^2 + \lambda \left(\sum_{k=1}^{p}|\beta_k|^q\right)$$
+
+| $q$ 值 | 对应方法 | 几何形状 | 关键特点 |
+|:---|:---|:---|:---|
+| $q = 0$ | 最优子集选择 | 非凸 | $2^p$ 种组合，NP 难 |
+| $q = 1$ | LASSO | 菱形 | 产生稀疏解（自动变量选择） |
+| $q = 2$ | Ridge 回归 | 圆形 | 系数均匀收缩，不产生零 |
+
+**重要提示**：在进行正则化回归之前，通常需要对特征进行**标准化**（减均值、除标准差），否则惩罚项会受到变量量纲的影响。
+
+## Ridge 回归 {#sec-ridge}
+
+### 数学形式
+
+Ridge 回归（也称岭回归或 Tikhonov 正则化）使用 $L_2$ 惩罚：
+
+$$\min_{\beta} \sum_{i=1}^{n}(y_i - X_i'\beta)^2 + \lambda \sum_{k=1}^{p}\beta_k^2$$
+
+与 OLS 不同，Ridge 有封闭解（closed-form solution）：
+
+$$\hat{\beta}_{Ridge} = (\mathbf{X}'\mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}'\mathbf{y}$$
+
+注意 $\lambda \mathbf{I}$ 的加入使得 $\mathbf{X}'\mathbf{X} + \lambda \mathbf{I}$ 一定是正定的（即使 $p > n$），因此 Ridge 总是有唯一解。
+
+### 偏差-方差权衡
+
+Ridge 回归的核心好处体现在偏差-方差权衡上：
+
+- 当 $\lambda = 0$ 时，就是 OLS 估计——偏差为零但方差可能很大。
+- 随着 $\lambda$ 增大，系数被收缩向零——偏差增加但方差显著下降。
+- 存在一个最优 $\lambda^*$，使得测试 MSE（$= \text{Bias}^2 + \text{Variance}$）最小。
+
+```{python}
+#| fig-cap: "Ridge 回归系数路径图（红色线为真实非零系数对应的特征）"
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import Ridge
+from sklearn.preprocessing import StandardScaler
+
+np.random.seed(42)
+n, p = 100, 20
+X = np.random.randn(n, p)
+beta_true = np.zeros(p)
+beta_true[:5] = [3, -2, 1.5, -1, 0.5]
+y = X @ beta_true + np.random.randn(n) * 0.5
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+alphas = np.logspace(-3, 4, 200)
+coefs = []
+for a in alphas:
+    ridge = Ridge(alpha=a)
+    ridge.fit(X_scaled, y)
+    coefs.append(ridge.coef_)
+
+coefs = np.array(coefs)
+
+plt.figure(figsize=(10, 6))
+for i in range(p):
+    color = 'red' if i < 5 else 'lightgray'
+    lw = 2 if i < 5 else 0.8
+    label = f'β{i+1} (true={beta_true[i]:.1f})' if i < 5 else None
+    plt.plot(np.log10(alphas), coefs[:, i], color=color,
+             linewidth=lw, label=label)
+
+plt.axhline(y=0, color='black', linewidth=0.5)
+plt.xlabel('log₁₀(λ)', fontsize=13)
+plt.ylabel('Standardized Coefficients', fontsize=13)
+plt.title('Ridge Regression Coefficient Paths', fontsize=14)
+plt.legend(fontsize=9, loc='upper right')
+plt.tight_layout()
+plt.show()
+```
+
+可以看到：
+
+- 当 $\lambda$ 很小（左端）时，系数接近 OLS 估计值。
+- 随着 $\lambda$ 增大，所有系数 **均匀地** 向零收缩。
+- 但即使 $\lambda$ 很大，系数也 **不会精确为零**——这是 $L_2$ 惩罚的本质特征。
+
+### Ridge 的等价约束形式
+
+Ridge 回归也可以等价地表示为约束优化问题：
+
+$$\min_{\beta} \sum_{i=1}^{n}(y_i - X_i'\beta)^2 \quad \text{s.t.} \quad \sum_{k=1}^{p}\beta_k^2 \leq s$$
+
+其中约束半径 $s$ 与惩罚参数 $\lambda$ 之间存在一一对应关系。几何上，约束区域 $\sum \beta_k^2 \leq s$ 是一个以原点为中心的 **超球体**。
+
+## LASSO {#sec-lasso}
+
+### 数学形式
+
+LASSO（Least Absolute Shrinkage and Selection Operator，Tibshirani 1996）使用 $L_1$ 惩罚：
+
+$$\min_{\beta} \sum_{i=1}^{n}(y_i - X_i'\beta)^2 + \lambda \sum_{k=1}^{p}|\beta_k|$$
+
+与 Ridge 不同，LASSO **没有封闭解**——需要使用迭代算法求解（如坐标下降法 coordinate descent）。
+
+LASSO 的核心特性是：当 $\lambda$ 足够大时，部分系数会被 **精确压缩为零**。这意味着 LASSO 同时实现了 **参数估计和变量选择**。
+
+### 为什么 $L_1$ 产生稀疏解
+
+这是正则化理论中最优美的几何直觉之一。考虑二维情形（$p = 2$）：
+
+- **LASSO**：$L_1$ 约束区域 $|\beta_1| + |\beta_2| \leq s$ 是一个 **菱形**（diamond）。
+- **Ridge**：$L_2$ 约束区域 $\beta_1^2 + \beta_2^2 \leq s$ 是一个 **圆**。
+
+RSS 的等高线从 OLS 解（最小点）向外扩展，它与约束区域的第一个 **切点** 就是正则化的解。菱形有"角"（axes 上的顶点），椭圆形的等高线更容易碰到这些角——此时某个坐标分量恰好为零。圆形没有角，切点几乎不会落在坐标轴上。
+
+```{python}
+#| fig-cap: "LASSO (L1) vs Ridge (L2) 的约束区域几何直觉"
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import numpy as np
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+# LASSO (L1)
+ax = axes[0]
+ax.set_xlim(-2.5, 2.5)
+ax.set_ylim(-2.5, 2.5)
+ax.set_aspect('equal')
+
+diamond = plt.Polygon([(-1.5, 0), (0, 1.5), (1.5, 0), (0, -1.5)],
+                       fill=True, facecolor='lightblue', edgecolor='blue',
+                       linewidth=2, alpha=0.5)
+ax.add_patch(diamond)
+
+theta = np.linspace(0, 2*np.pi, 200)
+for r in [0.8, 1.3, 1.8, 2.3]:
+    x_ell = 1.8 + r * 0.6 * np.cos(theta)
+    y_ell = 1.2 + r * 0.4 * np.sin(theta - 0.3)
+    ax.plot(x_ell, y_ell, 'r-', alpha=0.3, linewidth=0.8)
+
+ax.plot(1.8, 1.2, 'r+', markersize=12, markeredgewidth=2)
+ax.plot(1.5, 0, 'ko', markersize=8, zorder=5)
+ax.annotate('β̂_LASSO', (1.5, 0), textcoords="offset points",
+            xytext=(10, 10), fontsize=11, fontweight='bold')
+ax.annotate('β̂_OLS', (1.8, 1.2), textcoords="offset points",
+            xytext=(10, 5), fontsize=10, color='red')
+
+ax.axhline(y=0, color='gray', linewidth=0.3)
+ax.axvline(x=0, color='gray', linewidth=0.3)
+ax.set_xlabel('β₁', fontsize=12)
+ax.set_ylabel('β₂', fontsize=12)
+ax.set_title('LASSO (L₁ constraint)', fontsize=14)
+
+# Ridge (L2)
+ax = axes[1]
+ax.set_xlim(-2.5, 2.5)
+ax.set_ylim(-2.5, 2.5)
+ax.set_aspect('equal')
+
+circle = plt.Circle((0, 0), 1.5, fill=True, facecolor='lightyellow',
+                     edgecolor='orange', linewidth=2, alpha=0.5)
+ax.add_patch(circle)
+
+for r in [0.6, 1.1, 1.6, 2.1]:
+    x_ell = 1.8 + r * 0.6 * np.cos(theta)
+    y_ell = 1.2 + r * 0.4 * np.sin(theta - 0.3)
+    ax.plot(x_ell, y_ell, 'r-', alpha=0.3, linewidth=0.8)
+
+ax.plot(1.8, 1.2, 'r+', markersize=12, markeredgewidth=2)
+contact_angle = np.arctan2(1.2, 1.8)
+cx = 1.5 * np.cos(contact_angle)
+cy = 1.5 * np.sin(contact_angle)
+ax.plot(cx, cy, 'ko', markersize=8, zorder=5)
+ax.annotate('β̂_Ridge', (cx, cy), textcoords="offset points",
+            xytext=(10, 10), fontsize=11, fontweight='bold')
+ax.annotate('β̂_OLS', (1.8, 1.2), textcoords="offset points",
+            xytext=(10, 5), fontsize=10, color='red')
+
+ax.axhline(y=0, color='gray', linewidth=0.3)
+ax.axvline(x=0, color='gray', linewidth=0.3)
+ax.set_xlabel('β₁', fontsize=12)
+ax.set_ylabel('β₂', fontsize=12)
+ax.set_title('Ridge (L₂ constraint)', fontsize=14)
+
+plt.tight_layout()
+plt.show()
+```
+
+### LASSO 系数路径
+
+```{python}
+#| fig-cap: "LASSO 系数路径图——注意许多系数在某个 λ 值处精确变为零"
+from sklearn.linear_model import Lasso
+
+alphas = np.logspace(-3, 1.5, 200)
+coefs = []
+for a in alphas:
+    lasso = Lasso(alpha=a, max_iter=10000)
+    lasso.fit(X_scaled, y)
+    coefs.append(lasso.coef_)
+
+coefs = np.array(coefs)
+
+plt.figure(figsize=(10, 6))
+for i in range(p):
+    color = 'red' if i < 5 else 'lightgray'
+    lw = 2 if i < 5 else 0.8
+    label = f'β{i+1} (true={beta_true[i]:.1f})' if i < 5 else None
+    plt.plot(np.log10(alphas), coefs[:, i], color=color,
+             linewidth=lw, label=label)
+
+plt.axhline(y=0, color='black', linewidth=0.5)
+plt.xlabel('log₁₀(λ)', fontsize=13)
+plt.ylabel('Standardized Coefficients', fontsize=13)
+plt.title('LASSO Coefficient Paths', fontsize=14)
+plt.legend(fontsize=9, loc='upper right')
+plt.tight_layout()
+plt.show()
+```
+
+与 Ridge 对比，LASSO 的系数路径展示了两个显著差异：
+
+1. **系数路径是分段线性的**——系数在某个 $\lambda$ 值处突然变为零。
+2. **最终只保留少量非零系数**——实现了自动变量选择。
+
+### LASSO vs Ridge 性能何时更好
+
+LASSO 和 Ridge 各有优势，取决于真实数据生成过程（DGP）的特征：
+
+- 若真实模型是 **稀疏的**（只有少数特征真正重要），LASSO 通常表现更好——它能精确地将无关变量的系数设为零。
+- 若真实模型是 **密集的**（大多数特征对 $y$ 有小的但非零的贡献），Ridge 通常更好——LASSO 强制置零会引入过多偏差。
+- 在实践中，我们通常不知道真实模型是稀疏还是密集的——**Elastic Net** 提供了折中方案。
+
+## Elastic Net {#sec-elastic-net}
+
+Elastic Net（Zou & Hastie, 2005）结合了 $L_1$ 和 $L_2$ 惩罚：
+
+$$\min_{\beta} \sum_{i=1}^{n}(y_i - X_i'\beta)^2 + \lambda \left[\alpha \sum_{k=1}^{p}|\beta_k| + (1-\alpha)\sum_{k=1}^{p}\beta_k^2 \right]$$
+
+- $\alpha = 1$：退化为 LASSO。
+- $\alpha = 0$：退化为 Ridge。
+- $0 < \alpha < 1$：兼顾变量选择（$L_1$）和系数收缩（$L_2$）。
+
+Elastic Net 的优点包括：
+
+1. 当特征之间高度相关时，LASSO 倾向于随机选择其中一个并丢弃其余——Elastic Net 则倾向于保留这组相关特征。
+2. 在 $p \gg n$ 的场景下，LASSO 最多选择 $n$ 个特征——Elastic Net 没有这个限制。
+
+## 超参数选择 {#sec-lambda-selection}
+
+正则化回归中最关键的超参数是惩罚参数 $\lambda$。实践中的标准流程是使用 **$K$ 折交叉验证** 选择 $\lambda$：
+
+1. 在对数尺度上生成 $\lambda$ 的候选值序列：$\lambda_1 > \lambda_2 > \cdots > \lambda_T$。
+2. 对每个 $\lambda_t$，计算 $K$ 折 CV 误差。
+3. 选择使 CV 误差最小的 $\lambda^*$。
+
+### One-Standard-Error 规则
+
+实践中一条重要的启发式规则是：不选择 CV 误差绝对最小的 $\lambda$，而是选择 **在最小 CV 误差一个标准误以内的最简模型**（对应最大的 $\lambda$）。这遵循了奥卡姆剃刀原则——在预测性能相当的情况下，倾向更简约的模型。
+
+```{python}
+#| fig-cap: "LASSO 交叉验证选择最优 λ（虚线：最小 CV MSE，点虚线：一个标准误规则）"
+from sklearn.linear_model import LassoCV
+import warnings
+warnings.filterwarnings('ignore')
+
+lasso_cv = LassoCV(alphas=np.logspace(-3, 1, 100), cv=10,
+                    max_iter=10000, random_state=42)
+lasso_cv.fit(X_scaled, y)
+
+mean_mse = lasso_cv.mse_path_.mean(axis=1)
+std_mse = lasso_cv.mse_path_.std(axis=1) / np.sqrt(10)
+
+plt.figure(figsize=(10, 6))
+plt.semilogx(lasso_cv.alphas_, mean_mse, 'b-', linewidth=2)
+plt.fill_between(lasso_cv.alphas_, mean_mse - std_mse,
+                 mean_mse + std_mse, alpha=0.2)
+plt.axvline(lasso_cv.alpha_, color='red', linestyle='--',
+            label=f'λ_min = {lasso_cv.alpha_:.4f}')
+
+# 1-SE rule
+min_idx = np.argmin(mean_mse)
+threshold = mean_mse[min_idx] + std_mse[min_idx]
+valid = np.where(mean_mse <= threshold)[0]
+se_idx = valid[np.argmax(lasso_cv.alphas_[valid])]
+plt.axvline(lasso_cv.alphas_[se_idx], color='green', linestyle='-.',
+            label=f'λ_1se = {lasso_cv.alphas_[se_idx]:.4f}')
+
+plt.xlabel('λ (log scale)', fontsize=13)
+plt.ylabel('10-Fold CV MSE', fontsize=13)
+plt.title('LASSO Cross-Validation', fontsize=14)
+plt.legend(fontsize=11)
+plt.tight_layout()
+plt.show()
+
+# Report selected features
+n_nonzero_min = np.sum(lasso_cv.coef_ != 0)
+print(f"λ_min 选择了 {n_nonzero_min} 个非零特征（真实非零特征 = 5）")
+print(f"非零系数索引: {np.where(lasso_cv.coef_ != 0)[0]}")
+print(f"真实非零系数索引: {np.where(beta_true != 0)[0]}")
+```
+
+## 正则化在经济学中的应用 {#sec-reg-econ}
+
+正则化线性回归在经济学和因果推断中有三个重要应用方向：
+
+### 1. 高维控制变量选择
+
+在因果推断中，我们经常需要控制大量潜在的混淆变量。例如在估计教育对收入影响的模型中：
+
+$$\text{Income}_i = \tau \cdot \text{Education}_i + X_i'\beta + \varepsilon_i$$
+
+如果 $X$ 包含数十个甚至数百个控制变量（能力测试、家庭背景、地区特征等），LASSO 可以帮助选择最重要的控制变量。
+
+### 2. 为什么不能直接用 LASSO 估计因果效应
+
+**核心问题**：LASSO 对系数的估计是有偏的——其偏差来自正则化惩罚。当我们使用 LASSO 同时估计处理效应 $\tau$ 和选择控制变量时，$\hat{\tau}_{LASSO}$ 会受到 **正则化偏差（regularization bias）** 的影响。
+
+这个问题的标准解决方案是 **双重机器学习**（Double Machine Learning, Chernozhukov et al., 2018）——将在第 13 讲详细介绍。基本思想是：
+
+1. 用 ML（如 LASSO）从 $X$ 预测 $D$（处理变量）→ 得到残差 $\tilde{D}$。
+2. 用 ML 从 $X$ 预测 $Y$（结果变量）→ 得到残差 $\tilde{Y}$。
+3. 对残差做 OLS 回归：$\tilde{Y} = \tau \tilde{D} + \eta$。
+
+这种"正交化"或"去偏"的方法消除了正则化偏差，同时利用了 ML 处理高维变量的能力。
+
+### 3. Relaxed LASSO
+
+一种更简单的去偏策略是 **Relaxed LASSO**（Meinshausen, 2007）：先用 LASSO 选择变量集合 $\hat{S} = \{k : \hat{\beta}_k^{LASSO} \neq 0\}$，然后在选中的变量上运行 OLS：
+
+$$\hat{\beta}^{Relaxed} = \arg\min_{\beta: \beta_k = 0 \text{ for } k \notin \hat{S}} \sum_{i=1}^n (y_i - X_i'\beta)^2$$
+
+这种方法结合了 LASSO 的变量选择能力和 OLS 的无偏性。
+
+# 第二部分：梯度提升 {#sec-boosting}
+
+## 集成学习的两条路径 {#sec-ensemble}
+
+上一讲我们学习了随机森林——它属于 **Bagging**（Bootstrap Aggregating）范式。Bagging 的核心思想是：独立训练多个模型，然后取平均或投票。
+
+Boosting 走的是完全不同的路径——**顺序地训练一系列弱学习器，每个新模型专门纠正前面模型的错误**。
+
+| 方面 | Bagging（随机森林） | Boosting（梯度提升） |
+|:---|:---|:---|
+| 训练方式 | 并行，相互独立 | 顺序，依赖前一步 |
+| 每个基模型 | 完整的树 | 通常是浅树（"桩"） |
+| 降低的误差来源 | 主要降低方差 | 主要降低偏差 |
+| 过拟合风险 | 难以过拟合 | 可能过拟合 |
+
+## Boosting 的核心思想 {#sec-boosting-idea}
+
+Boosting 的关键洞察可以用一个教学类比来理解：
+
+- **随机森林** 像是 100 个独立专家各自给出诊断，然后投票。每个专家看到的数据稍有不同（Bootstrap 抽样），考虑的因素也不完全相同（随机特征选择），最终的集体智慧比任何单个专家都更可靠。
+
+- **梯度提升** 像是一个学生反复练习同一套试题。第一遍答题后，老师批改，标出错误。第二遍时，学生重点关注做错的题目。如此反复，每次专注于之前的薄弱环节。最终的"模型"是所有轮次学习成果的叠加。
+
+数学形式上：
+
+$$\hat{f}(x) = \sum_{b=1}^{B} \lambda \cdot \hat{f}_b(x)$$
+
+其中每棵树 $\hat{f}_b$ 拟合的不是原始数据 $y$，而是上一轮的 **残差**——即前面模型尚未解释的部分。
+
+## 梯度提升算法 {#sec-gbm-algorithm}
+
+以下是回归问题的梯度提升标准算法：
+
+**输入**：训练数据 $\{(x_i, y_i)\}_{i=1}^n$；超参数：树的数量 $B$、学习率 $\lambda$、树深度 $d$。
+
+**算法步骤**：
+
+1. **初始化**：$\hat{f}^{(0)}(x) = \bar{y}$（用全局均值作为初始预测）。
+
+2. **迭代**：对 $b = 1, 2, \ldots, B$：
+
+   a. 计算伪残差：$r_i^{(b)} = y_i - \hat{f}^{(b-1)}(x_i), \quad i = 1, \ldots, n$
+
+   b. 对 $\{(x_i, r_i^{(b)})\}_{i=1}^n$ 拟合一棵深度为 $d$ 的回归树 $\hat{f}_b(x)$。
+
+   c. 更新集成模型：$\hat{f}^{(b)}(x) = \hat{f}^{(b-1)}(x) + \lambda \cdot \hat{f}_b(x)$
+
+3. **输出**：$\hat{f}^{(B)}(x) = \hat{f}^{(0)}(x) + \sum_{b=1}^{B}\lambda\hat{f}_b(x)$
+
+### 为什么叫 "梯度" 提升
+
+对于均方误差损失函数 $L(y, f) = \frac{1}{2}(y - f)^2$，残差 $r_i = y_i - \hat{f}(x_i)$ 恰好是损失函数关于 $\hat{f}(x_i)$ 的 **负梯度**：
+
+$$r_i = -\frac{\partial L(y_i, f)}{\partial f}\bigg|_{f = \hat{f}^{(b-1)}(x_i)}$$
+
+因此，拟合残差等同于在函数空间中做**梯度下降**——每一步沿着使损失函数下降最快的方向移动一小步。这就是 Friedman (2001) 将该算法命名为 "Gradient Boosting" 的原因。
+
+对于其他损失函数（如绝对值损失、Huber 损失、分类的交叉熵损失），算法结构相同，只是伪残差的计算公式不同。
+
+## 关键超参数 {#sec-gbm-hyperparams}
+
+梯度提升有三个核心超参数，它们之间存在微妙的交互关系：
+
+### 树的数量 $B$
+
+- 与随机森林不同，梯度提升 **可以过拟合**——当 $B$ 太大时，训练误差持续下降但测试误差开始上升。
+- 实践中通过交叉验证或 **Early Stopping** 确定最优 $B$。
+
+### 学习率 $\lambda$（Shrinkage）
+
+- 控制每棵树对最终模型的贡献大小，通常取 $0.01 \sim 0.1$。
+- 较小的 $\lambda$ 使得训练更稳健（不容易过拟合），但需要更多的树来达到相同的训练误差。
+- 经验法则：$\lambda$ 越小，模型的泛化性能越好——代价是计算量增大。
+
+### 树深度 $d$
+
+- $d = 1$（树桩，stump）：每棵树只有一次分裂，模型是纯粹的加法模型（无交互效应）。
+- $d = 2$：允许两两特征交互。
+- $d = k$：最多允许 $k$ 阶特征交互。
+- 大多数应用中 $d = 4 \sim 8$ 就已足够。
+
+```{python}
+#| fig-cap: "梯度提升的超参数影响：学习率和树数量对 CV 误差的影响"
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.model_selection import cross_val_score
+
+np.random.seed(42)
+n = 500
+X_sim = np.random.uniform(0, 10, (n, 5))
+y_sim = (np.sin(X_sim[:, 0]) + 0.5 * X_sim[:, 1] +
+         0.3 * X_sim[:, 0] * X_sim[:, 1] +
+         np.random.normal(0, 0.5, n))
+
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+# Left panel: Effect of learning rate
+n_trees_range = [10, 25, 50, 100, 200, 500]
+for lr, color, marker in [(0.01, 'blue', 's'), (0.05, 'green', '^'),
+                           (0.1, 'orange', 'o'), (0.5, 'red', 'D')]:
+    scores = []
+    for n_trees in n_trees_range:
+        gb = GradientBoostingRegressor(n_estimators=n_trees,
+                                        learning_rate=lr, max_depth=3,
+                                        random_state=42)
+        cv = -cross_val_score(gb, X_sim, y_sim, cv=5,
+                              scoring='neg_mean_squared_error').mean()
+        scores.append(cv)
+    axes[0].plot(n_trees_range, scores, '-', marker=marker, color=color,
+                 markersize=5, label=f'λ = {lr}')
+
+axes[0].set_xlabel('Number of Trees (B)', fontsize=12)
+axes[0].set_ylabel('5-Fold CV MSE', fontsize=12)
+axes[0].set_title('Learning Rate × Tree Count', fontsize=13)
+axes[0].legend(fontsize=10)
+
+# Right panel: Effect of tree depth
+for depth, color in [(1, 'blue'), (2, 'green'), (3, 'orange'),
+                     (5, 'red'), (8, 'purple')]:
+    scores = []
+    for n_trees in n_trees_range:
+        gb = GradientBoostingRegressor(n_estimators=n_trees,
+                                        learning_rate=0.1, max_depth=depth,
+                                        random_state=42)
+        cv = -cross_val_score(gb, X_sim, y_sim, cv=5,
+                              scoring='neg_mean_squared_error').mean()
+        scores.append(cv)
+    axes[1].plot(n_trees_range, scores, '-o', color=color,
+                 markersize=5, label=f'd = {depth}')
+
+axes[1].set_xlabel('Number of Trees (B)', fontsize=12)
+axes[1].set_ylabel('5-Fold CV MSE', fontsize=12)
+axes[1].set_title('Tree Depth Effect (λ = 0.1)', fontsize=13)
+axes[1].legend(fontsize=10)
+
+plt.tight_layout()
+plt.show()
+```
+
+从图中可以看出几个重要规律：
+
+1. **小学习率 + 多树** 通常优于 **大学习率 + 少树**。
+2. 深度增加到一定程度后收益递减，且过深的树容易过拟合。
+3. 最优的树数量随学习率下降而增加——$\lambda$ 和 $B$ 需要联合调优。
+
+## Boosting vs Random Forest {#sec-boosting-vs-rf}
+
+```{python}
+#| fig-cap: "Gradient Boosting 与 Random Forest 的对比实验"
+from sklearn.ensemble import RandomForestRegressor
+
+methods = {
+    'Random Forest (n=500)': RandomForestRegressor(
+        n_estimators=500, max_depth=None, random_state=42),
+    'GBM (d=1, λ=0.1, B=500)': GradientBoostingRegressor(
+        n_estimators=500, learning_rate=0.1, max_depth=1, random_state=42),
+    'GBM (d=3, λ=0.1, B=200)': GradientBoostingRegressor(
+        n_estimators=200, learning_rate=0.1, max_depth=3, random_state=42),
+    'GBM (d=5, λ=0.05, B=500)': GradientBoostingRegressor(
+        n_estimators=500, learning_rate=0.05, max_depth=5, random_state=42),
+}
+
+results = {}
+for name, model in methods.items():
+    scores = cross_val_score(model, X_sim, y_sim, cv=10,
+                             scoring='neg_mean_squared_error')
+    results[name] = {'mean': -scores.mean(), 'std': scores.std()}
+
+fig, ax = plt.subplots(figsize=(10, 5))
+names = list(results.keys())
+means = [results[n]['mean'] for n in names]
+stds = [results[n]['std'] for n in names]
+
+colors = ['steelblue', '#e8b339', '#d4690e', '#AE0B2A']
+bars = ax.barh(names, means, xerr=stds, color=colors, capsize=4)
+ax.set_xlabel('10-Fold CV MSE (lower is better)', fontsize=12)
+ax.set_title('Gradient Boosting vs Random Forest', fontsize=14)
+ax.invert_yaxis()
+plt.tight_layout()
+plt.show()
+```
+
+实验表明：
+
+- 调优良好的 GBM 和 Random Forest 在预测性能上通常 **非常接近**。
+- GBM 的优势在于超参数更丰富，能更精细地控制模型复杂度。
+- Random Forest 更加"开箱即用"——默认参数就能给出不错的结果。
+- 在因果推断的应用中，Boosting 的思想启发了 **广义随机森林**（GRF，下一讲的主题）。
+
+## XGBoost 简介 {#sec-xgboost}
+
+XGBoost（eXtreme Gradient Boosting, Chen & Guestrin, 2016）是梯度提升的工业级实现，在 Kaggle 竞赛和工业应用中广泛使用。它在标准梯度提升基础上引入了若干重要改进：
+
+1. **正则化目标函数**：在损失函数中同时惩罚树的复杂度（叶节点数量、叶节点权重）：
+
+$$\text{Obj} = \sum_{i=1}^n L(y_i, \hat{y}_i) + \sum_{b=1}^B \left[\gamma T_b + \frac{1}{2}\lambda \sum_{j=1}^{T_b} w_{bj}^2\right]$$
+
+其中 $T_b$ 是第 $b$ 棵树的叶节点数，$w_{bj}$ 是叶节点权重。
+
+2. **二阶泰勒展开**：使用损失函数的一阶和二阶导数（Newton 步长）来更精确地选择分裂点和计算叶节点权重。
+
+3. **列采样（Column Subsampling）**：类似随机森林的特征随机选择，在每棵树或每次分裂时随机选择特征子集。
+
+4. **高效工程实现**：并行化特征分裂搜索、缓存优化、稀疏数据的高效处理。
+
+## Boosting 的最佳实践 {#sec-boosting-practice}
+
+### 推荐的调参流程
+
+1. **固定** $\lambda = 0.1$，$d = 3$，先用 Early Stopping 找到合理的 $B$。
+2. **联合调优** $d$ 和 $\lambda$：网格搜索或贝叶斯优化。
+3. 加入 **列采样**（`colsample_bytree`）和 **行采样**（`subsample`）。
+4. 最后用更小的 $\lambda$（如 0.01）和更大的 $B$ 做精细调优。
+
+### 常见陷阱
+
+- **没有使用 Early Stopping**：固定 $B$ 容易过拟合。
+- **学习率太大**（$> 0.3$）：训练不稳定，泛化差。
+- **树太深**（$> 10$）：在小样本上极易过拟合。
+- **忘记标准化**：虽然树模型本身不需要标准化，但如果与正则化线性模型一起比较，标准化有助于公平对比。
+
+# 第三部分：模型选择与评估 {#sec-model-selection}
+
+## 模型选择的两种思路 {#sec-selection-approaches}
+
+选择最优模型（或最优超参数）有两种基本策略：
+
+1. **间接估计测试误差**：在训练误差基础上加一个"惩罚项"，惩罚模型的复杂度。代表方法包括 $C_p$ 统计量、AIC、BIC、调整 $R^2$。
+
+2. **直接估计测试误差**：通过交叉验证模拟训练-测试过程。上一讲已详细介绍了 $K$ 折 CV 和 LOOCV。
+
+## 信息准则 {#sec-information-criteria}
+
+### Mallow's $C_p$
+
+$$C_p = \frac{1}{n}\left(\text{RSS} + 2d\hat{\sigma}^2\right)$$
+
+其中 $d$ 是模型中参数的个数，$\hat{\sigma}^2$ 是全模型的误差方差估计。$C_p$ 的直觉是：训练 RSS 总是低估测试误差，每增加一个参数大约使训练误差多低估 $2\hat{\sigma}^2$ 的量。
+
+### AIC（Akaike Information Criterion）
+
+$$\text{AIC} = -2 \cdot \text{LLF} + 2k$$
+
+其中 LLF 是最大化的对数似然函数值，$k$ 是参数个数。对高斯线性模型，AIC 与 $C_p$ 成正密切比关系。
+
+### BIC（Bayesian Information Criterion）
+
+$$\text{BIC} = -2 \cdot \text{LLF} + k \ln(n)$$
+
+BIC 来源于贝叶斯推断，其惩罚项 $k\ln(n)$ 在 $n > 7$（即 $\ln(n) > 2$）时比 AIC 的 $2k$ 更重。因此 BIC 倾向于选择更简约的模型。
+
+### AIC vs BIC 的选择
+
+| 目标 | 推荐准则 | 理论依据 |
+|:---|:---|:---|
+| **预测** | AIC | 渐近等价于 LOOCV |
+| **寻找真实模型** | BIC | 在真实模型有限维时是一致的（$n \to \infty$ 时选中真实模型的概率趋于 1） |
+| **灵活性** | 交叉验证 | 不依赖参数化假设 |
+
+```{python}
+#| fig-cap: "AIC vs BIC 在不同模型大小下的表现（真实模型有 5 个变量）"
+from sklearn.linear_model import LinearRegression
+from itertools import combinations
+
+# AIC and BIC for subset selection
+n_features = X_scaled.shape[1]
+all_features = list(range(n_features))
+
+results_aic = []
+results_bic = []
+
+for k in range(1, min(n_features + 1, 16)):
+    best_aic = np.inf
+    best_bic = np.inf
+
+    if k <= 8:
+        combos = list(combinations(all_features, k))
+        if len(combos) > 200:
+            np.random.seed(42)
+            combos = [combos[i] for i in
+                      np.random.choice(len(combos), 200, replace=False)]
+    else:
+        np.random.seed(42)
+        combos = [tuple(np.random.choice(all_features, k, replace=False))
+                  for _ in range(200)]
+
+    for combo in combos:
+        combo = list(combo)
+        model = LinearRegression()
+        model.fit(X_scaled[:, combo], y)
+        rss = np.sum((y - model.predict(X_scaled[:, combo])) ** 2)
+        n_obs = len(y)
+
+        aic = n_obs * np.log(rss / n_obs) + 2 * k
+        bic = n_obs * np.log(rss / n_obs) + k * np.log(n_obs)
+
+        best_aic = min(best_aic, aic)
+        best_bic = min(best_bic, bic)
+
+    results_aic.append(best_aic)
+    results_bic.append(best_bic)
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+k_range = range(1, len(results_aic) + 1)
+
+axes[0].plot(k_range, results_aic, 'b-o', markersize=5)
+axes[0].axvline(x=5, color='red', linestyle='--', alpha=0.5,
+                label='True model size (k=5)')
+axes[0].axvline(x=np.argmin(results_aic) + 1, color='green',
+                linestyle=':', label=f'AIC min (k={np.argmin(results_aic)+1})')
+axes[0].set_xlabel('Model Size (k)', fontsize=12)
+axes[0].set_ylabel('AIC', fontsize=12)
+axes[0].set_title('AIC', fontsize=14)
+axes[0].legend(fontsize=10)
+
+axes[1].plot(k_range, results_bic, 'r-o', markersize=5)
+axes[1].axvline(x=5, color='red', linestyle='--', alpha=0.5,
+                label='True model size (k=5)')
+axes[1].axvline(x=np.argmin(results_bic) + 1, color='green',
+                linestyle=':', label=f'BIC min (k={np.argmin(results_bic)+1})')
+axes[1].set_xlabel('Model Size (k)', fontsize=12)
+axes[1].set_ylabel('BIC', fontsize=12)
+axes[1].set_title('BIC', fontsize=14)
+axes[1].legend(fontsize=10)
+
+plt.tight_layout()
+plt.show()
+```
+
+## 综合方法对比 {#sec-comparison}
+
+现在我们可以将本讲和上一讲学到的所有方法放在一起进行系统比较。
+
+```{python}
+#| fig-cap: "ML 方法综合对比（10 折交叉验证）"
+from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import (RandomForestRegressor,
+                               GradientBoostingRegressor)
+from sklearn.model_selection import cross_val_score
+
+np.random.seed(42)
+n = 300
+X_comp = np.random.randn(n, 10)
+y_comp = (2*X_comp[:, 0] - 1.5*X_comp[:, 1] +
+          np.sin(3*X_comp[:, 2]) +
+          0.5*X_comp[:, 0]*X_comp[:, 1] +
+          np.random.randn(n)*0.5)
+
+models = {
+    'OLS': LinearRegression(),
+    'Ridge (α=1)': Ridge(alpha=1.0),
+    'LASSO (α=0.1)': Lasso(alpha=0.1),
+    'Elastic Net': ElasticNet(alpha=0.1, l1_ratio=0.5),
+    'Decision Tree (d=5)': DecisionTreeRegressor(max_depth=5,
+                                                  random_state=42),
+    'Random Forest': RandomForestRegressor(n_estimators=200,
+                                           max_depth=5, random_state=42),
+    'GBM (d=3, λ=0.1)': GradientBoostingRegressor(
+        n_estimators=200, learning_rate=0.1, max_depth=3, random_state=42),
+}
+
+fig, ax = plt.subplots(figsize=(10, 6))
+results = {}
+for name, model in models.items():
+    scores = cross_val_score(model, X_comp, y_comp, cv=10,
+                             scoring='neg_mean_squared_error')
+    results[name] = {'mean': -scores.mean(), 'std': scores.std()}
+
+names = list(results.keys())
+means = [results[n]['mean'] for n in names]
+stds = [results[n]['std'] for n in names]
+
+colors = ['#999', '#4a90d9', '#4a90d9', '#4a90d9',
+          '#e8b339', '#2d8659', '#AE0B2A']
+bars = ax.barh(names, means, xerr=stds, color=colors, capsize=4, height=0.6)
+ax.set_xlabel('10-Fold CV MSE (lower is better)', fontsize=12)
+ax.set_title('全方法对比：模拟数据含非线性和交互效应', fontsize=13)
+ax.invert_yaxis()
+
+plt.tight_layout()
+plt.show()
+
+# Summary table
+print("\n方法对比汇总表：")
+print(f"{'方法':<25} {'CV MSE (mean)':>15} {'CV MSE (std)':>15}")
+print("-" * 55)
+for name in names:
+    print(f"{name:<25} {results[name]['mean']:>15.4f} "
+          f"{results[name]['std']:>15.4f}")
+```
+
+几点观察：
+
+1. **线性方法**（OLS、Ridge、LASSO）在这个有非线性和交互的模拟数据上表现一般——因为它们无法捕捉 $\sin(X_1)$ 和 $X_1 \times X_2$ 的效应。
+2. **单棵决策树** 表现最差——高方差。
+3. **随机森林和 GBM** 表现最好——它们自动地捕捉了非线性和交互效应。
+4. 在纯线性数据上，正则化线性方法可能反超树方法——**没有"最好"的方法，选择取决于数据特征**。
+
+## 模型选择的方法论总结 {#sec-selection-summary}
+
+| 方法类型 | 方法 | 优点 | 缺点 | 适用场景 |
+|:---|:---|:---|:---|:---|
+| 子集选择 | 最优子集 | 理论最优 | $2^p$ 复杂度 | $p < 30$ |
+| 子集选择 | 前向/后向 | 计算快 | 贪心近似 | 中等 $p$ |
+| 正则化 | Ridge | 稳定收缩 | 不选变量 | 密集信号 |
+| 正则化 | LASSO | 自动选变量 | 系数有偏 | 稀疏信号 |
+| 正则化 | Elastic Net | 兼顾两者 | 多超参数 | 相关特征 |
+| 交叉验证 | $K$-fold CV | 灵活通用 | 计算量大 | 任何 |
+| 信息准则 | AIC | 等价 CV | 假设正态 | 预测目标 |
+| 信息准则 | BIC | 一致性 | 保守 | 模型识别 |
+
+# 第四部分：从预测到因果 {#sec-prediction-to-causal}
+
+## ML 与因果推断的本质区别 {#sec-ml-vs-ci}
+
+机器学习和因果推断虽然都处理数据、拟合模型，但它们回答的是本质上不同的问题。
+
+**预测问题**：给定一组特征 $X$，最好地预测 $Y$——不关心 $X$ 和 $Y$ 之间是否存在因果关系。
+
+$$\hat{Y} = \hat{f}(X) \approx E[Y|X]$$
+
+**因果问题**：如果我们改变 $D$（如实施某项政策），$Y$ 会如何变化——需要估计 **反事实**。
+
+$$\tau = E[Y(1) - Y(0)]$$
+
+Mullainathan & Spiess (2017) 在 Journal of Economic Perspectives 中用一个经典的例子说明了这一区别：在线零售中，购买尿布的顾客有更高的概率也购买啤酒。ML 可以成功地利用这一相关性做 **交叉销售推荐**——但推荐本身不意味着尿布 **导致** 人们购买啤酒。
+
+## ML 在因果推断中的三大角色 {#sec-ml-roles}
+
+虽然 ML 不能直接回答因果问题，但它可以在三个关键环节辅助因果推断：
+
+### 角色 1：高维控制变量选择
+
+在回归分析中控制混淆变量是因果识别的基础。当潜在控制变量的维度很高（$p$ 可能接近或超过 $n$）时，传统方法面临两难：
+
+- 包含太少的控制变量 → 遗漏变量偏差。
+- 包含太多 → 过拟合、多重共线性、估计不精确。
+
+LASSO 和 Elastic Net 可以数据驱动地选择最重要的控制变量——但前面提到，直接在一步 LASSO 中估计因果效应会引入正则化偏差。双重机器学习（第 13 讲）通过正交化解决了这个问题。
+
+### 角色 2：异质性处理效应（HTE）估计
+
+**条件平均处理效应**（Conditional Average Treatment Effect, CATE）：
+
+$$\tau(x) = E[Y(1) - Y(0) | X = x]$$
+
+传统方法通常假设处理效应 $\tau$ 是一个常数。但在很多应用中，不同特征的个体对干预的反应可能截然不同。例如：
+
+- 药物对不同基因型患者的效果不同。
+- 补贴政策对不同收入群体的影响不同。
+- 广告对不同用户画像的效果不同。
+
+**因果森林**（Causal Forest, Athey & Imbens, 2018）和 **广义随机森林**（GRF, Athey, Tibshirani & Wager, 2019）提供了非参数估计 $\tau(x)$ 的方法——这是第 9-12 讲的核心内容。
+
+### 角色 3：去偏估计（Debiased/Double ML）
+
+当我们使用 ML 方法（如 LASSO、随机森林、梯度提升）估计回归函数时，模型选择和正则化引入的偏差会传递到因果效应估计中。
+
+**双重机器学习**（Double ML, Chernozhukov et al., 2018）通过一个优雅的两步正交化过程消除这种偏差：
+
+1. **第一步**：用 ML 从控制变量预测处理变量和结果变量。
+2. **第二步**：用残差做 OLS 回归得到因果效应估计。
+3. 关键技巧：使用 **交叉拟合**（cross-fitting）避免 ML 的过拟合偏差。
+
+这将在第 13 讲详细展开。
+
+## 课程路线图 {#sec-roadmap}
+
+本课程的设计体现了因果推断和机器学习从基础到融合的递进结构：
+
+- **第 1-6 讲**（已完成）：经典因果推断方法——DAG、匹配、IV、面板/DID。
+- **第 7-8 讲**（当前）：ML 基础——偏差-方差、CV、树、随机森林、正则化、Boosting。
+- **第 9-10 讲**：广义随机森林和因果森林——ML 方法的因果推断版本。
+- **第 11-12 讲**：异质性处理效应的估计和推断——政策评估的核心。
+- **第 13 讲**：双重机器学习——正则化方法在因果推断中的严谨应用。
+- **第 14 讲**：前沿专题——最新进展和开放问题。
+
+# 总结 {#sec-summary}
+
+## 本讲要点
+
+1. **正则化线性回归**
+   - Ridge（$L_2$）均匀收缩系数但不做变量选择；LASSO（$L_1$）自动将部分系数压缩为零。
+   - LASSO 产生稀疏解的关键在于 $L_1$ 约束区域的"角"——等高线易切角点。
+   - Elastic Net 结合两者，适合相关特征和 $p \gg n$ 场景。
+   - 超参数 $\lambda$ 通过交叉验证选择，推荐使用一个标准误规则。
+
+2. **梯度提升**
+   - 顺序地训练浅树，每轮拟合前一轮的残差——等价于函数空间中的梯度下降。
+   - 三个核心超参数 $(B, \lambda, d)$ 需要联合调优。
+   - XGBoost 是工业级实现，引入正则化目标和二阶优化。
+
+3. **模型选择**
+   - 信息准则（AIC 偏预测、BIC 偏简约）间接估计测试误差。
+   - 交叉验证直接估计测试误差——最灵活也最可靠。
+   - 没有"最好"的方法——选择取决于数据特征和研究目标。
+
+4. **从预测到因果**
+   - ML 在因果推断中三大角色：高维控制、异质性效应、去偏估计。
+   - 直接使用 ML 估计因果效应会引入正则化偏差——需要专门的去偏方法。
+   - 后续课程将深入因果森林（GRF）和双重机器学习（DML）。
+
+## 推荐软件工具
+
+### Python
+- `scikit-learn`：Ridge、Lasso、ElasticNet、GradientBoostingRegressor（学习首选）
+- `xgboost`：XGBRegressor（工业应用推荐）
+- `lightgbm`：LGBMRegressor（大数据集，训练更快）
+- `glmnet`（`python-glmnet`）：LASSO/Ridge 的高效实现
+
+### R
+- `glmnet`：Ridge、LASSO、Elastic Net 的标准包（Hastie & Tibshirani 开发）
+- `xgboost`：XGBoost 的 R 接口
+- `caret` / `tidymodels`：统一的建模和调参框架
+- `grf`：广义随机森林（下一讲将使用）
+
+## 阅读推荐
+
+**核心参考**
+
+- James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). *An Introduction to Statistical Learning: with Applications in Python*. Springer. **Chapters 6 (Regularization) and 8 (Tree-Based Methods)**.
+
+- Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning* (2nd ed.). Springer. **Chapter 10 (Boosting and Additive Trees)**.
+
+**原始论文**
+
+- Tibshirani, R. (1996). Regression Shrinkage and Selection via the Lasso. *JRSSB*, 58(1), 267-288.
+
+- Chen, T., & Guestrin, C. (2016). XGBoost: A Scalable Tree Boosting System. *KDD 2016*, 785-794.
+
+- Friedman, J. H. (2001). Greedy Function Approximation: A Gradient Boosting Machine. *Annals of Statistics*, 29(5), 1189-1232.
+
+**经济学视角**
+
+- Athey, S., & Imbens, G. W. (2019). Machine Learning Methods That Economists Should Know About. *Annual Review of Economics*, 11, 685-725.
+
+- Mullainathan, S., & Spiess, J. (2017). Machine Learning: An Applied Econometric Approach. *Journal of Economic Perspectives*, 31(2), 87-106.
+
+- Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., & Robins, J. (2018). Double/Debiased Machine Learning for Treatment and Structural Parameters. *The Econometrics Journal*, 21(1), C1-C68.

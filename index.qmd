@@ -51,11 +51,23 @@ date: "2026-03-05"
 - [📖 第六讲详细讲义](Quarto/lecture06_panel_did_notes.html)
 - [📊 第七讲课件](Quarto/lecture07_ml_basics.html)
 - [📖 第七讲详细讲义](Quarto/lecture07_ml_basics_notes.html)
-- [💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
+- [� 第八讲课件](Quarto/lecture08_ml_basics_ii.html)
+- [📖 第八讲详细讲义](Quarto/lecture08_ml_basics_ii_notes.html)
+- [�💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
 
 ### 最新公告
 
 ::: {.callout-important appearance="simple"}
+**2026-04-26**
+
+第八讲课件和详细讲义已发布！
+
+📊 [查看第八讲课件：机器学习基础 II——梯度提升、正则化与模型选择](Quarto/lecture08_ml_basics_ii.html)
+
+📚 [查看第八讲详细讲义](Quarto/lecture08_ml_basics_ii_notes.html)
+
+---
+
 **2026-04-19**
 
 第七讲课件和详细讲义已发布！
@@ -235,5 +247,9 @@ date: "2026-03-05"
 
 ::: {.learning-grid-item}
 [📊 第七讲](Quarto/lecture07_ml_basics.html){.btn .btn-primary .course-start-btn}
+:::
+
+::: {.learning-grid-item}
+[📊 第八讲](Quarto/lecture08_ml_basics_ii.html){.btn .btn-primary .course-start-btn}
 :::
 :::
