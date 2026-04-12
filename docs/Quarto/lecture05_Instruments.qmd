@@ -1020,10 +1020,16 @@ $$\Delta Y_{treatment} - \Delta Y_{control}$$
 
 # 参考文献
 
-- Angrist, J. D. (1990). Lifetime earnings and the Vietnam era draft lottery. *American Economic Review*.
-- Angrist, J. D., \& Krueger, A. B. (1991). Does compulsory school attendance affect schooling and earnings? *Quarterly Journal of Economics*.
-- Angrist, J. D., Imbens, G. W., \& Rubin, D. B. (1996). Identification of causal effects using instrumental variables. *Journal of the American Statistical Association*.
-- Bound, J., Jaeger, D. A., \& Baker, R. M. (1995). Problems with instrumental variables estimation when the correlation between the instruments and the endogenous explanatory variable is weak. *Journal of the American Statistical Association*.
-- Card, D. (1995). Using geographic variation in college proximity to estimate the return to schooling. *NBER Working Paper*.
-- Imbens, G. W., \& Angrist, J. D. (1994). Identification and estimation of local average treatment effects. *Econometrica*.
-- Stock, J. H., \& Yogo, M. (2005). Testing for weak instruments in linear IV regression.
+- Angrist, J. D. (1991). The Draft Lottery and Voluntary Enlistment in the Vietnam Era. Journal of the American Statistical Association, 86(415), 584-595. https://doi.org/10.1080/01621459.1991.10475083
+  
+- Angrist, J. D., & Krueger, A. B. (1991). Does Compulsory School Attendance Affect Schooling and Earnings? The Quarterly Journal of Economics, 106(4), 979-1014. https://doi.org/10.2307/2937954
+
+- Angrist, J. D., Imbens, G. W., & Rubin, D. B. (1996). Identification of Causal Effects Using Instrumental Variables. Journal of the American Statistical Association, 91(434), 444-455. https://doi.org/10.1080/01621459.1996.10476902
+
+- Bound, J., Jaeger, D. A., & Baker, R. M. (1995). Problems with Instrumental Variables Estimation when the Correlation between the Instruments and the Endogenous Explanatory Variable is Weak. Journal of the American Statistical Association, 90(430), 443-450. https://doi.org/10.1080/01621459.1995.10476536
+
+- Card, D. (1993). Using Geographic Variation in College Proximity to Estimate the Return to Schooling. NBER Working Paper No. 4483. https://doi.org/10.3386/w4483
+
+- Imbens, G. W., & Angrist, J. D. (1994). Identification and Estimation of Local Average Treatment Effects. Econometrica, 62(2), 467-. https://doi.org/10.2307/2951620
+
+- Stock, J. H., & Yogo, M. (2005). Testing for Weak Instruments in Linear IV Regression. In D. W. K. Andrews & J. H. Stock (Eds.), Identification and Inference for Econometric Models (pp. 80-108). Cambridge University Press. https://doi.org/10.1017/CBO9780511614491.006

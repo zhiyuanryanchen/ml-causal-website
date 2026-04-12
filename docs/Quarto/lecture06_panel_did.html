@@ -99,7 +99,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="lecture06_panel_did_files/libs/revealjs/dist/theme/quarto-5f78f4195a156fe81552c484f9a72109.css">
+  <link rel="stylesheet" href="lecture06_panel_did_files/libs/revealjs/dist/theme/quarto-8b8acb134ad08796896ab318cb276518.css">
   <link rel="stylesheet" href="ruc-theme.scss">
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -814,7 +814,7 @@ Y_{it} = \alpha &amp;+ \beta_1 Treat_i + \beta_2 Post_t + \beta_3 Group_i \\
 <section id="python实现did模拟" class="slide level2">
 <h2>Python实现：DiD模拟</h2>
 <div style="font-size: 1em;">
-<div id="f1411572" class="cell" data-execution_count="1">
+<div id="81e24c2a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href=""></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href=""></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
@@ -856,7 +856,7 @@ Y_{it} = \alpha &amp;+ \beta_1 Treat_i + \beta_2 Post_t + \beta_3 Group_i \\
 <section id="数据生成过程" class="slide level2">
 <h2>数据生成过程</h2>
 <div style="font-size: 1em;">
-<div id="c7c9d974" class="cell" data-execution_count="2">
+<div id="aaa7fef1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="co"># 个体固定效应（不随时间变化）</span></span>
 <span id="cb3-2"><a href=""></a>unit_fe <span class="op">=</span> np.repeat(np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n_units), n_periods)</span>
 <span id="cb3-3"><a href=""></a></span>
@@ -907,7 +907,7 @@ Y_{it} = \alpha &amp;+ \beta_1 Treat_i + \beta_2 Post_t + \beta_3 Group_i \\
 <section id="twfe估计" class="slide level2">
 <h2>TWFE估计</h2>
 <div style="font-size: 1em;">
-<div id="2d18ee56" class="cell" data-execution_count="3">
+<div id="6c5af30f" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="co"># 设置面板索引</span></span>
 <span id="cb5-2"><a href=""></a>data <span class="op">=</span> data.set_index([<span class="st">'unit'</span>, <span class="st">'period'</span>])</span>
 <span id="cb5-3"><a href=""></a></span>
@@ -1261,17 +1261,19 @@ p值: 0.000
 </section>
 <section id="下节课预告" class="slide level2">
 <h2>下节课预告</h2>
-<p><strong>第七讲：断点回归设计 (Regression Discontinuity)</strong></p>
+<p><strong>第七讲：机器学习基础 (Machine Learning Basics)</strong></p>
 <ul>
-<li>清晰断点（Sharp RD）</li>
-<li>模糊断点（Fuzzy RD）</li>
-<li>带宽选择和稳健性检验</li>
+<li>回归树（Regression Trees）</li>
+<li>随机森林（Random Forests）</li>
+<li>梯度提升（Gradient Boosting）</li>
+<li>正则化（Regularization）</li>
+<li>模型选择（Model Selection）</li>
 <li>应用案例</li>
 </ul>
 <div class="fragment">
 <div class="concept-box">
 <p><em>核心思想</em></p>
-<p>在断点附近的个体可以认为是可比较的，处理效应由断点处的跳跃识别。</p>
+<p>机器学习通过自动从数据中学习模式来进行预测或决策，而不依赖于严格的参数假设。它强调模型的<strong>泛化能力</strong>和<strong>预测性能</strong>。</p>
 </div>
 </div>
 </section></section>

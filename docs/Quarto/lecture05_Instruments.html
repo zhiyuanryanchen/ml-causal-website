@@ -99,7 +99,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="lecture05_Instruments_files/libs/revealjs/dist/theme/quarto-54e101200c9e1583c2e436623919375d.css">
+  <link rel="stylesheet" href="lecture05_Instruments_files/libs/revealjs/dist/theme/quarto-8b8acb134ad08796896ab318cb276518.css">
   <link rel="stylesheet" href="ruc-theme.scss">
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -486,7 +486,7 @@
 <section id="python-实现2sls" class="slide level2">
 <h2>Python 实现：2SLS</h2>
 <div style="font-size: 1em;">
-<div id="91690df6" class="cell" data-execution_count="1">
+<div id="b1ba2474" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href=""></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href=""></a><span class="im">from</span> linearmodels.iv <span class="im">import</span> IV2SLS</span>
@@ -531,7 +531,7 @@
 <section id="ols-vs-2sls-比较" class="slide level2">
 <h2>OLS vs 2SLS 比较</h2>
 <div style="font-size: 1em;">
-<div id="9463d6cd" class="cell" data-execution_count="2">
+<div id="566e3004" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="co"># OLS 估计（有偏，因为忽略了 U）</span></span>
 <span id="cb3-2"><a href=""></a>X_ols <span class="op">=</span> sm.add_constant(data[<span class="st">'D'</span>])</span>
 <span id="cb3-3"><a href=""></a>model_ols <span class="op">=</span> sm.OLS(data[<span class="st">'Y'</span>], X_ols).fit()</span>
@@ -577,7 +577,7 @@ OLS 估计:    3.043  (偏差: 1.043)
 <section id="第一阶段结果分析" class="slide level2">
 <h2>第一阶段结果分析</h2>
 <div style="font-size: 1em;">
-<div id="4aff8bfe" class="cell" data-execution_count="3">
+<div id="29e229ed" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="co"># 第一阶段回归结果</span></span>
 <span id="cb5-2"><a href=""></a><span class="bu">print</span>(<span class="st">"第一阶段回归结果:"</span>)</span>
 <span id="cb5-3"><a href=""></a><span class="bu">print</span>(<span class="st">"="</span> <span class="op">*</span> <span class="dv">50</span>)</span>
@@ -653,7 +653,7 @@ F 统计量: 251.72</code></pre>
 <section id="弱工具变量的模拟演示" class="slide level2">
 <h2>弱工具变量的模拟演示</h2>
 <div style="font-size: 1em;">
-<div id="596778d0" class="cell" data-execution_count="4">
+<div id="f0397dbf" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="co"># 模拟不同工具变量强度下的表现</span></span>
 <span id="cb7-2"><a href=""></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb7-3"><a href=""></a>n <span class="op">=</span> <span class="dv">500</span></span>
@@ -860,7 +860,7 @@ F 统计量: 251.72</code></pre>
 <section id="数据与变量" class="slide level2">
 <h2>数据与变量</h2>
 <div style="font-size: 1em;">
-<div id="7d6b160e" class="cell" data-execution_count="6">
+<div id="9cb47e13" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href=""></a><span class="co"># 模拟 Angrist &amp; Krueger (1991) 的数据结构</span></span>
 <span id="cb9-2"><a href=""></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb9-3"><a href=""></a>n <span class="op">=</span> <span class="dv">5000</span></span>
@@ -926,7 +926,7 @@ Name: education, dtype: float64</code></pre>
 <section id="ols-vs-2sls-估计对比" class="slide level2">
 <h2>OLS vs 2SLS 估计对比</h2>
 <div style="font-size: 1em;">
-<div id="da9b5a60" class="cell" data-execution_count="7">
+<div id="b2b32417" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href=""></a><span class="co"># OLS 估计</span></span>
 <span id="cb11-2"><a href=""></a>X_ols <span class="op">=</span> sm.add_constant(ak_data[<span class="st">'education'</span>])</span>
 <span id="cb11-3"><a href=""></a>ols_model <span class="op">=</span> sm.OLS(ak_data[<span class="st">'log_earnings'</span>], X_ols).fit()</span>
@@ -1335,13 +1335,13 @@ OLS 估计:     16.9%
 <section id="参考文献" class="title-slide slide level1 center">
 <h1>参考文献</h1>
 <ul>
-<li>Angrist, J. D. (1991). The Draft Lottery and Voluntary Enlistment in the Vietnam Era. Journal of the American Statistical Association, 86(415), 584-595. https://doi.org/10.1080/01621459.1991.10475083</li>
-<li>Angrist, J. D., &amp; Krueger, A. B. (1991). Does Compulsory School Attendance Affect Schooling and Earnings? The Quarterly Journal of Economics, 106(4), 979-1014. https://doi.org/10.2307/2937954</li>
-<li>Angrist, J. D., Imbens, G. W., &amp; Rubin, D. B. (1996). Identification of Causal Effects Using Instrumental Variables. Journal of the American Statistical Association, 91(434), 444-455. https://doi.org/10.1080/01621459.1996.10476902</li>
-<li>Bound, J., Jaeger, D. A., &amp; Baker, R. M. (1995). Problems with Instrumental Variables Estimation when the Correlation between the Instruments and the Endogenous Explanatory Variable is Weak. Journal of the American Statistical Association, 90(430), 443-450. https://doi.org/10.1080/01621459.1995.10476536</li>
-<li>Card, D. (1993). Using Geographic Variation in College Proximity to Estimate the Return to Schooling. NBER Working Paper No.&nbsp;4483. https://doi.org/10.3386/w4483</li>
-<li>Imbens, G. W., &amp; Angrist, J. D. (1994). Identification and Estimation of Local Average Treatment Effects. Econometrica, 62(2), 467-. https://doi.org/10.2307/2951620</li>
-<li>Stock, J. H., &amp; Yogo, M. (2005). Testing for Weak Instruments in Linear IV Regression. In D. W. K. Andrews &amp; J. H. Stock (Eds.), Identification and Inference for Econometric Models (pp.&nbsp;80-108). Cambridge University Press. https://doi.org/10.1017/CBO9780511614491.006</li>
+<li><p>Angrist, J. D. (1991). The Draft Lottery and Voluntary Enlistment in the Vietnam Era. Journal of the American Statistical Association, 86(415), 584-595. https://doi.org/10.1080/01621459.1991.10475083</p></li>
+<li><p>Angrist, J. D., &amp; Krueger, A. B. (1991). Does Compulsory School Attendance Affect Schooling and Earnings? The Quarterly Journal of Economics, 106(4), 979-1014. https://doi.org/10.2307/2937954</p></li>
+<li><p>Angrist, J. D., Imbens, G. W., &amp; Rubin, D. B. (1996). Identification of Causal Effects Using Instrumental Variables. Journal of the American Statistical Association, 91(434), 444-455. https://doi.org/10.1080/01621459.1996.10476902</p></li>
+<li><p>Bound, J., Jaeger, D. A., &amp; Baker, R. M. (1995). Problems with Instrumental Variables Estimation when the Correlation between the Instruments and the Endogenous Explanatory Variable is Weak. Journal of the American Statistical Association, 90(430), 443-450. https://doi.org/10.1080/01621459.1995.10476536</p></li>
+<li><p>Card, D. (1993). Using Geographic Variation in College Proximity to Estimate the Return to Schooling. NBER Working Paper No.&nbsp;4483. https://doi.org/10.3386/w4483</p></li>
+<li><p>Imbens, G. W., &amp; Angrist, J. D. (1994). Identification and Estimation of Local Average Treatment Effects. Econometrica, 62(2), 467-. https://doi.org/10.2307/2951620</p></li>
+<li><p>Stock, J. H., &amp; Yogo, M. (2005). Testing for Weak Instruments in Linear IV Regression. In D. W. K. Andrews &amp; J. H. Stock (Eds.), Identification and Inference for Econometric Models (pp.&nbsp;80-108). Cambridge University Press. https://doi.org/10.1017/CBO9780511614491.006</p></li>
 </ul>
 
 </section>

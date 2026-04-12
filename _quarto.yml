@@ -5,9 +5,9 @@ project:
     - index.qmd
     - syllabus.qmd
     - resources.qmd
-    - Quarto/lecture01_students.html
+    - Quarto/lecture01_intro.html
     - Quarto/lecture01_notes.html
-    - Quarto/lecture02_probability_regression_students.html
+    - Quarto/lecture02_probability_regression.html
     - Quarto/lecture02_probability_regression_notes.html
     - Quarto/lecture03_dags.html
     - Quarto/lecture03_dags_notes.html
@@ -34,11 +34,11 @@ website:
       - text: "讲义"
         menu:
           - text: "第一讲：课程导论"
-            file: Quarto/lecture01_students.html
+            file: Quarto/lecture01_intro.html
           - text: "第一讲：详细讲义"
             file: Quarto/lecture01_notes.html
           - text: "第二讲：概率与回归基础"
-            file: Quarto/lecture02_probability_regression_students.html
+            file: Quarto/lecture02_probability_regression.html
           - text: "第二讲：详细讲义"
             file: Quarto/lecture02_probability_regression_notes.html
           - text: "第三讲：有向无环图"
@@ -88,11 +88,11 @@ website:
         - section: "讲义"
           contents:
             - text: "第一讲：课程导论"
-              file: Quarto/lecture01_students.html
+              file: Quarto/lecture01_intro.html
             - text: "第一讲：详细讲义"
               file: Quarto/lecture01_notes.html
             - text: "第二讲：概率与回归基础"
-              file: Quarto/lecture02_probability_regression_students.html
+              file: Quarto/lecture02_probability_regression.html
             - text: "第二讲：详细讲义"
               file: Quarto/lecture02_probability_regression_notes.html
             - text: "第三讲：有向无环图"

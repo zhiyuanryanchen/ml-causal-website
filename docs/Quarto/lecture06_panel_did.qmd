@@ -947,11 +947,13 @@ $$\min_{\mathbf{W}} ||\mathbf{X}_1 - \mathbf{X}_0 \mathbf{W}||$$
 
 ## 下节课预告
 
-**第七讲：断点回归设计 (Regression Discontinuity)**
+**第七讲：机器学习基础 (Machine Learning Basics)**
 
-- 清晰断点（Sharp RD）
-- 模糊断点（Fuzzy RD）
-- 带宽选择和稳健性检验
+- 回归树（Regression Trees）
+- 随机森林（Random Forests）
+- 梯度提升（Gradient Boosting）
+- 正则化（Regularization）
+- 模型选择（Model Selection）
 - 应用案例
 
 . . .
@@ -959,7 +961,7 @@ $$\min_{\mathbf{W}} ||\mathbf{X}_1 - \mathbf{X}_0 \mathbf{W}||$$
 ::: {.concept-box}
 *核心思想*
 
-在断点附近的个体可以认为是可比较的，处理效应由断点处的跳跃识别。
+机器学习通过自动从数据中学习模式来进行预测或决策，而不依赖于严格的参数假设。它强调模型的**泛化能力**和**预测性能**。
 :::
 
 # 参考文献

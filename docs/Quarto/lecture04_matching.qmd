@@ -1,0 +1,909 @@
+---
+title: "机器学习与因果推断"
+subtitle: "第四讲：匹配与分层(Matching and Subclassification)——基于可观测变量的选择偏差校正"
+author: "陈志远"
+institute: "中国人民大学商学院"
+date: "2026-03-23"
+format:
+  revealjs:
+    theme: [default, ruc-theme.scss]
+    css: ruc-theme.scss
+    slide-number: true
+    progress: true
+    code-fold: false
+    code-tools: true
+    highlight-style: github
+    pdf-separate-fragments: false
+    width: 1400
+    height: 788
+    margin: 0.05
+    transition: slide
+    background-transition: fade
+    toc: true
+    toc-depth: 1
+    chalkboard:
+      buttons: true
+    preview-links: auto
+    mermaid:
+      theme: default
+      flowchart:
+        useMaxWidth: true
+        htmlLabels: true
+        nodeSpacing: 70
+        rankSpacing: 90
+        diagramPadding: 20
+      themeCSS: |
+        .label text,
+        .nodeLabel,
+        .edgeLabel,
+        .edgeLabel p,
+        .cluster-label text {
+          font-size: 28px !important;
+          font-family: "Source Han Sans SC", "Noto Sans CJK SC", "WenQuanYi Micro Hei", sans-serif !important;
+          font-weight: 600 !important;
+        }
+      themeVariables:
+        fontSize: 32px
+        fontFamily: "Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif"
+        fontWeight: 600
+  beamer:
+    pdf-engine: xelatex
+    include-in-header:
+      text: |
+        \usepackage[UTF8]{ctex}
+        \usetheme{Madrid}
+        \usecolortheme{default}
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: false
+  cache: false
+lang: zh
+html-math-method: katex
+---
+
+
+## 上节课回顾
+
+::: {.concept-box}
+**核心概念**
+
+- *有向无环图(DAG)*：用图形表示因果关系
+- *后门准则*：识别需要阻断的混淆路径
+- *碰撞偏误*：控制碰撞节点会打开虚假路径
+- *do-演算*：从观测数据推导干预效果
+:::
+
+. . .
+
+*本节课目标*
+
+- 理解匹配法的基本原理
+- 掌握倾向得分匹配(PSM)的实现
+- 学习分层估计方法
+- 通过案例应用匹配技术
+
+# 观测研究中的选择偏差问题 {background-color="#AE0B2A"}
+
+## 从随机实验到观测研究
+
+::: {.columns}
+::: {.column width="50%"}
+**随机对照试验(RCT)**
+
+- 处理组和对照组随机分配
+- 可忽略性假设成立：$D \perp \{Y(0), Y(1)\}$
+- 选择偏差为零
+- 实验成本高，伦理限制多
+:::
+
+::: {.column width="50%"}
+**观测研究**
+
+- 利用现有数据进行因果推断
+- 处理组自选择，存在混淆
+- 需要基于可观测变量调整
+- 广泛应用在经济学、医学、社会学
+:::
+:::
+
+. . .
+
+::: {.warning-box}
+**核心问题**
+
+在观测研究中，个体是否接受处理往往与潜在结果相关：
+$$D \not\perp \{Y(0), Y(1)\}$$
+
+这导致了*选择偏差*，需要用统计方法进行校正。
+:::
+
+## 选择偏差的分解
+
+**观测到的均值差异可以分解为：**
+
+$$\underbrace{E[Y|D=1] - E[Y|D=0]}_{\text{观测差异}} = \underbrace{E[Y(1) - Y(0)|D=1]}_{\text{ATT}} + \underbrace{\{E[Y(0)|D=1] - E[Y(0)|D=0]\}}_{\text{选择偏差}}$$
+
+. . .
+
+*关键洞察*
+
+- 如果我们能找到与处理组*可比*的对照组，选择偏差就能消除
+- 匹配法的核心思想：为每个处理组个体找到一个"双胞胎"对照
+
+## 可忽略性假设 (Ignorability)
+
+::: {.concept-box}
+**条件可忽略性**
+
+在给定协变量 $X$ 的情况下，处理分配与潜在结果独立：
+$$D \perp \{Y(0), Y(1)\} | X$$
+
+也称为*无混淆性* (Unconfoundedness) 或*基于可观测变量的选择*。
+:::
+
+. . .
+
+*这意味着*
+
+- 在同一 $X$ 层内，处理分配可以视为随机
+- 混淆变量都被观测到并包含在 $X$ 中
+- 我们只需要比较*相似*的个体
+
+. . .
+
+::: {.warning-box}
+**局限性**
+
+- 不可观测的混淆变量无法通过匹配消除
+- 需要丰富的协变量数据
+- 重叠假设(Overlap)必须满足
+:::
+
+# 匹配法的基本原理 {background-color="#AE0B2A"}
+
+## 什么是匹配？
+
+**基本思想**: 为每个处理组个体，在对照组中找到"最相似"的个体进行配对
+
+::: {.example-box}
+**类比理解**
+
+想象你要比较两种教学方法的效果：
+
+- 处理组：使用新教学方法的学生
+- 对照组：使用传统方法的学生
+
+如果处理组学生普遍更聪明、家庭条件更好，直接比较不公平。
+
+*匹配法*：为每个新教学法学生，找一个智商、家庭背景相近的传统教学法学生对比。
+:::
+
+## 精确匹配 vs 近似匹配
+
+::: {.columns}
+::: {.column width="50%"}
+**精确匹配 (Exact Matching)**
+
+- 要求对照个体在所有协变量上与处理个体完全相同
+- 理论上理想，但实践中难以实现
+- 当协变量维度高时，出现"维度灾难"
+:::
+
+::: {.column width="50%"}
+**近似匹配 (Approximate Matching)**
+
+- 找到在协变量空间上"最接近"的个体
+- 需要定义"距离"或"相似度"
+- 常用方法：
+  - 最近邻匹配
+  - 卡尺匹配 (Caliper matching)
+  - 核匹配
+:::
+:::
+
+. . .
+
+*距离度量*
+
+- 欧氏距离：$d(X_i, X_j) = \sqrt{(X_i - X_j)'(X_i - X_j)}$
+- 马氏距离：考虑协变量协方差矩阵
+
+## 一对一匹配 vs 一对多匹配
+
+| 匹配类型 | 描述 | 优点 | 缺点 |
+|:---|:---|:---|:---|
+| **1:1 匹配** | 每个处理个体匹配1个对照 | 方差小，配对简单 | 可能丢弃有用数据 |
+| **1:k 匹配** | 每个处理个体匹配k个对照 | 使用更多数据，偏差小 | 方差可能增大 |
+| **有放回匹配** | 对照个体可重复使用 | 避免丢弃处理个体 | 对照组样本不独立 |
+| **无放回匹配** | 每个对照最多使用一次 | 样本独立性更好 | 可能匹配质量下降 |
+
+# 倾向得分匹配 (PSM) {background-color="#AE0B2A"}
+
+## 倾向得分的定义
+
+::: {.concept-box}
+**倾向得分 (Propensity Score)**
+
+在给定协变量 $X$ 的情况下，个体接受处理的概率：
+$$e(X) = P(D=1|X)$$
+
+Rosenbaum \& Rubin (1983) 证明了：如果 $D \perp \{Y(0), Y(1)\} | X$，则 $D \perp \{Y(0), Y(1)\} | e(X)$
+:::
+
+. . .
+
+*为什么倾向得分有用？*
+
+- 将多维协变量 $X$ 压缩为一维得分 $e(X)$
+- 避免高维匹配中的维度灾难
+- 平衡处理组和对照组的协变量分布
+
+. . .
+
+*估计方法*
+
+- Logistic 回归
+- Probit 回归
+- 机器学习分类器
+
+## PSM 的实施步骤
+
+::: {.example-box}
+**步骤1：估计倾向得分**
+
+使用 Logit 或 Probit 模型：
+$$\text{logit}(e(X)) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + ... + \beta_k X_k$$
+
+为每个个体计算倾向得分 $\hat{e}(X_i)$
+:::
+
+. . .
+
+::: {.example-box}
+**步骤2：检验共同支撑域 (Common Support)**
+
+- 倾向得分分布应该有重叠
+- 剔除没有重叠的个体
+- 通常使用直方图或核密度图检查
+:::
+
+. . .
+
+::: {.example-box}
+**步骤3：匹配处理组和对照组**
+
+- 在倾向得分空间上进行匹配
+- 常用方法：最近邻、卡尺匹配、核匹配
+:::
+
+## PSM 匹配方法
+
+::: {.columns}
+::: {.column width="50%"}
+**最近邻匹配 (Nearest Neighbor)**
+
+为每个处理个体找到倾向得分最接近的对照个体
+
+- 有放回/无放回
+- 1:1 或 1:k
+- 简单高效
+:::
+
+::: {.column width="50%"}
+**卡尺匹配 (Caliper Matching)**
+
+设定最大距离阈值，只匹配在阈值内的对照
+
+- 避免"坏"匹配
+- 常用卡尺：$0.2 \times SD(\hat{e}(X))$
+- 可能丢弃部分处理个体
+:::
+:::
+
+. . .
+
+**核匹配 (Kernel Matching)**
+
+使用所有对照个体，但按距离加权：
+$$\hat{Y}_0(1) = \frac{\sum_{j \in \text{Control}} K(\frac{e_i - e_j}{h}) Y_j}{\sum_{j \in \text{Control}} K(\frac{e_i - e_j}{h})}$$
+
+其中 $K(\cdot)$ 是核函数，$h$ 是带宽。
+
+# 分层估计 (Subclassification) {background-color="#AE0B2A"}
+
+## 分层估计的基本思想
+
+*核心思想*
+
+将样本按倾向得分分成若干层(strata)，在层内进行简单比较
+
+::: {.concept-box}
+**为什么分层有效？**
+
+在同一层内，处理组和对照组的倾向得分相近，意味着：
+
+- 协变量分布相似
+- 处理分配可以视为"近似随机"
+- 组间差异可归因于处理效应
+:::
+
+. . .
+
+*分层步骤*
+
+1. 按倾向得分排序
+2. 分成 $J$ 个层（通常 $J=5$ 或 $10$）
+3. 在每层内计算处理效应
+4. 加权平均得到总体效应
+
+## 分层估计公式
+
+*层内处理效应估计*
+$$\hat{\tau}_j = \bar{Y}_{1j} - \bar{Y}_{0j}$$
+
+其中 $\bar{Y}_{1j}$ 和 $\bar{Y}_{0j}$ 分别是第 $j$ 层内处理组和对照组的平均结果。
+
+. . .
+
+*总体处理效应估计*
+$$\hat{\tau} = \sum_{j=1}^{J} \frac{N_j}{N} \hat{\tau}_j$$
+
+其中 $N_j$ 是第 $j$ 层的样本量，$N$ 是总样本量。
+
+. . .
+
+::: {.callout-tip}
+**层数选择**
+
+- Cochran (1968) 建议：5-10层通常足够
+- 每层内应有足够的处理组和对照组个体
+- 层内协变量应达到平衡
+:::
+
+# 平衡性检验 {background-color="#AE0B2A"}
+
+## 为什么需要平衡性检验？
+
+**匹配的目的**是使处理组和对照组在协变量上可比
+
+::: {.warning-box}
+**不平衡的后果**
+
+- 匹配后仍存在混淆
+- 处理效应估计有偏
+- 外推问题（缺乏共同支撑域）
+:::
+
+. . .
+
+*平衡性检验内容*
+
+- 协变量均值差异
+- 标准化偏差 (Standardized Bias)
+- 方差比
+- 可视化检查（箱线图、QQ图）
+
+## 标准化偏差
+
+*定义*
+$$\text{StdBias} = \frac{\bar{X}_{\text{treat}} - \bar{X}_{\text{control}}}{\sqrt{(s^2_{\text{treat}} + s^2_{\text{control}})/2}}$$
+
+. . .
+
+**经验法则** (Rosenbaum \& Rubin, 1985)：
+
+- 标准化偏差 $< 0.1$：可接受
+- $0.1 \leq$ 标准化偏差 $< 0.2$：需注意
+- 标准化偏差 $\geq 0.2$：严重不平衡
+
+. . .
+
+*匹配后的目标*
+
+- 所有协变量的标准化偏差都小于 0.1
+- 倾向得分分布重叠良好
+
+## 可视化平衡性检查
+
+*匹配前的特征*
+
+- 协变量分布差异明显
+- 倾向得分分布重叠少
+
+. . .
+
+*匹配后的理想状态*
+
+- 协变量均值接近
+- 分布形状相似
+- 共同支撑域充足
+
+. . .
+
+::: {.example-box}
+**常用可视化工具**
+
+1. *箱线图*：比较匹配前后分布
+2. *QQ图*：检查分位数对应关系
+3. *密度图*：比较倾向得分分布
+4. *Love图*：展示标准化偏差
+:::
+
+# 实践案例：LaLonde 职业培训项目 {background-color="#AE0B2A"}
+
+## 案例背景
+
+*LaLonde (1986) 研究*
+
+评估美国国家支持工作示范项目(NSW)的效果
+
+- **处理组**：接受职业培训的低收入工人
+- **对照组**：未接受培训的对照人群
+- **结果变量**：1978年实际收入
+
+. . .
+
+*研究挑战*
+
+- 处理组和对照组在可观测特征上差异显著
+- 培训参与者可能本身更有动力
+- 直接回归分析会产生选择偏差
+
+. . .
+
+::: {.concept-box}
+*数据特点*
+
+这是因果推断方法研究的经典数据集，被广泛用于评估匹配、DID等方法的有效性。
+:::
+
+## 数据生成与探索
+
+::: {style="font-size: 0.75em;"}
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import NearestNeighbors
+import warnings
+warnings.filterwarnings('ignore')
+
+# 设置中文字体
+plt.rcParams['font.sans-serif'] = ['Source Han Sans SC', 'Noto Sans CJK SC',
+                                    'WenQuanYi Micro Hei', 'SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+
+# 加载LaLonde数据（使用模拟数据展示方法）
+np.random.seed(42)
+n = 1000
+
+# 生成协变量
+age = np.random.normal(25, 7, n)
+education = np.random.normal(10, 2.5, n)
+black = np.random.binomial(1, 0.5, n)
+hispanic = np.random.binomial(1, 0.2, n)
+married = np.random.binomial(1, 0.3, n)
+nodegree = np.random.binomial(1, 0.6, n)
+
+# 生成收入前置变量
+re74 = np.random.lognormal(8, 1.5, n)
+re75 = np.random.lognormal(8, 1.5, n)
+
+# 处理变量（受协变量影响）
+X_vars = np.column_stack([age, education, black, hispanic, married, nodegree, re74, re75])
+X_scaled = (X_vars - X_vars.mean(axis=0)) / X_vars.std(axis=0)
+
+# 倾向得分（Logit模型）
+logit_ps = (0.3 * X_scaled[:, 0] - 0.5 * X_scaled[:, 1] + 0.8 * X_scaled[:, 2]
+            + 0.3 * X_scaled[:, 5] - 0.2 * X_scaled[:, 6] / 1000)
+ps = 1 / (1 + np.exp(-logit_ps))
+treat = np.random.binomial(1, ps)
+
+# 真实处理效应
+true_effect = 1794
+
+# 结果变量（收入）
+re78_base = (1000 + 50 * age + 200 * education + 300 * married
+             + 0.3 * re74 + 0.3 * re75 + np.random.normal(0, 3000, n))
+re78 = re78_base + true_effect * treat
+
+# 创建数据框
+data = pd.DataFrame({
+    'treat': treat,
+    'age': age,
+    'education': education,
+    'black': black,
+    'hispanic': hispanic,
+    'married': married,
+    'nodegree': nodegree,
+    're74': re74,
+    're75': re75,
+    're78': re78,
+    'ps': ps
+})
+
+print(f"样本量: {n}")
+print(f"处理组: {treat.sum()} ({treat.mean()*100:.1f}%)")
+print(f"对照组: {(1-treat).sum()} ({(1-treat).mean()*100:.1f}%)")
+print("\n数据前5行:")
+print(data.head())
+```
+:::
+
+## 协变量平衡性检查（匹配前）
+
+::: {style="font-size: 0.75em;"}
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+# 计算匹配前的标准化偏差
+covariates = ['age', 'education', 'black', 'hispanic', 'married', 'nodegree', 're74', 're75']
+
+balance_before = []
+for var in covariates:
+    treated_mean = data[data['treat']==1][var].mean()
+    control_mean = data[data['treat']==0][var].mean()
+    treated_std = data[data['treat']==1][var].std()
+    control_std = data[data['treat']==0][var].std()
+
+    # 标准化偏差
+    std_bias = (treated_mean - control_mean) / np.sqrt((treated_std**2 + control_std**2) / 2)
+
+    balance_before.append({
+        'Variable': var,
+        'Treated_Mean': f"{treated_mean:.2f}",
+        'Control_Mean': f"{control_mean:.2f}",
+        'Std_Bias': f"{std_bias:.3f}"
+    })
+
+balance_df = pd.DataFrame(balance_before)
+print("匹配前协变量平衡性:")
+print("=" * 60)
+print(balance_df.to_string(index=False))
+print("\n标准化偏差 > 0.2 表示严重不平衡!")
+```
+:::
+
+## 倾向得分估计
+
+::: {style="font-size: 0.75em;"}
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+# 使用Logistic回归估计倾向得分
+X = data[['age', 'education', 'black', 'hispanic', 'married', 'nodegree', 're74', 're75']]
+y = data['treat']
+
+# 标准化收入变量
+X_scaled = X.copy()
+X_scaled['re74'] = X_scaled['re74'] / 1000
+X_scaled['re75'] = X_scaled['re75'] / 1000
+
+# 拟合Logistic回归
+logit_model = LogisticRegression(max_iter=1000)
+logit_model.fit(X_scaled, y)
+
+# 预测倾向得分
+data['ps_estimated'] = logit_model.predict_proba(X_scaled)[:, 1]
+
+print("Logistic回归系数:")
+coef_df = pd.DataFrame({
+    'Variable': X.columns,
+    'Coefficient': logit_model.coef_[0]
+})
+print(coef_df.to_string(index=False))
+
+print(f"\n处理组倾向得分均值: {data[data['treat']==1]['ps_estimated'].mean():.3f}")
+print(f"对照组倾向得分均值: {data[data['treat']==0]['ps_estimated'].mean():.3f}")
+```
+:::
+
+## 倾向得分分布图
+
+```{python}
+#| echo: false
+#| eval: true
+#| fig-width: 10
+#| fig-height: 5.8
+
+# 绘制倾向得分分布
+fig, ax = plt.subplots(figsize=(7, 4.5))
+ax.hist(data[data['treat']==0]['ps_estimated'], bins=30, alpha=0.5,
+        label='Control', color='blue', density=True)
+ax.hist(data[data['treat']==1]['ps_estimated'], bins=30, alpha=0.5,
+        label='Treated', color='red', density=True)
+ax.set_xlabel('Propensity Score', fontsize=11)
+ax.set_ylabel('Density', fontsize=11)
+ax.set_title('Propensity Score Distribution (Before Matching)', fontsize=12, fontweight='bold')
+ax.legend()
+ax.axvline(data[data['treat']==0]['ps_estimated'].mean(), color='blue',
+           linestyle='--', label='Control Mean')
+ax.axvline(data[data['treat']==1]['ps_estimated'].mean(), color='red',
+           linestyle='--', label='Treated Mean')
+plt.tight_layout()
+plt.show()
+```
+
+## 最近邻匹配
+
+::: {style="font-size: 0.75em;"}
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+# 分离处理组和对照组
+treated = data[data['treat'] == 1].copy()
+control = data[data['treat'] == 0].copy()
+
+# 使用倾向得分进行1:1最近邻匹配
+nbrs = NearestNeighbors(n_neighbors=1).fit(control['ps_estimated'].values.reshape(-1, 1))
+distances, indices = nbrs.kneighbors(treated['ps_estimated'].values.reshape(-1, 1))
+
+# 获取匹配的对照组个体
+matched_control_indices = control.iloc[indices.flatten()].index
+matched_data = pd.concat([treated, data.loc[matched_control_indices]])
+
+print(f"匹配前处理组数量: {len(treated)}")
+print(f"匹配后对照组数量: {len(matched_control_indices)}")
+print(f"匹配后总样本量: {len(matched_data)}")
+
+# 计算平均匹配距离
+mean_distance = distances.mean()
+print(f"\n平均倾向得分距离: {mean_distance:.4f}")
+```
+:::
+
+## 匹配后平衡性检查
+
+::: {style="font-size: 0.75em;"}
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+# 计算匹配后的标准化偏差
+balance_after = []
+for var in covariates:
+    treated_mean = matched_data[matched_data['treat']==1][var].mean()
+    control_mean = matched_data[matched_data['treat']==0][var].mean()
+    treated_std = matched_data[matched_data['treat']==1][var].std()
+    control_std = matched_data[matched_data['treat']==0][var].std()
+
+    std_bias = (treated_mean - control_mean) / np.sqrt((treated_std**2 + control_std**2) / 2)
+
+    balance_after.append({
+        'Variable': var,
+        'Std_Bias_After': std_bias
+    })
+
+# 合并前后结果
+balance_comparison = pd.DataFrame(balance_before)
+balance_comparison['Std_Bias_After'] = [x['Std_Bias_After'] for x in balance_after]
+balance_comparison['Std_Bias'] = balance_comparison['Std_Bias'].astype(float)
+
+print("标准化偏差对比:")
+print("=" * 50)
+print(balance_comparison[['Variable', 'Std_Bias', 'Std_Bias_After']].to_string(index=False))
+
+```
+:::
+
+## 匹配后平衡性图示
+
+```{python}
+#| echo: false
+#| eval: true
+#| fig-width: 10
+#| fig-height: 6
+
+# 绘制Love图
+fig, ax = plt.subplots(figsize=(8, 5))
+y_pos = np.arange(len(covariates))
+ax.barh(y_pos - 0.2, balance_comparison['Std_Bias'], 0.4,
+        label='Before Matching', color='lightcoral')
+ax.barh(y_pos + 0.2, balance_comparison['Std_Bias_After'], 0.4,
+        label='After Matching', color='skyblue')
+ax.set_yticks(y_pos)
+ax.set_yticklabels(covariates)
+ax.axvline(x=0.1, color='red', linestyle='--', linewidth=1, label='Threshold (0.1)')
+ax.axvline(x=-0.1, color='red', linestyle='--', linewidth=1)
+ax.set_xlabel('Standardized Bias', fontsize=11)
+ax.set_title('Covariate Balance: Before vs After Matching', fontsize=12, fontweight='bold')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+## 匹配后处理效应估计
+
+::: {style="font-size: 0.75em;"}
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+# 匹配前的朴素估计
+naive_est = data[data['treat']==1]['re78'].mean() - data[data['treat']==0]['re78'].mean()
+
+# 匹配后的估计
+matched_est = (matched_data[matched_data['treat']==1]['re78'].mean()
+               - matched_data[matched_data['treat']==0]['re78'].mean())
+
+# 回归调整（匹配后）
+X_matched = sm.add_constant(matched_data[['treat']])
+model_matched = sm.OLS(matched_data['re78'], X_matched).fit()
+reg_est = model_matched.params['treat']
+
+print("处理效应估计结果对比:")
+print("=" * 60)
+print(f"真实处理效应:     ${true_effect:,.0f}")
+print(f"朴素估计(匹配前): ${naive_est:,.0f}  (偏差: {naive_est - true_effect:,.0f})")
+print(f"匹配后估计:       ${matched_est:,.0f}  (偏差: {matched_est - true_effect:,.0f})")
+print(f"回归调整估计:     ${reg_est:,.0f}  (偏差: {reg_est - true_effect:,.0f})")
+print("=" * 60)
+print("\n结论: 匹配显著降低了选择偏差!")
+```
+:::
+
+# 匹配法的局限性与拓展 {background-color="#AE0B2A"}
+
+## 匹配法的局限性
+
+::: {.warning-box}
+**1. 不可观测混淆变量**
+
+匹配只能控制可观测的混淆变量。如果存在未观测的混淆因素，估计仍有偏。
+:::
+
+. . .
+
+::: {.warning-box}
+**2. 违背重叠假设**
+
+- 某些处理组个体没有合适的对照匹配
+- 倾向得分分布不重叠的区域需要剔除
+- 可能导致样本选择偏差
+:::
+
+. . .
+
+::: {.warning-box}
+**3. 高维协变量挑战**
+
+- 协变量维度高时，匹配质量下降
+- 倾向得分模型设定困难
+- 维度灾难问题
+:::
+
+## 匹配法的变体与拓展
+
+::: {.columns}
+::: {.column width="50%"}
+**协变量平衡倾向得分 (CBPS)**
+
+Imai \& Ratkovic (2014)
+
+- 同时估计倾向得分和平衡协变量
+- 广义矩估计框架
+- 更好的平衡性保证
+:::
+
+::: {.column width="50%"}
+**熵平衡 (Entropy Balancing)**
+
+Hainmueller (2012)
+
+- 直接约束协变量矩条件
+- 自动确定权重
+- 精确的协变量平衡
+:::
+:::
+
+. . .
+
+*机器学习方法*
+
+- 使用随机森林、梯度提升估计倾向得分
+- 神经网络处理复杂非线性关系
+- 双重稳健估计 (Doubly Robust Estimation)
+
+## 双重稳健估计 (AIPW)
+
+::: {.concept-box}
+*Augmented Inverse Probability Weighting*
+
+结合倾向得分和结果回归：
+$$\hat{\tau}_{AIPW} = \frac{1}{n} \sum_{i=1}^{n} \left[ \hat{\mu}_1(X_i) - \hat{\mu}_0(X_i) + \frac{D_i(Y_i - \hat{\mu}_1(X_i))}{\hat{e}(X_i)} - \frac{(1-D_i)(Y_i - \hat{\mu}_0(X_i))}{1-\hat{e}(X_i)} \right]$$
+
+**只要倾向得分模型或结果模型有一个正确，估计就是一致的。**
+:::
+
+. . .
+
+*优势*
+
+- 双重稳健性
+- 半参数效率界
+- 比单纯匹配或回归更可靠
+
+# 总结 {background-color="#AE0B2A"}
+
+## 本讲要点
+
+::: {.concept-box}
+
+1. *匹配法原理*
+   - 基于可观测变量构建可比对照组
+   - 消除选择偏差，恢复因果效应
+
+2. *倾向得分匹配*
+   - 将多维协变量压缩为一维得分
+   - 最近邻、卡尺、核匹配方法
+
+3. *分层估计*
+   - 按倾向得分分层比较
+   - 加权平均得到总体效应
+
+4. *平衡性检验*
+   - 标准化偏差 < 0.1
+   - 可视化检查分布重叠
+:::
+
+## 实践建议
+
+::: {.example-box}
+**使用匹配法的检查清单**
+
+- [ ] 绘制DAG识别混淆变量
+- [ ] 收集丰富的协变量数据
+- [ ] 估计倾向得分（Logit/Probit）
+- [ ] 检查共同支撑域
+- [ ] 选择匹配方法并实施
+- [ ] 进行平衡性检验
+- [ ] 报告匹配后样本量
+- [ ] 进行敏感性分析
+:::
+
+. . .
+
+::: {.callout-tip}
+**推荐工具**
+
+- *MatchIt* (R包)：全面的匹配方法实现
+- *CausalML* (Python)：机器学习因果推断
+- *EconML* (Python)：双重稳健估计
+- *sklearn* (Python)：最近邻匹配基础
+:::
+
+## 下节课预告
+
+**第五讲：工具变量法 (Instrumental Variables)**
+
+- 当存在未观测混淆变量时
+- 利用工具变量识别因果效应
+- 两阶段最小二乘法 (2SLS)
+- 弱工具变量问题
+
+. . .
+
+::: {.concept-box}
+*核心思想*
+
+工具变量 $Z$ 满足：
+
+1. *相关性*：$Z$ 与处理 $D$ 相关
+2. *排他性*：$Z$ 只通过 $D$ 影响结果
+:::

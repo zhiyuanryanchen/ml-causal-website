@@ -1,0 +1,799 @@
+---
+title: "机器学习与因果推断 - 第一讲：课程导论"
+subtitle: "从相关性到因果性：完整讲义"
+author: "陈志远"
+institute: "中国人民大学商学院"
+date: "2026-03-02"
+format:
+  html:
+    theme: cosmo
+    css: lecture-notes.css
+    html-math-method: mathml
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    highlight-style: github
+    self-contained: true
+    embed-resources: true
+    page-layout: article
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: true
+  cache: false
+  fig-width: 10
+  fig-height: 6
+  dpi: 150
+lang: zh
+jupyter: python3
+---
+
+```{python}
+#| echo: false
+#| output: false
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+
+# Set up matplotlib for Chinese display
+plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['figure.dpi'] = 150
+
+# Set random seed for reproducibility
+np.random.seed(42)
+```
+
+# 课程介绍 {#sec-intro}
+
+## 课程目标
+
+本课程旨在培养学生运用数据回答"**为什么**"的能力，而不仅仅是"**是什么**"。在人工智能时代，机器学习擅长预测，但因果推断才能揭示机制。本课程将系统介绍：
+
+1. **经典因果推断方法**：潜在结果框架、匹配法、双重差分、工具变量、合成控制
+2. **机器学习方法**：回归、决策树、随机森林、广义随机森林、双重机器学习
+3. **实际应用**：商业决策、政策评估、异质性效应分析
+
+## 为什么要学习因果推断？
+
+在现实商业和政策环境中，我们经常面临以下问题：
+
+- **营销投入**真的带来了销量增长吗？还是高潜力市场本身就增长快？
+- **新产品上线**提升了用户留存吗？还是忠诚用户更可能尝试新产品？
+- **培训项目**提高了员工绩效吗？还是表现好的员工更可能被选中参加培训？
+- **政策调整**促进了经济发展吗？还是经济本身就在周期性上行？
+
+这些问题的核心在于区分**相关性**和**因果性**。简单比较处理组和对照组往往会得出误导性结论，因为**选择性偏误**普遍存在。
+
+## 课程安排
+
+| 周次 | 主题 | 内容要点 |
+|:---:|:---|:---|
+| 1 | 课程导入 | 相关vs因果，课程框架，潜在结果框架入门 |
+| 2-3 | 因果推断基础 | 潜在结果框架深入，混淆变量，识别策略 |
+| 4 | 匹配法 | 倾向得分匹配，精确匹配，重叠条件 |
+| 5-6 | 双重差分 | DID原理，平行趋势检验，动态效应 |
+| 7 | 合成控制法 | 合成控制原理，安慰剂检验 |
+| 8 | 工具变量法 | IV原理，两阶段最小二乘，排他性约束 |
+| 9-10 | ML基础 | 回归，决策树，随机森林，交叉验证 |
+| 11-12 | 广义随机森林 | 异质性处理效应，因果树 |
+| 13 | 因果森林 | 异质性分析，Policy Learning |
+| 14 | 双重机器学习 | Double ML原理，Neyman正交性 |
+| 15-16 | 项目答辩 | 期末展示与点评 |
+
+# 核心问题：相关 vs 因果 {#sec-correlation-causation}
+
+## 一个看似简单的例子 {#sec-drug-example}
+
+### 案例背景：新冠停特效药
+
+某公司研发了新冠治疗特效药"新冠停"。临床数据显示：
+
+| 城市类型 | 样本量 | 康复天数 | 标准误 |
+|:---|:---:|:---:|:---:|
+| 有售卖点城市 | 5,678 | 15.3天 | 1.1 |
+| 无售卖点城市 | 131,415 | 10.1天 | 2.1 |
+
+**表面结论**：有药物的城市康复反而更慢（15.3天 vs 10.1天）！
+
+### 深入分析：为什么观察结果如此反直觉？
+
+关键洞察在于**选择机制**：
+
+1. **药物分配非随机**：药物只在疫情*严重*的地区销售
+2. **严重程度影响康复**：疫情严重地区本身康复就*慢*
+3. **混淆变量**：简单比较混淆了*药物效果*和*疫情严重程度*
+
+这是一个典型的**选择偏误**案例。接受处理的城市（有药物）与未接受处理的城市（无药物）在"疫情严重程度"这一关键维度上不可比。
+
+## 模拟实验：Python实现 {#sec-python-simulation}
+
+让我们用Python模拟这个场景，直观展示选择偏误是如何产生的。
+
+### 数据生成过程
+
+```{python}
+#| code-fold: show
+#| code-summary: "点击查看完整代码"
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 设置随机种子保证可重复性
+np.random.seed(42)
+
+# 模拟参数
+n_cities = 5000  # 城市数量
+true_effect = -2  # 真实药物效果：减少2天康复时间
+
+# 步骤1：生成混淆变量（疫情严重程度）
+# 假设严重程度服从标准正态分布
+severity = np.random.normal(0, 1, n_cities)
+
+# 步骤2：处理分配机制
+# 严重程度 > 0 的城市获得药物（选择偏误来源）
+treatment = (severity > 0).astype(int)
+
+# 步骤3：生成结果变量（康复时间）
+# 康复时间 = 基础时间 + 严重程度影响 + 药物效果 + 随机误差
+recovery = 10 + severity * 3 + treatment * true_effect + np.random.normal(0, 1, n_cities)
+
+# 创建数据框
+data = pd.DataFrame({
+    'severity': severity,
+    'treatment': treatment,
+    'recovery': recovery
+})
+
+# 显示数据前5行
+print("数据预览：")
+print(data.head(10))
+```
+
+### 结果分析
+
+```{python}
+# 计算观察到的平均康复时间
+summary_stats = data.groupby('treatment')['recovery'].agg(['mean', 'std', 'count'])
+summary_stats.index = ['无药物城市', '有药物城市']
+print("\n观察到的统计结果：")
+print(summary_stats)
+
+# 计算观察到的"效果"
+observed_effect = summary_stats.loc['有药物城市', 'mean'] - summary_stats.loc['无药物城市', 'mean']
+print(f"\n观察到的差异: {observed_effect:.2f}天")
+print(f"真实药物效果: {true_effect:.2f}天")
+print(f"选择偏误: {observed_effect - true_effect:.2f}天")
+```
+
+**关键发现**：
+
+- 观察结果显示有药物的城市康复时间**更长**（正效应）
+- 但真实药物效果是**缩短**康复时间（负效应）
+- 差异来源于选择偏误：疫情严重的城市才获得药物
+
+### 可视化分析
+
+```{python}
+#| fig-cap: "选择偏误的可视化解释"
+#| fig-width: 12
+#| fig-height: 8
+
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+
+# 图1：疫情严重程度分布
+axes[0, 0].hist(data[data['treatment']==0]['severity'],
+                bins=30, alpha=0.6, label='无药物', color='steelblue', edgecolor='white')
+axes[0, 0].hist(data[data['treatment']==1]['severity'],
+                bins=30, alpha=0.6, label='有药物', color='coral', edgecolor='white')
+axes[0, 0].axvline(0, color='red', linestyle='--', linewidth=2, label='分配阈值')
+axes[0, 0].set_xlabel('疫情严重程度', fontsize=11)
+axes[0, 0].set_ylabel('城市数量', fontsize=11)
+axes[0, 0].set_title('(a) 疫情严重程度分布', fontsize=12, fontweight='bold')
+axes[0, 0].legend()
+axes[0, 0].grid(alpha=0.3)
+
+# 图2：康复时间分布
+axes[0, 1].hist(data[data['treatment']==0]['recovery'],
+                bins=30, alpha=0.6, label='无药物', color='steelblue', edgecolor='white')
+axes[0, 1].hist(data[data['treatment']==1]['recovery'],
+                bins=30, alpha=0.6, label='有药物', color='coral', edgecolor='white')
+axes[0, 1].axvline(data[data['treatment']==0]['recovery'].mean(),
+                   color='steelblue', linestyle='--', linewidth=2, label=f'均值={data[data["treatment"]==0]["recovery"].mean():.1f}')
+axes[0, 1].axvline(data[data['treatment']==1]['recovery'].mean(),
+                   color='coral', linestyle='--', linewidth=2, label=f'均值={data[data["treatment"]==1]["recovery"].mean():.1f}')
+axes[0, 1].set_xlabel('康复天数', fontsize=11)
+axes[0, 1].set_ylabel('城市数量', fontsize=11)
+axes[0, 1].set_title('(b) 康复时间分布', fontsize=12, fontweight='bold')
+axes[0, 1].legend()
+axes[0, 1].grid(alpha=0.3)
+
+# 图3：严重程度与康复时间的关系
+axes[1, 0].scatter(data[data['treatment']==0]['severity'],
+                   data[data['treatment']==0]['recovery'],
+                   alpha=0.3, s=15, color='steelblue', label='无药物')
+axes[1, 0].scatter(data[data['treatment']==1]['severity'],
+                   data[data['treatment']==1]['recovery'],
+                   alpha=0.3, s=15, color='coral', label='有药物')
+# 添加趋势线
+x_range = np.linspace(-3, 3, 100)
+axes[1, 0].plot(x_range, 10 + 3*x_range, 'k--', linewidth=2, label='真实关系')
+axes[1, 0].set_xlabel('疫情严重程度', fontsize=11)
+axes[1, 0].set_ylabel('康复天数', fontsize=11)
+axes[1, 0].set_title('(c) 严重程度与康复时间', fontsize=12, fontweight='bold')
+axes[1, 0].legend()
+axes[1, 0].grid(alpha=0.3)
+
+# 图4：效应分解
+ax = axes[1, 1]
+effects = [observed_effect, true_effect, observed_effect - true_effect]
+colors = ['orange', 'green', 'red']
+labels = ['观察效应', '真实效应', '选择偏误']
+bars = ax.barh(labels, effects, color=colors, alpha=0.7, edgecolor='black')
+ax.axvline(0, color='black', linewidth=1)
+ax.set_xlabel('天数', fontsize=11)
+ax.set_title('(d) 效应分解', fontsize=12, fontweight='bold')
+ax.grid(alpha=0.3, axis='x')
+
+# 添加数值标签
+for bar, val in zip(bars, effects):
+    ax.text(val + 0.1 if val >= 0 else val - 0.1, bar.get_y() + bar.get_height()/2,
+            f'{val:.2f}', ha='left' if val >= 0 else 'right', va='center', fontweight='bold')
+
+plt.tight_layout()
+plt.show()
+```
+
+### 图形解读
+
+1. **图(a)**：有药物的城市（红色）集中在严重程度>0的区域，而无药物的城市（蓝色）集中在严重程度<0的区域。两组在混淆变量上分布完全不同。
+
+2. **图(b)**：有药物城市的康复时间均值反而更高，但这只是因为它们疫情更严重，而非药物无效。
+
+3. **图(c)**：散点图显示严重程度与康复时间正相关。两组数据的分离导致了观察偏误。
+
+4. **图(d)**：效应分解显示观察效应（正）= 真实效应（负）+ 选择偏误（正且很大）。
+
+## R语言验证 {#sec-r-simulation}
+
+同样的分析可以用R语言实现，结果应完全一致（数值可能因随机数生成器差异而略有不同）。
+
+```{r}
+#| eval: true
+#| echo: true
+#| message: false
+#| warning: false
+
+library(tidyverse)
+
+# 设置随机种子
+set.seed(42)
+
+# 模拟参数
+n <- 5000
+true_effect <- -2
+
+# 生成数据
+data_r <- tibble(
+  severity = rnorm(n),
+  treatment = ifelse(severity > 0, 1, 0),
+  recovery = 10 + severity * 3 + treatment * true_effect + rnorm(n)
+)
+
+# 计算统计量
+summary_r <- data_r |>
+  group_by(treatment) |>
+  summarise(
+    mean_recovery = mean(recovery),
+    sd_recovery = sd(recovery),
+    n = n()
+  )
+
+print("R语言统计结果：")
+print(summary_r)
+
+# 计算效应
+observed_effect_r <- summary_r$mean_recovery[2] - summary_r$mean_recovery[1]
+cat("\n观察到的差异:", round(observed_effect_r, 2), "天\n")
+cat("真实药物效果:", true_effect, "天\n")
+cat("选择偏误:", round(observed_effect_r - true_effect, 2), "天\n")
+```
+
+**一致性检验**：R和Python的结果应该非常接近（差异小于0.5天），这验证了我们模拟的可靠性。
+
+# 潜在结果框架 {#sec-potential-outcomes}
+
+## 核心概念 {#sec-core-concepts}
+
+### 潜在结果的定义
+
+Rubin因果模型的核心思想是：每个个体都有**两种潜在状态**：
+
+- $Y_i(1)$：个体$i$接受处理时的结果（潜在结果1）
+- $Y_i(0)$：个体$i$未接受处理时的结果（潜在结果0）
+
+**关键问题**：对于任何个体，我们只能观察到其中一种状态！这被称为**因果推断的基本问题**。
+
+### 因果效应的定义
+
+个体$i$的处理效应（Individual Treatment Effect, ITE）定义为：
+
+$$\tau_i = Y_i(1) - Y_i(0)$$
+
+由于无法同时观测两种状态，个体层面的因果效应**不可识别**。
+
+## 观察到的结果 {#sec-observed-outcomes}
+
+我们实际能观测到的结果可以用以下公式表示：
+
+$$Y_i = \begin{cases} Y_i(1) & \text{if } D_i = 1 \text{（接受处理）} \\ Y_i(0) & \text{if } D_i = 0 \text{（未接受处理）} \end{cases}$$
+
+等价地写成：
+
+$$Y_i = Y_i(0) + D_i \times [Y_i(1) - Y_i(0)] = Y_i(0) + D_i \times \tau_i$$
+
+这被称为**Rubin因果模型**的基本方程。
+
+## 平均处理效应 {#sec-ate}
+
+由于个体效应不可识别，我们转而关注**总体参数**：
+
+### 平均处理效应（ATE）
+
+$$\text{ATE} = E[Y_i(1) - Y_i(0)] = E[\tau_i]$$
+
+ATE表示如果随机选择一个人给予处理，预期效果是多少。
+
+### 处理组平均处理效应（ATT）
+
+$$\text{ATT} = E[Y_i(1) - Y_i(0) | D_i = 1]$$
+
+ATT表示实际接受处理的人群从中获益多少，这在政策评估中往往更有意义。
+
+## 选择性偏误的数学分解 {#sec-selection-bias-math}
+
+观察到的组间差异可以分解为：
+
+$$\underbrace{E[Y|D=1] - E[Y|D=0]}_{\text{观察差异}} = \underbrace{E[Y(1)-Y(0)|D=1]}_{\text{ATT}} + \underbrace{E[Y(0)|D=1] - E[Y(0)|D=0]}_{\text{选择偏误}}$$
+
+### 分解的直观解释
+
+| 成分 | 含义 | 示例 |
+|:---|:---|:---|
+| **观察差异** | 简单比较两组均值 | 参加培训者收入 - 未参加者收入 |
+| **ATT** | 处理对接受者的真实效应 | 培训使收入提高1000元 |
+| **选择偏误** | 接受者的"先天优势" | 参加培训者本来能力就更强 |
+
+**核心问题**：选择偏误往往为正（能力强的人更可能接受处理），导致简单比较高估处理效应。
+
+## 随机实验：因果推断的黄金标准 {#sec-randomization}
+
+### 随机化的魔力
+
+如果处理分配$D$是完全随机的，则：
+
+$$D \perp\!\!\perp Y(0), Y(1)$$
+
+这意味着：
+
+$$E[Y(0)|D=1] = E[Y(0)|D=0]$$
+
+选择偏误消失了！此时：
+
+$$\underbrace{E[Y|D=1] - E[Y|D=0]}_{\text{观察差异}} = \underbrace{E[Y(1)-Y(0)]}_{\text{ATE}}$$
+
+### 随机实验为什么有效？
+
+1. **平衡性**：随机化保证处理组和对照组在**所有可观测和不可观测特征**上分布相同
+2. **可忽略性**：$D$的分配不依赖于潜在结果
+3. **无混淆**：不存在同时影响$D$和$Y$的变量
+
+### 现实中的挑战
+
+虽然随机实验是"黄金标准"，但现实中往往不可行：
+
+- **伦理问题**：不能随机分配吸烟或不吸烟
+- **成本问题**：大规模随机实验可能极其昂贵
+- **可行性**：某些处理无法随机分配（如性别、种族）
+
+因此，我们需要**观察性研究方法**来模拟随机实验的条件。
+
+# 更多"相关≠因果"的陷阱 {#sec-correlation-traps}
+
+## 常见混淆类型
+
+### 1. 反向因果（Reverse Causality）
+
+**例子**：警察越多的地区犯罪率越高
+
+**解释**：可能是犯罪率高的地区才部署更多警察，而非警察导致犯罪
+
+**数学表达**：$Y \rightarrow D$ 而非 $D \rightarrow Y$
+
+### 2. 共同原因（Common Cause）
+
+**例子**：冰淇淋销量与溺水事故正相关
+
+**解释**：气温升高同时导致冰淇淋消费增加和游泳活动增加
+
+**数学表达**：$Z \rightarrow D$ 且 $Z \rightarrow Y$，导致$Corr(D,Y) \neq 0$即使$D$对$Y$无因果效应
+
+### 3. 选择偏差（Selection Bias）
+
+**例子**：名校毕业生收入更高
+
+**解释**：能力强的学生更可能进入名校，也更可能获得高收入
+
+**核心问题**：样本选择非随机，处理组和对照组不可比
+
+## 代码模拟：三种偏误 {#sec-bias-simulation}
+
+```{python}
+#| code-fold: show
+#| code-summary: "点击查看三种偏误的模拟代码"
+
+np.random.seed(42)
+n = 3000
+
+# ========== 场景1：反向因果 ==========
+# 真实因果：犯罪率 → 警察数量（而非相反）
+crime_rate = np.random.normal(0, 1, n)  # 犯罪率（标准化）
+police = 5 + 2 * crime_rate + np.random.normal(0, 0.5, n)  # 警察数量
+
+# 观察到的相关性
+observed_corr_reverse = np.corrcoef(police, crime_rate)[0, 1]
+
+# ========== 场景2：共同原因（混淆变量）==========
+temperature = np.random.normal(25, 5, n)  # 气温
+ice_cream = 100 + 5 * temperature + np.random.normal(0, 10, n)  # 冰淇淋销量
+drowning = 2 + 0.3 * temperature + np.random.normal(0, 0.5, n)  # 溺水事故
+
+observed_corr_confound = np.corrcoef(ice_cream, drowning)[0, 1]
+
+# ========== 场景3：选择偏差 ==========
+ability = np.random.normal(0, 1, n)  # 能力（不可观测的混淆变量）
+# 能力强的人更可能进入名校
+elite_school = (ability + np.random.normal(0, 0.5, n) > 0).astype(int)
+# 能力强的人收入更高
+income = 5000 + 1000 * ability + 500 * elite_school + np.random.normal(0, 500, n)
+
+# 观察到的"名校效应"
+elite_income = income[elite_school == 1].mean()
+nonelite_income = income[elite_school == 0].mean()
+observed_school_effect = elite_income - nonelite_income
+
+print("=" * 60)
+print("三种相关≠因果的场景模拟")
+print("=" * 60)
+print(f"\n【反向因果】警察与犯罪率的相关系数: {observed_corr_reverse:.3f}")
+print("   解释：并非警察导致犯罪，而是犯罪多→部署更多警察")
+
+print(f"\n【共同原因】冰淇淋销量与溺水事故的相关系数: {observed_corr_confound:.3f}")
+print("   解释：气温同时影响两者，而非冰淇淋导致溺水")
+
+print(f"\n【选择偏差】名校 vs 普通学校收入差异: {observed_school_effect:.0f}元")
+print("   解释：部分差异来自能力（能力强的人更可能进名校）")
+```
+
+### 可视化三种偏误
+
+```{python}
+#| fig-cap: "三种常见偏误的可视化"
+#| fig-width: 14
+#| fig-height: 4
+
+fig, axes = plt.subplots(1, 3, figsize=(14, 4))
+
+# 图1：反向因果
+axes[0].scatter(crime_rate, police, alpha=0.3, s=20, color='steelblue')
+axes[0].set_xlabel('犯罪率（标准化）', fontsize=11)
+axes[0].set_ylabel('警察数量', fontsize=11)
+axes[0].set_title('(a) 反向因果：警察 vs 犯罪率\n真实因果：犯罪→警察', fontsize=11, fontweight='bold')
+axes[0].grid(alpha=0.3)
+
+# 添加注释
+axes[0].annotate('观察到的正相关', xy=(1.5, 8), fontsize=10, color='red',
+                bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+
+# 图2：共同原因
+axes[1].scatter(ice_cream, drowning, alpha=0.3, s=20, color='coral')
+axes[1].set_xlabel('冰淇淋销量', fontsize=11)
+axes[1].set_ylabel('溺水事故数', fontsize=11)
+axes[1].set_title('(b) 共同原因：冰淇淋 vs 溺水\n共同原因：气温', fontsize=11, fontweight='bold')
+axes[1].grid(alpha=0.3)
+
+# 添加注释
+axes[1].annotate('虚假的因果关系', xy=(140, 10), fontsize=10, color='red',
+                bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+
+# 图3：选择偏差
+axes[2].scatter(ability, income, c=elite_school, cmap='coolwarm', alpha=0.4, s=20)
+axes[2].set_xlabel('能力（标准化）', fontsize=11)
+axes[2].set_ylabel('收入', fontsize=11)
+axes[2].set_title('(c) 选择偏差：名校 vs 收入\n混淆变量：能力', fontsize=11, fontweight='bold')
+axes[2].grid(alpha=0.3)
+
+# 添加图例
+from matplotlib.lines import Line2D
+legend_elements = [Line2D([0], [0], marker='o', color='w', markerfacecolor='blue',
+                          markersize=8, label='普通学校'),
+                   Line2D([0], [0], marker='o', color='w', markerfacecolor='red',
+                          markersize=8, label='名校')]
+axes[2].legend(handles=legend_elements, loc='upper left')
+
+plt.tight_layout()
+plt.show()
+```
+
+## 关键启示 {#sec-key-insights}
+
+在观察性研究中，简单比较两组均值是危险的！我们必须考虑：
+
+1. **处理组和对照组是否可比？**
+   - 在协变量分布上是否相似？
+   - 是否存在系统性差异？
+
+2. **是否存在混杂变量？**
+   - 同时影响处理分配和结果的变量
+   - 如何识别和测量这些变量？
+
+3. **如何处理选择偏误？**
+   - 匹配法：找到可比的子样本
+   - 双重差分：利用时间变化
+   - 工具变量：找到"准实验"变化
+   - 回归控制：统计上调整混淆变量
+
+这正是因果推断方法要解决的问题！
+
+# 课程方法预览 {#sec-methods-preview}
+
+## 我们将学习的方法
+
+本课程涵盖两大类方法：
+
+### 经典因果推断方法（前8周）
+
+这些方法源自经济学和统计学的长期发展：
+
+1. **匹配法（Matching）**
+   - 倾向得分匹配（PSM）
+   - 精确匹配和共同支持
+   - 重叠条件和平衡检验
+
+2. **双重差分（Difference-in-Differences, DID）**
+   - 经典DID模型
+   - 平行趋势假设
+   - 交错DID和动态效应
+
+3. **工具变量（Instrumental Variables, IV）**
+   - 两阶段最小二乘法（2SLS）
+   - 排他性约束和弱工具变量检验
+   - LATE（局部平均处理效应）
+
+4. **合成控制法（Synthetic Control）**
+   - 构造合成对照组
+   - 安慰剂检验
+   - 多期处理
+
+### 机器学习方法（后6周）
+
+这些方法将ML的预测能力与因果推断结合：
+
+1. **广义随机森林（Generalized Random Forests）**
+   - 异质性处理效应估计
+   - 置信区间构造
+
+2. **因果森林（Causal Forests）**
+   - 发现处理效应的异质性
+   - Policy Learning
+
+3. **双重机器学习（Double Machine Learning）**
+   - Neyman正交性
+   - 高维控制变量
+   - 去偏估计
+
+## 学习路径 {#sec-learning-path}
+
+对于每种方法，我们将遵循以下学习路径：
+
+1. **理解原理**
+   - 识别假设：什么条件下方法有效？
+   - 直观解释：为什么方法有效？
+
+2. **掌握应用**
+   - 适用场景：什么时候用？
+   - 实施步骤：怎么用？
+   - 稳健性检验：结果可靠吗？
+
+3. **代码实现**
+   - Python实现（scikit-learn, econml, doubleml）
+   - R实现（MatchIt, fixest, grf）
+
+4. **批判思考**
+   - 方法局限性：什么情况下不能用？
+   - 替代方法：还有其他选择吗？
+   - 实际应用：文献中的案例
+
+# 交互式参数探索 {#sec-interactive-exploration}
+
+## 模拟参数的影响
+
+让我们系统探索不同参数对选择偏误的影响：
+
+```{python}
+#| code-fold: show
+#| code-summary: "参数探索代码"
+
+def simulate_bias(n_cities=5000, true_drug_effect=-2.0, confound_strength=3.0, threshold=0):
+    """
+    模拟选择偏误
+
+    Parameters:
+    -----------
+    n_cities : int
+        城市数量
+    true_drug_effect : float
+        真实药物效果（负值表示缩短康复时间）
+    confound_strength : float
+        混淆变量的影响强度
+    threshold : float
+        处理分配阈值（严重程度>threshold获得药物）
+
+    Returns:
+    --------
+    dict : 包含观察效应、真实效应、选择偏误的字典
+    """
+    severity = np.random.normal(0, 1, n_cities)
+    treatment = (severity > threshold).astype(int)
+    recovery = 10 + severity * confound_strength + treatment * true_drug_effect + np.random.normal(0, 1, n_cities)
+
+    data = pd.DataFrame({
+        'severity': severity,
+        'treatment': treatment,
+        'recovery': recovery
+    })
+
+    control_mean = data[data['treatment'] == 0]['recovery'].mean()
+    treated_mean = data[data['treatment'] == 1]['recovery'].mean()
+    observed_effect = treated_mean - control_mean
+    selection_bias = observed_effect - true_drug_effect
+
+    return {
+        'observed_effect': observed_effect,
+        'true_effect': true_drug_effect,
+        'selection_bias': selection_bias,
+        'treatment_rate': treatment.mean()
+    }
+
+# 参数敏感性分析
+np.random.seed(42)
+
+print("=" * 70)
+print("参数敏感性分析：混淆强度对选择偏误的影响")
+print("=" * 70)
+
+confound_values = [0, 1, 2, 3, 4, 5]
+results = []
+
+for cs in confound_values:
+    np.random.seed(42)  # 固定种子保证可比性
+    result = simulate_bias(confound_strength=cs)
+    results.append(result)
+    print(f"\n混淆强度 = {cs}:")
+    print(f"  观察效应: {result['observed_effect']:+.2f}天")
+    print(f"  真实效应: {result['true_effect']:+.2f}天")
+    print(f"  选择偏误: {result['selection_bias']:+.2f}天")
+    print(f"  处理率: {result['treatment_rate']*100:.1f}%")
+```
+
+### 结果解读
+
+**关键发现**：
+
+- 当`confound_strength=0`时，无选择偏误，观察效应=真实效应
+- 随着混淆强度增加，选择偏误急剧增大
+- 即使真实效应为负（药物有效），强混淆可能导致观察效应为正（看似无效甚至有害）
+
+## 可视化参数影响
+
+```{python}
+#| fig-cap: "混淆强度对选择偏误的影响"
+#| fig-width: 10
+#| fig-height: 6
+
+fig, ax = plt.subplots(figsize=(10, 6))
+
+confound_values = [0, 1, 2, 3, 4, 5]
+observed_effects = [r['observed_effect'] for r in results]
+selection_biases = [r['selection_bias'] for r in results]
+
+ax.plot(confound_values, observed_effects, 'o-', linewidth=2, markersize=8,
+        label='观察效应', color='coral')
+ax.axhline(y=-2, color='green', linestyle='--', linewidth=2, label='真实效应 (-2天)')
+ax.plot(confound_values, selection_biases, 's-', linewidth=2, markersize=8,
+        label='选择偏误', color='red', alpha=0.7)
+
+ax.set_xlabel('混淆强度（严重程度对康复时间的影响）', fontsize=12)
+ax.set_ylabel('天数', fontsize=12)
+ax.set_title('混淆强度如何影响观察结果', fontsize=14, fontweight='bold')
+ax.legend(fontsize=11)
+ax.grid(alpha=0.3)
+ax.axhline(y=0, color='black', linewidth=0.5)
+
+plt.tight_layout()
+plt.show()
+```
+
+**政策含义**：
+
+- 在混淆变量影响强的领域（如医疗、教育），简单比较极其危险
+- 必须采用因果推断方法才能获得有效结论
+- 干预前评估混淆变量强度是研究设计的关键步骤
+
+# 总结 {#sec-summary}
+
+## 本讲要点回顾
+
+### 1. 课程定位
+
+- **机器学习**：关注预测（是什么）
+- **因果推断**：关注归因（为什么）
+- **结合**：AI时代的科学决策能力
+
+### 2. 核心问题：相关性 ≠ 因果性
+
+- **混淆变量**：同时影响处理和结果
+- **选择偏误**：处理组和对照组不可比
+- **反向因果**：结果影响处理分配
+
+### 3. 分析框架：潜在结果模型
+
+- 每个个体有两种"潜在"状态
+- **因果推断的基本问题**：无法同时观测
+- **随机实验**：通过随机化消除选择偏误
+
+### 4. 学习内容概览
+
+- **经典方法**：匹配、DID、IV、合成控制
+- **前沿方法**：因果森林、双重机器学习
+- **实践应用**：真实案例分析
+
+## 关键公式汇总
+
+| 概念 | 公式 | 说明 |
+|:---|:---|:---|
+| 个体处理效应 | $\tau_i = Y_i(1) - Y_i(0)$ | 不可观测 |
+| 平均处理效应 | $\text{ATE} = E[Y(1) - Y(0)]$ | 目标参数 |
+| 观察差异分解 | $E[Y \mid D=1] - E[Y \mid D=0] = \text{ATT} + \text{选择偏误}$ | 偏误来源 |
+| 随机化条件 | $D \perp\!\!\perp Y(0), Y(1)$ | 无偏估计 |
+
+## 下一讲预告
+
+**第二讲：因果推断基础——潜在结果框架深入**
+
+- 条件独立假设（CIA）
+- 重叠条件（Overlap）
+- 识别 vs 估计
+- 反事实预测的机器学习方法
+
+## 课后思考
+
+1. **在你的研究领域**，找到一个"相关≠因果"的例子。混淆变量可能是什么？
+
+2. **随机实验的局限**：为什么有些重要问题无法通过随机实验回答？观察性研究的价值是什么？
+
+3. **AI与因果推断**：大语言模型能帮助我们做因果推断吗？其局限性在哪里？
+
+---
+
+**联系方式**
+
+- 邮箱：chenzhiyuan@rmbs.ruc.edu.cn
+- 办公室：919
+- Office Hours：周四下午2-3点
+
+*本讲义基于 Scott Cunningham《Causal Inference: The Mixtape》、Angrist & Pischke《Mostly Harmless Econometrics》以及 Chernozhukov 等的《Applied Causal Inference Powered by ML and AI》整理而成。*

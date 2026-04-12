@@ -1,0 +1,838 @@
+---
+title: "机器学习与因果推断 - 第二讲：概率与回归基础"
+subtitle: "从预测到因果：完整讲义"
+author: "陈志远"
+institute: "中国人民大学商学院"
+date: "2026-03-09"
+format:
+  html:
+    theme: cosmo
+    css: lecture-notes.css
+    html-math-method: mathml
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    highlight-style: github
+    self-contained: true
+    embed-resources: true
+    page-layout: article
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: true
+  cache: false
+  fig-width: 10
+  fig-height: 6
+  dpi: 150
+lang: zh
+jupyter: python3
+---
+
+```{python}
+#| echo: false
+#| output: false
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+from scipy import stats
+
+# Set up matplotlib for Chinese display
+plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['figure.dpi'] = 150
+
+# Set random seed for reproducibility
+np.random.seed(42)
+```
+
+# 上节课回顾 {#sec-review}
+
+## 核心概念
+
+在第一讲中，我们建立了因果推断的基础认知：
+
+1. **相关性 ≠ 因果性**：混淆变量会导致虚假相关
+2. **潜在结果框架**：每个个体有两种潜在状态 $Y_i(1)$ 和 $Y_i(0)$
+3. **选择偏误**：$E[Y_0|D=1] \neq E[Y_0|D=0]$ 使得简单比较失效
+
+## 本节课目标
+
+本讲将建立概率统计与回归分析的数学基础：
+
+1. 复习概率与统计基础
+2. 理解回归的本质——条件期望
+3. 区分"预测"与"因果"两种目标
+4. 为后续因果推断方法打下数学基础
+
+# 概率论基础 {#sec-probability}
+
+## 为什么要学习概率？ {#sec-why-probability}
+
+### 因果推断的不确定性
+
+因果推断面临一个根本问题：**我们无法同时观察到 $Y_i(1)$ 和 $Y_i(0)$**。这意味着：
+
+- 只能基于样本推断总体因果效应
+- 需要量化估计的不确定性
+- 概率论提供了这种量化工具
+
+**例子**：新药试验中，100人服药、100人服安慰剂，观察到的差异可能是"真实效果"或"随机波动"。
+
+### 概率论在因果推断中的作用
+
+| 应用场景 | 概率工具 |
+|:---|:---|
+| 估计因果效应 | 期望、方差、大数定律 |
+| 量化不确定性 | 置信区间、假设检验 |
+| 处理选择机制 | 条件概率、贝叶斯定理 |
+| 构建预测模型 | 条件期望、回归分析 |
+
+## 随机变量与分布 {#sec-random-variables}
+
+### 随机变量的定义
+
+**随机变量 (Random Variable)** 是将随机结果映射为数值的函数。分为两类：
+
+- **离散型**：取值可数（如二项分布、泊松分布）
+- **连续型**：取值不可数（如正态分布、均匀分布）
+
+### 正态分布（高斯分布）
+
+正态分布是最重要的概率分布：
+
+$$X \sim N(\mu, \sigma^2)$$
+
+概率密度函数：
+$$f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$$
+
+**性质**：
+
+- 均值：$E[X] = \mu$
+- 方差：$Var(X) = \sigma^2$
+- 68-95-99.7 规则
+- 中心极限定理的基础
+
+## 模拟实验：Python实现 {#sec-prob-simulation}
+
+让我们用Python模拟不同的概率分布，观察其特性。
+
+### 代码实现
+
+```{python}
+#| code-fold: show
+#| code-summary: "点击查看完整代码"
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# 设置随机种子
+np.random.seed(42)
+n = 10000
+
+# 生成不同分布的样本
+normal = np.random.normal(0, 1, n)
+binomial = np.random.binomial(10, 0.3, n)
+poisson = np.random.poisson(3, n)
+uniform = np.random.uniform(0, 1, n)
+
+# 计算统计量
+print("样本统计量：")
+print(f"正态分布 N(0,1) - 均值: {normal.mean():.3f}, 标准差: {normal.std():.3f}")
+print(f"二项分布 Bin(10,0.3) - 均值: {binomial.mean():.3f}, 方差: {binomial.var():.3f}")
+print(f"泊松分布 Pois(3) - 均值: {poisson.mean():.3f}, 方差: {poisson.var():.3f}")
+print(f"均匀分布 U(0,1) - 均值: {uniform.mean():.3f}, 方差: {uniform.var():.3f}")
+```
+
+### 可视化结果
+
+```{python}
+#| fig-cap: "常见概率分布的可视化"
+#| fig-width: 14
+#| fig-height: 4
+
+fig, axes = plt.subplots(1, 4, figsize=(14, 4))
+
+# 正态分布
+x = np.linspace(-4, 4, 1000)
+axes[0].hist(normal, bins=30, density=True, alpha=0.6, color='steelblue', edgecolor='white')
+axes[0].plot(x, stats.norm.pdf(x, 0, 1), 'r-', lw=2, label='理论PDF')
+axes[0].set_title('正态分布 N(0,1)', fontweight='bold')
+axes[0].set_xlabel('Value')
+axes[0].set_ylabel('Density')
+axes[0].legend()
+axes[0].grid(alpha=0.3)
+
+# 二项分布
+axes[1].hist(binomial, bins=range(12), density=True, alpha=0.6, color='forestgreen', edgecolor='white')
+axes[1].set_title('二项分布 Bin(10, 0.3)', fontweight='bold')
+axes[1].set_xlabel('Value')
+axes[1].set_ylabel('Probability')
+axes[1].grid(alpha=0.3)
+
+# 泊松分布
+axes[2].hist(poisson, bins=range(15), density=True, alpha=0.6, color='coral', edgecolor='white')
+axes[2].set_title('泊松分布 Pois(3)', fontweight='bold')
+axes[2].set_xlabel('Value')
+axes[2].set_ylabel('Probability')
+axes[2].grid(alpha=0.3)
+
+# 均匀分布
+axes[3].hist(uniform, bins=30, density=True, alpha=0.6, color='mediumpurple', edgecolor='white')
+axes[3].axhline(y=1, color='red', linestyle='--', linewidth=2, label='理论PDF')
+axes[3].set_title('均匀分布 U(0,1)', fontweight='bold')
+axes[3].set_xlabel('Value')
+axes[3].set_ylabel('Density')
+axes[3].legend()
+axes[3].grid(alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+```
+
+### 关键发现
+
+- **样本统计量接近理论值**：体现大数定律
+- **直方图形状反映分布特性**：正态分布的钟形、二项分布的离散性
+- **固定随机种子**确保结果可重复——科学研究的基本要求
+
+## 期望与方差 {#sec-expectation-variance}
+
+### 期望 (Expected Value)
+
+随机变量的"长期平均值"：
+
+- **离散型**：$E[X] = \sum_i x_i \cdot P(X=x_i)$
+- **连续型**：$E[X] = \int_{-\infty}^{\infty} x \cdot f(x) dx$
+
+### 方差 (Variance)
+
+衡量随机变量的"离散程度"：
+
+$$Var(X) = E[(X - E[X])^2] = E[X^2] - (E[X])^2$$
+
+### 重要性质
+
+| 性质 | 公式 |
+|:---|:---|
+| 线性性 | $E[aX + b] = aE[X] + b$ |
+| 方差缩放 | $Var(aX + b) = a^2 Var(X)$ |
+| 期望可加 | $E[X + Y] = E[X] + E[Y]$ |
+| 方差可加（独立） | $Var(X + Y) = Var(X) + Var(Y)$ |
+
+### 常见分布的期望与方差
+
+| 分布 | 概率函数 | 均值 | 方差 |
+|:---|:---|:---:|:---:|
+| 正态分布 $N(\mu, \sigma^2)$ | $\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ | $\mu$ | $\sigma^2$ |
+| 二项分布 $Bin(n,p)$ | $\binom{n}{k}p^k(1-p)^{n-k}$ | $np$ | $np(1-p)$ |
+| 泊松分布 $Pois(\lambda)$ | $\frac{\lambda^k e^{-\lambda}}{k!}$ | $\lambda$ | $\lambda$ |
+
+## 大数定律与中心极限定理 {#sec-lln-clt}
+
+### 大数定律 (Law of Large Numbers)
+
+随着样本量增加，样本均值收敛于总体期望：
+
+$$\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i \xrightarrow{p} E[X]$$
+
+**直观理解**：抛硬币次数越多，正面比例越接近 50%。
+
+### 中心极限定理 (Central Limit Theorem)
+
+无论总体分布如何，样本均值的分布趋近正态：
+
+$$\sqrt{n}(\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$$
+
+**直观理解**：大量独立随机因素叠加，结果趋于正态分布。
+
+### 模拟验证
+
+```{python}
+#| fig-cap: "中心极限定理的模拟验证"
+#| fig-width: 12
+#| fig-height: 5
+
+# 模拟不同样本量下的样本均值分布
+sample_sizes = [10, 30, 100, 1000]
+n_simulations = 10000
+
+fig, axes = plt.subplots(2, 2, figsize=(12, 5))
+axes = axes.flatten()
+
+for idx, n in enumerate(sample_sizes):
+    # 从指数分布中抽样（非正态分布）
+    sample_means = [np.random.exponential(1, n).mean() for _ in range(n_simulations)]
+
+    axes[idx].hist(sample_means, bins=50, density=True, alpha=0.6, color='steelblue', edgecolor='white')
+    axes[idx].axvline(x=1, color='red', linestyle='--', linewidth=2, label='理论均值=1')
+    axes[idx].set_title(f'样本量 n={n}', fontweight='bold')
+    axes[idx].set_xlabel('样本均值')
+    axes[idx].set_ylabel('密度')
+    axes[idx].legend()
+    axes[idx].grid(alpha=0.3)
+
+plt.suptitle('中心极限定理：样本均值的分布趋近正态', fontsize=14, fontweight='bold', y=1.02)
+plt.tight_layout()
+plt.show()
+```
+
+### 为什么重要？
+
+- **LLN 保证估计的一致性**：样本越大，估计越准确
+- **CLT 让我们可以构建置信区间、进行假设检验**
+- **这是统计推断的数学基础**
+
+# 条件概率与条件期望 {#sec-conditional}
+
+## 条件概率 {#sec-conditional-prob}
+
+### 定义
+
+在事件 $B$ 发生的条件下，事件 $A$ 发生的概率：
+
+$$P(A|B) = \frac{P(A \cap B)}{P(B)}$$
+
+### 贝叶斯定理
+
+$$P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}$$
+
+### 条件概率与因果推断
+
+在因果推断中，我们经常问："给定处理状态 $D=1$，结果 $Y$ 的分布是什么？"
+
+但这不等于"处理对 $Y$ 的因果效应"，因为：
+
+- $P(Y|D=1)$ 和 $P(Y|D=0)$ 的比较可能包含选择偏误
+- 需要额外的假设才能识别因果效应
+
+## 条件期望函数 (CEF) {#sec-cef}
+
+### 定义
+
+在给定 $X=x$ 的条件下，$Y$ 的期望：
+
+$$E[Y|X=x]$$
+
+**条件期望函数 (CEF)**：
+$$g(x) = E[Y|X=x]$$
+
+### 关键洞见
+
+- CEF 是 $X$ 的函数，描述了 $Y$ 如何随 $X$ 系统性地变化
+- 我们可以将 $Y$ 分解为：$Y = E[Y|X] + \varepsilon$
+- 其中 $\varepsilon = Y - E[Y|X]$ 满足 $E[\varepsilon|X] = 0$
+
+### 例子：教育与收入
+
+- $E[\text{收入}|\text{教育}=12]$：高中毕业生的平均收入
+- $E[\text{收入}|\text{教育}=16]$：大学毕业生的平均收入
+- **注意**：差异是教育的"相关关系"，但未必是"因果效应"
+
+## Python：计算条件期望 {#sec-cef-python}
+
+```{python}
+#| code-fold: show
+#| code-summary: "条件期望计算代码"
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 设置随机种子
+np.random.seed(42)
+n = 10000
+
+# 模拟数据：教育年限与收入
+education = np.random.choice([12, 14, 16, 18], size=n,
+                              p=[0.3, 0.2, 0.35, 0.15])
+
+# 收入 = 基础 + 教育回报 + 能力因素 + 噪声
+ability = np.random.normal(0, 1, n)
+income = 20000 + education * 3000 + ability * 10000 + np.random.normal(0, 5000, n)
+
+data = pd.DataFrame({'education': education, 'income': income, 'ability': ability})
+
+# 计算条件期望 E[收入|教育]
+conditional_means = data.groupby('education')['income'].mean()
+conditional_vars = data.groupby('education')['income'].var()
+
+print("条件期望 E[收入|教育]:")
+for edu, mean_income in conditional_means.items():
+    print(f"  教育{edu}年: 平均收入 = {mean_income:.0f}元")
+
+print("\n条件方差 Var(收入|教育]:")
+for edu, var_income in conditional_vars.items():
+    print(f"  教育{edu}年: 收入方差 = {var_income:.0f}")
+```
+
+### 可视化条件期望
+
+```{python}
+#| fig-cap: "条件期望函数的可视化"
+#| fig-width: 12
+#| fig-height: 5
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+# 左图：散点图 + 条件均值
+axes[0].scatter(data['education'], data['income'], alpha=0.3, s=10, color='steelblue')
+axes[0].scatter(conditional_means.index, conditional_means.values,
+               color='red', s=100, zorder=5, label='条件期望 E[收入|教育]')
+axes[0].plot(conditional_means.index, conditional_means.values,
+            'r--', linewidth=2, alpha=0.7)
+axes[0].set_xlabel('教育年限', fontsize=11)
+axes[0].set_ylabel('收入', fontsize=11)
+axes[0].set_title('(a) 教育-收入散点图与条件期望', fontweight='bold')
+axes[0].legend()
+axes[0].grid(alpha=0.3)
+
+# 右图：不同教育水平的收入分布
+for edu in [12, 14, 16, 18]:
+    subset = data[data['education'] == edu]['income']
+    axes[1].hist(subset, bins=30, alpha=0.5, label=f'教育{edu}年', density=True)
+axes[1].set_xlabel('收入', fontsize=11)
+axes[1].set_ylabel('密度', fontsize=11)
+axes[1].set_title('(b) 不同教育水平的收入分布', fontweight='bold')
+axes[1].legend()
+axes[1].grid(alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+```
+
+## 迭代期望定律 (Law of Iterated Expectations) {#sec-lie}
+
+### 定理
+
+$$E[Y] = E[E[Y|X]]$$
+
+"期望的期望等于期望"
+
+### 直观理解
+
+总体的平均收入 = 各教育组的平均收入的加权平均
+
+$$E[\text{收入}] = \sum_{e} E[\text{收入}|\text{教育}=e] \cdot P(\text{教育}=e)$$
+
+### 验证
+
+```{python}
+# 验证迭代期望定律
+overall_mean = data['income'].mean()
+education_probs = data['education'].value_counts(normalize=True).sort_index()
+weighted_mean = sum(conditional_means[edu] * education_probs[edu] for edu in conditional_means.index)
+
+print(f"总体平均收入: {overall_mean:.2f}")
+print(f"加权条件期望: {weighted_mean:.2f}")
+print(f"差异: {abs(overall_mean - weighted_mean):.6f} (应接近0)")
+```
+
+### 重要性
+
+- 允许我们"分而治之"：先分组计算，再加权平均
+- 是许多计量经济学推导的基础
+- 理解缺失数据、选择模型的关键
+
+# 回归分析基础 {#sec-regression}
+
+## 什么是回归？ {#sec-what-is-regression}
+
+### 回归的两种视角
+
+1. **预测视角**：找到最好的函数 $f(X)$ 来预测 $Y$
+2. **因果视角**：估计 $X$ 对 $Y$ 的因果效应
+
+**这两种目标需要不同的假设和方法！**
+
+### 线性回归模型
+
+$$Y = \beta_0 + \beta_1 X + \varepsilon$$
+
+其中：
+
+- $\beta_0$：截距（当 $X=0$ 时 $Y$ 的期望值）
+- $\beta_1$：斜率（$X$ 增加 1 单位，$Y$ 的期望变化）
+- $\varepsilon$：误差项
+
+### 关键问题
+
+OLS 估计的 $\hat{\beta}_1$ 在什么条件下可以解释为因果效应？
+
+## 普通最小二乘法 (OLS) {#sec-ols}
+
+### OLS 的目标
+
+最小化残差平方和：
+
+$$\min_{\beta_0, \beta_1} \sum_{i=1}^n (Y_i - \beta_0 - \beta_1 X_i)^2$$
+
+### OLS 估计量
+
+$$\hat{\beta}_1 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n (X_i - \bar{X})^2} = \frac{Cov(X, Y)}{Var(X)}$$
+
+$$\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}$$
+
+### OLS 与 CEF 的关系
+
+- OLS 提供了对 CEF 的最佳线性近似
+- 如果真实的 CEF 是线性的，OLS 估计的是真实的条件期望
+- 即使 CEF 非线性，OLS 仍是最优线性预测
+
+## Python：OLS 回归 {#sec-ols-python}
+
+```{python}
+#| code-fold: show
+#| code-summary: "OLS回归完整代码"
+
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+
+# 设置随机种子
+np.random.seed(42)
+n = 1000
+
+# 生成数据
+X = np.random.normal(10, 2, n)  # 解释变量
+epsilon = np.random.normal(0, 5, n)  # 误差项
+Y = 2 + 3 * X + epsilon  # 真实模型：Y = 2 + 3X + ε
+
+# 添加常数项（截距）
+X_const = sm.add_constant(X)
+
+# 拟合 OLS 模型
+model = sm.OLS(Y, X_const)
+results = model.fit()
+
+# 输出结果
+print(results.summary())
+
+# 提取关键统计量
+print(f"\n估计系数:")
+print(f"  截距 (β₀): {results.params[0]:.4f} (真实值: 2)")
+print(f"  斜率 (β₁): {results.params[1]:.4f} (真实值: 3)")
+print(f"\n标准误:")
+print(f"  β₀: {results.bse[0]:.4f}")
+print(f"  β₁: {results.bse[1]:.4f}")
+print(f"\nR²: {results.rsquared:.4f}")
+print(f"调整R²: {results.rsquared_adj:.4f}")
+```
+
+### 回归结果可视化
+
+```{python}
+#| fig-cap: "OLS回归结果可视化"
+#| fig-width: 12
+#| fig-height: 5
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+# 左图：散点图 + 回归线
+axes[0].scatter(X, Y, alpha=0.5, s=20, color='steelblue', label='观测值')
+axes[0].plot(X, results.predict(X_const), 'r-', linewidth=2, label='OLS拟合线')
+axes[0].plot(X, 2 + 3*X, 'g--', linewidth=2, alpha=0.7, label='真实关系')
+axes[0].set_xlabel('X', fontsize=11)
+axes[0].set_ylabel('Y', fontsize=11)
+axes[0].set_title('(a) OLS回归拟合', fontweight='bold')
+axes[0].legend()
+axes[0].grid(alpha=0.3)
+
+# 右图：残差图
+residuals = results.resid
+fitted = results.fittedvalues
+axes[1].scatter(fitted, residuals, alpha=0.5, s=20, color='coral')
+axes[1].axhline(y=0, color='red', linestyle='--', linewidth=2)
+axes[1].set_xlabel('拟合值', fontsize=11)
+axes[1].set_ylabel('残差', fontsize=11)
+axes[1].set_title('(b) 残差图', fontweight='bold')
+axes[1].grid(alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+```
+
+## 多元回归 {#sec-multiple-regression}
+
+### 多元线性回归模型
+
+当有多个解释变量时：
+
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_k X_k + \varepsilon$$
+
+### 矩阵形式
+
+$$\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$$
+
+**OLS 估计量**：
+$$\hat{\boldsymbol{\beta}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{Y}$$
+
+### 偏回归系数
+
+- $\beta_j$ 表示：在保持其他变量不变的情况下，$X_j$ 增加 1 单位，$Y$ 的期望变化
+- 这是"控制其他因素"的数学实现
+- **但要注意**：控制变量只能控制观测到的因素！
+
+## 遗漏变量偏误演示 {#sec-ovb}
+
+### 模拟数据生成
+
+```{python}
+#| code-fold: show
+#| code-summary: "遗漏变量偏误模拟代码"
+
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+
+# 设置随机种子
+np.random.seed(42)
+n = 1000
+
+# 生成数据
+education = np.random.normal(12, 3, n)  # 教育年限
+experience = np.random.normal(10, 5, n)  # 工作经验
+ability = np.random.normal(0, 1, n)  # 能力（通常不可观测）
+
+# 收入由教育、经验和能力决定
+income = 10000 + 2000 * education + 1500 * experience + 10000 * ability + np.random.normal(0, 8000, n)
+
+data = pd.DataFrame({
+    'income': income,
+    'education': education,
+    'experience': experience,
+    'ability': ability
+})
+
+# 模型1：简单回归（遗漏能力和经验）
+X1 = sm.add_constant(data['education'])
+model1 = sm.OLS(data['income'], X1).fit()
+
+# 模型2：多元回归（控制经验，但仍遗漏能力）
+X2 = sm.add_constant(data[['education', 'experience']])
+model2 = sm.OLS(data['income'], X2).fit()
+
+# 模型3：包含能力（现实中通常不可观测）
+X3 = sm.add_constant(data[['education', 'experience', 'ability']])
+model3 = sm.OLS(data['income'], X3).fit()
+
+print("=" * 70)
+print("遗漏变量偏误演示")
+print("=" * 70)
+print(f"\n模型1（仅教育）教育系数: {model1.params['education']:.2f}")
+print(f"模型2（教育+经验）教育系数: {model2.params['education']:.2f}")
+print(f"模型3（教育+经验+能力）教育系数: {model3.params['education']:.2f}")
+print(f"\n真实参数（数据生成时）: 2000.00")
+print("=" * 70)
+```
+
+### 结果解读
+
+| 模型 | 包含变量 | 教育系数 | 偏误分析 |
+|:---|:---|:---:|:---|
+| 模型1 | 仅教育 | 过高 | 遗漏能力和经验，向上偏误 |
+| 模型2 | 教育+经验 | 接近真实 | 仍遗漏能力，但已减少偏误 |
+| 模型3 | 教育+经验+能力 | 接近2000 | 包含所有变量，无遗漏变量偏误 |
+
+### 关键启示
+
+- **遗漏变量偏误方向**：取决于遗漏变量与 $X$ 和 $Y$ 的相关性
+- **现实中**：能力等关键变量往往不可观测
+- **解决方案**：需要工具变量、固定效应、随机实验等方法
+
+# 预测 vs 因果 {#sec-prediction-causality}
+
+## 预测的目标 {#sec-prediction-goal}
+
+### 预测 (Prediction)
+
+目标：最小化预测误差，准确预测 $Y$
+
+关心的是：$\hat{Y}$ 与 $Y$ 有多接近？
+
+### 预测中的"黑箱"是可以接受的
+
+- **机器学习模型**（随机森林、神经网络）中的具体机制可以是黑箱
+- 只要预测准确，我们**不关心内部机制**
+- **交叉验证**是评估预测性能的金标准
+
+### 预测问题的例子
+
+- 预测明天的股价
+- 预测客户是否会流失
+- 预测贷款违约概率
+- 推荐系统（预测用户喜欢的商品）
+
+## 因果推断的目标 {#sec-causal-goal}
+
+### 因果推断 (Causal Inference)
+
+目标：估计 $X$ 对 $Y$ 的因果效应
+
+关心的是：如果改变 $X$，$Y$ 会如何变化？
+
+### 因果推断需要"白箱"
+
+- 必须理解为什么估计量有效
+- 需要明确的识别假设
+- **统计相关性 ≠ 因果效应**
+
+### 因果问题的例子
+
+- 广告投入是否增加销量？
+- 教育是否提高收入？
+- 新药是否改善健康？
+- 政策是否减少贫困？
+
+## 预测与因果的对比 {#sec-comparison}
+
+| 维度 | 预测 | 因果推断 |
+|:---|:---|:---|
+| **核心问题** | $Y$ 是什么？ | 如果改变 $X$，$Y$ 会如何？ |
+| **目标** | 最小化预测误差 | 无偏、一致地估计因果效应 |
+| **过拟合** | 需要避免 | 不是主要问题 |
+| **可解释性** | 可以黑箱 | 必须可解释 |
+| **假设** | 数据分布稳定 | 需要因果识别假设 |
+| **方法** | ML、交叉验证 | 实验、准实验、IV、DID 等 |
+| **外推** | 需要谨慎 | 需要更强的假设 |
+
+### 常见错误
+
+用预测的方法做因果推断，或用因果的方法做预测，都会导致错误结论！
+
+## 为什么回归系数不等于因果效应？ {#sec-regression-not-causal}
+
+### 例子：教育与收入
+
+回归结果：每多受一年教育，收入平均增加 8%
+
+但这*不一定*是教育的因果效应，因为：
+
+1. **能力偏误**：能力强的人既爱学习又能赚钱
+2. **家庭背景**：富裕家庭的孩子教育更多、收入也更高
+3. **信号效应**：文凭可能只是能力的信号
+4. **选择效应**：选择继续上学的人本来就有更高的收入潜力
+
+### 遗漏变量偏误公式
+
+如果遗漏的变量 $Z$ 既影响 $X$ 又影响 $Y$，则：
+
+$$\text{偏误方向} = \text{Corr}(X, Z) \times \text{Corr}(Z, Y)$$
+
+只有当遗漏变量与 $X$ 无关时，才不会有偏误。
+
+## 火鸡悖论 {#sec-turkey-paradox}
+
+### 罗素的火鸡悖论 (Russell's Turkey)
+
+有一只火鸡，它发现每天上午9点，主人都会准时来喂食。经过100天的观察，火鸡得出结论："主人会在每天上午9点给我喂食。" 火鸡用这个"模型"预测第101天、第102天...都会如此。预测一直很准确，火鸡对自己的"机器学习模型"充满信心。直到感恩节那天，上午9点，主人来了——但这次带来的是一把刀。
+
+### 问题出在哪里？
+
+- **预测视角**：过去100天的数据支持"9点有食物"的预测
+- **因果视角**：主人喂食的目的是养肥火鸡过节，而非关爱
+
+> "机器学习可以完美预测过去，但唯有因果理解才能预见未来。"
+
+### 对研究的启示
+
+- 历史数据中的相关性可能在某个"感恩节"突然断裂
+- 只有理解背后的因果机制，才能判断何时可以**外推**
+- 这是**因果推断优于纯预测方法的关键所在**
+
+# 从回归到因果推断 {#sec-from-regression}
+
+## 回归的因果解释需要什么？ {#sec-what-is-needed}
+
+### 关键假设：条件独立假设 (CIA)
+
+给定控制变量 $X$，处理分配 $D$ 与潜在结果独立：
+
+$$(Y_0, Y_1) \perp D | X$$
+
+或更弱的形式：$E[Y_0|D=1, X] = E[Y_0|D=0, X]$
+
+### 直观理解
+
+- 在相同的 $X$ 水平下，处理组和控制组是可比较的
+- 控制 $X$ 后，处理分配"就像是随机的"
+- 这时，回归系数可以解释为因果效应
+
+### 问题
+
+- 我们永远不知道是否控制了所有混杂因素
+- 需要理论指导哪些变量应该控制
+- 需要排除"坏控制变量"（中介变量、碰撞变量）
+
+# 本讲总结 {#sec-summary}
+
+## 核心要点回顾
+
+### 概率与统计基础
+
+- 随机变量、期望、方差
+- 条件概率与条件期望
+- 大数定律与中心极限定理
+- 迭代期望定律
+
+### 回归分析
+
+- OLS 估计与性质
+- 多元回归与偏效应
+- 预测 vs 因果的区别
+- 遗漏变量偏误问题
+
+### 关键公式汇总
+
+| 概念 | 公式 |
+|:---|:---|
+| 期望 | $E[X] = \sum_i x_i P(X=x_i)$ |
+| 方差 | $Var(X) = E[X^2] - (E[X])^2$ |
+| 条件期望 | $E[Y|X=x]$ |
+| 迭代期望 | $E[Y] = E[E[Y|X]]$ |
+| OLS估计 | $\hat{\beta} = (X'X)^{-1}X'Y$ |
+
+## 下节课预告
+
+**第三讲：有向无环图 (DAGs)——因果推断的可视化语言**
+
+- 如何用图形表示因果关系
+- 识别混杂因素、中介变量、工具变量
+- d-分离与后门准则
+- 为后续方法打下图形化基础
+
+## 练习与作业
+
+### 理论题
+
+1. 证明 $Var(X) = E[X^2] - (E[X])^2$
+2. 解释迭代期望定律的直观含义
+3. 推导 OLS 估计量的无偏性条件
+4. 分析以下情境中的遗漏变量偏误方向：
+   - 估计教育对收入的影响，遗漏能力变量
+   - 估计广告对销量的影响，遗漏季节因素
+
+### 编程题（Python 或 R）
+
+1. 模拟数据验证中心极限定理
+2. 用 OLS 复现课堂示例，展示遗漏变量偏误
+3. 绘制条件期望函数的可视化
+
+## 推荐阅读
+
+- Cunningham (2021): "Causal Inference: The Mixtape" - Chapter 2
+- Angrist & Pischke: "Mostly Harmless Econometrics" - Chapter 1-2
+- Huntington-Klein: "The Effect" - Chapter 1
+
+---
+
+**联系方式**
+
+- 邮箱：chenzhiyuan@rmbs.ruc.edu.cn
+- Office Hours：周四 14:00-15:00
+
+*本讲义基于 Scott Cunningham《Causal Inference: The Mixtape》、Angrist & Pischke《Mostly Harmless Econometrics》整理而成。*

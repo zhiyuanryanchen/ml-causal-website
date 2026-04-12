@@ -6,8 +6,8 @@
 <script src="lecture02_probability_regression_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="lecture02_probability_regression_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="lecture02_probability_regression_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="lecture02_probability_regression_files/libs/quarto-html/quarto-syntax-highlighting-67e1af7abdb15bd5a2919d83736f6706.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.27">
+<link href="lecture02_probability_regression_files/libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.36">
 
   <meta name="author" content="陈志远">
   <meta name="dcterms.date" content="2026-03-04">
@@ -99,7 +99,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="lecture02_probability_regression_files/libs/revealjs/dist/theme/quarto-ac687b436bd4ed829b8379afeee07e00.css">
+  <link rel="stylesheet" href="lecture02_probability_regression_files/libs/revealjs/dist/theme/quarto-8b8acb134ad08796896ab318cb276518.css">
   <link rel="stylesheet" href="ruc-theme.scss">
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -322,7 +322,7 @@
 <h2>Python：模拟随机变量</h2>
 <div class="columns">
 <div class="column" style="font-size: 0.85em;">
-<div id="9724502c" class="cell" data-fig-height="2.8" data-fig-width="8" data-execution_count="2">
+<div id="2a2be633" class="cell" data-fig-height="2.8" data-fig-width="8" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" data-code-line-numbers="5-6,8-11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href=""></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href=""></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
@@ -368,7 +368,7 @@
 <div class="cell-output cell-output-display">
 <div>
 <figure>
-<p><img data-src="lecture02_probability_regression_files/figure-revealjs/cell-2-output-1.png" width="757" height="257"></p>
+<p><img data-src="lecture02_probability_regression_files/figure-revealjs/cell-2-output-1.png" width="758" height="259"></p>
 </figure>
 </div>
 </div>
@@ -589,7 +589,7 @@ Poisson: mean=2.990, var=2.951</code></pre>
 <section id="python计算条件期望" class="slide level2">
 <h2>Python：计算条件期望</h2>
 <div style="font-size: 1em;">
-<div id="c445dd78" class="cell" data-execution_count="3">
+<div id="55114198" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" data-code-line-numbers="3,6,8,11,14,16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-2"><a href=""></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb4-3"><a href=""></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -715,7 +715,12 @@ Name: income, dtype: float64</code></pre>
 </div>
 <div class="fragment">
 <p><strong>线性回归模型</strong>： <span class="math display">Y = \beta_0 + \beta_1 X + \varepsilon</span></p>
-<p>其中： - <span class="math inline">\beta_0</span>：截距（当 <span class="math inline">X=0</span> 时 <span class="math inline">Y</span> 的期望值） - <span class="math inline">\beta_1</span>：斜率（<span class="math inline">X</span> 增加 1 单位，<span class="math inline">Y</span> 的期望变化） - <span class="math inline">\varepsilon</span>：误差项</p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\beta_0</span>：截距（当 <span class="math inline">X=0</span> 时 <span class="math inline">Y</span> 的期望值）</li>
+<li><span class="math inline">\beta_1</span>：斜率（<span class="math inline">X</span> 增加 1 单位，<span class="math inline">Y</span> 的期望变化）</li>
+<li><span class="math inline">\varepsilon</span>：误差项</li>
+</ul>
 </div>
 <div class="fragment">
 <div class="warning-box">
@@ -766,7 +771,7 @@ Name: income, dtype: float64</code></pre>
 <section id="pythonols-回归" class="slide level2">
 <h2>Python：OLS 回归</h2>
 <div style="font-size: 1em;">
-<div id="7898e9ed" class="cell" data-execution_count="4">
+<div id="ef66dac8" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" data-code-line-numbers="3,6,9,13,15,16,18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb7-2"><a href=""></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb7-3"><a href=""></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
@@ -805,8 +810,8 @@ Name: income, dtype: float64</code></pre>
 Dep. Variable:                      y   R-squared:                       0.565
 Model:                            OLS   Adj. R-squared:                  0.564
 Method:                 Least Squares   F-statistic:                     1294.
-Date:                Wed, 04 Mar 2026   Prob (F-statistic):          2.32e-182
-Time:                        13:21:57   Log-Likelihood:                -3024.5
+Date:                Sun, 12 Apr 2026   Prob (F-statistic):          2.32e-182
+Time:                        20:26:12   Log-Likelihood:                -3024.5
 No. Observations:                1000   AIC:                             6053.
 Df Residuals:                     998   BIC:                             6063.
 Df Model:                           1                                         
@@ -895,7 +900,7 @@ R²: 0.5645</code></pre>
 <section id="多元回归示例" class="slide level2">
 <h2>多元回归示例</h2>
 <div style="font-size: 1em;">
-<div id="7bf40b8a" class="cell" data-execution_count="5">
+<div id="92f31f8e" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10" data-code-line-numbers="3,6,9,10,11,15,17,18,19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href=""></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb10-2"><a href=""></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb10-3"><a href=""></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>

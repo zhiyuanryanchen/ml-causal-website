@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.27">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -2365,7 +2365,12 @@ vertical-align: -.125em;
 <h2 data-number="2.1" class="anchored" data-anchor-id="sec-basic-elements"><span class="header-section-number">2.1</span> 基本要素</h2>
 <p>一个有向无环图（DAG）包含三个基本要素：</p>
 <p><strong>节点（Nodes）</strong></p>
-<p>节点表示随机变量。在因果推断中，我们通常关注： - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>：处理变量（Treatment/Exposure） - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>：结果变量（Outcome） - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>：其他变量（可能是混淆因素、中介变量、碰撞节点等）</p>
+<p>节点表示随机变量。在因果推断中，我们通常关注：</p>
+<ul>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>：处理变量（Treatment/Exposure）</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>：结果变量（Outcome）</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>：其他变量（可能是混淆因素、中介变量、碰撞节点等）</li>
+</ul>
 <p><strong>有向边（Directed Edges）</strong></p>
 <p>有向边用箭头表示（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>→</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A \rightarrow B</annotation></semantics></math>），表示<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>对<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>有直接的因果效应。箭头的方向表示因果关系的方向——从原因指向结果。</p>
 <p><strong>无环性（Acyclicity）</strong></p>
@@ -2384,7 +2389,11 @@ vertical-align: -.125em;
 <li>更高的职业技能带来更高收入</li>
 <li>教育对收入的总效应部分通过职业技能的提升实现</li>
 </ul>
-<p><strong>控制策略</strong>： - 如果想估计总效应，<strong>不要控制</strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math> - 如果想估计直接效应（不通过<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>的部分），可以控制<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math></p>
+<p><strong>控制策略</strong>：</p>
+<ul>
+<li>如果想估计总效应，<strong>不要控制</strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math></li>
+<li>如果想估计直接效应（不通过<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>的部分），可以控制<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math></li>
+</ul>
 </section>
 <section id="sec-fork" class="level3" data-number="2.2.2">
 <h3 data-number="2.2.2" class="anchored" data-anchor-id="sec-fork"><span class="header-section-number">2.2.2</span> 分叉结构（Fork）</h3>
@@ -2396,7 +2405,11 @@ vertical-align: -.125em;
 <li>能力强的人即使没有高等教育也可能收入更高</li>
 <li>简单比较大学生和非大学生的收入会夸大教育回报</li>
 </ul>
-<p><strong>控制策略</strong>： - <strong>必须控制</strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>才能识别<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>对<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>的因果效应 - 如果不控制<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>，后门路径<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>←</mo><mi>Z</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \leftarrow Z \rightarrow Y</annotation></semantics></math>保持开放，造成偏误</p>
+<p><strong>控制策略</strong>：</p>
+<ul>
+<li><strong>必须控制</strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>才能识别<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>对<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>的因果效应</li>
+<li>如果不控制<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>，后门路径<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>←</mo><mi>Z</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \leftarrow Z \rightarrow Y</annotation></semantics></math>保持开放，造成偏误</li>
+</ul>
 </section>
 <section id="sec-collider-basic" class="level3" data-number="2.2.3">
 <h3 data-number="2.2.3" class="anchored" data-anchor-id="sec-collider-basic"><span class="header-section-number">2.2.3</span> 碰撞结构（Collider）</h3>
@@ -2410,7 +2423,11 @@ vertical-align: -.125em;
 <li>但在”明星”这个子群体中，美貌和才华会呈现负相关</li>
 <li>这是因为：如果已经有美貌，才华的要求可以降低；如果已经有才华，美貌的要求可以降低</li>
 </ul>
-<p><strong>控制策略</strong>： - <strong>绝对不要控制</strong>碰撞节点 - 控制<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>会打开虚假路径<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>→</mo><mi>Z</mi><mo>←</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \rightarrow Z \leftarrow Y</annotation></semantics></math>，创造本不存在的相关</p>
+<p><strong>控制策略</strong>：</p>
+<ul>
+<li><strong>绝对不要控制</strong>碰撞节点</li>
+<li>控制<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>会打开虚假路径<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>→</mo><mi>Z</mi><mo>←</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \rightarrow Z \leftarrow Y</annotation></semantics></math>，创造本不存在的相关</li>
+</ul>
 </section>
 </section>
 </section>
@@ -2435,24 +2452,59 @@ vertical-align: -.125em;
 <li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>不包含<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>的任何后代（包括<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>本身）</li>
 </ol>
 <p><strong>为什么条件2很重要？</strong></p>
-<p>条件2确保我们不会： - 控制碰撞节点（碰撞节点是<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>和某个其他变量的共同后代） - 控制中介变量（中介变量是<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>的后代）</p>
+<p>条件2确保我们不会：</p>
+<ul>
+<li>控制碰撞节点（碰撞节点是<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>和某个其他变量的共同后代）</li>
+<li>控制中介变量（中介变量是<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>的后代）</li>
+</ul>
 </section>
 <section id="sec-backdoor-math" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="sec-backdoor-math"><span class="header-section-number">3.3</span> 后门准则的数学含义</h2>
 <p>如果变量集合<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>满足后门准则，那么我们可以用观察数据识别因果效应：</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">|</mo><mi>d</mi><mi>o</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munder><mo>∑</mo><mi>z</mi></munder><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">|</mo><mi>X</mi><mo>,</mo><mi>Z</mi><mo stretchy="false" form="postfix">)</mo><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Z</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">P(Y|do(X)) = \sum_z P(Y|X,Z)P(Z)</annotation></semantics></math></p>
-<p>其中： - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">|</mo><mi>d</mi><mi>o</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">P(Y|do(X))</annotation></semantics></math> 表示干预<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>后的<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>分布（即因果效应） - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">|</mo><mi>X</mi><mo>,</mo><mi>Z</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">P(Y|X,Z)</annotation></semantics></math> 是给定<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>和<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>的条件分布 - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Z</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">P(Z)</annotation></semantics></math> 是<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>的边缘分布</p>
+<p>其中：</p>
+<ul>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">|</mo><mi>d</mi><mi>o</mi><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">P(Y|do(X))</annotation></semantics></math> 表示干预<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>后的<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>分布（即因果效应）</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Y</mi><mo stretchy="false" form="prefix">|</mo><mi>X</mi><mo>,</mo><mi>Z</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">P(Y|X,Z)</annotation></semantics></math> 是给定<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>和<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>的条件分布</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>Z</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">P(Z)</annotation></semantics></math> 是<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>的边缘分布</li>
+</ul>
 <p><strong>实际含义</strong>：通过调整（控制）<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>，我们可以消除后门路径造成的偏误，获得因果效应的无偏估计。</p>
 </section>
 <section id="sec-education-example" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="sec-education-example"><span class="header-section-number">3.4</span> 应用示例：教育回报研究</h2>
 <p>考虑研究”大学教育对收入的因果效应”。相关的DAG可能包括：</p>
-<p><strong>变量</strong>： - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>：是否上大学 - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>：收入 - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mn>1</mn></msub><annotation encoding="application/x-tex">Z_1</annotation></semantics></math>：能力（不可完全观测） - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mn>2</mn></msub><annotation encoding="application/x-tex">Z_2</annotation></semantics></math>：家庭社会经济地位 - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mn>3</mn></msub><annotation encoding="application/x-tex">Z_3</annotation></semantics></math>：高中成绩 - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mn>4</mn></msub><annotation encoding="application/x-tex">Z_4</annotation></semantics></math>：职业选择 - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mn>5</mn></msub><annotation encoding="application/x-tex">Z_5</annotation></semantics></math>：婚姻状况</p>
-<p><strong>因果路径</strong>： - 大学教育 → 收入（直接效应） - 大学教育 → 职业选择 → 收入（间接效应）</p>
-<p><strong>后门路径</strong>： 1. 教育 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math> 能力 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 收入 2. 教育 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math> 家庭背景 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 能力 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 收入 3. 教育 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math> 高中成绩 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 能力 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 收入</p>
+<p><strong>变量</strong>：</p>
+<ul>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>：是否上大学</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>：收入</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mn>1</mn></msub><annotation encoding="application/x-tex">Z_1</annotation></semantics></math>：能力（不可完全观测）</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mn>2</mn></msub><annotation encoding="application/x-tex">Z_2</annotation></semantics></math>：家庭社会经济地位</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mn>3</mn></msub><annotation encoding="application/x-tex">Z_3</annotation></semantics></math>：高中成绩</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mn>4</mn></msub><annotation encoding="application/x-tex">Z_4</annotation></semantics></math>：职业选择</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mn>5</mn></msub><annotation encoding="application/x-tex">Z_5</annotation></semantics></math>：婚姻状况</li>
+</ul>
+<p><strong>因果路径</strong>：</p>
+<ul>
+<li>大学教育 → 收入（直接效应）</li>
+<li>大学教育 → 职业选择 → 收入（间接效应）</li>
+</ul>
+<p><strong>后门路径</strong>：</p>
+<ol type="1">
+<li>教育 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math> 能力 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 收入</li>
+<li>教育 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math> 家庭背景 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 能力 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 收入</li>
+<li>教育 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>←</mo><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math> 高中成绩 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 能力 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>→</mo><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math> 收入</li>
+</ol>
 <p><strong>控制策略</strong>：</p>
-<p><strong>应该控制</strong>：能力（尽可能代理）、家庭背景、高中成绩 - 阻断所有后门路径 - 这些不是<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>的后代</p>
-<p><strong>不应该控制</strong>： - 职业选择（中介变量，控制会低估总效应） - 婚姻状况（可能是碰撞节点：教育 → 婚姻 ← 收入潜力）</p>
+<p><strong>应该控制</strong>：能力（尽可能代理）、家庭背景、高中成绩</p>
+<ul>
+<li>阻断所有后门路径</li>
+<li>这些不是<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>的后代</li>
+</ul>
+<p><strong>不应该控制</strong>：</p>
+<ul>
+<li>职业选择（中介变量，控制会低估总效应）</li>
+<li>婚姻状况（可能是碰撞节点：教育 → 婚姻 ← 收入潜力）</li>
+</ul>
 </section>
 </section>
 <section id="sec-collider-bias" class="level1" data-number="4">
@@ -2460,10 +2512,25 @@ vertical-align: -.125em;
 <section id="sec-celebrity-effect" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="sec-celebrity-effect"><span class="header-section-number">4.1</span> 名人效应：直观理解碰撞偏误</h2>
 <p>电影明星的例子是理解碰撞偏误的经典案例：</p>
-<p><strong>设定</strong>： - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>：美貌 - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>：演技 - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>：成为明星</p>
-<p><strong>因果关系</strong>： - 美貌有助于成为明星：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>→</mo><mi>Z</mi></mrow><annotation encoding="application/x-tex">X \rightarrow Z</annotation></semantics></math> - 演技有助于成为明星：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>→</mo><mi>Z</mi></mrow><annotation encoding="application/x-tex">Y \rightarrow Z</annotation></semantics></math> - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>是碰撞节点</p>
+<p><strong>设定</strong>：</p>
+<ul>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>：美貌</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>：演技</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>：成为明星</li>
+</ul>
+<p><strong>因果关系</strong>：</p>
+<ul>
+<li>美貌有助于成为明星：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>→</mo><mi>Z</mi></mrow><annotation encoding="application/x-tex">X \rightarrow Z</annotation></semantics></math></li>
+<li>演技有助于成为明星：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>→</mo><mi>Z</mi></mrow><annotation encoding="application/x-tex">Y \rightarrow Z</annotation></semantics></math></li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>是碰撞节点</li>
+</ul>
 <p><strong>悖论</strong>：</p>
-<p>在普通人群中，美貌和演技可能不相关（或只有弱相关）。但在”明星”这个子群体中： - 我们看到很多美貌但演技一般的明星 - 我们看到很多演技好但美貌一般的明星 - 美貌和演技呈现负相关！</p>
+<p>在普通人群中，美貌和演技可能不相关（或只有弱相关）。但在”明星”这个子群体中：</p>
+<ul>
+<li>我们看到很多美貌但演技一般的明星</li>
+<li>我们看到很多演技好但美貌一般的明星</li>
+<li>美貌和演技呈现负相关！</li>
+</ul>
 <p><strong>解释</strong>：这不是因为美貌和演技真的此消彼长，而是成为明星的<strong>选择机制</strong>造成的。如果一个人在美貌方面得分很高，那么在演技方面的”门槛”就会降低；反之亦然。</p>
 </section>
 <section id="sec-collider-research" class="level2" data-number="4.2">
@@ -2471,26 +2538,53 @@ vertical-align: -.125em;
 <section id="sec-sample-selection" class="level3" data-number="4.2.1">
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="sec-sample-selection"><span class="header-section-number">4.2.1</span> 样本选择偏误</h3>
 <p><strong>问题</strong>：如果研究样本本身是基于碰撞节点选择，偏误就存在了。</p>
-<p><strong>例子</strong>：研究成功人士的特征 - 成功 = f(能力, 机遇) - 能力和机遇都影响成功（成为成功人士） - 在成功人士样本中，能力和机遇可能负相关 - 但这只是选择效应，不是真实的权衡</p>
+<p><strong>例子</strong>：研究成功人士的特征</p>
+<ul>
+<li>成功 = f(能力, 机遇)</li>
+<li>能力和机遇都影响成功（成为成功人士）</li>
+<li>在成功人士样本中，能力和机遇可能负相关</li>
+<li>但这只是选择效应，不是真实的权衡</li>
+</ul>
 </section>
 <section id="sec-controlling-outcome" class="level3" data-number="4.2.2">
 <h3 data-number="4.2.2" class="anchored" data-anchor-id="sec-controlling-outcome"><span class="header-section-number">4.2.2</span> 控制结果变量</h3>
 <p><strong>问题</strong>：有时研究者会无意中控制处理或结果的代理变量。</p>
-<p><strong>例子</strong>：研究幸福感对收入的影响 - 幸福感可能影响婚姻决策 - 收入也可能影响婚姻决策 - 婚姻状态是碰撞节点 - 如果控制婚姻状态，会引入偏误</p>
+<p><strong>例子</strong>：研究幸福感对收入的影响</p>
+<ul>
+<li>幸福感可能影响婚姻决策</li>
+<li>收入也可能影响婚姻决策</li>
+<li>婚姻状态是碰撞节点</li>
+<li>如果控制婚姻状态，会引入偏误</li>
+</ul>
 </section>
 <section id="sec-survivorship" class="level3" data-number="4.2.3">
 <h3 data-number="4.2.3" class="anchored" data-anchor-id="sec-survivorship"><span class="header-section-number">4.2.3</span> 幸存者偏误</h3>
-<p><strong>例子</strong>：研究企业培训的效果 - 培训可能影响员工绩效 - 高绩效员工更可能被保留（不被裁员） - 留存状态是碰撞节点：培训 → 留存 ← 绩效 - 如果只分析留存的员工，会低估培训效果（因为培训效果差的已经离开）</p>
+<p><strong>例子</strong>：研究企业培训的效果</p>
+<ul>
+<li>培训可能影响员工绩效</li>
+<li>高绩效员工更可能被保留（不被裁员）</li>
+<li>留存状态是碰撞节点：培训 → 留存 ← 绩效</li>
+<li>如果只分析留存的员工，会低估培训效果（因为培训效果差的已经离开）</li>
+</ul>
 </section>
 </section>
 <section id="sec-gender-wage" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="sec-gender-wage"><span class="header-section-number">4.3</span> 真实案例：性别工资差距</h2>
 <p><strong>常见发现</strong>：控制职业后，性别工资差距减小或消失</p>
 <p><strong>DAG分析</strong>：</p>
-<p>职业选择可能是碰撞节点： - 性别歧视可能影响职业选择 - 个人偏好和能力影响职业选择 - 职业收入反映歧视和偏好</p>
+<p>职业选择可能是碰撞节点：</p>
+<ul>
+<li>性别歧视可能影响职业选择</li>
+<li>个人偏好和能力影响职业选择</li>
+<li>职业收入反映歧视和偏好</li>
+</ul>
 <p><strong>控制职业的潜在问题</strong>：</p>
 <p>如果歧视通过限制女性进入高收入职业来运作，那么”控制职业”就是在控制歧视的<strong>渠道</strong>。这会低估歧视的总效应。</p>
-<p><strong>正确的解释</strong>： - 总歧视效应 = 同职业内的工资差距 + 职业选择受限造成的损失 - 只控制前者会遗漏后者</p>
+<p><strong>正确的解释</strong>：</p>
+<ul>
+<li>总歧视效应 = 同职业内的工资差距 + 职业选择受限造成的损失</li>
+<li>只控制前者会遗漏后者</li>
+</ul>
 </section>
 </section>
 <section id="sec-comparison" class="level1" data-number="5">
@@ -2498,10 +2592,28 @@ vertical-align: -.125em;
 <section id="sec-potential-outcomes" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="sec-potential-outcomes"><span class="header-section-number">5.1</span> 潜在结果框架（Rubin因果模型）</h2>
 <p><strong>核心概念</strong>：</p>
-<p>对于每个个体<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>，存在两种潜在结果： - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y_i(1)</annotation></semantics></math>：接受处理的结果 - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y_i(0)</annotation></semantics></math>：未接受处理的结果</p>
-<p><strong>因果效应</strong>： - 个体处理效应：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\tau_i = Y_i(1) - Y_i(0)</annotation></semantics></math> - 平均处理效应：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>T</mi><mi>E</mi><mo>=</mo><mi>E</mi><mo stretchy="false" form="prefix">[</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">ATE = E[Y(1) - Y(0)]</annotation></semantics></math></p>
-<p><strong>识别假设</strong>： 1. <strong>无混淆假设（Unconfoundedness）</strong>：处理分配与潜在结果独立，条件于可观测变量 2. <strong>正向性（Positivity/Overlap）</strong>：对于所有协变量值，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>D</mi><mo>=</mo><mn>1</mn><mo stretchy="false" form="prefix">|</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0 &lt; P(D=1|X) &lt; 1</annotation></semantics></math> 3. <strong>SUTVA</strong>：个体的潜在结果不受他人处理状态影响</p>
-<p><strong>优势</strong>： - 数学表达精确 - 估计方法成熟（回归、匹配、加权、双重差分等） - 易于进行统计推断</p>
+<p>对于每个个体<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>，存在两种潜在结果：</p>
+<ul>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y_i(1)</annotation></semantics></math>：接受处理的结果</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">Y_i(0)</annotation></semantics></math>：未接受处理的结果</li>
+</ul>
+<p><strong>因果效应</strong>：</p>
+<ul>
+<li>个体处理效应：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\tau_i = Y_i(1) - Y_i(0)</annotation></semantics></math></li>
+<li>平均处理效应：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>T</mi><mi>E</mi><mo>=</mo><mi>E</mi><mo stretchy="false" form="prefix">[</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">ATE = E[Y(1) - Y(0)]</annotation></semantics></math></li>
+</ul>
+<p><strong>识别假设</strong>：</p>
+<ol type="1">
+<li><strong>无混淆假设（Unconfoundedness）</strong>：处理分配与潜在结果独立，条件于可观测变量</li>
+<li><strong>正向性（Positivity/Overlap）</strong>：对于所有协变量值，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mi>D</mi><mo>=</mo><mn>1</mn><mo stretchy="false" form="prefix">|</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0 &lt; P(D=1|X) &lt; 1</annotation></semantics></math></li>
+<li><strong>SUTVA</strong>：个体的潜在结果不受他人处理状态影响</li>
+</ol>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>数学表达精确</li>
+<li>估计方法成熟（回归、匹配、加权、双重差分等）</li>
+<li>易于进行统计推断</li>
+</ul>
 </section>
 <section id="sec-dag-framework" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="sec-dag-framework"><span class="header-section-number">5.2</span> DAG框架（Pearl因果图）</h2>
@@ -2518,7 +2630,13 @@ vertical-align: -.125em;
 <li><strong>前门准则</strong>：利用中介变量识别因果效应</li>
 <li><strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>o</mi></mrow><annotation encoding="application/x-tex">do</annotation></semantics></math>-演算</strong>：从观察分布推导干预分布的通用方法</li>
 </ul>
-<p><strong>优势</strong>： - 可视化因果关系 - 系统化识别偏误来源 - 指导变量选择 - 处理复杂因果结构（如多中介、反馈循环等）</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>可视化因果关系</li>
+<li>系统化识别偏误来源</li>
+<li>指导变量选择</li>
+<li>处理复杂因果结构（如多中介、反馈循环等）</li>
+</ul>
 </section>
 <section id="sec-complementarity" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="sec-complementarity"><span class="header-section-number">5.3</span> 两种框架的互补性</h2>
@@ -2603,30 +2721,73 @@ vertical-align: -.125em;
 <h2 data-number="6.1" class="anchored" data-anchor-id="sec-five-steps"><span class="header-section-number">6.1</span> DAG分析的五步法</h2>
 <section id="sec-step1-draw" class="level3" data-number="6.1.1">
 <h3 data-number="6.1.1" class="anchored" data-anchor-id="sec-step1-draw"><span class="header-section-number">6.1.1</span> 步骤1：绘制DAG</h3>
-<p><strong>原则</strong>： - 列出所有可能影响因果关系的变量 - 基于理论、先验知识和领域专家意见 - 包含可观测和不可观测变量 - 与同事、导师讨论，完善图表</p>
-<p><strong>注意事项</strong>： - DAG反映的是你的因果假设，不是数据的相关性 - 不同的研究者可能有不同的DAG——这是正常的科学讨论 - 随着研究深入，DAG可以被修正</p>
+<p><strong>原则</strong>：</p>
+<ul>
+<li>列出所有可能影响因果关系的变量</li>
+<li>基于理论、先验知识和领域专家意见</li>
+<li>包含可观测和不可观测变量</li>
+<li>与同事、导师讨论，完善图表</li>
+</ul>
+<p><strong>注意事项</strong>：</p>
+<ul>
+<li>DAG反映的是你的因果假设，不是数据的相关性</li>
+<li>不同的研究者可能有不同的DAG——这是正常的科学讨论</li>
+<li>随着研究深入，DAG可以被修正</li>
+</ul>
 </section>
 <section id="sec-step2-causal" class="level3" data-number="6.1.2">
 <h3 data-number="6.1.2" class="anchored" data-anchor-id="sec-step2-causal"><span class="header-section-number">6.1.2</span> 步骤2：识别因果路径</h3>
-<p>从处理变量<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>到结果变量<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>，找出所有可能的因果路径： - 直接效应：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \rightarrow Y</annotation></semantics></math> - 间接效应：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>→</mo><mi>Z</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \rightarrow Z \rightarrow Y</annotation></semantics></math>（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>是中介）</p>
+<p>从处理变量<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>到结果变量<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>，找出所有可能的因果路径：</p>
+<ul>
+<li>直接效应：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \rightarrow Y</annotation></semantics></math></li>
+<li>间接效应：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>→</mo><mi>Z</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \rightarrow Z \rightarrow Y</annotation></semantics></math>（<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>是中介）</li>
+</ul>
 <p><strong>重要</strong>：确保你不会在后续步骤中阻断这些路径（除非你只想估计直接效应）。</p>
 </section>
 <section id="sec-step3-backdoor" class="level3" data-number="6.1.3">
 <h3 data-number="6.1.3" class="anchored" data-anchor-id="sec-step3-backdoor"><span class="header-section-number">6.1.3</span> 步骤3：识别后门路径</h3>
-<p>找出所有从<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>到<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>的后门路径： 1. 路径以指向<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>的箭头开始 2. 路径最终到达<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math> 3. 路径不是直接的因果路径</p>
-<p><strong>例子</strong>： - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>←</mo><mi>Z</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \leftarrow Z \rightarrow Y</annotation></semantics></math> - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>←</mo><mi>A</mi><mo>→</mo><mi>B</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \leftarrow A \rightarrow B \rightarrow Y</annotation></semantics></math> - <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>←</mo><mi>C</mi><mo>←</mo><mi>D</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \leftarrow C \leftarrow D \rightarrow Y</annotation></semantics></math></p>
+<p>找出所有从<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>到<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>的后门路径：</p>
+<ol type="1">
+<li>路径以指向<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>的箭头开始</li>
+<li>路径最终到达<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math></li>
+<li>路径不是直接的因果路径</li>
+</ol>
+<p><strong>例子</strong>：</p>
+<ul>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>←</mo><mi>Z</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \leftarrow Z \rightarrow Y</annotation></semantics></math></li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>←</mo><mi>A</mi><mo>→</mo><mi>B</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \leftarrow A \rightarrow B \rightarrow Y</annotation></semantics></math></li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>←</mo><mi>C</mi><mo>←</mo><mi>D</mi><mo>→</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X \leftarrow C \leftarrow D \rightarrow Y</annotation></semantics></math></li>
+</ul>
 </section>
 <section id="sec-step4-adjust" class="level3" data-number="6.1.4">
 <h3 data-number="6.1.4" class="anchored" data-anchor-id="sec-step4-adjust"><span class="header-section-number">6.1.4</span> 步骤4：确定调整策略</h3>
 <p>找出满足后门准则的变量集合<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>：</p>
-<p><strong>必须满足</strong>： 1. 阻断所有后门路径 2. 不包含<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>的后代</p>
-<p><strong>可能的集合</strong>： - 通常有多个满足条件的变量集合 - 选择最容易测量、最不容易出错的集合 - 考虑统计功效（调整变量过多会降低估计精度）</p>
+<p><strong>必须满足</strong>：</p>
+<ol type="1">
+<li>阻断所有后门路径</li>
+<li>不包含<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>的后代</li>
+</ol>
+<p><strong>可能的集合</strong>：</p>
+<ul>
+<li>通常有多个满足条件的变量集合</li>
+<li>选择最容易测量、最不容易出错的集合</li>
+<li>考虑统计功效（调整变量过多会降低估计精度）</li>
+</ul>
 </section>
 <section id="sec-step5-sensitivity" class="level3" data-number="6.1.5">
 <h3 data-number="6.1.5" class="anchored" data-anchor-id="sec-step5-sensitivity"><span class="header-section-number">6.1.5</span> 步骤5：敏感性分析</h3>
 <p><strong>未观测混淆因素</strong>：</p>
-<p>DAG中可能包含不可观测的变量。思考： - 如果存在未观测的混淆因素，效应估计会如何变化？ - 需要多强的未观测混淆才能解释掉观察到的效应？</p>
-<p><strong>工具</strong>： - VanderWeele和Ding的敏感性分析 - 界限分析（Bounding Analysis） - 阴性对照（Negative Controls）</p>
+<p>DAG中可能包含不可观测的变量。思考：</p>
+<ul>
+<li>如果存在未观测的混淆因素，效应估计会如何变化？</li>
+<li>需要多强的未观测混淆才能解释掉观察到的效应？</li>
+</ul>
+<p><strong>工具</strong>：</p>
+<ul>
+<li>VanderWeele和Ding的敏感性分析</li>
+<li>界限分析（Bounding Analysis）</li>
+<li>阴性对照（Negative Controls）</li>
+</ul>
 </section>
 </section>
 <section id="sec-training-case" class="level2" data-number="6.2">
@@ -2793,9 +2954,21 @@ vertical-align: -.125em;
 <h2 data-number="6.3" class="anchored" data-anchor-id="sec-practical-tips"><span class="header-section-number">6.3</span> 使用DAG的实用建议</h2>
 <section id="sec-tools" class="level3" data-number="6.3.1">
 <h3 data-number="6.3.1" class="anchored" data-anchor-id="sec-tools"><span class="header-section-number">6.3.1</span> 推荐工具</h3>
-<p><strong>在线工具</strong>： - <strong>DAGitty</strong>（dagitty.net）：绘制DAG、识别最小调整集、进行<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>-分离分析 - <strong>Causal Fusion</strong>：更复杂的因果分析平台</p>
-<p><strong>R包</strong>： - <strong>ggdag</strong>：绘制美观的DAG - <strong>dagitty</strong>：与DAGitty在线工具交互</p>
-<p><strong>Python包</strong>： - <strong>CausalGraph</strong>：构建和分析因果图 - <strong>pgmpy</strong>：概率图模型库</p>
+<p><strong>在线工具</strong>：</p>
+<ul>
+<li><strong>DAGitty</strong>（dagitty.net）：绘制DAG、识别最小调整集、进行<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>-分离分析</li>
+<li><strong>Causal Fusion</strong>：更复杂的因果分析平台</li>
+</ul>
+<p><strong>R包</strong>：</p>
+<ul>
+<li><strong>ggdag</strong>：绘制美观的DAG</li>
+<li><strong>dagitty</strong>：与DAGitty在线工具交互</li>
+</ul>
+<p><strong>Python包</strong>：</p>
+<ul>
+<li><strong>CausalGraph</strong>：构建和分析因果图</li>
+<li><strong>pgmpy</strong>：概率图模型库</li>
+</ul>
 </section>
 <section id="sec-common-mistakes" class="level3" data-number="6.3.2">
 <h3 data-number="6.3.2" class="anchored" data-anchor-id="sec-common-mistakes"><span class="header-section-number">6.3.2</span> 常见错误与避免</h3>
@@ -2876,9 +3049,22 @@ vertical-align: -.125em;
 </section>
 <section id="sec-further-reading" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="sec-further-reading"><span class="header-section-number">7.3</span> 进一步阅读</h2>
-<p><strong>入门读物</strong>： - Pearl, J., &amp; Mackenzie, D. (2018). <em>The Book of Why</em>. Basic Books. - Cunningham, S. (2021). <em>Causal Inference: The Mixtape</em>, Chapter 3.</p>
-<p><strong>进阶读物</strong>： - Pearl, J. (2009). <em>Causality: Models, Reasoning, and Inference</em> (2nd ed.). Cambridge University Press. - Morgan, S. L., &amp; Winship, C. (2014). <em>Counterfactuals and Causal Inference: Methods and Principles for Social Research</em> (2nd ed.). Cambridge University Press. - Hernán, M. A., &amp; Robins, J. M. (2020). <em>Causal Inference: What If</em>. Chapman &amp; Hall/CRC.</p>
-<p><strong>在线资源</strong>： - DAGitty: https://dagitty.net/ - Causal Inference Playlist: https://www.youtube.com/playlist?list=PLoYXqjI7xzXa_8E5fQ2q3z5u5z5z5z5z5</p>
+<p><strong>入门读物</strong>：</p>
+<ul>
+<li>Pearl, J., &amp; Mackenzie, D. (2018). <em>The Book of Why</em>. Basic Books.</li>
+<li>Cunningham, S. (2021). <em>Causal Inference: The Mixtape</em>, Chapter 3.</li>
+</ul>
+<p><strong>进阶读物</strong>：</p>
+<ul>
+<li>Pearl, J. (2009). <em>Causality: Models, Reasoning, and Inference</em> (2nd ed.). Cambridge University Press.</li>
+<li>Morgan, S. L., &amp; Winship, C. (2014). <em>Counterfactuals and Causal Inference: Methods and Principles for Social Research</em> (2nd ed.). Cambridge University Press.</li>
+<li>Hernán, M. A., &amp; Robins, J. M. (2020). <em>Causal Inference: What If</em>. Chapman &amp; Hall/CRC.</li>
+</ul>
+<p><strong>在线资源</strong>：</p>
+<ul>
+<li>DAGitty: https://dagitty.net/</li>
+<li>Causal Inference Playlist: https://www.youtube.com/playlist?list=PLoYXqjI7xzXa_8E5fQ2q3z5u5z5z5z5z5</li>
+</ul>
 <!-- -->
 
 </section>
@@ -3417,598 +3603,637 @@ vertical-align: -.125em;
 <span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>**节点（Nodes）**</span>
 <span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>节点表示随机变量。在因果推断中，我们通常关注：</span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X$：处理变量（Treatment/Exposure）</span>
-<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y$：结果变量（Outcome）</span>
-<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z$：其他变量（可能是混淆因素、中介变量、碰撞节点等）</span>
-<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>**有向边（Directed Edges）**</span>
-<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>有向边用箭头表示（$A \rightarrow B$），表示$A$对$B$有直接的因果效应。箭头的方向表示因果关系的方向——从原因指向结果。</span>
-<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>**无环性（Acyclicity）**</span>
-<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>&quot;无环&quot;意味着图中不能存在循环路径。即，如果$A$导致$B$，$B$导致$C$，那么$C$不能导致$A$。这反映了因果关系的时序性：原因必须在结果之前发生。</span>
-<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## 三种基本路径结构 {#sec-path-structures}</span></span>
-<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>DAG中的所有路径都可以分解为三种基本结构的组合：</span>
-<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a><span class="fu">### 链式结构（Chain） {#sec-chain}</span></span>
-<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>**结构**：$X \rightarrow Z \rightarrow Y$</span>
-<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>在链式结构中，$Z$是**中介变量（Mediator）**——它是$X$影响$Y$的中间环节。</span>
-<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>**例子**：教育 → 职业技能 → 收入</span>
-<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>上大学提高职业技能</span>
-<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>更高的职业技能带来更高收入</span>
-<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>教育对收入的总效应部分通过职业技能的提升实现</span>
-<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>**控制策略**：</span>
-<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果想估计总效应，**不要控制**$Z$</span>
-<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果想估计直接效应（不通过$Z$的部分），可以控制$Z$</span>
-<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### 分叉结构（Fork） {#sec-fork}</span></span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X$：处理变量（Treatment/Exposure）</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y$：结果变量（Outcome）</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z$：其他变量（可能是混淆因素、中介变量、碰撞节点等）</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>**有向边（Directed Edges）**</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>有向边用箭头表示（$A \rightarrow B$），表示$A$对$B$有直接的因果效应。箭头的方向表示因果关系的方向——从原因指向结果。</span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>**无环性（Acyclicity）**</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>&quot;无环&quot;意味着图中不能存在循环路径。即，如果$A$导致$B$，$B$导致$C$，那么$C$不能导致$A$。这反映了因果关系的时序性：原因必须在结果之前发生。</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a><span class="fu">## 三种基本路径结构 {#sec-path-structures}</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>DAG中的所有路径都可以分解为三种基本结构的组合：</span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a><span class="fu">### 链式结构（Chain） {#sec-chain}</span></span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>**结构**：$X \rightarrow Z \rightarrow Y$</span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>在链式结构中，$Z$是**中介变量（Mediator）**——它是$X$影响$Y$的中间环节。</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>**例子**：教育 → 职业技能 → 收入</span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>上大学提高职业技能</span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>更高的职业技能带来更高收入</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>教育对收入的总效应部分通过职业技能的提升实现</span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>**控制策略**：</span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果想估计总效应，**不要控制**$Z$</span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果想估计直接效应（不通过$Z$的部分），可以控制$Z$</span>
 <span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>**结构**：$X \leftarrow Z \rightarrow Y$</span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a><span class="fu">### 分叉结构（Fork） {#sec-fork}</span></span>
 <span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>在分叉结构中，$Z$是**混淆变量（Confounder）**——它是$X$和$Y$的共同原因。</span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>**结构**：$X \leftarrow Z \rightarrow Y$</span>
 <span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>**例子**：能力 → 教育；能力 → 收入</span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>在分叉结构中，$Z$是**混淆变量（Confounder）**——它是$X$和$Y$的共同原因。</span>
 <span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>能力强的人更可能接受高等教育</span>
-<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>能力强的人即使没有高等教育也可能收入更高</span>
-<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>简单比较大学生和非大学生的收入会夸大教育回报</span>
-<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>**控制策略**：</span>
-<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**必须控制**$Z$才能识别$X$对$Y$的因果效应</span>
-<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果不控制$Z$，后门路径$X \leftarrow Z \rightarrow Y$保持开放，造成偏误</span>
+<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>**例子**：能力 → 教育；能力 → 收入</span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>能力强的人更可能接受高等教育</span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>能力强的人即使没有高等教育也可能收入更高</span>
+<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>简单比较大学生和非大学生的收入会夸大教育回报</span>
+<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a>**控制策略**：</span>
 <span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a><span class="fu">### 碰撞结构（Collider） {#sec-collider-basic}</span></span>
-<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a>**结构**：$X \rightarrow Z \leftarrow Y$</span>
-<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>在碰撞结构中，$Z$是**碰撞节点（Collider）**——它同时受到$X$和$Y$的影响。</span>
-<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a>**关键洞察**：在未控制$Z$时，$X$和$Y$是独立的（假设它们原本无因果关系）。但是，一旦**控制**$Z$，$X$和$Y$会变得**虚假相关**！</span>
-<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a>**例子**：美貌 → 成为明星 ← 才华</span>
-<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>成为电影明星可能需要美貌或才华（或两者兼备）</span>
-<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>在一般人群中，美貌和才华可能是独立的</span>
-<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>但在&quot;明星&quot;这个子群体中，美貌和才华会呈现负相关</span>
-<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>这是因为：如果已经有美貌，才华的要求可以降低；如果已经有才华，美貌的要求可以降低</span>
-<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a>**控制策略**：</span>
-<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**绝对不要控制**碰撞节点</span>
-<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>控制$Z$会打开虚假路径$X \rightarrow Z \leftarrow Y$，创造本不存在的相关</span>
-<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a><span class="fu"># 后门准则 {#sec-backdoor}</span></span>
-<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a><span class="fu">## 后门路径的概念 {#sec-backdoor-path}</span></span>
+<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**必须控制**$Z$才能识别$X$对$Y$的因果效应</span>
+<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果不控制$Z$，后门路径$X \leftarrow Z \rightarrow Y$保持开放，造成偏误</span>
+<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a><span class="fu">### 碰撞结构（Collider） {#sec-collider-basic}</span></span>
+<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a>**结构**：$X \rightarrow Z \leftarrow Y$</span>
+<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a>在碰撞结构中，$Z$是**碰撞节点（Collider）**——它同时受到$X$和$Y$的影响。</span>
+<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a>**关键洞察**：在未控制$Z$时，$X$和$Y$是独立的（假设它们原本无因果关系）。但是，一旦**控制**$Z$，$X$和$Y$会变得**虚假相关**！</span>
+<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a>**例子**：美貌 → 成为明星 ← 才华</span>
+<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>成为电影明星可能需要美貌或才华（或两者兼备）</span>
+<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>在一般人群中，美貌和才华可能是独立的</span>
+<span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>但在&quot;明星&quot;这个子群体中，美貌和才华会呈现负相关</span>
+<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>这是因为：如果已经有美貌，才华的要求可以降低；如果已经有才华，美貌的要求可以降低</span>
+<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a>**控制策略**：</span>
+<span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**绝对不要控制**碰撞节点</span>
+<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>控制$Z$会打开虚假路径$X \rightarrow Z \leftarrow Y$，创造本不存在的相关</span>
 <span id="cb4-151"><a href="#cb4-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-152"><a href="#cb4-152" aria-hidden="true" tabindex="-1"></a>**后门路径（Backdoor Path）**是指从处理变量$X$到结果变量$Y$的非因果路径，满足以下条件：</span>
+<span id="cb4-152"><a href="#cb4-152" aria-hidden="true" tabindex="-1"></a><span class="fu"># 后门准则 {#sec-backdoor}</span></span>
 <span id="cb4-153"><a href="#cb4-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>路径以指向$X$的箭头开始（即路径开始于$X \leftarrow \dots$）</span>
-<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>路径包含任何方向的边（可以是$\rightarrow$或$\leftarrow$）</span>
-<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a>**为什么后门路径会造成偏误？**</span>
-<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a>后门路径创建了$X$和$Y$之间的统计相关，但这种相关不是因果关系，而是混淆造成的。例如，路径$X \leftarrow Z \rightarrow Y$中，$Z$的变化会同时影响$X$和$Y$，使得$X$和$Y$看起来相关，即使$X$并不导致$Y$。</span>
+<span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a><span class="fu">## 后门路径的概念 {#sec-backdoor-path}</span></span>
+<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a>**后门路径（Backdoor Path）**是指从处理变量$X$到结果变量$Y$的非因果路径，满足以下条件：</span>
+<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>路径以指向$X$的箭头开始（即路径开始于$X \leftarrow \dots$）</span>
+<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>路径包含任何方向的边（可以是$\rightarrow$或$\leftarrow$）</span>
 <span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a><span class="fu">## 后门准则的正式定义 {#sec-backdoor-criterion-def}</span></span>
+<span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a>**为什么后门路径会造成偏误？**</span>
 <span id="cb4-162"><a href="#cb4-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a>**后门准则（Backdoor Criterion）**</span>
+<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a>后门路径创建了$X$和$Y$之间的统计相关，但这种相关不是因果关系，而是混淆造成的。例如，路径$X \leftarrow Z \rightarrow Y$中，$Z$的变化会同时影响$X$和$Y$，使得$X$和$Y$看起来相关，即使$X$并不导致$Y$。</span>
 <span id="cb4-164"><a href="#cb4-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a>对于处理变量$X$和结果变量$Y$，变量集合$Z$满足后门准则，如果：</span>
+<span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## 后门准则的正式定义 {#sec-backdoor-criterion-def}</span></span>
 <span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>$Z$阻断了所有从$X$到$Y$的后门路径</span>
-<span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>$Z$不包含$X$的任何后代（包括$X$本身）</span>
-<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a>**为什么条件2很重要？**</span>
-<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a>条件2确保我们不会：</span>
-<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>控制碰撞节点（碰撞节点是$X$和某个其他变量的共同后代）</span>
-<span id="cb4-174"><a href="#cb4-174" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>控制中介变量（中介变量是$X$的后代）</span>
+<span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a>**后门准则（Backdoor Criterion）**</span>
+<span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a>对于处理变量$X$和结果变量$Y$，变量集合$Z$满足后门准则，如果：</span>
+<span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>$Z$阻断了所有从$X$到$Y$的后门路径</span>
+<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>$Z$不包含$X$的任何后代（包括$X$本身）</span>
+<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-174"><a href="#cb4-174" aria-hidden="true" tabindex="-1"></a>**为什么条件2很重要？**</span>
 <span id="cb4-175"><a href="#cb4-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-176"><a href="#cb4-176" aria-hidden="true" tabindex="-1"></a><span class="fu">## 后门准则的数学含义 {#sec-backdoor-math}</span></span>
+<span id="cb4-176"><a href="#cb4-176" aria-hidden="true" tabindex="-1"></a>条件2确保我们不会：</span>
 <span id="cb4-177"><a href="#cb4-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-178"><a href="#cb4-178" aria-hidden="true" tabindex="-1"></a>如果变量集合$Z$满足后门准则，那么我们可以用观察数据识别因果效应：</span>
-<span id="cb4-179"><a href="#cb4-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-180"><a href="#cb4-180" aria-hidden="true" tabindex="-1"></a>$$P(Y|do(X)) = \sum_z P(Y|X,Z)P(Z)$$</span>
-<span id="cb4-181"><a href="#cb4-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-182"><a href="#cb4-182" aria-hidden="true" tabindex="-1"></a>其中：</span>
-<span id="cb4-183"><a href="#cb4-183" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$P(Y|do(X))$ 表示干预$X$后的$Y$分布（即因果效应）</span>
-<span id="cb4-184"><a href="#cb4-184" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$P(Y|X,Z)$ 是给定$X$和$Z$的条件分布</span>
-<span id="cb4-185"><a href="#cb4-185" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$P(Z)$ 是$Z$的边缘分布</span>
+<span id="cb4-178"><a href="#cb4-178" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>控制碰撞节点（碰撞节点是$X$和某个其他变量的共同后代）</span>
+<span id="cb4-179"><a href="#cb4-179" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>控制中介变量（中介变量是$X$的后代）</span>
+<span id="cb4-180"><a href="#cb4-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-181"><a href="#cb4-181" aria-hidden="true" tabindex="-1"></a><span class="fu">## 后门准则的数学含义 {#sec-backdoor-math}</span></span>
+<span id="cb4-182"><a href="#cb4-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-183"><a href="#cb4-183" aria-hidden="true" tabindex="-1"></a>如果变量集合$Z$满足后门准则，那么我们可以用观察数据识别因果效应：</span>
+<span id="cb4-184"><a href="#cb4-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-185"><a href="#cb4-185" aria-hidden="true" tabindex="-1"></a>$$P(Y|do(X)) = \sum_z P(Y|X,Z)P(Z)$$</span>
 <span id="cb4-186"><a href="#cb4-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-187"><a href="#cb4-187" aria-hidden="true" tabindex="-1"></a>**实际含义**：通过调整（控制）$Z$，我们可以消除后门路径造成的偏误，获得因果效应的无偏估计。</span>
+<span id="cb4-187"><a href="#cb4-187" aria-hidden="true" tabindex="-1"></a>其中：</span>
 <span id="cb4-188"><a href="#cb4-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-189"><a href="#cb4-189" aria-hidden="true" tabindex="-1"></a><span class="fu">## 应用示例：教育回报研究 {#sec-education-example}</span></span>
-<span id="cb4-190"><a href="#cb4-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-191"><a href="#cb4-191" aria-hidden="true" tabindex="-1"></a>考虑研究&quot;大学教育对收入的因果效应&quot;。相关的DAG可能包括：</span>
+<span id="cb4-189"><a href="#cb4-189" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$P(Y|do(X))$ 表示干预$X$后的$Y$分布（即因果效应）</span>
+<span id="cb4-190"><a href="#cb4-190" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$P(Y|X,Z)$ 是给定$X$和$Z$的条件分布</span>
+<span id="cb4-191"><a href="#cb4-191" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$P(Z)$ 是$Z$的边缘分布</span>
 <span id="cb4-192"><a href="#cb4-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-193"><a href="#cb4-193" aria-hidden="true" tabindex="-1"></a>**变量**：</span>
-<span id="cb4-194"><a href="#cb4-194" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X$：是否上大学</span>
-<span id="cb4-195"><a href="#cb4-195" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y$：收入</span>
-<span id="cb4-196"><a href="#cb4-196" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z_1$：能力（不可完全观测）</span>
-<span id="cb4-197"><a href="#cb4-197" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z_2$：家庭社会经济地位</span>
-<span id="cb4-198"><a href="#cb4-198" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z_3$：高中成绩</span>
-<span id="cb4-199"><a href="#cb4-199" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z_4$：职业选择</span>
-<span id="cb4-200"><a href="#cb4-200" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z_5$：婚姻状况</span>
-<span id="cb4-201"><a href="#cb4-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-202"><a href="#cb4-202" aria-hidden="true" tabindex="-1"></a>**因果路径**：</span>
-<span id="cb4-203"><a href="#cb4-203" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>大学教育 → 收入（直接效应）</span>
-<span id="cb4-204"><a href="#cb4-204" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>大学教育 → 职业选择 → 收入（间接效应）</span>
-<span id="cb4-205"><a href="#cb4-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-206"><a href="#cb4-206" aria-hidden="true" tabindex="-1"></a>**后门路径**：</span>
-<span id="cb4-207"><a href="#cb4-207" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>教育 $\leftarrow$ 能力 $\rightarrow$ 收入</span>
-<span id="cb4-208"><a href="#cb4-208" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>教育 $\leftarrow$ 家庭背景 $\rightarrow$ 能力 $\rightarrow$ 收入</span>
-<span id="cb4-209"><a href="#cb4-209" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>教育 $\leftarrow$ 高中成绩 $\rightarrow$ 能力 $\rightarrow$ 收入</span>
+<span id="cb4-193"><a href="#cb4-193" aria-hidden="true" tabindex="-1"></a>**实际含义**：通过调整（控制）$Z$，我们可以消除后门路径造成的偏误，获得因果效应的无偏估计。</span>
+<span id="cb4-194"><a href="#cb4-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-195"><a href="#cb4-195" aria-hidden="true" tabindex="-1"></a><span class="fu">## 应用示例：教育回报研究 {#sec-education-example}</span></span>
+<span id="cb4-196"><a href="#cb4-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-197"><a href="#cb4-197" aria-hidden="true" tabindex="-1"></a>考虑研究&quot;大学教育对收入的因果效应&quot;。相关的DAG可能包括：</span>
+<span id="cb4-198"><a href="#cb4-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-199"><a href="#cb4-199" aria-hidden="true" tabindex="-1"></a>**变量**：</span>
+<span id="cb4-200"><a href="#cb4-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-201"><a href="#cb4-201" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X$：是否上大学</span>
+<span id="cb4-202"><a href="#cb4-202" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y$：收入</span>
+<span id="cb4-203"><a href="#cb4-203" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z_1$：能力（不可完全观测）</span>
+<span id="cb4-204"><a href="#cb4-204" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z_2$：家庭社会经济地位</span>
+<span id="cb4-205"><a href="#cb4-205" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z_3$：高中成绩</span>
+<span id="cb4-206"><a href="#cb4-206" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z_4$：职业选择</span>
+<span id="cb4-207"><a href="#cb4-207" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z_5$：婚姻状况</span>
+<span id="cb4-208"><a href="#cb4-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-209"><a href="#cb4-209" aria-hidden="true" tabindex="-1"></a>**因果路径**：</span>
 <span id="cb4-210"><a href="#cb4-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-211"><a href="#cb4-211" aria-hidden="true" tabindex="-1"></a>**控制策略**：</span>
-<span id="cb4-212"><a href="#cb4-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-213"><a href="#cb4-213" aria-hidden="true" tabindex="-1"></a>**应该控制**：能力（尽可能代理）、家庭背景、高中成绩</span>
-<span id="cb4-214"><a href="#cb4-214" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>阻断所有后门路径</span>
-<span id="cb4-215"><a href="#cb4-215" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>这些不是$X$的后代</span>
-<span id="cb4-216"><a href="#cb4-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-217"><a href="#cb4-217" aria-hidden="true" tabindex="-1"></a>**不应该控制**：</span>
-<span id="cb4-218"><a href="#cb4-218" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>职业选择（中介变量，控制会低估总效应）</span>
-<span id="cb4-219"><a href="#cb4-219" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>婚姻状况（可能是碰撞节点：教育 → 婚姻 ← 收入潜力）</span>
-<span id="cb4-220"><a href="#cb4-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-221"><a href="#cb4-221" aria-hidden="true" tabindex="-1"></a><span class="fu"># 碰撞偏误的深入分析 {#sec-collider-bias}</span></span>
-<span id="cb4-222"><a href="#cb4-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-223"><a href="#cb4-223" aria-hidden="true" tabindex="-1"></a><span class="fu">## 名人效应：直观理解碰撞偏误 {#sec-celebrity-effect}</span></span>
-<span id="cb4-224"><a href="#cb4-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-225"><a href="#cb4-225" aria-hidden="true" tabindex="-1"></a>电影明星的例子是理解碰撞偏误的经典案例：</span>
+<span id="cb4-211"><a href="#cb4-211" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>大学教育 → 收入（直接效应）</span>
+<span id="cb4-212"><a href="#cb4-212" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>大学教育 → 职业选择 → 收入（间接效应）</span>
+<span id="cb4-213"><a href="#cb4-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-214"><a href="#cb4-214" aria-hidden="true" tabindex="-1"></a>**后门路径**：</span>
+<span id="cb4-215"><a href="#cb4-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-216"><a href="#cb4-216" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>教育 $\leftarrow$ 能力 $\rightarrow$ 收入</span>
+<span id="cb4-217"><a href="#cb4-217" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>教育 $\leftarrow$ 家庭背景 $\rightarrow$ 能力 $\rightarrow$ 收入</span>
+<span id="cb4-218"><a href="#cb4-218" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>教育 $\leftarrow$ 高中成绩 $\rightarrow$ 能力 $\rightarrow$ 收入</span>
+<span id="cb4-219"><a href="#cb4-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-220"><a href="#cb4-220" aria-hidden="true" tabindex="-1"></a>**控制策略**：</span>
+<span id="cb4-221"><a href="#cb4-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-222"><a href="#cb4-222" aria-hidden="true" tabindex="-1"></a>**应该控制**：能力（尽可能代理）、家庭背景、高中成绩</span>
+<span id="cb4-223"><a href="#cb4-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-224"><a href="#cb4-224" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>阻断所有后门路径</span>
+<span id="cb4-225"><a href="#cb4-225" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>这些不是$X$的后代</span>
 <span id="cb4-226"><a href="#cb4-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-227"><a href="#cb4-227" aria-hidden="true" tabindex="-1"></a>**设定**：</span>
-<span id="cb4-228"><a href="#cb4-228" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X$：美貌</span>
-<span id="cb4-229"><a href="#cb4-229" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y$：演技</span>
-<span id="cb4-230"><a href="#cb4-230" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z$：成为明星</span>
+<span id="cb4-227"><a href="#cb4-227" aria-hidden="true" tabindex="-1"></a>**不应该控制**：</span>
+<span id="cb4-228"><a href="#cb4-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-229"><a href="#cb4-229" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>职业选择（中介变量，控制会低估总效应）</span>
+<span id="cb4-230"><a href="#cb4-230" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>婚姻状况（可能是碰撞节点：教育 → 婚姻 ← 收入潜力）</span>
 <span id="cb4-231"><a href="#cb4-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-232"><a href="#cb4-232" aria-hidden="true" tabindex="-1"></a>**因果关系**：</span>
-<span id="cb4-233"><a href="#cb4-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>美貌有助于成为明星：$X \rightarrow Z$</span>
-<span id="cb4-234"><a href="#cb4-234" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>演技有助于成为明星：$Y \rightarrow Z$</span>
-<span id="cb4-235"><a href="#cb4-235" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z$是碰撞节点</span>
-<span id="cb4-236"><a href="#cb4-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-237"><a href="#cb4-237" aria-hidden="true" tabindex="-1"></a>**悖论**：</span>
-<span id="cb4-238"><a href="#cb4-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-239"><a href="#cb4-239" aria-hidden="true" tabindex="-1"></a>在普通人群中，美貌和演技可能不相关（或只有弱相关）。但在&quot;明星&quot;这个子群体中：</span>
-<span id="cb4-240"><a href="#cb4-240" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>我们看到很多美貌但演技一般的明星</span>
-<span id="cb4-241"><a href="#cb4-241" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>我们看到很多演技好但美貌一般的明星</span>
-<span id="cb4-242"><a href="#cb4-242" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>美貌和演技呈现负相关！</span>
+<span id="cb4-232"><a href="#cb4-232" aria-hidden="true" tabindex="-1"></a><span class="fu"># 碰撞偏误的深入分析 {#sec-collider-bias}</span></span>
+<span id="cb4-233"><a href="#cb4-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-234"><a href="#cb4-234" aria-hidden="true" tabindex="-1"></a><span class="fu">## 名人效应：直观理解碰撞偏误 {#sec-celebrity-effect}</span></span>
+<span id="cb4-235"><a href="#cb4-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-236"><a href="#cb4-236" aria-hidden="true" tabindex="-1"></a>电影明星的例子是理解碰撞偏误的经典案例：</span>
+<span id="cb4-237"><a href="#cb4-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-238"><a href="#cb4-238" aria-hidden="true" tabindex="-1"></a>**设定**：</span>
+<span id="cb4-239"><a href="#cb4-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-240"><a href="#cb4-240" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X$：美貌</span>
+<span id="cb4-241"><a href="#cb4-241" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y$：演技</span>
+<span id="cb4-242"><a href="#cb4-242" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z$：成为明星</span>
 <span id="cb4-243"><a href="#cb4-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-244"><a href="#cb4-244" aria-hidden="true" tabindex="-1"></a>**解释**：这不是因为美貌和演技真的此消彼长，而是成为明星的**选择机制**造成的。如果一个人在美貌方面得分很高，那么在演技方面的&quot;门槛&quot;就会降低；反之亦然。</span>
+<span id="cb4-244"><a href="#cb4-244" aria-hidden="true" tabindex="-1"></a>**因果关系**：</span>
 <span id="cb4-245"><a href="#cb4-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-246"><a href="#cb4-246" aria-hidden="true" tabindex="-1"></a><span class="fu">## 碰撞偏误在学术研究中的常见形式 {#sec-collider-research}</span></span>
-<span id="cb4-247"><a href="#cb4-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-248"><a href="#cb4-248" aria-hidden="true" tabindex="-1"></a><span class="fu">### 样本选择偏误 {#sec-sample-selection}</span></span>
+<span id="cb4-246"><a href="#cb4-246" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>美貌有助于成为明星：$X \rightarrow Z$</span>
+<span id="cb4-247"><a href="#cb4-247" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>演技有助于成为明星：$Y \rightarrow Z$</span>
+<span id="cb4-248"><a href="#cb4-248" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Z$是碰撞节点</span>
 <span id="cb4-249"><a href="#cb4-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-250"><a href="#cb4-250" aria-hidden="true" tabindex="-1"></a>**问题**：如果研究样本本身是基于碰撞节点选择，偏误就存在了。</span>
+<span id="cb4-250"><a href="#cb4-250" aria-hidden="true" tabindex="-1"></a>**悖论**：</span>
 <span id="cb4-251"><a href="#cb4-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-252"><a href="#cb4-252" aria-hidden="true" tabindex="-1"></a>**例子**：研究成功人士的特征</span>
-<span id="cb4-253"><a href="#cb4-253" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>成功 = f(能力, 机遇)</span>
-<span id="cb4-254"><a href="#cb4-254" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>能力和机遇都影响成功（成为成功人士）</span>
-<span id="cb4-255"><a href="#cb4-255" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>在成功人士样本中，能力和机遇可能负相关</span>
-<span id="cb4-256"><a href="#cb4-256" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>但这只是选择效应，不是真实的权衡</span>
+<span id="cb4-252"><a href="#cb4-252" aria-hidden="true" tabindex="-1"></a>在普通人群中，美貌和演技可能不相关（或只有弱相关）。但在&quot;明星&quot;这个子群体中：</span>
+<span id="cb4-253"><a href="#cb4-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-254"><a href="#cb4-254" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>我们看到很多美貌但演技一般的明星</span>
+<span id="cb4-255"><a href="#cb4-255" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>我们看到很多演技好但美貌一般的明星</span>
+<span id="cb4-256"><a href="#cb4-256" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>美貌和演技呈现负相关！</span>
 <span id="cb4-257"><a href="#cb4-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-258"><a href="#cb4-258" aria-hidden="true" tabindex="-1"></a><span class="fu">### 控制结果变量 {#sec-controlling-outcome}</span></span>
+<span id="cb4-258"><a href="#cb4-258" aria-hidden="true" tabindex="-1"></a>**解释**：这不是因为美貌和演技真的此消彼长，而是成为明星的**选择机制**造成的。如果一个人在美貌方面得分很高，那么在演技方面的&quot;门槛&quot;就会降低；反之亦然。</span>
 <span id="cb4-259"><a href="#cb4-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-260"><a href="#cb4-260" aria-hidden="true" tabindex="-1"></a>**问题**：有时研究者会无意中控制处理或结果的代理变量。</span>
+<span id="cb4-260"><a href="#cb4-260" aria-hidden="true" tabindex="-1"></a><span class="fu">## 碰撞偏误在学术研究中的常见形式 {#sec-collider-research}</span></span>
 <span id="cb4-261"><a href="#cb4-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-262"><a href="#cb4-262" aria-hidden="true" tabindex="-1"></a>**例子**：研究幸福感对收入的影响</span>
-<span id="cb4-263"><a href="#cb4-263" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>幸福感可能影响婚姻决策</span>
-<span id="cb4-264"><a href="#cb4-264" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>收入也可能影响婚姻决策</span>
-<span id="cb4-265"><a href="#cb4-265" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>婚姻状态是碰撞节点</span>
-<span id="cb4-266"><a href="#cb4-266" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果控制婚姻状态，会引入偏误</span>
+<span id="cb4-262"><a href="#cb4-262" aria-hidden="true" tabindex="-1"></a><span class="fu">### 样本选择偏误 {#sec-sample-selection}</span></span>
+<span id="cb4-263"><a href="#cb4-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-264"><a href="#cb4-264" aria-hidden="true" tabindex="-1"></a>**问题**：如果研究样本本身是基于碰撞节点选择，偏误就存在了。</span>
+<span id="cb4-265"><a href="#cb4-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-266"><a href="#cb4-266" aria-hidden="true" tabindex="-1"></a>**例子**：研究成功人士的特征</span>
 <span id="cb4-267"><a href="#cb4-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-268"><a href="#cb4-268" aria-hidden="true" tabindex="-1"></a><span class="fu">### 幸存者偏误 {#sec-survivorship}</span></span>
-<span id="cb4-269"><a href="#cb4-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-270"><a href="#cb4-270" aria-hidden="true" tabindex="-1"></a>**例子**：研究企业培训的效果</span>
-<span id="cb4-271"><a href="#cb4-271" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>培训可能影响员工绩效</span>
-<span id="cb4-272"><a href="#cb4-272" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>高绩效员工更可能被保留（不被裁员）</span>
-<span id="cb4-273"><a href="#cb4-273" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>留存状态是碰撞节点：培训 → 留存 ← 绩效</span>
-<span id="cb4-274"><a href="#cb4-274" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果只分析留存的员工，会低估培训效果（因为培训效果差的已经离开）</span>
-<span id="cb4-275"><a href="#cb4-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-276"><a href="#cb4-276" aria-hidden="true" tabindex="-1"></a><span class="fu">## 真实案例：性别工资差距 {#sec-gender-wage}</span></span>
-<span id="cb4-277"><a href="#cb4-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-278"><a href="#cb4-278" aria-hidden="true" tabindex="-1"></a>**常见发现**：控制职业后，性别工资差距减小或消失</span>
-<span id="cb4-279"><a href="#cb4-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-280"><a href="#cb4-280" aria-hidden="true" tabindex="-1"></a>**DAG分析**：</span>
-<span id="cb4-281"><a href="#cb4-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-282"><a href="#cb4-282" aria-hidden="true" tabindex="-1"></a>职业选择可能是碰撞节点：</span>
-<span id="cb4-283"><a href="#cb4-283" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>性别歧视可能影响职业选择</span>
-<span id="cb4-284"><a href="#cb4-284" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>个人偏好和能力影响职业选择</span>
-<span id="cb4-285"><a href="#cb4-285" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>职业收入反映歧视和偏好</span>
-<span id="cb4-286"><a href="#cb4-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-287"><a href="#cb4-287" aria-hidden="true" tabindex="-1"></a>**控制职业的潜在问题**：</span>
-<span id="cb4-288"><a href="#cb4-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-289"><a href="#cb4-289" aria-hidden="true" tabindex="-1"></a>如果歧视通过限制女性进入高收入职业来运作，那么&quot;控制职业&quot;就是在控制歧视的**渠道**。这会低估歧视的总效应。</span>
-<span id="cb4-290"><a href="#cb4-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-291"><a href="#cb4-291" aria-hidden="true" tabindex="-1"></a>**正确的解释**：</span>
-<span id="cb4-292"><a href="#cb4-292" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>总歧视效应 = 同职业内的工资差距 + 职业选择受限造成的损失</span>
-<span id="cb4-293"><a href="#cb4-293" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>只控制前者会遗漏后者</span>
+<span id="cb4-268"><a href="#cb4-268" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>成功 = f(能力, 机遇)</span>
+<span id="cb4-269"><a href="#cb4-269" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>能力和机遇都影响成功（成为成功人士）</span>
+<span id="cb4-270"><a href="#cb4-270" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>在成功人士样本中，能力和机遇可能负相关</span>
+<span id="cb4-271"><a href="#cb4-271" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>但这只是选择效应，不是真实的权衡</span>
+<span id="cb4-272"><a href="#cb4-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-273"><a href="#cb4-273" aria-hidden="true" tabindex="-1"></a><span class="fu">### 控制结果变量 {#sec-controlling-outcome}</span></span>
+<span id="cb4-274"><a href="#cb4-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-275"><a href="#cb4-275" aria-hidden="true" tabindex="-1"></a>**问题**：有时研究者会无意中控制处理或结果的代理变量。</span>
+<span id="cb4-276"><a href="#cb4-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-277"><a href="#cb4-277" aria-hidden="true" tabindex="-1"></a>**例子**：研究幸福感对收入的影响</span>
+<span id="cb4-278"><a href="#cb4-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-279"><a href="#cb4-279" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>幸福感可能影响婚姻决策</span>
+<span id="cb4-280"><a href="#cb4-280" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>收入也可能影响婚姻决策</span>
+<span id="cb4-281"><a href="#cb4-281" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>婚姻状态是碰撞节点</span>
+<span id="cb4-282"><a href="#cb4-282" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果控制婚姻状态，会引入偏误</span>
+<span id="cb4-283"><a href="#cb4-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-284"><a href="#cb4-284" aria-hidden="true" tabindex="-1"></a><span class="fu">### 幸存者偏误 {#sec-survivorship}</span></span>
+<span id="cb4-285"><a href="#cb4-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-286"><a href="#cb4-286" aria-hidden="true" tabindex="-1"></a>**例子**：研究企业培训的效果</span>
+<span id="cb4-287"><a href="#cb4-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-288"><a href="#cb4-288" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>培训可能影响员工绩效</span>
+<span id="cb4-289"><a href="#cb4-289" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>高绩效员工更可能被保留（不被裁员）</span>
+<span id="cb4-290"><a href="#cb4-290" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>留存状态是碰撞节点：培训 → 留存 ← 绩效</span>
+<span id="cb4-291"><a href="#cb4-291" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果只分析留存的员工，会低估培训效果（因为培训效果差的已经离开）</span>
+<span id="cb4-292"><a href="#cb4-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-293"><a href="#cb4-293" aria-hidden="true" tabindex="-1"></a><span class="fu">## 真实案例：性别工资差距 {#sec-gender-wage}</span></span>
 <span id="cb4-294"><a href="#cb4-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-295"><a href="#cb4-295" aria-hidden="true" tabindex="-1"></a><span class="fu"># 两种因果推断框架的比较 {#sec-comparison}</span></span>
+<span id="cb4-295"><a href="#cb4-295" aria-hidden="true" tabindex="-1"></a>**常见发现**：控制职业后，性别工资差距减小或消失</span>
 <span id="cb4-296"><a href="#cb4-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-297"><a href="#cb4-297" aria-hidden="true" tabindex="-1"></a><span class="fu">## 潜在结果框架（Rubin因果模型） {#sec-potential-outcomes}</span></span>
+<span id="cb4-297"><a href="#cb4-297" aria-hidden="true" tabindex="-1"></a>**DAG分析**：</span>
 <span id="cb4-298"><a href="#cb4-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-299"><a href="#cb4-299" aria-hidden="true" tabindex="-1"></a>**核心概念**：</span>
+<span id="cb4-299"><a href="#cb4-299" aria-hidden="true" tabindex="-1"></a>职业选择可能是碰撞节点：</span>
 <span id="cb4-300"><a href="#cb4-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-301"><a href="#cb4-301" aria-hidden="true" tabindex="-1"></a>对于每个个体$i$，存在两种潜在结果：</span>
-<span id="cb4-302"><a href="#cb4-302" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y_i(1)$：接受处理的结果</span>
-<span id="cb4-303"><a href="#cb4-303" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y_i(0)$：未接受处理的结果</span>
+<span id="cb4-301"><a href="#cb4-301" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>性别歧视可能影响职业选择</span>
+<span id="cb4-302"><a href="#cb4-302" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>个人偏好和能力影响职业选择</span>
+<span id="cb4-303"><a href="#cb4-303" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>职业收入反映歧视和偏好</span>
 <span id="cb4-304"><a href="#cb4-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-305"><a href="#cb4-305" aria-hidden="true" tabindex="-1"></a>**因果效应**：</span>
-<span id="cb4-306"><a href="#cb4-306" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>个体处理效应：$\tau_i = Y_i(1) - Y_i(0)$</span>
-<span id="cb4-307"><a href="#cb4-307" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>平均处理效应：$ATE = E<span class="co">[</span><span class="ot">Y(1) - Y(0)</span><span class="co">]</span>$</span>
+<span id="cb4-305"><a href="#cb4-305" aria-hidden="true" tabindex="-1"></a>**控制职业的潜在问题**：</span>
+<span id="cb4-306"><a href="#cb4-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-307"><a href="#cb4-307" aria-hidden="true" tabindex="-1"></a>如果歧视通过限制女性进入高收入职业来运作，那么&quot;控制职业&quot;就是在控制歧视的**渠道**。这会低估歧视的总效应。</span>
 <span id="cb4-308"><a href="#cb4-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-309"><a href="#cb4-309" aria-hidden="true" tabindex="-1"></a>**识别假设**：</span>
-<span id="cb4-310"><a href="#cb4-310" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**无混淆假设（Unconfoundedness）**：处理分配与潜在结果独立，条件于可观测变量</span>
-<span id="cb4-311"><a href="#cb4-311" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**正向性（Positivity/Overlap）**：对于所有协变量值，$0 &lt; P(D=1|X) &lt; 1$</span>
-<span id="cb4-312"><a href="#cb4-312" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**SUTVA**：个体的潜在结果不受他人处理状态影响</span>
+<span id="cb4-309"><a href="#cb4-309" aria-hidden="true" tabindex="-1"></a>**正确的解释**：</span>
+<span id="cb4-310"><a href="#cb4-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-311"><a href="#cb4-311" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>总歧视效应 = 同职业内的工资差距 + 职业选择受限造成的损失</span>
+<span id="cb4-312"><a href="#cb4-312" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>只控制前者会遗漏后者</span>
 <span id="cb4-313"><a href="#cb4-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-314"><a href="#cb4-314" aria-hidden="true" tabindex="-1"></a>**优势**：</span>
-<span id="cb4-315"><a href="#cb4-315" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>数学表达精确</span>
-<span id="cb4-316"><a href="#cb4-316" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>估计方法成熟（回归、匹配、加权、双重差分等）</span>
-<span id="cb4-317"><a href="#cb4-317" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>易于进行统计推断</span>
-<span id="cb4-318"><a href="#cb4-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-319"><a href="#cb4-319" aria-hidden="true" tabindex="-1"></a><span class="fu">## DAG框架（Pearl因果图） {#sec-dag-framework}</span></span>
-<span id="cb4-320"><a href="#cb4-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-321"><a href="#cb4-321" aria-hidden="true" tabindex="-1"></a>**核心概念**：</span>
-<span id="cb4-322"><a href="#cb4-322" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-323"><a href="#cb4-323" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**节点**：随机变量</span>
-<span id="cb4-324"><a href="#cb4-324" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**有向边**：直接因果效应</span>
-<span id="cb4-325"><a href="#cb4-325" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**路径**：节点间的连接序列</span>
-<span id="cb4-326"><a href="#cb4-326" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**$d$-分离（d-separation）**：判断条件独立性的图形准则</span>
-<span id="cb4-327"><a href="#cb4-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-328"><a href="#cb4-328" aria-hidden="true" tabindex="-1"></a>**识别规则**：</span>
+<span id="cb4-314"><a href="#cb4-314" aria-hidden="true" tabindex="-1"></a><span class="fu"># 两种因果推断框架的比较 {#sec-comparison}</span></span>
+<span id="cb4-315"><a href="#cb4-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-316"><a href="#cb4-316" aria-hidden="true" tabindex="-1"></a><span class="fu">## 潜在结果框架（Rubin因果模型） {#sec-potential-outcomes}</span></span>
+<span id="cb4-317"><a href="#cb4-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-318"><a href="#cb4-318" aria-hidden="true" tabindex="-1"></a>**核心概念**：</span>
+<span id="cb4-319"><a href="#cb4-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-320"><a href="#cb4-320" aria-hidden="true" tabindex="-1"></a>对于每个个体$i$，存在两种潜在结果：</span>
+<span id="cb4-321"><a href="#cb4-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-322"><a href="#cb4-322" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y_i(1)$：接受处理的结果</span>
+<span id="cb4-323"><a href="#cb4-323" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$Y_i(0)$：未接受处理的结果</span>
+<span id="cb4-324"><a href="#cb4-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-325"><a href="#cb4-325" aria-hidden="true" tabindex="-1"></a>**因果效应**：</span>
+<span id="cb4-326"><a href="#cb4-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-327"><a href="#cb4-327" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>个体处理效应：$\tau_i = Y_i(1) - Y_i(0)$</span>
+<span id="cb4-328"><a href="#cb4-328" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>平均处理效应：$ATE = E<span class="co">[</span><span class="ot">Y(1) - Y(0)</span><span class="co">]</span>$</span>
 <span id="cb4-329"><a href="#cb4-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-330"><a href="#cb4-330" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**后门准则**：阻断所有后门路径</span>
-<span id="cb4-331"><a href="#cb4-331" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**前门准则**：利用中介变量识别因果效应</span>
-<span id="cb4-332"><a href="#cb4-332" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**$do$-演算**：从观察分布推导干预分布的通用方法</span>
-<span id="cb4-333"><a href="#cb4-333" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-334"><a href="#cb4-334" aria-hidden="true" tabindex="-1"></a>**优势**：</span>
-<span id="cb4-335"><a href="#cb4-335" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>可视化因果关系</span>
-<span id="cb4-336"><a href="#cb4-336" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>系统化识别偏误来源</span>
-<span id="cb4-337"><a href="#cb4-337" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>指导变量选择</span>
-<span id="cb4-338"><a href="#cb4-338" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>处理复杂因果结构（如多中介、反馈循环等）</span>
-<span id="cb4-339"><a href="#cb4-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-340"><a href="#cb4-340" aria-hidden="true" tabindex="-1"></a><span class="fu">## 两种框架的互补性 {#sec-complementarity}</span></span>
+<span id="cb4-330"><a href="#cb4-330" aria-hidden="true" tabindex="-1"></a>**识别假设**：</span>
+<span id="cb4-331"><a href="#cb4-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-332"><a href="#cb4-332" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**无混淆假设（Unconfoundedness）**：处理分配与潜在结果独立，条件于可观测变量</span>
+<span id="cb4-333"><a href="#cb4-333" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**正向性（Positivity/Overlap）**：对于所有协变量值，$0 &lt; P(D=1|X) &lt; 1$</span>
+<span id="cb4-334"><a href="#cb4-334" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**SUTVA**：个体的潜在结果不受他人处理状态影响</span>
+<span id="cb4-335"><a href="#cb4-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-336"><a href="#cb4-336" aria-hidden="true" tabindex="-1"></a>**优势**：</span>
+<span id="cb4-337"><a href="#cb4-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-338"><a href="#cb4-338" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>数学表达精确</span>
+<span id="cb4-339"><a href="#cb4-339" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>估计方法成熟（回归、匹配、加权、双重差分等）</span>
+<span id="cb4-340"><a href="#cb4-340" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>易于进行统计推断</span>
 <span id="cb4-341"><a href="#cb4-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-342"><a href="#cb4-342" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 维度 <span class="pp">|</span> 潜在结果框架 <span class="pp">|</span> DAG框架 <span class="pp">|</span></span>
-<span id="cb4-343"><a href="#cb4-343" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|</span></span>
-<span id="cb4-344"><a href="#cb4-344" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **核心问题** <span class="pp">|</span> &quot;效应有多大？&quot; <span class="pp">|</span> &quot;能否识别效应？&quot; <span class="pp">|</span></span>
-<span id="cb4-345"><a href="#cb4-345" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **表达形式** <span class="pp">|</span> 数学方程和假设 <span class="pp">|</span> 图形结构 <span class="pp">|</span></span>
-<span id="cb4-346"><a href="#cb4-346" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **主要用途** <span class="pp">|</span> 估计和推断 <span class="pp">|</span> 研究设计和假设检验 <span class="pp">|</span></span>
-<span id="cb4-347"><a href="#cb4-347" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **识别条件** <span class="pp">|</span> 无混淆假设(CIA) <span class="pp">|</span> 后门准则、$d$-分离 <span class="pp">|</span></span>
-<span id="cb4-348"><a href="#cb4-348" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **变量选择** <span class="pp">|</span> 基于理论判断 <span class="pp">|</span> 基于路径分析 <span class="pp">|</span></span>
-<span id="cb4-349"><a href="#cb4-349" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **中介分析** <span class="pp">|</span> 潜在结果中介模型 <span class="pp">|</span> 前门准则 <span class="pp">|</span></span>
-<span id="cb4-350"><a href="#cb4-350" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **处理复杂选择** <span class="pp">|</span> 较困难 <span class="pp">|</span> 系统化方法 <span class="pp">|</span></span>
-<span id="cb4-351"><a href="#cb4-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-352"><a href="#cb4-352" aria-hidden="true" tabindex="-1"></a>**最佳实践**：</span>
-<span id="cb4-353"><a href="#cb4-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-354"><a href="#cb4-354" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**研究设计阶段**：使用DAG理清因果结构，识别需要控制的变量</span>
-<span id="cb4-355"><a href="#cb4-355" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**估计阶段**：使用潜在结果框架的估计方法（回归、匹配、双重差分等）</span>
-<span id="cb4-356"><a href="#cb4-356" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**敏感性分析**：用DAG识别可能的未观测混淆因素，用潜在结果框架评估敏感性</span>
-<span id="cb4-357"><a href="#cb4-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-358"><a href="#cb4-358" aria-hidden="true" tabindex="-1"></a><span class="fu">## 从两种视角看同一问题 {#sec-two-perspectives}</span></span>
-<span id="cb4-359"><a href="#cb4-359" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-360"><a href="#cb4-360" aria-hidden="true" tabindex="-1"></a><span class="fu">### 混淆偏误 {#sec-confounding-both}</span></span>
-<span id="cb4-361"><a href="#cb4-361" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-362"><a href="#cb4-362" aria-hidden="true" tabindex="-1"></a>*潜在结果视角*：</span>
-<span id="cb4-363"><a href="#cb4-363" aria-hidden="true" tabindex="-1"></a>$$E<span class="co">[</span><span class="ot">Y(0)|D=1</span><span class="co">]</span> \neq E<span class="co">[</span><span class="ot">Y(0)|D=0</span><span class="co">]</span>$$</span>
-<span id="cb4-364"><a href="#cb4-364" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-365"><a href="#cb4-365" aria-hidden="true" tabindex="-1"></a>处理组和对照组在反事实上不可比——如果处理组未接受处理，他们的结果会与实际未接受处理的对照组不同。</span>
-<span id="cb4-366"><a href="#cb4-366" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-367"><a href="#cb4-367" aria-hidden="true" tabindex="-1"></a>*DAG视角*：</span>
-<span id="cb4-368"><a href="#cb4-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-369"><a href="#cb4-369" aria-hidden="true" tabindex="-1"></a>存在从$X$到$Y$的开放后门路径。例如，$X \leftarrow Z \rightarrow Y$，其中$Z$是混淆变量。</span>
-<span id="cb4-370"><a href="#cb4-370" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-371"><a href="#cb4-371" aria-hidden="true" tabindex="-1"></a>*解决方案*：</span>
-<span id="cb4-372"><a href="#cb4-372" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-373"><a href="#cb4-373" aria-hidden="true" tabindex="-1"></a>控制$Z$阻断后门路径。潜在结果框架证明这可以恢复可比较性；DAG框架系统化识别需要控制的变量。</span>
-<span id="cb4-374"><a href="#cb4-374" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-375"><a href="#cb4-375" aria-hidden="true" tabindex="-1"></a><span class="fu">### 碰撞偏误 {#sec-collider-both}</span></span>
-<span id="cb4-376"><a href="#cb4-376" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-377"><a href="#cb4-377" aria-hidden="true" tabindex="-1"></a>*潜在结果视角*：</span>
-<span id="cb4-378"><a href="#cb4-378" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-379"><a href="#cb4-379" aria-hidden="true" tabindex="-1"></a>条件化（控制）一个变量导致样本选择，破坏了处理组和对照组的可比性。条件分布不再反映原始总体的特征。</span>
-<span id="cb4-380"><a href="#cb4-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-381"><a href="#cb4-381" aria-hidden="true" tabindex="-1"></a>*DAG视角*：</span>
-<span id="cb4-382"><a href="#cb4-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-383"><a href="#cb4-383" aria-hidden="true" tabindex="-1"></a>控制的变量是碰撞节点，打开了一条原本封闭的虚假路径。$X$和$Y$通过碰撞节点$Z$产生了虚假相关。</span>
-<span id="cb4-384"><a href="#cb4-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-385"><a href="#cb4-385" aria-hidden="true" tabindex="-1"></a>*解决方案*：</span>
-<span id="cb4-386"><a href="#cb4-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-387"><a href="#cb4-387" aria-hidden="true" tabindex="-1"></a>不要控制碰撞节点。在潜在结果框架中，这意味着避免基于结果或其代理变量进行选择；在DAG框架中，这意味着识别并避免控制碰撞节点。</span>
+<span id="cb4-342"><a href="#cb4-342" aria-hidden="true" tabindex="-1"></a><span class="fu">## DAG框架（Pearl因果图） {#sec-dag-framework}</span></span>
+<span id="cb4-343"><a href="#cb4-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-344"><a href="#cb4-344" aria-hidden="true" tabindex="-1"></a>**核心概念**：</span>
+<span id="cb4-345"><a href="#cb4-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-346"><a href="#cb4-346" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**节点**：随机变量</span>
+<span id="cb4-347"><a href="#cb4-347" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**有向边**：直接因果效应</span>
+<span id="cb4-348"><a href="#cb4-348" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**路径**：节点间的连接序列</span>
+<span id="cb4-349"><a href="#cb4-349" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**$d$-分离（d-separation）**：判断条件独立性的图形准则</span>
+<span id="cb4-350"><a href="#cb4-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-351"><a href="#cb4-351" aria-hidden="true" tabindex="-1"></a>**识别规则**：</span>
+<span id="cb4-352"><a href="#cb4-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-353"><a href="#cb4-353" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**后门准则**：阻断所有后门路径</span>
+<span id="cb4-354"><a href="#cb4-354" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**前门准则**：利用中介变量识别因果效应</span>
+<span id="cb4-355"><a href="#cb4-355" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**$do$-演算**：从观察分布推导干预分布的通用方法</span>
+<span id="cb4-356"><a href="#cb4-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-357"><a href="#cb4-357" aria-hidden="true" tabindex="-1"></a>**优势**：</span>
+<span id="cb4-358"><a href="#cb4-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-359"><a href="#cb4-359" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>可视化因果关系</span>
+<span id="cb4-360"><a href="#cb4-360" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>系统化识别偏误来源</span>
+<span id="cb4-361"><a href="#cb4-361" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>指导变量选择</span>
+<span id="cb4-362"><a href="#cb4-362" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>处理复杂因果结构（如多中介、反馈循环等）</span>
+<span id="cb4-363"><a href="#cb4-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-364"><a href="#cb4-364" aria-hidden="true" tabindex="-1"></a><span class="fu">## 两种框架的互补性 {#sec-complementarity}</span></span>
+<span id="cb4-365"><a href="#cb4-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-366"><a href="#cb4-366" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 维度 <span class="pp">|</span> 潜在结果框架 <span class="pp">|</span> DAG框架 <span class="pp">|</span></span>
+<span id="cb4-367"><a href="#cb4-367" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|</span></span>
+<span id="cb4-368"><a href="#cb4-368" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **核心问题** <span class="pp">|</span> &quot;效应有多大？&quot; <span class="pp">|</span> &quot;能否识别效应？&quot; <span class="pp">|</span></span>
+<span id="cb4-369"><a href="#cb4-369" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **表达形式** <span class="pp">|</span> 数学方程和假设 <span class="pp">|</span> 图形结构 <span class="pp">|</span></span>
+<span id="cb4-370"><a href="#cb4-370" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **主要用途** <span class="pp">|</span> 估计和推断 <span class="pp">|</span> 研究设计和假设检验 <span class="pp">|</span></span>
+<span id="cb4-371"><a href="#cb4-371" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **识别条件** <span class="pp">|</span> 无混淆假设(CIA) <span class="pp">|</span> 后门准则、$d$-分离 <span class="pp">|</span></span>
+<span id="cb4-372"><a href="#cb4-372" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **变量选择** <span class="pp">|</span> 基于理论判断 <span class="pp">|</span> 基于路径分析 <span class="pp">|</span></span>
+<span id="cb4-373"><a href="#cb4-373" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **中介分析** <span class="pp">|</span> 潜在结果中介模型 <span class="pp">|</span> 前门准则 <span class="pp">|</span></span>
+<span id="cb4-374"><a href="#cb4-374" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **处理复杂选择** <span class="pp">|</span> 较困难 <span class="pp">|</span> 系统化方法 <span class="pp">|</span></span>
+<span id="cb4-375"><a href="#cb4-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-376"><a href="#cb4-376" aria-hidden="true" tabindex="-1"></a>**最佳实践**：</span>
+<span id="cb4-377"><a href="#cb4-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-378"><a href="#cb4-378" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**研究设计阶段**：使用DAG理清因果结构，识别需要控制的变量</span>
+<span id="cb4-379"><a href="#cb4-379" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**估计阶段**：使用潜在结果框架的估计方法（回归、匹配、双重差分等）</span>
+<span id="cb4-380"><a href="#cb4-380" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**敏感性分析**：用DAG识别可能的未观测混淆因素，用潜在结果框架评估敏感性</span>
+<span id="cb4-381"><a href="#cb4-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-382"><a href="#cb4-382" aria-hidden="true" tabindex="-1"></a><span class="fu">## 从两种视角看同一问题 {#sec-two-perspectives}</span></span>
+<span id="cb4-383"><a href="#cb4-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-384"><a href="#cb4-384" aria-hidden="true" tabindex="-1"></a><span class="fu">### 混淆偏误 {#sec-confounding-both}</span></span>
+<span id="cb4-385"><a href="#cb4-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-386"><a href="#cb4-386" aria-hidden="true" tabindex="-1"></a>*潜在结果视角*：</span>
+<span id="cb4-387"><a href="#cb4-387" aria-hidden="true" tabindex="-1"></a>$$E<span class="co">[</span><span class="ot">Y(0)|D=1</span><span class="co">]</span> \neq E<span class="co">[</span><span class="ot">Y(0)|D=0</span><span class="co">]</span>$$</span>
 <span id="cb4-388"><a href="#cb4-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-389"><a href="#cb4-389" aria-hidden="true" tabindex="-1"></a><span class="fu"># 如何用DAG指导研究设计 {#sec-dag-research}</span></span>
+<span id="cb4-389"><a href="#cb4-389" aria-hidden="true" tabindex="-1"></a>处理组和对照组在反事实上不可比——如果处理组未接受处理，他们的结果会与实际未接受处理的对照组不同。</span>
 <span id="cb4-390"><a href="#cb4-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-391"><a href="#cb4-391" aria-hidden="true" tabindex="-1"></a><span class="fu">## DAG分析的五步法 {#sec-five-steps}</span></span>
+<span id="cb4-391"><a href="#cb4-391" aria-hidden="true" tabindex="-1"></a>*DAG视角*：</span>
 <span id="cb4-392"><a href="#cb4-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-393"><a href="#cb4-393" aria-hidden="true" tabindex="-1"></a><span class="fu">### 步骤1：绘制DAG {#sec-step1-draw}</span></span>
+<span id="cb4-393"><a href="#cb4-393" aria-hidden="true" tabindex="-1"></a>存在从$X$到$Y$的开放后门路径。例如，$X \leftarrow Z \rightarrow Y$，其中$Z$是混淆变量。</span>
 <span id="cb4-394"><a href="#cb4-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-395"><a href="#cb4-395" aria-hidden="true" tabindex="-1"></a>**原则**：</span>
-<span id="cb4-396"><a href="#cb4-396" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>列出所有可能影响因果关系的变量</span>
-<span id="cb4-397"><a href="#cb4-397" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>基于理论、先验知识和领域专家意见</span>
-<span id="cb4-398"><a href="#cb4-398" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>包含可观测和不可观测变量</span>
-<span id="cb4-399"><a href="#cb4-399" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>与同事、导师讨论，完善图表</span>
+<span id="cb4-395"><a href="#cb4-395" aria-hidden="true" tabindex="-1"></a>*解决方案*：</span>
+<span id="cb4-396"><a href="#cb4-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-397"><a href="#cb4-397" aria-hidden="true" tabindex="-1"></a>控制$Z$阻断后门路径。潜在结果框架证明这可以恢复可比较性；DAG框架系统化识别需要控制的变量。</span>
+<span id="cb4-398"><a href="#cb4-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-399"><a href="#cb4-399" aria-hidden="true" tabindex="-1"></a><span class="fu">### 碰撞偏误 {#sec-collider-both}</span></span>
 <span id="cb4-400"><a href="#cb4-400" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-401"><a href="#cb4-401" aria-hidden="true" tabindex="-1"></a>**注意事项**：</span>
-<span id="cb4-402"><a href="#cb4-402" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>DAG反映的是你的因果假设，不是数据的相关性</span>
-<span id="cb4-403"><a href="#cb4-403" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>不同的研究者可能有不同的DAG——这是正常的科学讨论</span>
-<span id="cb4-404"><a href="#cb4-404" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>随着研究深入，DAG可以被修正</span>
-<span id="cb4-405"><a href="#cb4-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-406"><a href="#cb4-406" aria-hidden="true" tabindex="-1"></a><span class="fu">### 步骤2：识别因果路径 {#sec-step2-causal}</span></span>
-<span id="cb4-407"><a href="#cb4-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-408"><a href="#cb4-408" aria-hidden="true" tabindex="-1"></a>从处理变量$X$到结果变量$Y$，找出所有可能的因果路径：</span>
-<span id="cb4-409"><a href="#cb4-409" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>直接效应：$X \rightarrow Y$</span>
-<span id="cb4-410"><a href="#cb4-410" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>间接效应：$X \rightarrow Z \rightarrow Y$（$Z$是中介）</span>
-<span id="cb4-411"><a href="#cb4-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-412"><a href="#cb4-412" aria-hidden="true" tabindex="-1"></a>**重要**：确保你不会在后续步骤中阻断这些路径（除非你只想估计直接效应）。</span>
-<span id="cb4-413"><a href="#cb4-413" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-414"><a href="#cb4-414" aria-hidden="true" tabindex="-1"></a><span class="fu">### 步骤3：识别后门路径 {#sec-step3-backdoor}</span></span>
-<span id="cb4-415"><a href="#cb4-415" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-416"><a href="#cb4-416" aria-hidden="true" tabindex="-1"></a>找出所有从$X$到$Y$的后门路径：</span>
-<span id="cb4-417"><a href="#cb4-417" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>路径以指向$X$的箭头开始</span>
-<span id="cb4-418"><a href="#cb4-418" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>路径最终到达$Y$</span>
-<span id="cb4-419"><a href="#cb4-419" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>路径不是直接的因果路径</span>
+<span id="cb4-401"><a href="#cb4-401" aria-hidden="true" tabindex="-1"></a>*潜在结果视角*：</span>
+<span id="cb4-402"><a href="#cb4-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-403"><a href="#cb4-403" aria-hidden="true" tabindex="-1"></a>条件化（控制）一个变量导致样本选择，破坏了处理组和对照组的可比性。条件分布不再反映原始总体的特征。</span>
+<span id="cb4-404"><a href="#cb4-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-405"><a href="#cb4-405" aria-hidden="true" tabindex="-1"></a>*DAG视角*：</span>
+<span id="cb4-406"><a href="#cb4-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-407"><a href="#cb4-407" aria-hidden="true" tabindex="-1"></a>控制的变量是碰撞节点，打开了一条原本封闭的虚假路径。$X$和$Y$通过碰撞节点$Z$产生了虚假相关。</span>
+<span id="cb4-408"><a href="#cb4-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-409"><a href="#cb4-409" aria-hidden="true" tabindex="-1"></a>*解决方案*：</span>
+<span id="cb4-410"><a href="#cb4-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-411"><a href="#cb4-411" aria-hidden="true" tabindex="-1"></a>不要控制碰撞节点。在潜在结果框架中，这意味着避免基于结果或其代理变量进行选择；在DAG框架中，这意味着识别并避免控制碰撞节点。</span>
+<span id="cb4-412"><a href="#cb4-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-413"><a href="#cb4-413" aria-hidden="true" tabindex="-1"></a><span class="fu"># 如何用DAG指导研究设计 {#sec-dag-research}</span></span>
+<span id="cb4-414"><a href="#cb4-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-415"><a href="#cb4-415" aria-hidden="true" tabindex="-1"></a><span class="fu">## DAG分析的五步法 {#sec-five-steps}</span></span>
+<span id="cb4-416"><a href="#cb4-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-417"><a href="#cb4-417" aria-hidden="true" tabindex="-1"></a><span class="fu">### 步骤1：绘制DAG {#sec-step1-draw}</span></span>
+<span id="cb4-418"><a href="#cb4-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-419"><a href="#cb4-419" aria-hidden="true" tabindex="-1"></a>**原则**：</span>
 <span id="cb4-420"><a href="#cb4-420" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-421"><a href="#cb4-421" aria-hidden="true" tabindex="-1"></a>**例子**：</span>
-<span id="cb4-422"><a href="#cb4-422" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X \leftarrow Z \rightarrow Y$</span>
-<span id="cb4-423"><a href="#cb4-423" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X \leftarrow A \rightarrow B \rightarrow Y$</span>
-<span id="cb4-424"><a href="#cb4-424" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X \leftarrow C \leftarrow D \rightarrow Y$</span>
+<span id="cb4-421"><a href="#cb4-421" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>列出所有可能影响因果关系的变量</span>
+<span id="cb4-422"><a href="#cb4-422" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>基于理论、先验知识和领域专家意见</span>
+<span id="cb4-423"><a href="#cb4-423" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>包含可观测和不可观测变量</span>
+<span id="cb4-424"><a href="#cb4-424" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>与同事、导师讨论，完善图表</span>
 <span id="cb4-425"><a href="#cb4-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-426"><a href="#cb4-426" aria-hidden="true" tabindex="-1"></a><span class="fu">### 步骤4：确定调整策略 {#sec-step4-adjust}</span></span>
+<span id="cb4-426"><a href="#cb4-426" aria-hidden="true" tabindex="-1"></a>**注意事项**：</span>
 <span id="cb4-427"><a href="#cb4-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-428"><a href="#cb4-428" aria-hidden="true" tabindex="-1"></a>找出满足后门准则的变量集合$Z$：</span>
-<span id="cb4-429"><a href="#cb4-429" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-430"><a href="#cb4-430" aria-hidden="true" tabindex="-1"></a>**必须满足**：</span>
-<span id="cb4-431"><a href="#cb4-431" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>阻断所有后门路径</span>
-<span id="cb4-432"><a href="#cb4-432" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>不包含$X$的后代</span>
+<span id="cb4-428"><a href="#cb4-428" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>DAG反映的是你的因果假设，不是数据的相关性</span>
+<span id="cb4-429"><a href="#cb4-429" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>不同的研究者可能有不同的DAG——这是正常的科学讨论</span>
+<span id="cb4-430"><a href="#cb4-430" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>随着研究深入，DAG可以被修正</span>
+<span id="cb4-431"><a href="#cb4-431" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-432"><a href="#cb4-432" aria-hidden="true" tabindex="-1"></a><span class="fu">### 步骤2：识别因果路径 {#sec-step2-causal}</span></span>
 <span id="cb4-433"><a href="#cb4-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-434"><a href="#cb4-434" aria-hidden="true" tabindex="-1"></a>**可能的集合**：</span>
-<span id="cb4-435"><a href="#cb4-435" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>通常有多个满足条件的变量集合</span>
-<span id="cb4-436"><a href="#cb4-436" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>选择最容易测量、最不容易出错的集合</span>
-<span id="cb4-437"><a href="#cb4-437" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>考虑统计功效（调整变量过多会降低估计精度）</span>
+<span id="cb4-434"><a href="#cb4-434" aria-hidden="true" tabindex="-1"></a>从处理变量$X$到结果变量$Y$，找出所有可能的因果路径：</span>
+<span id="cb4-435"><a href="#cb4-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-436"><a href="#cb4-436" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>直接效应：$X \rightarrow Y$</span>
+<span id="cb4-437"><a href="#cb4-437" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>间接效应：$X \rightarrow Z \rightarrow Y$（$Z$是中介）</span>
 <span id="cb4-438"><a href="#cb4-438" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-439"><a href="#cb4-439" aria-hidden="true" tabindex="-1"></a><span class="fu">### 步骤5：敏感性分析 {#sec-step5-sensitivity}</span></span>
+<span id="cb4-439"><a href="#cb4-439" aria-hidden="true" tabindex="-1"></a>**重要**：确保你不会在后续步骤中阻断这些路径（除非你只想估计直接效应）。</span>
 <span id="cb4-440"><a href="#cb4-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-441"><a href="#cb4-441" aria-hidden="true" tabindex="-1"></a>**未观测混淆因素**：</span>
+<span id="cb4-441"><a href="#cb4-441" aria-hidden="true" tabindex="-1"></a><span class="fu">### 步骤3：识别后门路径 {#sec-step3-backdoor}</span></span>
 <span id="cb4-442"><a href="#cb4-442" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-443"><a href="#cb4-443" aria-hidden="true" tabindex="-1"></a>DAG中可能包含不可观测的变量。思考：</span>
-<span id="cb4-444"><a href="#cb4-444" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果存在未观测的混淆因素，效应估计会如何变化？</span>
-<span id="cb4-445"><a href="#cb4-445" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>需要多强的未观测混淆才能解释掉观察到的效应？</span>
-<span id="cb4-446"><a href="#cb4-446" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-447"><a href="#cb4-447" aria-hidden="true" tabindex="-1"></a>**工具**：</span>
-<span id="cb4-448"><a href="#cb4-448" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>VanderWeele和Ding的敏感性分析</span>
-<span id="cb4-449"><a href="#cb4-449" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>界限分析（Bounding Analysis）</span>
-<span id="cb4-450"><a href="#cb4-450" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>阴性对照（Negative Controls）</span>
-<span id="cb4-451"><a href="#cb4-451" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-452"><a href="#cb4-452" aria-hidden="true" tabindex="-1"></a><span class="fu">## 实践案例：培训项目效果评估 {#sec-training-case}</span></span>
-<span id="cb4-453"><a href="#cb4-453" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-454"><a href="#cb4-454" aria-hidden="true" tabindex="-1"></a>本节通过完整的Python代码示例，展示如何使用DAG指导研究设计、生成模拟数据、进行回归分析，并比较不同控制策略的效果。</span>
-<span id="cb4-455"><a href="#cb4-455" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-456"><a href="#cb4-456" aria-hidden="true" tabindex="-1"></a><span class="fu">### 案例背景 {#sec-case-background}</span></span>
-<span id="cb4-457"><a href="#cb4-457" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-458"><a href="#cb4-458" aria-hidden="true" tabindex="-1"></a>某公司想评估新员工培训的效果。相关的变量包括：</span>
-<span id="cb4-459"><a href="#cb4-459" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-460"><a href="#cb4-460" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**处理变量 $D$**：是否参加培训</span>
-<span id="cb4-461"><a href="#cb4-461" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**结果变量 $Y$**：工作绩效</span>
-<span id="cb4-462"><a href="#cb4-462" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**混淆变量 $C$**：能力（影响培训和绩效）</span>
-<span id="cb4-463"><a href="#cb4-463" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**中介变量 $M$**：技能掌握（培训→技能→绩效）</span>
-<span id="cb4-464"><a href="#cb4-464" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**碰撞变量 $L$**：留任状态（受绩效和培训共同影响）</span>
+<span id="cb4-443"><a href="#cb4-443" aria-hidden="true" tabindex="-1"></a>找出所有从$X$到$Y$的后门路径：</span>
+<span id="cb4-444"><a href="#cb4-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-445"><a href="#cb4-445" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>路径以指向$X$的箭头开始</span>
+<span id="cb4-446"><a href="#cb4-446" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>路径最终到达$Y$</span>
+<span id="cb4-447"><a href="#cb4-447" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>路径不是直接的因果路径</span>
+<span id="cb4-448"><a href="#cb4-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-449"><a href="#cb4-449" aria-hidden="true" tabindex="-1"></a>**例子**：</span>
+<span id="cb4-450"><a href="#cb4-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-451"><a href="#cb4-451" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X \leftarrow Z \rightarrow Y$</span>
+<span id="cb4-452"><a href="#cb4-452" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X \leftarrow A \rightarrow B \rightarrow Y$</span>
+<span id="cb4-453"><a href="#cb4-453" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$X \leftarrow C \leftarrow D \rightarrow Y$</span>
+<span id="cb4-454"><a href="#cb4-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-455"><a href="#cb4-455" aria-hidden="true" tabindex="-1"></a><span class="fu">### 步骤4：确定调整策略 {#sec-step4-adjust}</span></span>
+<span id="cb4-456"><a href="#cb4-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-457"><a href="#cb4-457" aria-hidden="true" tabindex="-1"></a>找出满足后门准则的变量集合$Z$：</span>
+<span id="cb4-458"><a href="#cb4-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-459"><a href="#cb4-459" aria-hidden="true" tabindex="-1"></a>**必须满足**：</span>
+<span id="cb4-460"><a href="#cb4-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-461"><a href="#cb4-461" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>阻断所有后门路径</span>
+<span id="cb4-462"><a href="#cb4-462" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>不包含$X$的后代</span>
+<span id="cb4-463"><a href="#cb4-463" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-464"><a href="#cb4-464" aria-hidden="true" tabindex="-1"></a>**可能的集合**：</span>
 <span id="cb4-465"><a href="#cb4-465" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-466"><a href="#cb4-466" aria-hidden="true" tabindex="-1"></a><span class="fu">### 模拟数据生成 {#sec-data-generation}</span></span>
-<span id="cb4-467"><a href="#cb4-467" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-468"><a href="#cb4-468" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb4-469"><a href="#cb4-469" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb4-470"><a href="#cb4-470" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb4-471"><a href="#cb4-471" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
-<span id="cb4-472"><a href="#cb4-472" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb4-473"><a href="#cb4-473" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
-<span id="cb4-474"><a href="#cb4-474" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
-<span id="cb4-475"><a href="#cb4-475" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">&#39;ignore&#39;</span>)</span>
-<span id="cb4-476"><a href="#cb4-476" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-477"><a href="#cb4-477" aria-hidden="true" tabindex="-1"></a><span class="co"># 设置随机种子</span></span>
-<span id="cb4-478"><a href="#cb4-478" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb4-479"><a href="#cb4-479" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">1000</span></span>
-<span id="cb4-480"><a href="#cb4-480" aria-hidden="true" tabindex="-1"></a>true_effect <span class="op">=</span> <span class="fl">2.0</span></span>
-<span id="cb4-481"><a href="#cb4-481" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-482"><a href="#cb4-482" aria-hidden="true" tabindex="-1"></a><span class="co"># 生成变量</span></span>
-<span id="cb4-483"><a href="#cb4-483" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> np.random.normal(<span class="dv">5</span>, <span class="fl">1.5</span>, n)  <span class="co"># 能力</span></span>
-<span id="cb4-484"><a href="#cb4-484" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> (np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, n) <span class="op">&lt;</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>np.exp(<span class="op">-</span>(C<span class="op">-</span><span class="dv">5</span>)<span class="op">/</span><span class="dv">2</span>))).astype(<span class="bu">int</span>)  <span class="co"># 培训</span></span>
-<span id="cb4-485"><a href="#cb4-485" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> <span class="fl">0.7</span><span class="op">*</span>D <span class="op">+</span> <span class="fl">0.3</span><span class="op">*</span>C <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.5</span>, n)  <span class="co"># 技能</span></span>
-<span id="cb4-486"><a href="#cb4-486" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> true_effect<span class="op">*</span>D <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span>C <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>M <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n)  <span class="co"># 绩效</span></span>
-<span id="cb4-487"><a href="#cb4-487" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> (np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, n) <span class="op">&lt;</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>np.exp(<span class="op">-</span>(<span class="fl">0.3</span><span class="op">*</span>Y<span class="op">+</span><span class="fl">0.5</span><span class="op">*</span>D<span class="op">-</span><span class="dv">3</span>)))).astype(<span class="bu">int</span>)  <span class="co"># 留任</span></span>
+<span id="cb4-466"><a href="#cb4-466" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>通常有多个满足条件的变量集合</span>
+<span id="cb4-467"><a href="#cb4-467" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>选择最容易测量、最不容易出错的集合</span>
+<span id="cb4-468"><a href="#cb4-468" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>考虑统计功效（调整变量过多会降低估计精度）</span>
+<span id="cb4-469"><a href="#cb4-469" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-470"><a href="#cb4-470" aria-hidden="true" tabindex="-1"></a><span class="fu">### 步骤5：敏感性分析 {#sec-step5-sensitivity}</span></span>
+<span id="cb4-471"><a href="#cb4-471" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-472"><a href="#cb4-472" aria-hidden="true" tabindex="-1"></a>**未观测混淆因素**：</span>
+<span id="cb4-473"><a href="#cb4-473" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-474"><a href="#cb4-474" aria-hidden="true" tabindex="-1"></a>DAG中可能包含不可观测的变量。思考：</span>
+<span id="cb4-475"><a href="#cb4-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-476"><a href="#cb4-476" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>如果存在未观测的混淆因素，效应估计会如何变化？</span>
+<span id="cb4-477"><a href="#cb4-477" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>需要多强的未观测混淆才能解释掉观察到的效应？</span>
+<span id="cb4-478"><a href="#cb4-478" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-479"><a href="#cb4-479" aria-hidden="true" tabindex="-1"></a>**工具**：</span>
+<span id="cb4-480"><a href="#cb4-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-481"><a href="#cb4-481" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>VanderWeele和Ding的敏感性分析</span>
+<span id="cb4-482"><a href="#cb4-482" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>界限分析（Bounding Analysis）</span>
+<span id="cb4-483"><a href="#cb4-483" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>阴性对照（Negative Controls）</span>
+<span id="cb4-484"><a href="#cb4-484" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-485"><a href="#cb4-485" aria-hidden="true" tabindex="-1"></a><span class="fu">## 实践案例：培训项目效果评估 {#sec-training-case}</span></span>
+<span id="cb4-486"><a href="#cb4-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-487"><a href="#cb4-487" aria-hidden="true" tabindex="-1"></a>本节通过完整的Python代码示例，展示如何使用DAG指导研究设计、生成模拟数据、进行回归分析，并比较不同控制策略的效果。</span>
 <span id="cb4-488"><a href="#cb4-488" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-489"><a href="#cb4-489" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb4-490"><a href="#cb4-490" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;training&#39;</span>: D,</span>
-<span id="cb4-491"><a href="#cb4-491" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;performance&#39;</span>: Y,</span>
-<span id="cb4-492"><a href="#cb4-492" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;ability&#39;</span>: C,</span>
-<span id="cb4-493"><a href="#cb4-493" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;skill&#39;</span>: M,</span>
-<span id="cb4-494"><a href="#cb4-494" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;retention&#39;</span>: L</span>
-<span id="cb4-495"><a href="#cb4-495" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb4-496"><a href="#cb4-496" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-497"><a href="#cb4-497" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-498"><a href="#cb4-498" aria-hidden="true" tabindex="-1"></a><span class="fu">### 使用NetworkX/CausalGraph绘制DAG {#sec-dag-plotting}</span></span>
-<span id="cb4-499"><a href="#cb4-499" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-500"><a href="#cb4-500" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb4-501"><a href="#cb4-501" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建有向图</span></span>
-<span id="cb4-502"><a href="#cb4-502" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> nx.DiGraph()</span>
-<span id="cb4-503"><a href="#cb4-503" aria-hidden="true" tabindex="-1"></a>nodes <span class="op">=</span> [</span>
-<span id="cb4-504"><a href="#cb4-504" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;C&#39;</span>, {<span class="st">&#39;label&#39;</span>: <span class="st">&#39;能力(C)&#39;</span>, <span class="st">&#39;type&#39;</span>: <span class="st">&#39;confounder&#39;</span>, <span class="st">&#39;color&#39;</span>: <span class="st">&#39;#FF6B6B&#39;</span>}),</span>
-<span id="cb4-505"><a href="#cb4-505" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;D&#39;</span>, {<span class="st">&#39;label&#39;</span>: <span class="st">&#39;培训(D)&#39;</span>, <span class="st">&#39;type&#39;</span>: <span class="st">&#39;treatment&#39;</span>, <span class="st">&#39;color&#39;</span>: <span class="st">&#39;#4ECDC4&#39;</span>}),</span>
-<span id="cb4-506"><a href="#cb4-506" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;M&#39;</span>, {<span class="st">&#39;label&#39;</span>: <span class="st">&#39;技能(M)&#39;</span>, <span class="st">&#39;type&#39;</span>: <span class="st">&#39;mediator&#39;</span>, <span class="st">&#39;color&#39;</span>: <span class="st">&#39;#95E1D3&#39;</span>}),</span>
-<span id="cb4-507"><a href="#cb4-507" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;Y&#39;</span>, {<span class="st">&#39;label&#39;</span>: <span class="st">&#39;绩效(Y)&#39;</span>, <span class="st">&#39;type&#39;</span>: <span class="st">&#39;outcome&#39;</span>, <span class="st">&#39;color&#39;</span>: <span class="st">&#39;#F38181&#39;</span>}),</span>
-<span id="cb4-508"><a href="#cb4-508" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;L&#39;</span>, {<span class="st">&#39;label&#39;</span>: <span class="st">&#39;留任(L)&#39;</span>, <span class="st">&#39;type&#39;</span>: <span class="st">&#39;collider&#39;</span>, <span class="st">&#39;color&#39;</span>: <span class="st">&#39;#FFA07A&#39;</span>})</span>
-<span id="cb4-509"><a href="#cb4-509" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb4-510"><a href="#cb4-510" aria-hidden="true" tabindex="-1"></a>G.add_nodes_from([(n, attr) <span class="cf">for</span> n, attr <span class="kw">in</span> nodes])</span>
-<span id="cb4-511"><a href="#cb4-511" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-512"><a href="#cb4-512" aria-hidden="true" tabindex="-1"></a><span class="co"># 添加因果边</span></span>
-<span id="cb4-513"><a href="#cb4-513" aria-hidden="true" tabindex="-1"></a>edges <span class="op">=</span> [(<span class="st">&#39;C&#39;</span>,<span class="st">&#39;D&#39;</span>), (<span class="st">&#39;C&#39;</span>,<span class="st">&#39;Y&#39;</span>), (<span class="st">&#39;D&#39;</span>,<span class="st">&#39;M&#39;</span>), (<span class="st">&#39;M&#39;</span>,<span class="st">&#39;Y&#39;</span>), (<span class="st">&#39;D&#39;</span>,<span class="st">&#39;Y&#39;</span>), (<span class="st">&#39;D&#39;</span>,<span class="st">&#39;L&#39;</span>), (<span class="st">&#39;Y&#39;</span>,<span class="st">&#39;L&#39;</span>)]</span>
-<span id="cb4-514"><a href="#cb4-514" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> u, v <span class="kw">in</span> edges:</span>
-<span id="cb4-515"><a href="#cb4-515" aria-hidden="true" tabindex="-1"></a>    G.add_edge(u, v)</span>
-<span id="cb4-516"><a href="#cb4-516" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-517"><a href="#cb4-517" aria-hidden="true" tabindex="-1"></a><span class="co"># 绘制图形</span></span>
-<span id="cb4-518"><a href="#cb4-518" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
-<span id="cb4-519"><a href="#cb4-519" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> {<span class="st">&#39;C&#39;</span>: (<span class="dv">0</span>, <span class="dv">2</span>), <span class="st">&#39;D&#39;</span>: (<span class="op">-</span><span class="fl">1.5</span>, <span class="dv">1</span>), <span class="st">&#39;M&#39;</span>: (<span class="dv">0</span>, <span class="fl">1.2</span>), <span class="st">&#39;Y&#39;</span>: (<span class="fl">1.5</span>, <span class="dv">1</span>), <span class="st">&#39;L&#39;</span>: (<span class="dv">0</span>, <span class="dv">0</span>)}</span>
-<span id="cb4-520"><a href="#cb4-520" aria-hidden="true" tabindex="-1"></a>node_colors <span class="op">=</span> [G.nodes[n][<span class="st">&#39;color&#39;</span>] <span class="cf">for</span> n <span class="kw">in</span> G.nodes()]</span>
+<span id="cb4-489"><a href="#cb4-489" aria-hidden="true" tabindex="-1"></a><span class="fu">### 案例背景 {#sec-case-background}</span></span>
+<span id="cb4-490"><a href="#cb4-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-491"><a href="#cb4-491" aria-hidden="true" tabindex="-1"></a>某公司想评估新员工培训的效果。相关的变量包括：</span>
+<span id="cb4-492"><a href="#cb4-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-493"><a href="#cb4-493" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**处理变量 $D$**：是否参加培训</span>
+<span id="cb4-494"><a href="#cb4-494" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**结果变量 $Y$**：工作绩效</span>
+<span id="cb4-495"><a href="#cb4-495" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**混淆变量 $C$**：能力（影响培训和绩效）</span>
+<span id="cb4-496"><a href="#cb4-496" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**中介变量 $M$**：技能掌握（培训→技能→绩效）</span>
+<span id="cb4-497"><a href="#cb4-497" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**碰撞变量 $L$**：留任状态（受绩效和培训共同影响）</span>
+<span id="cb4-498"><a href="#cb4-498" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-499"><a href="#cb4-499" aria-hidden="true" tabindex="-1"></a><span class="fu">### 模拟数据生成 {#sec-data-generation}</span></span>
+<span id="cb4-500"><a href="#cb4-500" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-501"><a href="#cb4-501" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb4-502"><a href="#cb4-502" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-503"><a href="#cb4-503" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-504"><a href="#cb4-504" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb4-505"><a href="#cb4-505" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb4-506"><a href="#cb4-506" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb4-507"><a href="#cb4-507" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb4-508"><a href="#cb4-508" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">&#39;ignore&#39;</span>)</span>
+<span id="cb4-509"><a href="#cb4-509" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-510"><a href="#cb4-510" aria-hidden="true" tabindex="-1"></a><span class="co"># 设置随机种子</span></span>
+<span id="cb4-511"><a href="#cb4-511" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb4-512"><a href="#cb4-512" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb4-513"><a href="#cb4-513" aria-hidden="true" tabindex="-1"></a>true_effect <span class="op">=</span> <span class="fl">2.0</span></span>
+<span id="cb4-514"><a href="#cb4-514" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-515"><a href="#cb4-515" aria-hidden="true" tabindex="-1"></a><span class="co"># 生成变量</span></span>
+<span id="cb4-516"><a href="#cb4-516" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> np.random.normal(<span class="dv">5</span>, <span class="fl">1.5</span>, n)  <span class="co"># 能力</span></span>
+<span id="cb4-517"><a href="#cb4-517" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> (np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, n) <span class="op">&lt;</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>np.exp(<span class="op">-</span>(C<span class="op">-</span><span class="dv">5</span>)<span class="op">/</span><span class="dv">2</span>))).astype(<span class="bu">int</span>)  <span class="co"># 培训</span></span>
+<span id="cb4-518"><a href="#cb4-518" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> <span class="fl">0.7</span><span class="op">*</span>D <span class="op">+</span> <span class="fl">0.3</span><span class="op">*</span>C <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.5</span>, n)  <span class="co"># 技能</span></span>
+<span id="cb4-519"><a href="#cb4-519" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> true_effect<span class="op">*</span>D <span class="op">+</span> <span class="fl">1.5</span><span class="op">*</span>C <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>M <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n)  <span class="co"># 绩效</span></span>
+<span id="cb4-520"><a href="#cb4-520" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> (np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, n) <span class="op">&lt;</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>np.exp(<span class="op">-</span>(<span class="fl">0.3</span><span class="op">*</span>Y<span class="op">+</span><span class="fl">0.5</span><span class="op">*</span>D<span class="op">-</span><span class="dv">3</span>)))).astype(<span class="bu">int</span>)  <span class="co"># 留任</span></span>
 <span id="cb4-521"><a href="#cb4-521" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-522"><a href="#cb4-522" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_nodes(G, pos, node_color<span class="op">=</span>node_colors, node_size<span class="op">=</span><span class="dv">2000</span>,</span>
-<span id="cb4-523"><a href="#cb4-523" aria-hidden="true" tabindex="-1"></a>                       edgecolors<span class="op">=</span><span class="st">&#39;black&#39;</span>, linewidths<span class="op">=</span><span class="dv">2</span>, ax<span class="op">=</span>ax)</span>
-<span id="cb4-524"><a href="#cb4-524" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_edges(G, pos, edge_color<span class="op">=</span><span class="st">&#39;#333333&#39;</span>, width<span class="op">=</span><span class="fl">2.5</span>, arrows<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb4-525"><a href="#cb4-525" aria-hidden="true" tabindex="-1"></a>                       arrowstyle<span class="op">=</span><span class="st">&#39;-|&gt;&#39;</span>, arrowsize<span class="op">=</span><span class="dv">28</span>, ax<span class="op">=</span>ax,</span>
-<span id="cb4-526"><a href="#cb4-526" aria-hidden="true" tabindex="-1"></a>                       connectionstyle<span class="op">=</span><span class="st">&#39;arc3,rad=0.10&#39;</span>)</span>
-<span id="cb4-527"><a href="#cb4-527" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> {n: G.nodes[n][<span class="st">&#39;label&#39;</span>] <span class="cf">for</span> n <span class="kw">in</span> G.nodes()}</span>
-<span id="cb4-528"><a href="#cb4-528" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_labels(G, pos, labels, font_size<span class="op">=</span><span class="dv">10</span>, font_weight<span class="op">=</span><span class="st">&#39;bold&#39;</span>, ax<span class="op">=</span>ax)</span>
-<span id="cb4-529"><a href="#cb4-529" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-530"><a href="#cb4-530" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">&#39;培训效果评估的DAG结构&#39;</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">&#39;bold&#39;</span>)</span>
-<span id="cb4-531"><a href="#cb4-531" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">&#39;off&#39;</span>)</span>
-<span id="cb4-532"><a href="#cb4-532" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb4-533"><a href="#cb4-533" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-534"><a href="#cb4-534" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;DAG统计: </span><span class="sc">{</span>G<span class="sc">.</span>number_of_nodes()<span class="sc">}</span><span class="ss">节点, </span><span class="sc">{</span>G<span class="sc">.</span>number_of_edges()<span class="sc">}</span><span class="ss">边, 2条后门路径&quot;</span>)</span>
-<span id="cb4-535"><a href="#cb4-535" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-536"><a href="#cb4-536" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-537"><a href="#cb4-537" aria-hidden="true" tabindex="-1"></a><span class="fu">### 不同控制策略的回归分析 {#sec-regression-comparison}</span></span>
-<span id="cb4-538"><a href="#cb4-538" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-539"><a href="#cb4-539" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb4-540"><a href="#cb4-540" aria-hidden="true" tabindex="-1"></a><span class="co"># 5种控制策略比较</span></span>
-<span id="cb4-541"><a href="#cb4-541" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> {</span>
-<span id="cb4-542"><a href="#cb4-542" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;模型1(不控制)&#39;</span>: sm.OLS(data[<span class="st">&#39;performance&#39;</span>], sm.add_constant(data[<span class="st">&#39;training&#39;</span>])).fit(),</span>
-<span id="cb4-543"><a href="#cb4-543" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;模型2(控制C)✓&#39;</span>: sm.OLS(data[<span class="st">&#39;performance&#39;</span>], sm.add_constant(data[[<span class="st">&#39;training&#39;</span>,<span class="st">&#39;ability&#39;</span>]])).fit(),</span>
-<span id="cb4-544"><a href="#cb4-544" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;模型3(控制M)✗&#39;</span>: sm.OLS(data[<span class="st">&#39;performance&#39;</span>], sm.add_constant(data[[<span class="st">&#39;training&#39;</span>,<span class="st">&#39;skill&#39;</span>]])).fit(),</span>
-<span id="cb4-545"><a href="#cb4-545" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;模型4(控制C+M)&#39;</span>: sm.OLS(data[<span class="st">&#39;performance&#39;</span>], sm.add_constant(data[[<span class="st">&#39;training&#39;</span>,<span class="st">&#39;ability&#39;</span>,<span class="st">&#39;skill&#39;</span>]])).fit(),</span>
-<span id="cb4-546"><a href="#cb4-546" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;模型5(控制L)✗&#39;</span>: sm.OLS(data[<span class="st">&#39;performance&#39;</span>], sm.add_constant(data[[<span class="st">&#39;training&#39;</span>,<span class="st">&#39;retention&#39;</span>]])).fit()</span>
-<span id="cb4-547"><a href="#cb4-547" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-548"><a href="#cb4-548" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-549"><a href="#cb4-549" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;真实处理效应: </span><span class="sc">{</span>true_effect<span class="sc">:.3f}</span><span class="ss">&quot;</span>)</span>
-<span id="cb4-550"><a href="#cb4-550" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;=&quot;</span> <span class="op">*</span> <span class="dv">65</span>)</span>
-<span id="cb4-551"><a href="#cb4-551" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-552"><a href="#cb4-552" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
-<span id="cb4-553"><a href="#cb4-553" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, model <span class="kw">in</span> models.items():</span>
-<span id="cb4-554"><a href="#cb4-554" aria-hidden="true" tabindex="-1"></a>    coef <span class="op">=</span> model.params[<span class="st">&#39;training&#39;</span>]</span>
-<span id="cb4-555"><a href="#cb4-555" aria-hidden="true" tabindex="-1"></a>    results.append({</span>
-<span id="cb4-556"><a href="#cb4-556" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;模型&#39;</span>: name,</span>
-<span id="cb4-557"><a href="#cb4-557" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;估计值&#39;</span>: <span class="ss">f&quot;</span><span class="sc">{</span>coef<span class="sc">:.3f}</span><span class="ss">&quot;</span>,</span>
-<span id="cb4-558"><a href="#cb4-558" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;偏差&#39;</span>: <span class="ss">f&quot;</span><span class="sc">{</span>coef<span class="op">-</span>true_effect<span class="sc">:+.3f}</span><span class="ss">&quot;</span>,</span>
-<span id="cb4-559"><a href="#cb4-559" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;R²&#39;</span>: <span class="ss">f&quot;</span><span class="sc">{</span>model<span class="sc">.</span>rsquared<span class="sc">:.3f}</span><span class="ss">&quot;</span></span>
-<span id="cb4-560"><a href="#cb4-560" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb4-561"><a href="#cb4-561" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-562"><a href="#cb4-562" aria-hidden="true" tabindex="-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
-<span id="cb4-563"><a href="#cb4-563" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span>
-<span id="cb4-564"><a href="#cb4-564" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-565"><a href="#cb4-565" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-566"><a href="#cb4-566" aria-hidden="true" tabindex="-1"></a><span class="fu">### 结果解读 {#sec-result-interpretation}</span></span>
-<span id="cb4-567"><a href="#cb4-567" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-568"><a href="#cb4-568" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 模型 <span class="pp">|</span> 评估 <span class="pp">|</span> 问题说明 <span class="pp">|</span></span>
-<span id="cb4-569"><a href="#cb4-569" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|</span></span>
-<span id="cb4-570"><a href="#cb4-570" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **模型1：朴素回归（不控制）** <span class="pp">|</span> ✗ 有偏 <span class="pp">|</span> 包含能力(C)的混淆效应，能力强的人更可能参加培训且绩效更高 <span class="pp">|</span></span>
-<span id="cb4-571"><a href="#cb4-571" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **模型2：控制混淆变量C** | ✓ **正确** <span class="pp">|</span> 阻断后门路径 C→D 和 C→Y，最接近真实效应(2.0) <span class="pp">|</span></span>
-<span id="cb4-572"><a href="#cb4-572" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **模型3：控制中介变量M** <span class="pp">|</span> ✗ 低估 <span class="pp">|</span> 阻断了间接效应路径 D→M→Y，严重低估总效应 <span class="pp">|</span></span>
-<span id="cb4-573"><a href="#cb4-573" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **模型4：控制C+M** <span class="pp">|</span> △ 部分正确 <span class="pp">|</span> 估计直接效应（不包括间接效应），适用于特定研究目标 <span class="pp">|</span></span>
-<span id="cb4-574"><a href="#cb4-574" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **模型5：控制碰撞变量L** <span class="pp">|</span> ✗✗ 严重错误 <span class="pp">|</span> 控制了碰撞节点，打开虚假路径，估计严重有偏 <span class="pp">|</span></span>
-<span id="cb4-575"><a href="#cb4-575" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-576"><a href="#cb4-576" aria-hidden="true" tabindex="-1"></a>**核心教训：**</span>
-<span id="cb4-577"><a href="#cb4-577" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-578"><a href="#cb4-578" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**必须控制混淆变量(C)**：阻断后门路径，获得无偏估计</span>
-<span id="cb4-579"><a href="#cb4-579" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**不要控制中介变量(M)**：除非研究目标仅为直接效应</span>
-<span id="cb4-580"><a href="#cb4-580" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**绝对不能控制碰撞变量(L)**：会引入新的偏误，破坏估计的有效性</span>
-<span id="cb4-581"><a href="#cb4-581" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**DAG是选择控制变量的科学依据**：基于图形分析而非直觉选择控制变量</span>
-<span id="cb4-582"><a href="#cb4-582" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-583"><a href="#cb4-583" aria-hidden="true" tabindex="-1"></a><span class="fu">## 使用DAG的实用建议 {#sec-practical-tips}</span></span>
+<span id="cb4-522"><a href="#cb4-522" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb4-523"><a href="#cb4-523" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;training&#39;</span>: D,</span>
+<span id="cb4-524"><a href="#cb4-524" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;performance&#39;</span>: Y,</span>
+<span id="cb4-525"><a href="#cb4-525" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;ability&#39;</span>: C,</span>
+<span id="cb4-526"><a href="#cb4-526" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;skill&#39;</span>: M,</span>
+<span id="cb4-527"><a href="#cb4-527" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;retention&#39;</span>: L</span>
+<span id="cb4-528"><a href="#cb4-528" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-529"><a href="#cb4-529" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-530"><a href="#cb4-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-531"><a href="#cb4-531" aria-hidden="true" tabindex="-1"></a><span class="fu">### 使用NetworkX/CausalGraph绘制DAG {#sec-dag-plotting}</span></span>
+<span id="cb4-532"><a href="#cb4-532" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-533"><a href="#cb4-533" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb4-534"><a href="#cb4-534" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建有向图</span></span>
+<span id="cb4-535"><a href="#cb4-535" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> nx.DiGraph()</span>
+<span id="cb4-536"><a href="#cb4-536" aria-hidden="true" tabindex="-1"></a>nodes <span class="op">=</span> [</span>
+<span id="cb4-537"><a href="#cb4-537" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;C&#39;</span>, {<span class="st">&#39;label&#39;</span>: <span class="st">&#39;能力(C)&#39;</span>, <span class="st">&#39;type&#39;</span>: <span class="st">&#39;confounder&#39;</span>, <span class="st">&#39;color&#39;</span>: <span class="st">&#39;#FF6B6B&#39;</span>}),</span>
+<span id="cb4-538"><a href="#cb4-538" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;D&#39;</span>, {<span class="st">&#39;label&#39;</span>: <span class="st">&#39;培训(D)&#39;</span>, <span class="st">&#39;type&#39;</span>: <span class="st">&#39;treatment&#39;</span>, <span class="st">&#39;color&#39;</span>: <span class="st">&#39;#4ECDC4&#39;</span>}),</span>
+<span id="cb4-539"><a href="#cb4-539" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;M&#39;</span>, {<span class="st">&#39;label&#39;</span>: <span class="st">&#39;技能(M)&#39;</span>, <span class="st">&#39;type&#39;</span>: <span class="st">&#39;mediator&#39;</span>, <span class="st">&#39;color&#39;</span>: <span class="st">&#39;#95E1D3&#39;</span>}),</span>
+<span id="cb4-540"><a href="#cb4-540" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;Y&#39;</span>, {<span class="st">&#39;label&#39;</span>: <span class="st">&#39;绩效(Y)&#39;</span>, <span class="st">&#39;type&#39;</span>: <span class="st">&#39;outcome&#39;</span>, <span class="st">&#39;color&#39;</span>: <span class="st">&#39;#F38181&#39;</span>}),</span>
+<span id="cb4-541"><a href="#cb4-541" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&#39;L&#39;</span>, {<span class="st">&#39;label&#39;</span>: <span class="st">&#39;留任(L)&#39;</span>, <span class="st">&#39;type&#39;</span>: <span class="st">&#39;collider&#39;</span>, <span class="st">&#39;color&#39;</span>: <span class="st">&#39;#FFA07A&#39;</span>})</span>
+<span id="cb4-542"><a href="#cb4-542" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb4-543"><a href="#cb4-543" aria-hidden="true" tabindex="-1"></a>G.add_nodes_from([(n, attr) <span class="cf">for</span> n, attr <span class="kw">in</span> nodes])</span>
+<span id="cb4-544"><a href="#cb4-544" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-545"><a href="#cb4-545" aria-hidden="true" tabindex="-1"></a><span class="co"># 添加因果边</span></span>
+<span id="cb4-546"><a href="#cb4-546" aria-hidden="true" tabindex="-1"></a>edges <span class="op">=</span> [(<span class="st">&#39;C&#39;</span>,<span class="st">&#39;D&#39;</span>), (<span class="st">&#39;C&#39;</span>,<span class="st">&#39;Y&#39;</span>), (<span class="st">&#39;D&#39;</span>,<span class="st">&#39;M&#39;</span>), (<span class="st">&#39;M&#39;</span>,<span class="st">&#39;Y&#39;</span>), (<span class="st">&#39;D&#39;</span>,<span class="st">&#39;Y&#39;</span>), (<span class="st">&#39;D&#39;</span>,<span class="st">&#39;L&#39;</span>), (<span class="st">&#39;Y&#39;</span>,<span class="st">&#39;L&#39;</span>)]</span>
+<span id="cb4-547"><a href="#cb4-547" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> u, v <span class="kw">in</span> edges:</span>
+<span id="cb4-548"><a href="#cb4-548" aria-hidden="true" tabindex="-1"></a>    G.add_edge(u, v)</span>
+<span id="cb4-549"><a href="#cb4-549" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-550"><a href="#cb4-550" aria-hidden="true" tabindex="-1"></a><span class="co"># 绘制图形</span></span>
+<span id="cb4-551"><a href="#cb4-551" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb4-552"><a href="#cb4-552" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> {<span class="st">&#39;C&#39;</span>: (<span class="dv">0</span>, <span class="dv">2</span>), <span class="st">&#39;D&#39;</span>: (<span class="op">-</span><span class="fl">1.5</span>, <span class="dv">1</span>), <span class="st">&#39;M&#39;</span>: (<span class="dv">0</span>, <span class="fl">1.2</span>), <span class="st">&#39;Y&#39;</span>: (<span class="fl">1.5</span>, <span class="dv">1</span>), <span class="st">&#39;L&#39;</span>: (<span class="dv">0</span>, <span class="dv">0</span>)}</span>
+<span id="cb4-553"><a href="#cb4-553" aria-hidden="true" tabindex="-1"></a>node_colors <span class="op">=</span> [G.nodes[n][<span class="st">&#39;color&#39;</span>] <span class="cf">for</span> n <span class="kw">in</span> G.nodes()]</span>
+<span id="cb4-554"><a href="#cb4-554" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-555"><a href="#cb4-555" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_nodes(G, pos, node_color<span class="op">=</span>node_colors, node_size<span class="op">=</span><span class="dv">2000</span>,</span>
+<span id="cb4-556"><a href="#cb4-556" aria-hidden="true" tabindex="-1"></a>                       edgecolors<span class="op">=</span><span class="st">&#39;black&#39;</span>, linewidths<span class="op">=</span><span class="dv">2</span>, ax<span class="op">=</span>ax)</span>
+<span id="cb4-557"><a href="#cb4-557" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_edges(G, pos, edge_color<span class="op">=</span><span class="st">&#39;#333333&#39;</span>, width<span class="op">=</span><span class="fl">2.5</span>, arrows<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb4-558"><a href="#cb4-558" aria-hidden="true" tabindex="-1"></a>                       arrowstyle<span class="op">=</span><span class="st">&#39;-|&gt;&#39;</span>, arrowsize<span class="op">=</span><span class="dv">28</span>, ax<span class="op">=</span>ax,</span>
+<span id="cb4-559"><a href="#cb4-559" aria-hidden="true" tabindex="-1"></a>                       connectionstyle<span class="op">=</span><span class="st">&#39;arc3,rad=0.10&#39;</span>)</span>
+<span id="cb4-560"><a href="#cb4-560" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> {n: G.nodes[n][<span class="st">&#39;label&#39;</span>] <span class="cf">for</span> n <span class="kw">in</span> G.nodes()}</span>
+<span id="cb4-561"><a href="#cb4-561" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx_labels(G, pos, labels, font_size<span class="op">=</span><span class="dv">10</span>, font_weight<span class="op">=</span><span class="st">&#39;bold&#39;</span>, ax<span class="op">=</span>ax)</span>
+<span id="cb4-562"><a href="#cb4-562" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-563"><a href="#cb4-563" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">&#39;培训效果评估的DAG结构&#39;</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">&#39;bold&#39;</span>)</span>
+<span id="cb4-564"><a href="#cb4-564" aria-hidden="true" tabindex="-1"></a>ax.axis(<span class="st">&#39;off&#39;</span>)</span>
+<span id="cb4-565"><a href="#cb4-565" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb4-566"><a href="#cb4-566" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-567"><a href="#cb4-567" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;DAG统计: </span><span class="sc">{</span>G<span class="sc">.</span>number_of_nodes()<span class="sc">}</span><span class="ss">节点, </span><span class="sc">{</span>G<span class="sc">.</span>number_of_edges()<span class="sc">}</span><span class="ss">边, 2条后门路径&quot;</span>)</span>
+<span id="cb4-568"><a href="#cb4-568" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-569"><a href="#cb4-569" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-570"><a href="#cb4-570" aria-hidden="true" tabindex="-1"></a><span class="fu">### 不同控制策略的回归分析 {#sec-regression-comparison}</span></span>
+<span id="cb4-571"><a href="#cb4-571" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-572"><a href="#cb4-572" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb4-573"><a href="#cb4-573" aria-hidden="true" tabindex="-1"></a><span class="co"># 5种控制策略比较</span></span>
+<span id="cb4-574"><a href="#cb4-574" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> {</span>
+<span id="cb4-575"><a href="#cb4-575" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;模型1(不控制)&#39;</span>: sm.OLS(data[<span class="st">&#39;performance&#39;</span>], sm.add_constant(data[<span class="st">&#39;training&#39;</span>])).fit(),</span>
+<span id="cb4-576"><a href="#cb4-576" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;模型2(控制C)✓&#39;</span>: sm.OLS(data[<span class="st">&#39;performance&#39;</span>], sm.add_constant(data[[<span class="st">&#39;training&#39;</span>,<span class="st">&#39;ability&#39;</span>]])).fit(),</span>
+<span id="cb4-577"><a href="#cb4-577" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;模型3(控制M)✗&#39;</span>: sm.OLS(data[<span class="st">&#39;performance&#39;</span>], sm.add_constant(data[[<span class="st">&#39;training&#39;</span>,<span class="st">&#39;skill&#39;</span>]])).fit(),</span>
+<span id="cb4-578"><a href="#cb4-578" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;模型4(控制C+M)&#39;</span>: sm.OLS(data[<span class="st">&#39;performance&#39;</span>], sm.add_constant(data[[<span class="st">&#39;training&#39;</span>,<span class="st">&#39;ability&#39;</span>,<span class="st">&#39;skill&#39;</span>]])).fit(),</span>
+<span id="cb4-579"><a href="#cb4-579" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;模型5(控制L)✗&#39;</span>: sm.OLS(data[<span class="st">&#39;performance&#39;</span>], sm.add_constant(data[[<span class="st">&#39;training&#39;</span>,<span class="st">&#39;retention&#39;</span>]])).fit()</span>
+<span id="cb4-580"><a href="#cb4-580" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-581"><a href="#cb4-581" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-582"><a href="#cb4-582" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;真实处理效应: </span><span class="sc">{</span>true_effect<span class="sc">:.3f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb4-583"><a href="#cb4-583" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;=&quot;</span> <span class="op">*</span> <span class="dv">65</span>)</span>
 <span id="cb4-584"><a href="#cb4-584" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-585"><a href="#cb4-585" aria-hidden="true" tabindex="-1"></a><span class="fu">### 推荐工具 {#sec-tools}</span></span>
-<span id="cb4-586"><a href="#cb4-586" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-587"><a href="#cb4-587" aria-hidden="true" tabindex="-1"></a>**在线工具**：</span>
-<span id="cb4-588"><a href="#cb4-588" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**DAGitty**（dagitty.net）：绘制DAG、识别最小调整集、进行$d$-分离分析</span>
-<span id="cb4-589"><a href="#cb4-589" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Causal Fusion**：更复杂的因果分析平台</span>
-<span id="cb4-590"><a href="#cb4-590" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-591"><a href="#cb4-591" aria-hidden="true" tabindex="-1"></a>**R包**：</span>
-<span id="cb4-592"><a href="#cb4-592" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**ggdag**：绘制美观的DAG</span>
-<span id="cb4-593"><a href="#cb4-593" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**dagitty**：与DAGitty在线工具交互</span>
+<span id="cb4-585"><a href="#cb4-585" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
+<span id="cb4-586"><a href="#cb4-586" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, model <span class="kw">in</span> models.items():</span>
+<span id="cb4-587"><a href="#cb4-587" aria-hidden="true" tabindex="-1"></a>    coef <span class="op">=</span> model.params[<span class="st">&#39;training&#39;</span>]</span>
+<span id="cb4-588"><a href="#cb4-588" aria-hidden="true" tabindex="-1"></a>    results.append({</span>
+<span id="cb4-589"><a href="#cb4-589" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;模型&#39;</span>: name,</span>
+<span id="cb4-590"><a href="#cb4-590" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;估计值&#39;</span>: <span class="ss">f&quot;</span><span class="sc">{</span>coef<span class="sc">:.3f}</span><span class="ss">&quot;</span>,</span>
+<span id="cb4-591"><a href="#cb4-591" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;偏差&#39;</span>: <span class="ss">f&quot;</span><span class="sc">{</span>coef<span class="op">-</span>true_effect<span class="sc">:+.3f}</span><span class="ss">&quot;</span>,</span>
+<span id="cb4-592"><a href="#cb4-592" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;R²&#39;</span>: <span class="ss">f&quot;</span><span class="sc">{</span>model<span class="sc">.</span>rsquared<span class="sc">:.3f}</span><span class="ss">&quot;</span></span>
+<span id="cb4-593"><a href="#cb4-593" aria-hidden="true" tabindex="-1"></a>    })</span>
 <span id="cb4-594"><a href="#cb4-594" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-595"><a href="#cb4-595" aria-hidden="true" tabindex="-1"></a>**Python包**：</span>
-<span id="cb4-596"><a href="#cb4-596" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**CausalGraph**：构建和分析因果图</span>
-<span id="cb4-597"><a href="#cb4-597" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**pgmpy**：概率图模型库</span>
+<span id="cb4-595"><a href="#cb4-595" aria-hidden="true" tabindex="-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
+<span id="cb4-596"><a href="#cb4-596" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb4-597"><a href="#cb4-597" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb4-598"><a href="#cb4-598" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-599"><a href="#cb4-599" aria-hidden="true" tabindex="-1"></a><span class="fu">### 常见错误与避免 {#sec-common-mistakes}</span></span>
+<span id="cb4-599"><a href="#cb4-599" aria-hidden="true" tabindex="-1"></a><span class="fu">### 结果解读 {#sec-result-interpretation}</span></span>
 <span id="cb4-600"><a href="#cb4-600" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-601"><a href="#cb4-601" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**绘制DAG时包含数据中的相关性**</span>
-<span id="cb4-602"><a href="#cb4-602" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>DAG应该基于因果假设，不是数据的相关性</span>
-<span id="cb4-603"><a href="#cb4-603" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>避免&quot;我看到X和Y相关，所以在DAG中加一条边&quot;</span>
-<span id="cb4-604"><a href="#cb4-604" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-605"><a href="#cb4-605" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**遗漏关键变量**</span>
-<span id="cb4-606"><a href="#cb4-606" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>特别是混淆因素</span>
-<span id="cb4-607"><a href="#cb4-607" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>即使不可观测，也应该在DAG中标出</span>
+<span id="cb4-601"><a href="#cb4-601" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 模型 <span class="pp">|</span> 评估 <span class="pp">|</span> 问题说明 <span class="pp">|</span></span>
+<span id="cb4-602"><a href="#cb4-602" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|:---|</span></span>
+<span id="cb4-603"><a href="#cb4-603" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **模型1：朴素回归（不控制）** <span class="pp">|</span> ✗ 有偏 <span class="pp">|</span> 包含能力(C)的混淆效应，能力强的人更可能参加培训且绩效更高 <span class="pp">|</span></span>
+<span id="cb4-604"><a href="#cb4-604" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **模型2：控制混淆变量C** | ✓ **正确** <span class="pp">|</span> 阻断后门路径 C→D 和 C→Y，最接近真实效应(2.0) <span class="pp">|</span></span>
+<span id="cb4-605"><a href="#cb4-605" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **模型3：控制中介变量M** <span class="pp">|</span> ✗ 低估 <span class="pp">|</span> 阻断了间接效应路径 D→M→Y，严重低估总效应 <span class="pp">|</span></span>
+<span id="cb4-606"><a href="#cb4-606" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **模型4：控制C+M** <span class="pp">|</span> △ 部分正确 <span class="pp">|</span> 估计直接效应（不包括间接效应），适用于特定研究目标 <span class="pp">|</span></span>
+<span id="cb4-607"><a href="#cb4-607" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **模型5：控制碰撞变量L** <span class="pp">|</span> ✗✗ 严重错误 <span class="pp">|</span> 控制了碰撞节点，打开虚假路径，估计严重有偏 <span class="pp">|</span></span>
 <span id="cb4-608"><a href="#cb4-608" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-609"><a href="#cb4-609" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**混淆链式结构和碰撞结构**</span>
-<span id="cb4-610"><a href="#cb4-610" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>仔细观察箭头的方向</span>
-<span id="cb4-611"><a href="#cb4-611" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>碰撞节点有两个箭头指向它</span>
-<span id="cb4-612"><a href="#cb4-612" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-613"><a href="#cb4-613" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**过度控制**</span>
-<span id="cb4-614"><a href="#cb4-614" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>不要控制所有可观测变量</span>
-<span id="cb4-615"><a href="#cb4-615" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>使用DAG指导选择</span>
-<span id="cb4-616"><a href="#cb4-616" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-617"><a href="#cb4-617" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**忽视样本选择**</span>
-<span id="cb4-618"><a href="#cb4-618" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>考虑数据收集过程本身是否引入偏误</span>
-<span id="cb4-619"><a href="#cb4-619" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>样本是否基于碰撞节点选择？</span>
-<span id="cb4-620"><a href="#cb4-620" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-621"><a href="#cb4-621" aria-hidden="true" tabindex="-1"></a><span class="fu"># 总结 {#sec-conclusion}</span></span>
-<span id="cb4-622"><a href="#cb4-622" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-623"><a href="#cb4-623" aria-hidden="true" tabindex="-1"></a><span class="fu">## 核心要点 {#sec-key-points}</span></span>
+<span id="cb4-609"><a href="#cb4-609" aria-hidden="true" tabindex="-1"></a>**核心教训：**</span>
+<span id="cb4-610"><a href="#cb4-610" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-611"><a href="#cb4-611" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**必须控制混淆变量(C)**：阻断后门路径，获得无偏估计</span>
+<span id="cb4-612"><a href="#cb4-612" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**不要控制中介变量(M)**：除非研究目标仅为直接效应</span>
+<span id="cb4-613"><a href="#cb4-613" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**绝对不能控制碰撞变量(L)**：会引入新的偏误，破坏估计的有效性</span>
+<span id="cb4-614"><a href="#cb4-614" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**DAG是选择控制变量的科学依据**：基于图形分析而非直觉选择控制变量</span>
+<span id="cb4-615"><a href="#cb4-615" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-616"><a href="#cb4-616" aria-hidden="true" tabindex="-1"></a><span class="fu">## 使用DAG的实用建议 {#sec-practical-tips}</span></span>
+<span id="cb4-617"><a href="#cb4-617" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-618"><a href="#cb4-618" aria-hidden="true" tabindex="-1"></a><span class="fu">### 推荐工具 {#sec-tools}</span></span>
+<span id="cb4-619"><a href="#cb4-619" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-620"><a href="#cb4-620" aria-hidden="true" tabindex="-1"></a>**在线工具**：</span>
+<span id="cb4-621"><a href="#cb4-621" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-622"><a href="#cb4-622" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**DAGitty**（dagitty.net）：绘制DAG、识别最小调整集、进行$d$-分离分析</span>
+<span id="cb4-623"><a href="#cb4-623" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Causal Fusion**：更复杂的因果分析平台</span>
 <span id="cb4-624"><a href="#cb4-624" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-625"><a href="#cb4-625" aria-hidden="true" tabindex="-1"></a>本讲介绍了有向无环图（DAG）作为因果推断的图形化工具：</span>
+<span id="cb4-625"><a href="#cb4-625" aria-hidden="true" tabindex="-1"></a>**R包**：</span>
 <span id="cb4-626"><a href="#cb4-626" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-627"><a href="#cb4-627" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**DAG基础**</span>
-<span id="cb4-628"><a href="#cb4-628" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>节点表示变量，有向边表示因果效应</span>
-<span id="cb4-629"><a href="#cb4-629" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>三种路径结构：链式（中介）、分叉（混淆）、碰撞（虚假相关）</span>
-<span id="cb4-630"><a href="#cb4-630" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-631"><a href="#cb4-631" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**后门准则**</span>
-<span id="cb4-632"><a href="#cb4-632" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>识别所有后门路径</span>
-<span id="cb4-633"><a href="#cb4-633" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>找到满足后门准则的控制变量集合</span>
-<span id="cb4-634"><a href="#cb4-634" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>阻断混淆路径，恢复因果关系的无偏估计</span>
-<span id="cb4-635"><a href="#cb4-635" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-636"><a href="#cb4-636" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**碰撞偏误**</span>
-<span id="cb4-637"><a href="#cb4-637" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>控制碰撞节点会打开虚假路径</span>
-<span id="cb4-638"><a href="#cb4-638" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>样本选择可能引入偏误</span>
-<span id="cb4-639"><a href="#cb4-639" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>避免控制处理或结果的代理变量</span>
+<span id="cb4-627"><a href="#cb4-627" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**ggdag**：绘制美观的DAG</span>
+<span id="cb4-628"><a href="#cb4-628" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**dagitty**：与DAGitty在线工具交互</span>
+<span id="cb4-629"><a href="#cb4-629" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-630"><a href="#cb4-630" aria-hidden="true" tabindex="-1"></a>**Python包**：</span>
+<span id="cb4-631"><a href="#cb4-631" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-632"><a href="#cb4-632" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**CausalGraph**：构建和分析因果图</span>
+<span id="cb4-633"><a href="#cb4-633" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**pgmpy**：概率图模型库</span>
+<span id="cb4-634"><a href="#cb4-634" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-635"><a href="#cb4-635" aria-hidden="true" tabindex="-1"></a><span class="fu">### 常见错误与避免 {#sec-common-mistakes}</span></span>
+<span id="cb4-636"><a href="#cb4-636" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-637"><a href="#cb4-637" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**绘制DAG时包含数据中的相关性**</span>
+<span id="cb4-638"><a href="#cb4-638" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>DAG应该基于因果假设，不是数据的相关性</span>
+<span id="cb4-639"><a href="#cb4-639" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>避免&quot;我看到X和Y相关，所以在DAG中加一条边&quot;</span>
 <span id="cb4-640"><a href="#cb4-640" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-641"><a href="#cb4-641" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**两种框架的结合**</span>
-<span id="cb4-642"><a href="#cb4-642" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>DAG用于研究设计和变量选择</span>
-<span id="cb4-643"><a href="#cb4-643" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>潜在结果框架用于估计和推断</span>
-<span id="cb4-644"><a href="#cb4-644" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>两者互补，共同服务于因果推断</span>
-<span id="cb4-645"><a href="#cb4-645" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-646"><a href="#cb4-646" aria-hidden="true" tabindex="-1"></a><span class="fu">## 实践检查清单 {#sec-checklist}</span></span>
-<span id="cb4-647"><a href="#cb4-647" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-648"><a href="#cb4-648" aria-hidden="true" tabindex="-1"></a>在开始任何因果推断研究时，考虑以下问题：</span>
-<span id="cb4-649"><a href="#cb4-649" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-650"><a href="#cb4-650" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否绘制了明确的DAG？</span>
-<span id="cb4-651"><a href="#cb4-651" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> DAG是否基于理论和先验知识（而非数据的相关性）？</span>
-<span id="cb4-652"><a href="#cb4-652" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否识别了所有后门路径？</span>
-<span id="cb4-653"><a href="#cb4-653" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我选择的控制变量是否满足后门准则？</span>
-<span id="cb4-654"><a href="#cb4-654" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否避免了控制中介变量（除非想估计直接效应）？</span>
-<span id="cb4-655"><a href="#cb4-655" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否避免了控制碰撞节点？</span>
-<span id="cb4-656"><a href="#cb4-656" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否考虑了未观测混淆因素的可能性？</span>
-<span id="cb4-657"><a href="#cb4-657" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否考虑了样本选择可能引入的偏误？</span>
+<span id="cb4-641"><a href="#cb4-641" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**遗漏关键变量**</span>
+<span id="cb4-642"><a href="#cb4-642" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>特别是混淆因素</span>
+<span id="cb4-643"><a href="#cb4-643" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>即使不可观测，也应该在DAG中标出</span>
+<span id="cb4-644"><a href="#cb4-644" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-645"><a href="#cb4-645" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**混淆链式结构和碰撞结构**</span>
+<span id="cb4-646"><a href="#cb4-646" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>仔细观察箭头的方向</span>
+<span id="cb4-647"><a href="#cb4-647" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>碰撞节点有两个箭头指向它</span>
+<span id="cb4-648"><a href="#cb4-648" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-649"><a href="#cb4-649" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**过度控制**</span>
+<span id="cb4-650"><a href="#cb4-650" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>不要控制所有可观测变量</span>
+<span id="cb4-651"><a href="#cb4-651" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>使用DAG指导选择</span>
+<span id="cb4-652"><a href="#cb4-652" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-653"><a href="#cb4-653" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**忽视样本选择**</span>
+<span id="cb4-654"><a href="#cb4-654" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>考虑数据收集过程本身是否引入偏误</span>
+<span id="cb4-655"><a href="#cb4-655" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>样本是否基于碰撞节点选择？</span>
+<span id="cb4-656"><a href="#cb4-656" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-657"><a href="#cb4-657" aria-hidden="true" tabindex="-1"></a><span class="fu"># 总结 {#sec-conclusion}</span></span>
 <span id="cb4-658"><a href="#cb4-658" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-659"><a href="#cb4-659" aria-hidden="true" tabindex="-1"></a><span class="fu">## 进一步阅读 {#sec-further-reading}</span></span>
+<span id="cb4-659"><a href="#cb4-659" aria-hidden="true" tabindex="-1"></a><span class="fu">## 核心要点 {#sec-key-points}</span></span>
 <span id="cb4-660"><a href="#cb4-660" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-661"><a href="#cb4-661" aria-hidden="true" tabindex="-1"></a>**入门读物**：</span>
-<span id="cb4-662"><a href="#cb4-662" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pearl, J., &amp; Mackenzie, D. (2018). *The Book of Why*. Basic Books.</span>
-<span id="cb4-663"><a href="#cb4-663" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cunningham, S. (2021). *Causal Inference: The Mixtape*, Chapter 3.</span>
-<span id="cb4-664"><a href="#cb4-664" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-665"><a href="#cb4-665" aria-hidden="true" tabindex="-1"></a>**进阶读物**：</span>
-<span id="cb4-666"><a href="#cb4-666" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pearl, J. (2009). *Causality: Models, Reasoning, and Inference* (2nd ed.). Cambridge University Press.</span>
-<span id="cb4-667"><a href="#cb4-667" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Morgan, S. L., &amp; Winship, C. (2014). *Counterfactuals and Causal Inference: Methods and Principles for Social Research* (2nd ed.). Cambridge University Press.</span>
-<span id="cb4-668"><a href="#cb4-668" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Hernán, M. A., &amp; Robins, J. M. (2020). *Causal Inference: What If*. Chapman &amp; Hall/CRC.</span>
-<span id="cb4-669"><a href="#cb4-669" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-670"><a href="#cb4-670" aria-hidden="true" tabindex="-1"></a>**在线资源**：</span>
-<span id="cb4-671"><a href="#cb4-671" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>DAGitty: https://dagitty.net/</span>
-<span id="cb4-672"><a href="#cb4-672" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Causal Inference Playlist: https://www.youtube.com/playlist?list=PLoYXqjI7xzXa_8E5fQ2q3z5u5z5z5z5z5</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></div>
+<span id="cb4-661"><a href="#cb4-661" aria-hidden="true" tabindex="-1"></a>本讲介绍了有向无环图（DAG）作为因果推断的图形化工具：</span>
+<span id="cb4-662"><a href="#cb4-662" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-663"><a href="#cb4-663" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**DAG基础**</span>
+<span id="cb4-664"><a href="#cb4-664" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>节点表示变量，有向边表示因果效应</span>
+<span id="cb4-665"><a href="#cb4-665" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>三种路径结构：链式（中介）、分叉（混淆）、碰撞（虚假相关）</span>
+<span id="cb4-666"><a href="#cb4-666" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-667"><a href="#cb4-667" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**后门准则**</span>
+<span id="cb4-668"><a href="#cb4-668" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>识别所有后门路径</span>
+<span id="cb4-669"><a href="#cb4-669" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>找到满足后门准则的控制变量集合</span>
+<span id="cb4-670"><a href="#cb4-670" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>阻断混淆路径，恢复因果关系的无偏估计</span>
+<span id="cb4-671"><a href="#cb4-671" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-672"><a href="#cb4-672" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**碰撞偏误**</span>
+<span id="cb4-673"><a href="#cb4-673" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>控制碰撞节点会打开虚假路径</span>
+<span id="cb4-674"><a href="#cb4-674" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>样本选择可能引入偏误</span>
+<span id="cb4-675"><a href="#cb4-675" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>避免控制处理或结果的代理变量</span>
+<span id="cb4-676"><a href="#cb4-676" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-677"><a href="#cb4-677" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**两种框架的结合**</span>
+<span id="cb4-678"><a href="#cb4-678" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>DAG用于研究设计和变量选择</span>
+<span id="cb4-679"><a href="#cb4-679" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>潜在结果框架用于估计和推断</span>
+<span id="cb4-680"><a href="#cb4-680" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>两者互补，共同服务于因果推断</span>
+<span id="cb4-681"><a href="#cb4-681" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-682"><a href="#cb4-682" aria-hidden="true" tabindex="-1"></a><span class="fu">## 实践检查清单 {#sec-checklist}</span></span>
+<span id="cb4-683"><a href="#cb4-683" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-684"><a href="#cb4-684" aria-hidden="true" tabindex="-1"></a>在开始任何因果推断研究时，考虑以下问题：</span>
+<span id="cb4-685"><a href="#cb4-685" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-686"><a href="#cb4-686" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否绘制了明确的DAG？</span>
+<span id="cb4-687"><a href="#cb4-687" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> DAG是否基于理论和先验知识（而非数据的相关性）？</span>
+<span id="cb4-688"><a href="#cb4-688" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否识别了所有后门路径？</span>
+<span id="cb4-689"><a href="#cb4-689" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我选择的控制变量是否满足后门准则？</span>
+<span id="cb4-690"><a href="#cb4-690" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否避免了控制中介变量（除非想估计直接效应）？</span>
+<span id="cb4-691"><a href="#cb4-691" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否避免了控制碰撞节点？</span>
+<span id="cb4-692"><a href="#cb4-692" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否考虑了未观测混淆因素的可能性？</span>
+<span id="cb4-693"><a href="#cb4-693" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> 我是否考虑了样本选择可能引入的偏误？</span>
+<span id="cb4-694"><a href="#cb4-694" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-695"><a href="#cb4-695" aria-hidden="true" tabindex="-1"></a><span class="fu">## 进一步阅读 {#sec-further-reading}</span></span>
+<span id="cb4-696"><a href="#cb4-696" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-697"><a href="#cb4-697" aria-hidden="true" tabindex="-1"></a>**入门读物**：</span>
+<span id="cb4-698"><a href="#cb4-698" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-699"><a href="#cb4-699" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pearl, J., &amp; Mackenzie, D. (2018). *The Book of Why*. Basic Books.</span>
+<span id="cb4-700"><a href="#cb4-700" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cunningham, S. (2021). *Causal Inference: The Mixtape*, Chapter 3.</span>
+<span id="cb4-701"><a href="#cb4-701" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-702"><a href="#cb4-702" aria-hidden="true" tabindex="-1"></a>**进阶读物**：</span>
+<span id="cb4-703"><a href="#cb4-703" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-704"><a href="#cb4-704" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pearl, J. (2009). *Causality: Models, Reasoning, and Inference* (2nd ed.). Cambridge University Press.</span>
+<span id="cb4-705"><a href="#cb4-705" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Morgan, S. L., &amp; Winship, C. (2014). *Counterfactuals and Causal Inference: Methods and Principles for Social Research* (2nd ed.). Cambridge University Press.</span>
+<span id="cb4-706"><a href="#cb4-706" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Hernán, M. A., &amp; Robins, J. M. (2020). *Causal Inference: What If*. Chapman &amp; Hall/CRC.</span>
+<span id="cb4-707"><a href="#cb4-707" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-708"><a href="#cb4-708" aria-hidden="true" tabindex="-1"></a>**在线资源**：</span>
+<span id="cb4-709"><a href="#cb4-709" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-710"><a href="#cb4-710" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>DAGitty: https://dagitty.net/</span>
+<span id="cb4-711"><a href="#cb4-711" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Causal Inference Playlist: https://www.youtube.com/playlist?list=PLoYXqjI7xzXa_8E5fQ2q3z5u5z5z5z5z5</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
