@@ -27,9 +27,10 @@ date: "2026-03-05"
 **陈志远**
 中国人民大学商学院
 助理教授（贸易经济系）
-📧 chenzhiyuan@rmbs.ruc.edu.cn
-🏢 办公室: 919
-🕒 Office Hours: 周四 14:00-15:00
+
+- 📧 chenzhiyuan@rmbs.ruc.edu.cn
+- 🏢 办公室: 919
+- 🕒 Office Hours: 周四 14:00-15:00
 :::
 
 ::: {.g-col-6}
