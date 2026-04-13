@@ -52,6 +52,7 @@ date: "2026-03-05"
 - 第九讲：广义随机森林 [[课件](Quarto/lecture09_grf.html)] [[详细讲义](Quarto/lecture09_grf_notes.html)]
 - 第十讲：因果森林 [[课件](Quarto/lecture10_causal_forest.html)] [[详细讲义](Quarto/lecture10_causal_forest_notes.html)]
 - 第十一讲：双重机器学习 [[课件](Quarto/lecture11_dml.html)] [[详细讲义](Quarto/lecture11_dml_notes.html)]
+- 第十二讲：因果推断与 AI [[课件](Quarto/lecture12_ai_workflow.html)] [[详细讲义](Quarto/lecture12_ai_workflow_notes.html)]
 - [💻 课程代码仓库](https://github.com/zhiyuanryanchen/ml-causal-inference)
 
 </div>
@@ -60,6 +61,11 @@ date: "2026-03-05"
 <details class="info-panel">
 <summary class="info-panel-header">📢 最新公告</summary>
 <div class="info-panel-body">
+
+**2026-06-09** — 第十二讲课件和详细讲义已发布！
+📊 [课件：因果推断与 AI](Quarto/lecture12_ai_workflow.html) · 📖 [详细讲义](Quarto/lecture12_ai_workflow_notes.html)
+
+---
 
 **2026-06-02** — 第十一讲课件和详细讲义已发布！
 📊 [课件：双重机器学习](Quarto/lecture11_dml.html) · 📖 [详细讲义](Quarto/lecture11_dml_notes.html)
@@ -240,5 +246,9 @@ date: "2026-03-05"
 
 ::: {.learning-grid-item}
 [📊 第十一讲](Quarto/lecture11_dml.html){.btn .btn-primary .course-start-btn}
+:::
+
+::: {.learning-grid-item}
+[📊 第十二讲](Quarto/lecture12_ai_workflow.html){.btn .btn-primary .course-start-btn}
 :::
 :::

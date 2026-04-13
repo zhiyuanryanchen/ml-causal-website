@@ -1,0 +1,705 @@
+---
+title: "机器学习与因果推断 - 第十二讲：前沿专题——因果推断与 AI，大语言模型的应用"
+subtitle: "从 vibe coding 到可复现 research workflow：完整讲义"
+author: "陈志远"
+institute: "中国人民大学商学院"
+date: "2026-06-09"
+format:
+  html:
+    theme: cosmo
+    css: lecture-notes.css
+    html-math-method: mathml
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    highlight-style: github
+    embed-resources: true
+    page-layout: article
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: true
+  cache: false
+  fig-width: 10
+  fig-height: 6
+  dpi: 150
+lang: zh
+jupyter: python3
+---
+
+```{python}
+#| echo: false
+#| output: false
+import json
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import warnings
+
+from sklearn.linear_model import LassoCV, LinearRegression
+from sklearn.model_selection import cross_val_predict
+
+warnings.filterwarnings('ignore')
+
+plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['figure.dpi'] = 150
+
+np.random.seed(42)
+
+n, p = 2400, 30
+X = np.random.normal(size=(n, p))
+theta_0 = 1.5
+
+beta_y = np.array([1.0, -0.9, 0.8, 0.6, -0.5, 0.3] + [0.0] * (p - 6))
+beta_d = np.array([0.8, -0.5, 0.4, 0.0, 0.4, -0.2] + [0.0] * (p - 6))
+
+D = 0.7 * (X @ beta_d) + 0.5 * np.sin(X[:, 0]) + np.random.normal(scale=1.0, size=n)
+Y = theta_0 * D + 0.6 * (X @ beta_y) + 0.6 * np.cos(X[:, 1]) + np.random.normal(scale=1.0, size=n)
+
+theta_naive = LinearRegression().fit(D.reshape(-1, 1), Y).coef_[0]
+theta_controlled = LinearRegression().fit(np.column_stack([D, X[:, :6]]), Y).coef_[0]
+
+model_y = LassoCV(cv=5, random_state=42, n_alphas=30, max_iter=5000)
+model_d = LassoCV(cv=5, random_state=42, n_alphas=30, max_iter=5000)
+
+Y_hat = cross_val_predict(model_y, X, Y, cv=5)
+D_hat = cross_val_predict(model_d, X, D, cv=5)
+
+Y_tilde = Y - Y_hat
+D_tilde = D - D_hat
+theta_resid = np.sum(D_tilde * Y_tilde) / np.sum(D_tilde ** 2)
+
+comparison_df = pd.DataFrame({
+    '方法': ['朴素回归', '部分控制 OLS', '残差化回归', '真实值'],
+    '估计值': [theta_naive, theta_controlled, theta_resid, theta_0]
+})
+
+pilot_df = pd.DataFrame({
+    'merchant_id': [101, 102, 103, 104, 105, 106],
+    'coupon_exposure': [1, 0, 1, 1, 0, 1],
+    'retention_30d': [1, 0, 1, 1, 0, 1],
+    'age_days': [180, 23, 400, 52, 90, np.nan],
+    'prior_sales': [5200, 320, 8100, 1100, 900, 4300],
+    'region': ['East', 'West', 'East', 'North', 'West', 'South'],
+    'note': [
+        '政策稳定，补贴响应积极',
+        '样本刚入驻平台',
+        '品牌商家，历史销量高',
+        None,
+        '季节波动明显',
+        '渠道调整导致口径变化'
+    ]
+})
+
+audit_summary = pd.DataFrame({
+    '变量': pilot_df.columns,
+    '缺失个数': pilot_df.isna().sum().values,
+    '缺失率': pilot_df.isna().mean().round(2).values,
+    '唯一值个数': [pilot_df[col].nunique(dropna=True) for col in pilot_df.columns]
+})
+
+mock_structured_output = json.dumps([
+    {
+        'document': '地方补贴政策说明',
+        'policy_type': '补贴',
+        'timing': '处理前',
+        'strength': '高',
+        'risk': '政策选择性覆盖'
+    },
+    {
+        'document': '平台治理公告',
+        'policy_type': '监管',
+        'timing': '处理前',
+        'strength': '中',
+        'risk': '执行力度地区差异'
+    },
+    {
+        'document': '商家访谈纪要',
+        'policy_type': '访谈',
+        'timing': '处理后',
+        'strength': '低',
+        'risk': '回忆偏误'
+    }
+], ensure_ascii=False)
+
+structured_df = pd.DataFrame(json.loads(mock_structured_output))
+allowed_labels = {'补贴', '监管', '税收', '访谈'}
+structured_df['标签合法'] = structured_df['policy_type'].isin(allowed_labels)
+```
+
+# 引言 {#sec-intro}
+
+在第十一讲中，我们完成了从“机器学习用于预测”到“机器学习用于因果估计”的关键跨越。双重机器学习（Double/Debiased Machine Learning, DML）告诉我们：即使控制变量很多、关系很复杂，只要估计量满足 Neyman 正交性并配合交叉拟合，仍然可以对低维因果参数进行有效推断。
+
+但真正的研究工作并不只是在最后一步跑一个估计器。研究者还需要决定：问题如何定义、数据如何清洗、变量如何构造、识别策略是否可信、结果该如何解释、反对意见如何回应、最终报告如何组织。*换言之，估计器只是 workflow 中的一个环节，而不是全部。*
+
+这一讲的任务，就是把 AI 放回到完整的 research workflow 里来理解。
+
+::: {.callout-note}
+## 本讲核心观点
+AI 不是识别策略的替代品，也不是因果结论的自动生成器。它的真正价值在于：作为研究 workflow 的协作者，帮助我们更快地分解问题、组织数据、搭建脚手架、审查结果，并把分析沉淀成可复现资产。
+:::
+
+## 本讲目标 {#sec-goals}
+
+完成本讲后，你应能够：
+
+1. 区分 AI 在因果研究中的高价值用途与高风险误用
+2. 把一个因果问题拆解成 estimand、识别假设、数据审计与估计流程
+3. 使用大语言模型协助搭建本地可运行的分析脚手架
+4. 理解“严谨版 vibe coding”的基本原则
+5. 设计一套包含验证、日志与回滚机制的 AI 协作研究 workflow
+
+## 上节课回顾 {#sec-review}
+
+第十一讲的关键贡献可以概括为四点：
+
+- **高维控制**：当混杂变量很多时，简单的 OLS 已经不够
+- **正交化**：用 Neyman 正交性降低 nuisance estimation error 带来的偏差
+- **交叉拟合**：用样本分割控制过拟合
+- **DML**：把机器学习预测能力与半参数推断理论结合起来
+
+这些工具为我们提供了一个强大的估计层。但在真实研究中，仅仅“会用 DML”还不够。你还需要组织完整工作流，并保证过程可复核、结论可追踪。AI 正是在这一层开始产生真正价值。
+
+# 第一部分：AI 不是识别策略的替代品 {#sec-boundary}
+
+## DML 之后为什么要讲 AI workflow {#sec-why-ai}
+
+许多同学第一次接触 AI 时，会自然地产生两个误解：
+
+1. 既然大语言模型会写代码，那以后研究是不是只要会提问就够了？
+2. 既然大模型知道很多论文和案例，它是不是也能自动判断识别是否可信？
+
+这两种看法都不成立。第一种忽略了研究中最难的部分不是“写代码”，而是“提出正确问题并判断证据是否充分”。第二种则把语言模型的模式匹配能力误解成了识别能力。
+
+::: {.callout-warning}
+## 边界必须先讲清楚
+识别来自研究设计、时间顺序、制度背景和可辩护的假设；不会因为提示词写得漂亮就自动成立。
+:::
+
+因此，这一讲不是在说“AI 会替代因果推断”，而是在说“当我们已经掌握因果推断工具之后，如何把 AI 变成高效且受控的研究协作者”。
+
+## AI 在因果研究中的合理位置 {#sec-position}
+
+把完整研究流程拆开来看，AI 的角色其实非常清晰：
+
+| 研究环节 | AI 的合理角色 | 研究者的核心责任 |
+|:---|:---|:---|
+| 问题定义 | 帮助提炼 estimand、梳理变量、生成候选路径 | 确认问题是否具有因果含义 |
+| 识别设计 | 列出假设、给出反例、画出 DAG 草图 | 判断假设是否在现实中成立 |
+| 数据工作 | 生成清洗、EDA、特征工程、文本结构化脚手架 | 审核口径、时间顺序、样本边界 |
+| 估计推断 | 组织 DML、因果森林、稳健性模板 | 审查模型与解释边界 |
+| 写作表达 | 生成图注、摘要、审稿清单、问答稿 | 对结论、措辞和声誉负责 |
+
+从这个表格可以看出，AI 最强的是 *组织与加速*，而不是 *承担责任*。
+
+## 什么是“严谨版 vibe coding” {#sec-vibe}
+
+在软件圈，“vibe coding”往往指用自然语言快速驱动代码生成。但在学术研究和数据分析场景里，这个词如果不加限定，就容易滑向一种危险做法：让 AI 连续不断地产出代码，而研究者既不验证，也不记录。
+
+更合理的定义是：
+
+::: {.callout-note}
+## 严谨版 vibe coding
+使用自然语言加速原型开发，但必须同时满足四个条件：结构化输入、局部验证、可回滚、可审计。
+:::
+
+这意味着：
+
+- 你给 AI 的不是一句模糊要求，而是变量字典、样本限制、目标参数和验证要求
+- AI 生成的不是“终局结论”，而是可以单独运行、单独检查的模块
+- 你始终保留修改、删除、回退和重写的权力
+- 每次重要更改都要进入日志或版本控制
+
+## 一个常见反例 {#sec-counterexample}
+
+假设学生告诉 AI：
+
+> “帮我估计补贴对留存的因果效应，控制所有相关变量。”
+
+一个看似“聪明”的模型，可能会把“补贴后的曝光量”“补贴后的点击率”“补贴后的活跃度”统统列进控制变量集合。这样生成的代码甚至可以顺利跑完，但识别已经彻底被破坏了，因为这些变量发生在处理之后，属于 post-treatment variables。
+
+这里暴露出研究中最重要的区分：
+
+- **AI 能列出候选变量**
+- **研究者必须判断变量与处理的时间关系、机制关系和可控制性**
+
+因此，本讲后面每一个 AI 应用场景，都会同时回答四个问题：
+
+1. 它替代了哪一步劳动？
+2. 它可能犯什么错？
+3. 我如何验证？
+4. 失败之后如何回退？
+
+# 第二部分：AI 辅助的因果分析流水线 {#sec-workflow}
+
+## 从研究问题到 estimand {#sec-estimand}
+
+因果研究的第一步永远不是打开 Python，而是明确“我要估计什么”。AI 在这里最有价值的用途，是帮助研究者把模糊问题拆成一个可分析对象。
+
+例如，原始问题可能是：
+
+> “平台给商家发券，到底能不能提高长期留存？”
+
+一个更好的结构化表达应当包含：
+
+- **处理变量**：是否收到定向优惠券
+- **结果变量**：30 天后是否继续活跃
+- **估计对象**：ATE、ATT，还是特定子群的 CATE
+- **候选混杂**：历史销量、地区、店铺年龄、平台评级、行业固定效应
+- **主要识别风险**：平台可能会把券定向发给更有增长潜力的商家
+
+这一步完全可以让 AI 辅助完成，但前提是你提供足够上下文，并要求它输出结构化结果，而不是直接给一个“结论”。
+
+### 一个推荐的提示模板
+
+```text
+请把下面的研究问题拆解成因果分析输入，不要直接做结论：
+1. 处理变量
+2. 结果变量
+3. 目标 estimand
+4. 候选混杂变量
+5. 不能控制的 post-treatment variables
+6. 需要人工核对的识别风险
+
+研究问题：平台补贴是否提升商家 30 天留存？
+```
+
+这个模板的关键不是“让 AI 显得更聪明”，而是强迫它按照研究者能检查的维度输出内容。
+
+## DAG、假设与样本限制 {#sec-dag}
+
+在把问题拆开之后，下一步应是识别审查。这一步特别适合采用“AI 提草图，人来裁决”的模式。
+
+你可以让 AI 做三件事：
+
+1. 列出后门路径与潜在混杂
+2. 提醒可能的样本选择问题
+3. 给出需要画进 DAG 的变量清单
+
+但最后真正要由研究者负责的，是：
+
+- 某变量是否发生在处理之前
+- 某路径是否是实际制度过程的一部分
+- 某样本限制是否会引入新的偏差
+
+换言之，AI 可以帮助你“想全”，但不能替你“想对”。
+
+## 数据审计：AI 先搭框架，人来定口径 {#sec-audit}
+
+在许多项目里，最容易被低估的一步是数据审计。研究失败往往不是因为没有更复杂的估计器，而是因为：
+
+- 变量定义混乱
+- 时间顺序没对齐
+- 样本口径中途变化
+- 文本字段和结构化字段没有打通
+
+AI 很适合在这里产出初始 schema summary、缺失表、异常值清单、EDA 模板，但所有这些内容都必须经过人工审核。
+
+::: {.callout-tip}
+## 一个实用原则
+先让 AI 告诉你“应该看什么”，再由你决定“什么值得信”。
+:::
+
+### Python 演示：小样本数据审计
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+print(pilot_df.to_string(index=False))
+print()
+print(audit_summary.to_string(index=False))
+```
+
+这段输出虽然简单，但已经足够说明三件事：
+
+1. `age_days` 与 `note` 存在缺失
+2. `region` 是分类变量，编码与聚合方式会影响后续估计
+3. 文本字段 `note` 可能包含重要制度信息，但不能直接进回归，需要先结构化
+
+### 这一环节适合交给 AI 的具体任务
+
+- 生成缺失值、唯一值、异常值检查代码
+- 生成数据字典草稿
+- 生成样本限制 checklist
+- 生成图表标题、变量翻译和初步注释
+
+### 不应直接外包的判断
+
+- 缺失是否随机
+- 某字段是否是 post-treatment measure
+- 样本剔除是否改变了研究对象
+- 文本字段是否暴露个人隐私或敏感信息
+
+## 本地高维分析脚手架 {#sec-local-estimation}
+
+研究者经常会问：如果我已经知道 AI 不能替代识别，那它在估计阶段还能帮什么？答案是：*它可以极大降低搭建与调试分析脚手架的时间成本。*
+
+例如，在第十一讲我们已经知道，面对高维混杂时，朴素回归通常会偏。此时可以让 AI 帮我们快速写出一版“本地可执行、可检查”的残差化分析模板，然后由研究者来检查逻辑与结果。
+
+### Python 演示：朴素回归、部分控制与残差化回归
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+print(comparison_df.to_string(index=False, float_format=lambda x: f"{x:.3f}"))
+```
+
+### 结果解释
+
+- **朴素回归**：把混杂的一部分也算进了处理效应，通常偏高或偏低
+- **部分控制 OLS**：如果研究者只控制少数显眼变量，往往仍然不足
+- **残差化回归**：更接近第十一讲的 DML 思路，用 ML 先吸收高维控制带来的系统部分，再对残差做低维回归
+
+这段代码本身并不新奇。真正值得学习的是 workflow：
+
+1. 把任务描述清楚
+2. 让 AI 搭建第一版脚手架
+3. 本地执行并检查每个中间对象
+4. 用图表、表格和日志沉淀可复现实验
+
+### Python 演示：估计比较图
+
+```{python}
+#| echo: false
+#| eval: true
+#| fig-align: center
+
+fig, ax = plt.subplots(figsize=(9, 5))
+bars = ax.bar(comparison_df['方法'], comparison_df['估计值'],
+              color=['#8B6F4E', '#B08A2E', '#AE0B2A', '#2C3E50'], width=0.5)
+ax.axhline(theta_0, color='black', linestyle='--', linewidth=2, label=f'真实值 = {theta_0:.1f}')
+for bar, value in zip(bars, comparison_df['估计值']):
+    ax.text(bar.get_x() + bar.get_width() / 2, value + 0.03, f'{value:.2f}',
+            ha='center', va='bottom', fontsize=12, fontweight='bold')
+ax.set_ylabel('估计值')
+ax.set_title('本地因果分析脚手架中的估计比较', fontsize=15, fontweight='bold')
+ax.legend(loc='upper right')
+plt.tight_layout()
+plt.show()
+```
+
+### 方法论上的结论
+
+AI 在这一步的真正价值，不是给你一个神奇新估计器，而是让你更快地：
+
+- 明确输入输出
+- 组织可运行代码
+- 生成对照组、对比表和可视化
+- 把估计阶段接进一个更大的验证循环
+
+## 结果解释、写作与复现 {#sec-writeup}
+
+研究完成之后，很多工作仍然耗时：
+
+- 为图表写注释
+- 把代码结果转成课堂汇报或论文叙述
+- 准备答辩中的反对意见与回复
+
+这是 AI 很适合出力的地方。但一定要使用固定模板，而不是让它自由发挥。例如，一个好的结果解释模板应强制包含：
+
+1. 估计对象是什么
+2. 识别依赖什么假设
+3. 统计不确定性如何体现
+4. 结论只适用于哪些边界条件
+
+如果没有这四项，AI 生成的“流畅解释”很容易沦为相关性包装术。
+
+# 第三部分：大语言模型的具体应用场景 {#sec-llm-use-cases}
+
+## 场景一：文献综述矩阵 {#sec-literature-matrix}
+
+研究一开始，学生常常面对几十篇论文摘要，不知道如何快速归纳。AI 在这里最自然的用途，是把摘要整理成研究设计矩阵，而不是“帮你直接写 literature review”。
+
+一个好矩阵至少应包含这些列：
+
+- 研究问题
+- 处理变量
+- 结果变量
+- 数据来源
+- 识别策略
+- 估计对象
+- 主要局限性
+
+这样做的好处是，AI 输出能被快速抽查，也更容易服务于你自己的研究设计比较。
+
+## 场景二：文本变量构造 {#sec-text-labeling}
+
+因果研究中的文本材料越来越多，例如：
+
+- 政策文件
+- 平台公告
+- 公司年报
+- 访谈纪要
+- 新闻标题与用户评论
+
+这些材料往往包含重要机制信息，但不能直接进入回归，需要先变成结构化变量。大语言模型在这一步非常有用，因为它擅长把长文本归类、摘要、提取字段。
+
+不过，一旦你打算把 AI 结构化的文本标签用于因果分析，就必须多加一层验证：字段完整性、标签白名单、一致性抽样检查。
+
+### Python 演示：结构化输出校验
+
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+print(structured_df.to_string(index=False))
+```
+
+这一步展示的不是“如何调用模型”，而是“拿到结构化输出后如何审查”。如果连标签合法性都没有检查，就把结果直接并入主数据集，后面所有回归都有可能建立在错误测量之上。
+
+### 这一场景的风险
+
+- **标签漂移**：AI 对同一类文本在不同轮次给出不同标签
+- **信息泄漏**：不小心把处理后的描述拿来构造处理强度
+- **伪精确性**：文本标签看起来很细，但缺乏稳定定义
+
+### 课堂建议
+
+如果使用 LLM 做文本结构化，至少保留：
+
+1. 原始文本样本
+2. 提示模板
+3. 模型输出 JSON
+4. 人工抽样复核记录
+
+## 场景三：大数据探索与查询协作 {#sec-big-data}
+
+在大数据场景里，AI 的最佳定位不是“直接给我答案”，而是“帮助我快速写出第一版查询与聚合草案”。
+
+例如，当数据量很大时，你可以把以下信息交给 AI：
+
+- 表结构和字段释义
+- 观测单位
+- 时间变量
+- 关键聚合指标
+- 想要比较的处理组与对照组
+
+然后让它先生成 SQL、DuckDB 或 pandas 查询草案。研究者再在本地执行，并核对：
+
+- join 是否正确
+- 聚合层级是否匹配研究问题
+- 时间窗口是否发生穿越
+- 是否意外过滤掉了关键样本
+
+### 推荐的对话方式
+
+```text
+下面是表结构、主键、时间字段和指标定义。请不要做结论，先帮我：
+1. 写出一版聚合草案
+2. 说明每个 group by 和 filter 的目的
+3. 提醒我最可能出现的数据泄漏和重复计数风险
+```
+
+这种对话方式的价值在于：你让 AI 产出的是 *可检查对象*，而不是不可追踪的“智能答案”。
+
+## 场景四：调试、审稿与结果解释 {#sec-debug-review}
+
+当项目进入中后期，AI 往往在这三类任务上最省时间：
+
+1. **代码调试**：定位异常、维度错误、重复 merge、可视化 bug
+2. **审稿模拟**：站在 reviewer 视角质疑识别与稳健性
+3. **结果解释**：按固定模板生成图注、摘要和答辩用语
+
+但这里也最容易发生一种假象：AI 说得越流畅，研究者越容易以为它理解得越深。事实上，很多时候它只是语言上更像一篇论文，而不是证据上更扎实。
+
+因此，调试和审稿阶段要特别强调“反问式使用”：
+
+- 我最脆弱的识别假设是什么？
+- 如果 reviewer 质疑样本选择，我该补什么证据？
+- 这张图是否把相关误写成了因果？
+
+# 第四部分：验证、审计与伦理 {#sec-validation}
+
+## 验证循环 {#sec-loop}
+
+AI 协作之所以能从“花哨工具”变成“研究生产力”，关键不在模型本身，而在是否建立了验证循环。
+
+下面是一条最实用的工作流：
+
+```{mermaid}
+flowchart TD
+    A[自然语言任务] --> B[AI 生成脚手架]
+    B --> C[本地运行]
+    C --> D[查看中间结果]
+    D --> E[提出反问]
+    E --> F[修订代码与假设]
+    F --> G[记录版本与日志]
+    G --> H[形成可复现结果]
+```
+
+这个循环的本质是：**任何一步都不能直接跳到结论**。你必须看到中间对象，看到失败原因，看到回滚路径。
+
+## 常见失败模式 {#sec-failure-modes}
+
+AI 在因果研究中最常见的失败模式有六类：
+
+1. **把预测问题伪装成因果问题**
+2. **把 post-treatment variables 当作控制变量**
+3. **把相关性语言包装成机制语言**
+4. **忽略样本选择和数据口径变化**
+5. **在文本变量构造中产生不可见测量误差**
+6. **生成看似完整、实则无法复现的代码**
+
+### 一个实践清单
+
+在接受任何 AI 输出之前，至少问自己八个问题：
+
+1. 这个输出替代了哪一步劳动？
+2. 这一步的成功标准是什么？
+3. 有没有时间顺序问题？
+4. 有没有样本泄漏？
+5. 中间对象是否可见？
+6. 是否已经有日志和版本？
+7. 如果它错了，我如何定位？
+8. 如果它完全不行，我如何回退？
+
+## 数据安全、版权与合规 {#sec-ethics}
+
+在 AI 协作研究中，技术之外还有三类底线问题：
+
+- **隐私**：是否包含可识别个人信息、交易数据、敏感文本
+- **版权**：是否把受限制的数据和文档直接上传到不安全环境
+- **可追责性**：是否能说明某个结果是怎么得到的
+
+对于课堂项目而言，最稳妥的原则是：
+
+::: {.callout-warning}
+## 安全第一
+敏感原始数据尽量留在本地；给 AI 的是 schema、脱敏样本、统计摘要和任务描述，而不是完整原始库。
+:::
+
+这样做并不会削弱 AI 的协作价值，因为 AI 真正擅长的是理解任务结构和代码框架，而不是必须直接接触全部原始数据。
+
+# 第五部分：完整 mini case {#sec-mini-case}
+
+## 一个教学案例：平台补贴与留存 {#sec-case}
+
+为了把本讲的思想串起来，我们可以把项目 workflow 设计成一个 mini case：
+
+**问题**：平台定向补贴是否提高商家 30 天留存？
+
+这类问题同时具有：
+
+- 典型的政策/平台干预结构
+- 明确的处理与结果变量
+- 大量潜在混杂
+- 可能存在的文本材料（政策公告、商家反馈）
+
+### 第一步：结构化问题
+
+AI 可以帮助你快速整理：
+
+- 处理变量定义
+- 结果变量窗口
+- 候选混杂
+- 可疑的 post-treatment measures
+- 需要记录的样本限制
+
+### 第二步：本地估计与对比
+
+我们在前面的 Python 演示里已经得到了一张估计对比表。教学上，你可以要求学生思考：
+
+- 为什么朴素回归会偏？
+- 为什么只控制少数变量仍然不够？
+- 为什么残差化思路更稳健？
+
+### 第三步：文本变量补充机制解释
+
+如果商家反馈文本中包含对补贴政策的理解与执行情况，那么 AI 可以帮你把这些文本整理成：
+
+- 是否属于政策响应型商家
+- 是否提到资金约束
+- 是否出现执行摩擦
+
+这些结构化变量未必直接进入主回归，但可以作为机制证据或异质性分析的补充。
+
+### 第四步：形成项目答辩材料
+
+最后，AI 可以帮助你生成：
+
+- 图表说明
+- 风险与局限性清单
+- 答辩问答草稿
+- 可复现实验摘要
+
+但你必须保证每一条叙述都能指回具体代码、图表和结果对象。
+
+# 第六部分：项目准备与研究能力升级 {#sec-project}
+
+## AI 时代的研究能力栈 {#sec-skill-stack}
+
+过去，很多人把研究能力理解成两件事：懂理论、会跑回归。今天这已经不够了。你还需要三类新增能力：
+
+1. **工程能力**：把分析流程拆成模块，让 AI 能协作而不失控
+2. **验证能力**：快速定位 AI 输出的错误并建立回滚机制
+3. **编排能力**：把文献、数据、代码、图表和叙事组织成一个一致系统
+
+换句话说，AI 并没有降低研究门槛，它只是把门槛从“会不会写代码”进一步提高到“能不能驾驭完整 workflow”。
+
+## 给课程项目的具体建议 {#sec-project-advice}
+
+如果你准备把 AI 纳入期末项目，可以按照以下顺序：
+
+1. **先写研究问题与识别草图**
+2. **再让 AI 生成数据审计与代码脚手架**
+3. **把估计结果、图表和日志纳入版本控制**
+4. **保留一页 AI 使用说明**：它做了什么，没有做什么，你如何验证
+
+这会显著提升项目的可信度，也能帮助你在答辩中说清楚“AI 参与”究竟意味着什么。
+
+# 总结 {#sec-summary}
+
+本讲最重要的收获，不是多学了一个新工具，而是完成了一次视角转换：
+
+- 从“AI 会不会替我做研究”
+- 转向“我如何把 AI 驯化为研究 workflow 的一部分”
+
+只要你始终坚持四件事，AI 就会成为真正的研究助力：
+
+1. 先定义问题，再写提示词
+2. 先看中间对象，再谈结论
+3. 先建立验证循环，再追求效率
+4. 先明确责任边界，再扩大自动化范围
+
+::: {.callout-note}
+## 一句话结论
+AI 时代的核心竞争力，不是让模型替你思考，而是让模型帮你更快地提出问题、检查证据，并把正确答案组织成可信研究。
+:::
+
+# 练习题 {#sec-exercises}
+
+## 概念题
+
+1. 为什么说 AI 不能替代识别策略？请结合 post-treatment variables 的例子说明。
+2. 请用自己的话解释“严谨版 vibe coding”与“随意让 AI 写代码”的区别。
+3. 在文献综述、数据审计、估计推断、结果解释四个环节中，哪两个环节最适合 AI 高强度参与？为什么？
+4. 为什么“预测准确率高”不等于“因果识别可信”？
+
+## 编程与 workflow 题
+
+5. 给定一个研究问题，请写出一个高质量提示模板，使 AI 输出：处理变量、结果变量、estimand、候选混杂和需要人工核对的识别风险。
+6. 修改本讲的 Python 代码，使其报告每一种估计方法相对于真实值的偏差。
+7. 设计一个文本变量结构化流程，要求包含：原文、提示模板、JSON 输出、白名单校验与人工抽样复核。
+8. 为你的期末项目设计一页“AI 协作日志”，至少包含：任务、输入上下文、AI 输出、人工修改、验证证据。
+
+# 参考文献 {#sec-references}
+
+1. Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., & Syrgkanis, V. (2024). *Applied Causal Inference Powered by Machine Learning and AI*. [在线阅读](https://causalml-book.org/)
+
+2. Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., & Robins, J. (2018). Double/Debiased Machine Learning for Treatment and Structural Parameters. *The Econometrics Journal*, 21(1), C1–C68.
+
+3. Battocchi, K., Dillon, E., Hei, M., Lewis, G., Oka, P., Oprescu, M., & Syrgkanis, V. (2019). EconML: A Python Package for ML-Based Heterogeneous Treatment Effects Estimation. [文档](https://econml.azurewebsites.net/)
+
+4. DoubleML Team. (2026). *DoubleML Documentation*. [文档](https://docs.doubleml.org/)
+
+5. Cunningham, S. (2021). *Causal Inference: The Mixtape*. [在线阅读](https://mixtape.scunning.com/)

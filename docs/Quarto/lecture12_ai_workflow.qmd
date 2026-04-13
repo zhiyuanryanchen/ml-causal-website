@@ -1,0 +1,614 @@
+---
+title: "机器学习与因果推断"
+subtitle: "第十二讲：前沿专题——因果推断与 AI，大语言模型的应用"
+author: "陈志远"
+institute: "中国人民大学商学院"
+date: "2026-06-09"
+format:
+  revealjs:
+    theme: [default, ruc-theme.scss]
+    css: ruc-theme.scss
+    slide-number: true
+    progress: true
+    code-fold: false
+    code-tools: true
+    highlight-style: github
+    pdf-separate-fragments: false
+    width: 1400
+    height: 788
+    margin: 0.05
+    transition: slide
+    background-transition: fade
+    toc: true
+    toc-depth: 1
+    chalkboard:
+      buttons: true
+    preview-links: auto
+    mermaid:
+      theme: default
+      flowchart:
+        useMaxWidth: true
+        htmlLabels: true
+        nodeSpacing: 70
+        rankSpacing: 90
+        diagramPadding: 20
+      themeCSS: |
+        .label text,
+        .nodeLabel,
+        .edgeLabel,
+        .edgeLabel p,
+        .cluster-label text {
+          font-size: 28px !important;
+          font-family: "Source Han Sans SC", "Noto Sans CJK SC", "WenQuanYi Micro Hei", sans-serif !important;
+          font-weight: 600 !important;
+        }
+      themeVariables:
+        fontSize: 32px
+        fontFamily: "Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif"
+        fontWeight: 600
+  beamer:
+    pdf-engine: xelatex
+    include-in-header:
+      text: |
+        \usepackage[UTF8]{ctex}
+        \usetheme{Madrid}
+        \usecolortheme{default}
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: true
+  cache: false
+lang: zh
+html-math-method: katex
+---
+
+```{python}
+#| echo: false
+#| output: false
+import json
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import warnings
+
+from sklearn.linear_model import LassoCV, LinearRegression
+from sklearn.model_selection import cross_val_predict
+
+warnings.filterwarnings('ignore')
+
+plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['figure.dpi'] = 150
+
+np.random.seed(42)
+
+n, p = 1800, 24
+X = np.random.normal(size=(n, p))
+theta_0 = 1.5
+
+beta_y = np.array([1.1, -0.8, 0.7, 0.5, -0.4] + [0.0] * (p - 5))
+beta_d = np.array([0.9, -0.6, 0.2, 0.0, 0.4] + [0.0] * (p - 5))
+
+D = 0.8 * (X @ beta_d) + 0.4 * np.sin(X[:, 0]) + np.random.normal(scale=1.0, size=n)
+Y = theta_0 * D + 0.7 * (X @ beta_y) + 0.5 * np.cos(X[:, 1]) + np.random.normal(scale=1.0, size=n)
+
+theta_naive = LinearRegression().fit(D.reshape(-1, 1), Y).coef_[0]
+
+model_y = LassoCV(cv=5, random_state=42, n_alphas=25, max_iter=5000)
+model_d = LassoCV(cv=5, random_state=42, n_alphas=25, max_iter=5000)
+
+Y_hat = cross_val_predict(model_y, X, Y, cv=5)
+D_hat = cross_val_predict(model_d, X, D, cv=5)
+
+Y_tilde = Y - Y_hat
+D_tilde = D - D_hat
+theta_resid = np.sum(D_tilde * Y_tilde) / np.sum(D_tilde ** 2)
+
+estimate_df = pd.DataFrame({
+    '方法': ['朴素回归', '残差化回归', '真实值'],
+    '估计值': [theta_naive, theta_resid, theta_0]
+})
+
+audit_df = pd.DataFrame({
+    '变量': ['outcome', 'treatment', 'age', 'prior_sales', 'region', 'text_note'],
+    '类型': ['float', 'int', 'int', 'float', 'category', 'string'],
+    '缺失率': [0.00, 0.00, 0.02, 0.11, 0.00, 0.07],
+    '是否关键': ['是', '是', '是', '是', '是', '否']
+})
+
+mock_llm_json = json.dumps([
+    {
+        'paper': 'Platform subsidy and retention',
+        'treatment': '补贴曝光',
+        'outcome': '30 天留存',
+        'estimand': 'ATE',
+        'risk': '自选择偏误'
+    },
+    {
+        'paper': 'Training and wages',
+        'treatment': '职业培训参与',
+        'outcome': '工资增长',
+        'estimand': 'ATT',
+        'risk': '样本流失'
+    },
+    {
+        'paper': 'Credit policy and SME growth',
+        'treatment': '信贷政策覆盖',
+        'outcome': '营收增长',
+        'estimand': 'LATE',
+        'risk': '政策外溢'
+    }
+], ensure_ascii=False)
+```
+
+## 上节课回顾
+
+::: {.concept-box}
+**双重机器学习**
+
+- *高维控制*：在复杂混杂下仍然估计低维因果参数
+- *Neyman 正交性*：让估计量对一阶 nuisance error 不敏感
+- *交叉拟合*：避免样本内过拟合污染因果估计
+- *DML*：把 ML 的预测能力与经典推断的严谨性结合起来
+:::
+
+. . .
+
+*本节课的承接问题*
+
+- 学会了估计器之后，如何把 AI 纳入完整研究流程？
+- 哪些工作适合交给大语言模型，哪些绝不能外包？
+- 如何用 vibe coding 提速，又不牺牲识别、验证与复现？
+
+## 从 DML 到 AI 协作研究
+
+::: {.example-box}
+**核心转折**
+
+第十一讲解决的是 *如何在高维控制下稳健估计*。
+
+第十二讲解决的是 *如何组织一整套 AI-native research workflow*。
+:::
+
+. . .
+
+**一句话概括**
+
+AI 不是识别策略的替代品，而是研究 workflow 的放大器。
+
+# 从估计器到研究 workflow {background-color="#AE0B2A"}
+
+## AI 在因果研究中的位置
+
+::: {.concept-box}
+**AI 最适合做的事**
+
+- *问题分解*：把模糊研究问题拆成 estimand、样本和假设
+- *代码脚手架*：快速生成数据审计、建模、作图原型
+- *文本结构化*：把非结构化材料转成表格、标签和摘要
+- *复现辅助*：整理分析日志、稳健性清单和 write-up 草稿
+:::
+
+. . .
+
+::: {.warning-box}
+**AI 不能替代的事**
+
+- 识别假设是否可信
+- 控制变量是否引入 post-treatment bias
+- 数据边界、制度背景与样本构造
+- 最终结论与学术责任
+:::
+
+## AI 能做什么，不能替代什么
+
+| 环节 | AI 可以高效协助 | 研究者必须把关 |
+|:---|:---|:---|
+| 问题定义 | 生成候选 estimand 与变量清单 | 判定研究问题是否有因果含义 |
+| 识别设计 | 列出假设与 DAG 草图 | 判断假设是否在制度上成立 |
+| 数据处理 | 生成 EDA、清洗与特征工程脚手架 | 核对口径、样本选择与泄漏 |
+| 估计推断 | 组织 DML、CATE、稳健性代码模板 | 审核模型选择与解释边界 |
+| 写作表达 | 生成图表说明、报告框架与审稿清单 | 对结论负责并保证可复现 |
+
+## Vibe coding 的严谨版本
+
+::: {.example-box}
+**不是“随便写点提示词”**
+
+在研究场景里，vibe coding 指的是：
+
+1. 用自然语言描述任务
+2. 让 AI 生成第一版分析脚手架
+3. 用断言、测试和日志不断收紧结果
+4. 把输出沉淀成可复现工作流
+:::
+
+. . .
+
+*高水平 vibe coding 的四个约束*
+
+- 结构化输入：变量字典、样本限制、识别目标
+- 局部验证：每一步都能单独运行和检查
+- 明确回滚：AI 生成内容可替换、可重写、可审计
+- 人类裁决：所有识别与解释最终由研究者签字
+
+## 例子：把研究问题拆成 estimand
+
+::: {.example-box}
+**原始问题**
+
+“平台给商家发券，到底能不能提高长期留存？”
+:::
+
+. . .
+
+| 元素 | 结构化表达 |
+|:---|:---|
+| 处理变量 | 是否收到定向优惠券 |
+| 结果变量 | 30 天后是否继续活跃 |
+| 目标参数 | ATE 或 ATT |
+| 主要混杂 | 商家历史销量、地区、类目、平台评级 |
+| 识别风险 | 平台可能把券发给更有潜力的商家 |
+
+## 例子：AI 先给草图，人来做识别裁决
+
+::: {.warning-box}
+**典型错误**
+
+AI 很容易把“发券后的点击率”“发券后的曝光量”也加入控制变量。
+
+这些变量发生在处理之后，属于 *post-treatment variables*。
+:::
+
+. . .
+
+::: {.concept-box}
+**正确做法**
+
+- 让 AI 先列出候选控制变量
+- 研究者逐个判断：变量是否发生在处理之前
+- 把“可控制”“不可控制”“待讨论”分开记录
+:::
+
+# AI 辅助的因果分析流水线 {background-color="#AE0B2A"}
+
+## 从研究问题到可复现实验
+
+```{mermaid}
+flowchart LR
+    A[研究问题] --> B[Estimand]
+    B --> C[DAG 与识别假设]
+    C --> D[数据审计]
+    D --> E[估计策略]
+    E --> F[稳健性检验]
+    F --> G[研究表达]
+    G --> H[可复现归档]
+```
+
+## 提示模板：先定义问题，再让 AI 干活
+
+::: {.concept-box}
+**提示词最小充分上下文**
+
+- 数据结构：每列变量的定义、时间点与单位
+- 研究目标：ATE、ATT、CATE 还是 policy learning
+- 样本限制：时间窗、剔除规则、缺失处理
+- 验证要求：输出代码、检查项、风险提示、日志
+:::
+
+. . .
+
+```text
+你是我的研究协作者。请不要直接给结论，而是先输出：
+1. 处理变量、结果变量、候选混杂变量
+2. 识别风险与不能控制的变量
+3. 数据审计步骤
+4. 一个可本地执行的 Python 分析脚手架
+5. 需要人工复核的地方
+```
+
+## 数据审计：让 AI 先读 schema，人来定样本
+
+::: {.concept-box}
+**数据审计不是机械清洗**
+
+- *先看变量*：类型、缺失、异常值、时间顺序
+- *再看样本*：是否存在选择偏误、口径变化、重复观测
+- *最后看识别*：哪些变量可以安全控制，哪些不能
+:::
+
+. . .
+
+::: {style="font-size: 1em;"}
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+print(audit_df.to_string(index=False))
+```
+
+:::
+
+## 本地演示：高维混杂下的快速分析脚手架
+
+::: {style="font-size: 1em;"}
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+print(estimate_df.to_string(index=False, float_format=lambda x: f"{x:.3f}"))
+```
+
+:::
+
+. . .
+
+**课堂解读**
+
+- 朴素回归把混杂当成处理效应
+- 残差化回归更接近第十一讲的 DML 思想
+- AI 的价值不在替代估计器，而在更快搭好并审查这条分析链
+
+## 估计结果可视化
+
+```{python}
+#| echo: false
+#| eval: true
+#| fig-align: center
+
+fig, ax = plt.subplots(figsize=(9, 5))
+colors = ['#8B6F4E', '#AE0B2A', '#2C3E50']
+bars = ax.bar(estimate_df['方法'], estimate_df['估计值'], color=colors, width=0.45)
+ax.axhline(theta_0, color='black', linestyle='--', linewidth=2, label=f'真实值 = {theta_0:.1f}')
+for bar, value in zip(bars, estimate_df['估计值']):
+    ax.text(bar.get_x() + bar.get_width() / 2, value + 0.03, f'{value:.2f}',
+            ha='center', va='bottom', fontsize=13, fontweight='bold')
+ax.set_ylabel('估计值', fontsize=13)
+ax.set_title('AI 辅助脚手架中的本地估计比较', fontsize=15, fontweight='bold')
+ax.legend(fontsize=12, loc='upper right')
+plt.tight_layout()
+plt.show()
+```
+
+## 写作与复现：AI 最适合产出哪些中间件
+
+| 中间件 | AI 可以生成 | 人类要检查 |
+|:---|:---|:---|
+| 分析计划 | 研究流程、变量字典、检查清单 | 是否遗漏关键假设 |
+| 代码脚手架 | 导包、建模模板、作图模板 | 是否存在样本泄漏、错误控制 |
+| 报告草稿 | 图表说明、结果摘要、局限性模板 | 是否过度外推、是否把相关当因果 |
+| 审稿清单 | 反问式 checklist | 是否覆盖识别、稳健性、外部效度 |
+
+# 大语言模型的具体应用场景 {background-color="#AE0B2A"}
+
+## 场景一：文献矩阵与研究设计
+
+::: {.example-box}
+**高价值用法**
+
+把 5 篇论文摘要整理成“研究问题—处理—结果—识别—数据—局限性”矩阵。
+
+这样能快速看到哪些论文是随机实验、哪些是工具变量、哪些是 DML。
+:::
+
+. . .
+
+| 论文 | 处理 | 结果 | 估计对象 | 主要风险 |
+|:---|:---|:---|:---|:---|
+| 平台补贴研究 | 补贴曝光 | 留存 | ATE | 自选择 |
+| 培训项目评估 | 培训参与 | 工资 | ATT | 样本流失 |
+| 信贷政策研究 | 政策覆盖 | 营收增长 | LATE | 外溢效应 |
+
+## 场景二：文本变量构造
+
+::: {.concept-box}
+**LLM 最擅长的不是“下因果结论”**
+
+而是把文本、访谈、政策文件、客服记录整理成结构化变量。
+:::
+
+. . .
+
+*典型任务*
+
+- 给政策文本打标签：监管、补贴、处罚、信息披露
+- 从访谈纪要提取处理时点、参与主体、执行强度
+- 把开放式问题整理成可回归的分类变量
+
+## Python 演示：结构化输出先验证再入库
+
+::: {style="font-size: 1em;"}
+```{python}
+#| echo: true
+#| eval: true
+#| output: true
+
+structured_df = pd.DataFrame(json.loads(mock_llm_json))
+print(structured_df.to_string(index=False))
+```
+
+:::
+
+. . .
+
+**关键原则**
+
+- 先要求 AI 输出 JSON 或表格
+- 再验证字段是否完整、标签是否在白名单内
+- 最后才允许进入估计环节
+
+## 场景三：大数据探索与 SQL 草案
+
+::: {.warning-box}
+**正确姿势**
+
+让 AI 起草查询，再在本地数据库执行。
+
+不要把大数据直接扔给 LLM，也不要让它在没有 schema 的情况下自由发挥。
+:::
+
+. . .
+
+*推荐 workflow*
+
+1. 给 AI 变量表、样本口径和目标指标
+2. 让 AI 先写 SQL 或 pandas 草案
+3. 本地运行并核对聚合逻辑
+4. 把最终查询纳入版本控制
+
+## 场景四：调试、审稿与结果解释
+
+| 任务 | AI 的高价值输出 | 研究者的终审重点 |
+|:---|:---|:---|
+| Debug | 定位异常值、语法错误、维度不匹配 | 是否修坏了识别逻辑 |
+| 审稿模拟 | 列出威胁识别的反对意见 | 哪些质疑需要新实验或新稳健性 |
+| 结果解释 | 按模板说明 estimand、CI、边界条件 | 是否偷换结论、是否过度宣传 |
+
+## 失败案例：为什么不能把识别交给 AI
+
+::: {.warning-box}
+**最危险的三种幻觉**
+
+- 把预测准确率误当因果识别
+- 把 post-treatment variable 当作控制变量
+- 把数据相关性包装成制度机制
+:::
+
+. . .
+
+*课堂纪律*
+
+- AI 给的是候选答案，不是最终结论
+- 每一个 AI 建议都要回答四个问题：它替代了什么劳动？可能犯什么错？如何验证？失败后如何回退？
+
+# AI 时代的研究能力升级 {background-color="#AE0B2A"}
+
+## 验证循环
+
+```{mermaid}
+flowchart TD
+    A[自然语言需求] --> B[AI 生成脚手架]
+    B --> C[本地运行]
+    C --> D[结果诊断]
+    D --> E[反问 AI]
+    E --> F[修订代码与假设]
+    F --> G[记录日志]
+    G --> H[可复现报告]
+```
+
+## 人机分工矩阵
+
+| 层级 | AI 更强 | 研究者更强 |
+|:---|:---|:---|
+| 信息处理 | 摘要、归类、补全模板 | 提出问题、判断重点 |
+| 代码原型 | 搭脚手架、重构、补文档 | 审核逻辑、设计测试 |
+| 识别设计 | 罗列可能方案 | 判断制度背景与可信度 |
+| 研究表达 | 生成初稿、图注、问答稿 | 负责叙事、边界与学术声誉 |
+
+## 研究能力栈
+
+::: {.concept-box}
+**AI 时代的研究者**
+
+不只是会写回归代码，还要同时具备：
+
+1. *识别能力*：知道什么可以识别，什么不能
+2. *工程能力*：会把分析流程拆成可执行模块
+3. *验证能力*：能审查 AI 输出并快速回退
+4. *表达能力*：把证据、假设与局限说清楚
+:::
+
+. . .
+
+*从“会跑数”到“会驾驭 workflow”*
+
+- 能让 AI 写第一版
+- 能发现第一版哪里错
+- 能把正确版本沉淀成团队资产
+
+## 推荐工具
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.callout-tip}
+**本地分析工具**
+
+- `pandas`：数据清洗与审计
+- `scikit-learn`：交叉验证、基线模型、特征工程
+- `econml` / `DoubleML`：因果估计
+- `Quarto`：把分析、图表、解释合成一份可复现讲义
+:::
+:::
+
+::: {.column width="50%"}
+::: {.callout-tip}
+**AI 协作工具**
+
+- LLM 聊天界面：问题分解与提示草拟
+- 代码代理：脚手架、重构、单元检查
+- Git：记录版本、回滚、对比变更
+- 审稿清单：保证输出始终能被人类复核
+:::
+:::
+
+::::
+
+## 本讲要点（一）
+
+::: {.concept-box}
+
+1. *AI 是 workflow 放大器*
+   - 它提升的是问题分解、脚手架生成、文本结构化与写作协作
+
+2. *识别永远不能外包*
+   - 因果识别来自制度、时间顺序和研究设计，不来自提示词
+
+3. *vibe coding 必须有约束*
+   - 结构化输入、局部验证、明确回滚、人类终审缺一不可
+
+:::
+
+## 本讲要点（二）
+
+::: {.concept-box}
+
+4. *高价值 AI 场景*
+   - 文献矩阵、文本变量构造、SQL 草案、结果解释、审稿模拟
+
+5. *每一步都要留下证据*
+   - 代码、日志、图表、稳健性结果都应纳入可复现流程
+
+6. *AI 时代真正稀缺的是判断力*
+   - 能把 AI 输出转化为可靠研究资产的人，才具备研究竞争力
+
+:::
+
+## 下节课预告
+
+**课程收官：项目答辩与研究展示**
+
+- 如何用清晰的识别逻辑讲好你的研究故事
+- 如何展示数据、代码、稳健性与 AI 协作日志
+- 如何把“会做分析”呈现成“会做研究”
+
+. . .
+
+::: {.callout-tip}
+**最后的核心能力**
+
+真正的优势不是让 AI 替你做研究，而是让 AI 帮你更快地提出问题、验证问题，并把答案组织成可信证据。
+:::
+
+# 参考文献
+
+- Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., & Syrgkanis, V. (2024). *Applied Causal Inference Powered by Machine Learning and AI*. https://causalml-book.org/
+
+- Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., & Robins, J. (2018). Double/Debiased Machine Learning for Treatment and Structural Parameters. *The Econometrics Journal*, 21(1), C1–C68.
+
+- Battocchi, K., Dillon, E., Hei, M., Lewis, G., Oka, P., Oprescu, M., Syrgkanis, V. (2019). EconML: A Python Package for ML-Based Heterogeneous Treatment Effects Estimation. https://econml.azurewebsites.net/
+
+- DoubleML Team. (2026). *DoubleML Documentation*. https://docs.doubleml.org/

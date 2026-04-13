@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="zh-Hans"><head>
+<script src="lecture12_ai_workflow_files/libs/clipboard/clipboard.min.js"></script>
+<script src="lecture12_ai_workflow_files/libs/quarto-html/tabby.min.js"></script>
+<script src="lecture12_ai_workflow_files/libs/quarto-html/popper.min.js"></script>
+<script src="lecture12_ai_workflow_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="lecture12_ai_workflow_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="lecture12_ai_workflow_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="lecture12_ai_workflow_files/libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.36">
+
+  <meta name="author" content="陈志远">
+  <meta name="dcterms.date" content="2026-06-09">
+  <title>机器学习与因果推断</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="lecture12_ai_workflow_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="lecture12_ai_workflow_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="lecture12_ai_workflow_files/libs/revealjs/dist/theme/quarto-8b8acb134ad08796896ab318cb276518.css">
+  <link rel="stylesheet" href="ruc-theme.scss">
+  <link href="lecture12_ai_workflow_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="lecture12_ai_workflow_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="lecture12_ai_workflow_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="lecture12_ai_workflow_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="lecture12_ai_workflow_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="lecture12_ai_workflow_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <meta name="mermaid-theme" content="default">
+  <script src="lecture12_ai_workflow_files/libs/quarto-diagram/mermaid.min.js"></script>
+  <script src="lecture12_ai_workflow_files/libs/quarto-diagram/mermaid-init.js"></script>
+  <link href="lecture12_ai_workflow_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">机器学习与因果推断</h1>
+  <p class="subtitle">第十二讲：前沿专题——因果推断与 AI，大语言模型的应用</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+陈志远 
+</div>
+        <p class="quarto-title-affiliation">
+            中国人民大学商学院
+          </p>
+    </div>
+</div>
+
+  <p class="date">2026-06-09</p>
+</section><section id="TOC">
+<nav role="doc-toc"> 
+<h2 id="toc-title">目录</h2>
+<ul>
+<li><a href="#/从估计器到研究-workflow" id="/toc-从估计器到研究-workflow">从估计器到研究 workflow</a></li>
+<li><a href="#/ai-辅助的因果分析流水线" id="/toc-ai-辅助的因果分析流水线">AI 辅助的因果分析流水线</a></li>
+<li><a href="#/大语言模型的具体应用场景" id="/toc-大语言模型的具体应用场景">大语言模型的具体应用场景</a></li>
+<li><a href="#/ai-时代的研究能力升级" id="/toc-ai-时代的研究能力升级">AI 时代的研究能力升级</a></li>
+<li><a href="#/参考文献" id="/toc-参考文献">参考文献</a></li>
+</ul>
+</nav>
+</section>
+<section id="上节课回顾" class="slide level2">
+<h2>上节课回顾</h2>
+<div class="concept-box">
+<p><strong>双重机器学习</strong></p>
+<ul>
+<li><em>高维控制</em>：在复杂混杂下仍然估计低维因果参数</li>
+<li><em>Neyman 正交性</em>：让估计量对一阶 nuisance error 不敏感</li>
+<li><em>交叉拟合</em>：避免样本内过拟合污染因果估计</li>
+<li><em>DML</em>：把 ML 的预测能力与经典推断的严谨性结合起来</li>
+</ul>
+</div>
+<div class="fragment">
+<p><em>本节课的承接问题</em></p>
+<ul>
+<li>学会了估计器之后，如何把 AI 纳入完整研究流程？</li>
+<li>哪些工作适合交给大语言模型，哪些绝不能外包？</li>
+<li>如何用 vibe coding 提速，又不牺牲识别、验证与复现？</li>
+</ul>
+</div>
+</section>
+<section id="从-dml-到-ai-协作研究" class="slide level2">
+<h2>从 DML 到 AI 协作研究</h2>
+<div class="example-box">
+<p><strong>核心转折</strong></p>
+<p>第十一讲解决的是 <em>如何在高维控制下稳健估计</em>。</p>
+<p>第十二讲解决的是 <em>如何组织一整套 AI-native research workflow</em>。</p>
+</div>
+<div class="fragment">
+<p><strong>一句话概括</strong></p>
+<p>AI 不是识别策略的替代品，而是研究 workflow 的放大器。</p>
+</div>
+</section>
+<section>
+<section id="从估计器到研究-workflow" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>从估计器到研究 workflow</h1>
+
+</section>
+<section id="ai-在因果研究中的位置" class="slide level2">
+<h2>AI 在因果研究中的位置</h2>
+<div class="concept-box">
+<p><strong>AI 最适合做的事</strong></p>
+<ul>
+<li><em>问题分解</em>：把模糊研究问题拆成 estimand、样本和假设</li>
+<li><em>代码脚手架</em>：快速生成数据审计、建模、作图原型</li>
+<li><em>文本结构化</em>：把非结构化材料转成表格、标签和摘要</li>
+<li><em>复现辅助</em>：整理分析日志、稳健性清单和 write-up 草稿</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="warning-box">
+<p><strong>AI 不能替代的事</strong></p>
+<ul>
+<li>识别假设是否可信</li>
+<li>控制变量是否引入 post-treatment bias</li>
+<li>数据边界、制度背景与样本构造</li>
+<li>最终结论与学术责任</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="ai-能做什么不能替代什么" class="slide level2">
+<h2>AI 能做什么，不能替代什么</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">环节</th>
+<th style="text-align: left;">AI 可以高效协助</th>
+<th style="text-align: left;">研究者必须把关</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">问题定义</td>
+<td style="text-align: left;">生成候选 estimand 与变量清单</td>
+<td style="text-align: left;">判定研究问题是否有因果含义</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">识别设计</td>
+<td style="text-align: left;">列出假设与 DAG 草图</td>
+<td style="text-align: left;">判断假设是否在制度上成立</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">数据处理</td>
+<td style="text-align: left;">生成 EDA、清洗与特征工程脚手架</td>
+<td style="text-align: left;">核对口径、样本选择与泄漏</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">估计推断</td>
+<td style="text-align: left;">组织 DML、CATE、稳健性代码模板</td>
+<td style="text-align: left;">审核模型选择与解释边界</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">写作表达</td>
+<td style="text-align: left;">生成图表说明、报告框架与审稿清单</td>
+<td style="text-align: left;">对结论负责并保证可复现</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="vibe-coding-的严谨版本" class="slide level2">
+<h2>Vibe coding 的严谨版本</h2>
+<div class="example-box">
+<p><strong>不是“随便写点提示词”</strong></p>
+<p>在研究场景里，vibe coding 指的是：</p>
+<ol type="1">
+<li>用自然语言描述任务</li>
+<li>让 AI 生成第一版分析脚手架</li>
+<li>用断言、测试和日志不断收紧结果</li>
+<li>把输出沉淀成可复现工作流</li>
+</ol>
+</div>
+<div class="fragment">
+<p><em>高水平 vibe coding 的四个约束</em></p>
+<ul>
+<li>结构化输入：变量字典、样本限制、识别目标</li>
+<li>局部验证：每一步都能单独运行和检查</li>
+<li>明确回滚：AI 生成内容可替换、可重写、可审计</li>
+<li>人类裁决：所有识别与解释最终由研究者签字</li>
+</ul>
+</div>
+</section>
+<section id="例子把研究问题拆成-estimand" class="slide level2">
+<h2>例子：把研究问题拆成 estimand</h2>
+<div class="example-box">
+<p><strong>原始问题</strong></p>
+<p>“平台给商家发券，到底能不能提高长期留存？”</p>
+</div>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">元素</th>
+<th style="text-align: left;">结构化表达</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">处理变量</td>
+<td style="text-align: left;">是否收到定向优惠券</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">结果变量</td>
+<td style="text-align: left;">30 天后是否继续活跃</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">目标参数</td>
+<td style="text-align: left;">ATE 或 ATT</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">主要混杂</td>
+<td style="text-align: left;">商家历史销量、地区、类目、平台评级</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">识别风险</td>
+<td style="text-align: left;">平台可能把券发给更有潜力的商家</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="例子ai-先给草图人来做识别裁决" class="slide level2">
+<h2>例子：AI 先给草图，人来做识别裁决</h2>
+<div class="warning-box">
+<p><strong>典型错误</strong></p>
+<p>AI 很容易把“发券后的点击率”“发券后的曝光量”也加入控制变量。</p>
+<p>这些变量发生在处理之后，属于 <em>post-treatment variables</em>。</p>
+</div>
+<div class="fragment">
+<div class="concept-box">
+<p><strong>正确做法</strong></p>
+<ul>
+<li>让 AI 先列出候选控制变量</li>
+<li>研究者逐个判断：变量是否发生在处理之前</li>
+<li>把“可控制”“不可控制”“待讨论”分开记录</li>
+</ul>
+</div>
+</div>
+</section></section>
+<section>
+<section id="ai-辅助的因果分析流水线" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>AI 辅助的因果分析流水线</h1>
+
+</section>
+<section id="从研究问题到可复现实验" class="slide level2">
+<h2>从研究问题到可复现实验</h2>
+<div class="cell" data-reveal="true" data-layout-align="default">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href=""></a>flowchart LR</span>
+<span id="cb1-2"><a href=""></a>    A[研究问题] --&gt; B[Estimand]</span>
+<span id="cb1-3"><a href=""></a>    B --&gt; C[DAG 与识别假设]</span>
+<span id="cb1-4"><a href=""></a>    C --&gt; D[数据审计]</span>
+<span id="cb1-5"><a href=""></a>    D --&gt; E[估计策略]</span>
+<span id="cb1-6"><a href=""></a>    E --&gt; F[稳健性检验]</span>
+<span id="cb1-7"><a href=""></a>    F --&gt; G[研究表达]</span>
+<span id="cb1-8"><a href=""></a>    G --&gt; H[可复现归档]</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    A[研究问题] --&gt; B[Estimand]
+    B --&gt; C[DAG 与识别假设]
+    C --&gt; D[数据审计]
+    D --&gt; E[估计策略]
+    E --&gt; F[稳健性检验]
+    F --&gt; G[研究表达]
+    G --&gt; H[可复现归档]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="提示模板先定义问题再让-ai-干活" class="slide level2">
+<h2>提示模板：先定义问题，再让 AI 干活</h2>
+<div class="concept-box">
+<p><strong>提示词最小充分上下文</strong></p>
+<ul>
+<li>数据结构：每列变量的定义、时间点与单位</li>
+<li>研究目标：ATE、ATT、CATE 还是 policy learning</li>
+<li>样本限制：时间窗、剔除规则、缺失处理</li>
+<li>验证要求：输出代码、检查项、风险提示、日志</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href=""></a>你是我的研究协作者。请不要直接给结论，而是先输出：</span>
+<span id="cb2-2"><a href=""></a>1. 处理变量、结果变量、候选混杂变量</span>
+<span id="cb2-3"><a href=""></a>2. 识别风险与不能控制的变量</span>
+<span id="cb2-4"><a href=""></a>3. 数据审计步骤</span>
+<span id="cb2-5"><a href=""></a>4. 一个可本地执行的 Python 分析脚手架</span>
+<span id="cb2-6"><a href=""></a>5. 需要人工复核的地方</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="数据审计让-ai-先读-schema人来定样本" class="slide level2">
+<h2>数据审计：让 AI 先读 schema，人来定样本</h2>
+<div class="concept-box">
+<p><strong>数据审计不是机械清洗</strong></p>
+<ul>
+<li><em>先看变量</em>：类型、缺失、异常值、时间顺序</li>
+<li><em>再看样本</em>：是否存在选择偏误、口径变化、重复观测</li>
+<li><em>最后看识别</em>：哪些变量可以安全控制，哪些不能</li>
+</ul>
+</div>
+<div class="fragment">
+<div style="font-size: 1em;">
+<div id="1f075522" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="bu">print</span>(audit_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         变量       类型  缺失率 是否关键
+    outcome    float 0.00    是
+  treatment      int 0.00    是
+        age      int 0.02    是
+prior_sales    float 0.11    是
+     region category 0.00    是
+  text_note   string 0.07    否</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="本地演示高维混杂下的快速分析脚手架" class="slide level2">
+<h2>本地演示：高维混杂下的快速分析脚手架</h2>
+<div style="font-size: 1em;">
+<div id="c07183c5" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="bu">print</span>(estimate_df.to_string(index<span class="op">=</span><span class="va">False</span>, float_format<span class="op">=</span><span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.3f}</span><span class="ss">"</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   方法   估计值
+ 朴素回归 1.953
+残差化回归 1.507
+  真实值 1.500</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p><strong>课堂解读</strong></p>
+<ul>
+<li>朴素回归把混杂当成处理效应</li>
+<li>残差化回归更接近第十一讲的 DML 思想</li>
+<li>AI 的价值不在替代估计器，而在更快搭好并审查这条分析链</li>
+</ul>
+</div>
+</section>
+<section id="估计结果可视化" class="slide level2">
+<h2>估计结果可视化</h2>
+<div id="331d62f3" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="lecture12_ai_workflow_files/figure-revealjs/cell-5-output-1.png" class="quarto-figure quarto-figure-center" width="1335" height="734"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="写作与复现ai-最适合产出哪些中间件" class="slide level2">
+<h2>写作与复现：AI 最适合产出哪些中间件</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">中间件</th>
+<th style="text-align: left;">AI 可以生成</th>
+<th style="text-align: left;">人类要检查</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">分析计划</td>
+<td style="text-align: left;">研究流程、变量字典、检查清单</td>
+<td style="text-align: left;">是否遗漏关键假设</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">代码脚手架</td>
+<td style="text-align: left;">导包、建模模板、作图模板</td>
+<td style="text-align: left;">是否存在样本泄漏、错误控制</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">报告草稿</td>
+<td style="text-align: left;">图表说明、结果摘要、局限性模板</td>
+<td style="text-align: left;">是否过度外推、是否把相关当因果</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">审稿清单</td>
+<td style="text-align: left;">反问式 checklist</td>
+<td style="text-align: left;">是否覆盖识别、稳健性、外部效度</td>
+</tr>
+</tbody>
+</table>
+</section></section>
+<section>
+<section id="大语言模型的具体应用场景" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>大语言模型的具体应用场景</h1>
+
+</section>
+<section id="场景一文献矩阵与研究设计" class="slide level2">
+<h2>场景一：文献矩阵与研究设计</h2>
+<div class="example-box">
+<p><strong>高价值用法</strong></p>
+<p>把 5 篇论文摘要整理成“研究问题—处理—结果—识别—数据—局限性”矩阵。</p>
+<p>这样能快速看到哪些论文是随机实验、哪些是工具变量、哪些是 DML。</p>
+</div>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">论文</th>
+<th style="text-align: left;">处理</th>
+<th style="text-align: left;">结果</th>
+<th style="text-align: left;">估计对象</th>
+<th style="text-align: left;">主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">平台补贴研究</td>
+<td style="text-align: left;">补贴曝光</td>
+<td style="text-align: left;">留存</td>
+<td style="text-align: left;">ATE</td>
+<td style="text-align: left;">自选择</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">培训项目评估</td>
+<td style="text-align: left;">培训参与</td>
+<td style="text-align: left;">工资</td>
+<td style="text-align: left;">ATT</td>
+<td style="text-align: left;">样本流失</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">信贷政策研究</td>
+<td style="text-align: left;">政策覆盖</td>
+<td style="text-align: left;">营收增长</td>
+<td style="text-align: left;">LATE</td>
+<td style="text-align: left;">外溢效应</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="场景二文本变量构造" class="slide level2">
+<h2>场景二：文本变量构造</h2>
+<div class="concept-box">
+<p><strong>LLM 最擅长的不是“下因果结论”</strong></p>
+<p>而是把文本、访谈、政策文件、客服记录整理成结构化变量。</p>
+</div>
+<div class="fragment">
+<p><em>典型任务</em></p>
+<ul>
+<li>给政策文本打标签：监管、补贴、处罚、信息披露</li>
+<li>从访谈纪要提取处理时点、参与主体、执行强度</li>
+<li>把开放式问题整理成可回归的分类变量</li>
+</ul>
+</div>
+</section>
+<section id="python-演示结构化输出先验证再入库" class="slide level2">
+<h2>Python 演示：结构化输出先验证再入库</h2>
+<div style="font-size: 1em;">
+<div id="98b73924" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a>structured_df <span class="op">=</span> pd.DataFrame(json.loads(mock_llm_json))</span>
+<span id="cb7-2"><a href=""></a><span class="bu">print</span>(structured_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                         paper treatment outcome estimand  risk
+Platform subsidy and retention      补贴曝光  30 天留存      ATE 自选择偏误
+            Training and wages    职业培训参与    工资增长      ATT  样本流失
+  Credit policy and SME growth    信贷政策覆盖    营收增长     LATE  政策外溢</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p><strong>关键原则</strong></p>
+<ul>
+<li>先要求 AI 输出 JSON 或表格</li>
+<li>再验证字段是否完整、标签是否在白名单内</li>
+<li>最后才允许进入估计环节</li>
+</ul>
+</div>
+</section>
+<section id="场景三大数据探索与-sql-草案" class="slide level2">
+<h2>场景三：大数据探索与 SQL 草案</h2>
+<div class="warning-box">
+<p><strong>正确姿势</strong></p>
+<p>让 AI 起草查询，再在本地数据库执行。</p>
+<p>不要把大数据直接扔给 LLM，也不要让它在没有 schema 的情况下自由发挥。</p>
+</div>
+<div class="fragment">
+<p><em>推荐 workflow</em></p>
+<ol type="1">
+<li>给 AI 变量表、样本口径和目标指标</li>
+<li>让 AI 先写 SQL 或 pandas 草案</li>
+<li>本地运行并核对聚合逻辑</li>
+<li>把最终查询纳入版本控制</li>
+</ol>
+</div>
+</section>
+<section id="场景四调试审稿与结果解释" class="slide level2">
+<h2>场景四：调试、审稿与结果解释</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">任务</th>
+<th style="text-align: left;">AI 的高价值输出</th>
+<th style="text-align: left;">研究者的终审重点</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Debug</td>
+<td style="text-align: left;">定位异常值、语法错误、维度不匹配</td>
+<td style="text-align: left;">是否修坏了识别逻辑</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">审稿模拟</td>
+<td style="text-align: left;">列出威胁识别的反对意见</td>
+<td style="text-align: left;">哪些质疑需要新实验或新稳健性</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">结果解释</td>
+<td style="text-align: left;">按模板说明 estimand、CI、边界条件</td>
+<td style="text-align: left;">是否偷换结论、是否过度宣传</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="失败案例为什么不能把识别交给-ai" class="slide level2">
+<h2>失败案例：为什么不能把识别交给 AI</h2>
+<div class="warning-box">
+<p><strong>最危险的三种幻觉</strong></p>
+<ul>
+<li>把预测准确率误当因果识别</li>
+<li>把 post-treatment variable 当作控制变量</li>
+<li>把数据相关性包装成制度机制</li>
+</ul>
+</div>
+<div class="fragment">
+<p><em>课堂纪律</em></p>
+<ul>
+<li>AI 给的是候选答案，不是最终结论</li>
+<li>每一个 AI 建议都要回答四个问题：它替代了什么劳动？可能犯什么错？如何验证？失败后如何回退？</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="ai-时代的研究能力升级" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>AI 时代的研究能力升级</h1>
+
+</section>
+<section id="验证循环" class="slide level2">
+<h2>验证循环</h2>
+<div class="cell" data-reveal="true" data-layout-align="default">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb9-1"><a href=""></a>flowchart TD</span>
+<span id="cb9-2"><a href=""></a>    A[自然语言需求] --&gt; B[AI 生成脚手架]</span>
+<span id="cb9-3"><a href=""></a>    B --&gt; C[本地运行]</span>
+<span id="cb9-4"><a href=""></a>    C --&gt; D[结果诊断]</span>
+<span id="cb9-5"><a href=""></a>    D --&gt; E[反问 AI]</span>
+<span id="cb9-6"><a href=""></a>    E --&gt; F[修订代码与假设]</span>
+<span id="cb9-7"><a href=""></a>    F --&gt; G[记录日志]</span>
+<span id="cb9-8"><a href=""></a>    G --&gt; H[可复现报告]</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    A[自然语言需求] --&gt; B[AI 生成脚手架]
+    B --&gt; C[本地运行]
+    C --&gt; D[结果诊断]
+    D --&gt; E[反问 AI]
+    E --&gt; F[修订代码与假设]
+    F --&gt; G[记录日志]
+    G --&gt; H[可复现报告]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="人机分工矩阵" class="slide level2">
+<h2>人机分工矩阵</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">层级</th>
+<th style="text-align: left;">AI 更强</th>
+<th style="text-align: left;">研究者更强</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">信息处理</td>
+<td style="text-align: left;">摘要、归类、补全模板</td>
+<td style="text-align: left;">提出问题、判断重点</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">代码原型</td>
+<td style="text-align: left;">搭脚手架、重构、补文档</td>
+<td style="text-align: left;">审核逻辑、设计测试</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">识别设计</td>
+<td style="text-align: left;">罗列可能方案</td>
+<td style="text-align: left;">判断制度背景与可信度</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">研究表达</td>
+<td style="text-align: left;">生成初稿、图注、问答稿</td>
+<td style="text-align: left;">负责叙事、边界与学术声誉</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="研究能力栈" class="slide level2">
+<h2>研究能力栈</h2>
+<div class="concept-box">
+<p><strong>AI 时代的研究者</strong></p>
+<p>不只是会写回归代码，还要同时具备：</p>
+<ol type="1">
+<li><em>识别能力</em>：知道什么可以识别，什么不能</li>
+<li><em>工程能力</em>：会把分析流程拆成可执行模块</li>
+<li><em>验证能力</em>：能审查 AI 输出并快速回退</li>
+<li><em>表达能力</em>：把证据、假设与局限说清楚</li>
+</ol>
+</div>
+<div class="fragment">
+<p><em>从“会跑数”到“会驾驭 workflow”</em></p>
+<ul>
+<li>能让 AI 写第一版</li>
+<li>能发现第一版哪里错</li>
+<li>能把正确版本沉淀成团队资产</li>
+</ul>
+</div>
+</section>
+<section id="推荐工具" class="slide level2">
+<h2>推荐工具</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>本地分析工具</strong></p>
+<ul>
+<li><code>pandas</code>：数据清洗与审计</li>
+<li><code>scikit-learn</code>：交叉验证、基线模型、特征工程</li>
+<li><code>econml</code> / <code>DoubleML</code>：因果估计</li>
+<li><code>Quarto</code>：把分析、图表、解释合成一份可复现讲义</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>AI 协作工具</strong></p>
+<ul>
+<li>LLM 聊天界面：问题分解与提示草拟</li>
+<li>代码代理：脚手架、重构、单元检查</li>
+<li>Git：记录版本、回滚、对比变更</li>
+<li>审稿清单：保证输出始终能被人类复核</li>
+</ul>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="本讲要点一" class="slide level2">
+<h2>本讲要点（一）</h2>
+<div class="concept-box">
+<ol type="1">
+<li><em>AI 是 workflow 放大器</em>
+<ul>
+<li>它提升的是问题分解、脚手架生成、文本结构化与写作协作</li>
+</ul></li>
+<li><em>识别永远不能外包</em>
+<ul>
+<li>因果识别来自制度、时间顺序和研究设计，不来自提示词</li>
+</ul></li>
+<li><em>vibe coding 必须有约束</em>
+<ul>
+<li>结构化输入、局部验证、明确回滚、人类终审缺一不可</li>
+</ul></li>
+</ol>
+</div>
+</section>
+<section id="本讲要点二" class="slide level2">
+<h2>本讲要点（二）</h2>
+<div class="concept-box">
+<ol start="4" type="1">
+<li><em>高价值 AI 场景</em>
+<ul>
+<li>文献矩阵、文本变量构造、SQL 草案、结果解释、审稿模拟</li>
+</ul></li>
+<li><em>每一步都要留下证据</em>
+<ul>
+<li>代码、日志、图表、稳健性结果都应纳入可复现流程</li>
+</ul></li>
+<li><em>AI 时代真正稀缺的是判断力</em>
+<ul>
+<li>能把 AI 输出转化为可靠研究资产的人，才具备研究竞争力</li>
+</ul></li>
+</ol>
+</div>
+</section>
+<section id="下节课预告" class="slide level2">
+<h2>下节课预告</h2>
+<p><strong>课程收官：项目答辩与研究展示</strong></p>
+<ul>
+<li>如何用清晰的识别逻辑讲好你的研究故事</li>
+<li>如何展示数据、代码、稳健性与 AI 协作日志</li>
+<li>如何把“会做分析”呈现成“会做研究”</li>
+</ul>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>最后的核心能力</strong></p>
+<p>真正的优势不是让 AI 替你做研究，而是让 AI 帮你更快地提出问题、验证问题，并把答案组织成可信证据。</p>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section id="参考文献" class="title-slide slide level1 center">
+<h1>参考文献</h1>
+<ul>
+<li><p>Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., &amp; Syrgkanis, V. (2024). <em>Applied Causal Inference Powered by Machine Learning and AI</em>. https://causalml-book.org/</p></li>
+<li><p>Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., &amp; Robins, J. (2018). Double/Debiased Machine Learning for Treatment and Structural Parameters. <em>The Econometrics Journal</em>, 21(1), C1–C68.</p></li>
+<li><p>Battocchi, K., Dillon, E., Hei, M., Lewis, G., Oka, P., Oprescu, M., Syrgkanis, V. (2019). EconML: A Python Package for ML-Based Heterogeneous Treatment Effects Estimation. https://econml.azurewebsites.net/</p></li>
+<li><p>DoubleML Team. (2026). <em>DoubleML Documentation</em>. https://docs.doubleml.org/</p></li>
+</ul>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="lecture12_ai_workflow_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="lecture12_ai_workflow_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="lecture12_ai_workflow_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="lecture12_ai_workflow_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="lecture12_ai_workflow_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="lecture12_ai_workflow_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="lecture12_ai_workflow_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="lecture12_ai_workflow_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="lecture12_ai_workflow_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="lecture12_ai_workflow_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1400,
+
+        height: 788,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 5.0e-2,
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "已复制");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "已复制");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

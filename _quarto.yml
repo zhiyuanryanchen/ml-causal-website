@@ -27,6 +27,8 @@ project:
     - Quarto/lecture10_causal_forest_notes.html
     - Quarto/lecture11_dml.html
     - Quarto/lecture11_dml_notes.html
+    - Quarto/lecture12_ai_workflow.html
+    - Quarto/lecture12_ai_workflow_notes.html
 
 website:
   title: "机器学习与因果推断"
@@ -85,6 +87,10 @@ website:
             file: Quarto/lecture11_dml.html
           - text: "第十一讲：详细讲义"
             file: Quarto/lecture11_dml_notes.html
+          - text: "第十二讲：因果推断与 AI"
+            file: Quarto/lecture12_ai_workflow.html
+          - text: "第十二讲：详细讲义"
+            file: Quarto/lecture12_ai_workflow_notes.html
       - text: "资源"
         file: resources.qmd
     right:
@@ -155,6 +161,10 @@ website:
               file: Quarto/lecture11_dml.html
             - text: "第十一讲：详细讲义"
               file: Quarto/lecture11_dml_notes.html
+            - text: "第十二讲：因果推断与 AI"
+              file: Quarto/lecture12_ai_workflow.html
+            - text: "第十二讲：详细讲义"
+              file: Quarto/lecture12_ai_workflow_notes.html
 
 format:
   html:
