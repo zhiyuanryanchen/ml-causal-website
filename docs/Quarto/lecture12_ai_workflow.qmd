@@ -13,6 +13,7 @@ format:
     code-fold: false
     code-tools: true
     highlight-style: github
+    auto-stretch: false
     width: 1400
     height: 788
     margin: 0.05

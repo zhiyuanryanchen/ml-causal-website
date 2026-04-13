@@ -413,8 +413,8 @@
 </section>
 <section id="从研究问题到可复现实验" class="slide level2">
 <h2>从研究问题到可复现实验</h2>
-
-<img data-src="diagrams/lecture12/lecture12_workflow_pipeline.png" style="width:80.0%" class="r-stretch"></section>
+<p><img data-src="diagrams/lecture12/lecture12_workflow_pipeline.png" style="width:80.0%"></p>
+</section>
 <section id="提示模板先定义问题再让-ai-干活" class="slide level2">
 <h2>提示模板：先定义问题，再让 AI 干活</h2>
 <div class="concept-box">
@@ -447,7 +447,7 @@
 </div>
 <div class="fragment">
 <div style="font-size: 1em;">
-<div id="feab8d26" class="cell" data-execution_count="2">
+<div id="fbbc0997" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href=""></a><span class="bu">print</span>(audit_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         变量       类型  缺失率 是否关键
@@ -465,7 +465,7 @@ prior_sales    float 0.11    是
 <section id="本地演示高维混杂下的快速分析脚手架" class="slide level2">
 <h2>本地演示：高维混杂下的快速分析脚手架</h2>
 <div style="font-size: 1em;">
-<div id="295d482d" class="cell" data-execution_count="3">
+<div id="bbe68c97" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="bu">print</span>(estimate_df.to_string(index<span class="op">=</span><span class="va">False</span>, float_format<span class="op">=</span><span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.3f}</span><span class="ss">"</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   方法   估计值
@@ -486,7 +486,7 @@ prior_sales    float 0.11    是
 </section>
 <section id="估计结果可视化" class="slide level2">
 <h2>估计结果可视化</h2>
-<div id="ff3a2c3c" class="cell" data-execution_count="4">
+<div id="38071450" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -602,7 +602,7 @@ prior_sales    float 0.11    是
 <section id="python-演示结构化输出先验证再入库" class="slide level2">
 <h2>Python 演示：结构化输出先验证再入库</h2>
 <div style="font-size: 1em;">
-<div id="f6685f6d" class="cell" data-execution_count="5">
+<div id="af8d6746" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href=""></a>structured_df <span class="op">=</span> pd.DataFrame(json.loads(mock_structured_output))</span>
 <span id="cb6-2"><a href=""></a><span class="bu">print</span>(structured_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -710,8 +710,8 @@ prior_sales    float 0.11    是
 </section>
 <section id="验证循环" class="slide level2">
 <h2>验证循环</h2>
-
-<img data-src="diagrams/lecture12/lecture12_verify_loop.png" style="width:80.0%" class="r-stretch"></section>
+<p><img data-src="diagrams/lecture12/lecture12_verify_loop.png" style="width:80.0%"></p>
+</section>
 <section id="人机分工矩阵" class="slide level2">
 <h2>人机分工矩阵</h2>
 <table class="caption-top">
