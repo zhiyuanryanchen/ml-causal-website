@@ -223,49 +223,45 @@
 <nav role="doc-toc"> 
 <h2 id="toc-title">目录</h2>
 <ul>
-<li><a href="#/从估计器到研究-workflow" id="/toc-从估计器到研究-workflow">从估计器到研究 workflow</a></li>
-<li><a href="#/ai-辅助的因果分析流水线" id="/toc-ai-辅助的因果分析流水线">AI 辅助的因果分析流水线</a></li>
+<li><a href="#/从估计工具到研究-workflow" id="/toc-从估计工具到研究-workflow">从估计工具到研究 workflow</a></li>
+<li><a href="#/ai-辅助的因果分析工作流" id="/toc-ai-辅助的因果分析工作流">AI 辅助的因果分析工作流</a></li>
 <li><a href="#/大语言模型的具体应用场景" id="/toc-大语言模型的具体应用场景">大语言模型的具体应用场景</a></li>
 <li><a href="#/ai-时代的研究能力升级" id="/toc-ai-时代的研究能力升级">AI 时代的研究能力升级</a></li>
+<li><a href="#/从-workflow-到终极追问" id="/toc-从-workflow-到终极追问">从 workflow 到终极追问</a></li>
 <li><a href="#/参考文献" id="/toc-参考文献">参考文献</a></li>
 </ul>
 </nav>
 </section>
-<section id="上节课回顾" class="slide level2">
-<h2>上节课回顾</h2>
+<section id="学期回顾" class="slide level2">
+<h2>学期回顾</h2>
 <div class="concept-box">
-<p><strong>双重机器学习</strong></p>
+<p><strong>因果推断与机器学习</strong></p>
 <ul>
-<li><em>高维控制</em>：在复杂混杂下仍然估计低维因果参数</li>
-<li><em>Neyman 正交性</em>：让估计量对一阶 nuisance error 不敏感</li>
-<li><em>交叉拟合</em>：避免样本内过拟合污染因果估计</li>
-<li><em>DML</em>：把 ML 的预测能力与经典推断的严谨性结合起来</li>
+<li><em>潜在结果分析框架</em>：经典因果推断的理论基础</li>
+<li><em>DAG</em>：识别假设的可视化工具</li>
+<li><em>机器学习基本工具</em>：回归、决策树、随机森林、交叉验证</li>
+<li><em>因果机器学习–异质性处理效应</em>：因果森林，双重机器学习</li>
 </ul>
 </div>
 <div class="fragment">
-<p><em>本节课的承接问题</em></p>
+<p><em>最终的问题</em></p>
 <ul>
-<li>学会了估计器之后，如何把 AI 纳入完整研究流程？</li>
+<li>学会了估计工具之后，如何把 AI 纳入完整研究流程？</li>
 <li>哪些工作适合交给大语言模型，哪些绝不能外包？</li>
 <li>如何用 vibe coding 提速，又不牺牲识别、验证与复现？</li>
 </ul>
 </div>
 </section>
-<section id="从-dml-到-ai-协作研究" class="slide level2">
-<h2>从 DML 到 AI 协作研究</h2>
-<div class="example-box">
+<section id="ai-协作研究" class="slide level2">
+<h2>AI 协作研究</h2>
+<div class="concept-box">
 <p><strong>核心转折</strong></p>
-<p>第十一讲解决的是 <em>如何在高维控制下稳健估计</em>。</p>
-<p>第十二讲解决的是 <em>如何组织一整套 AI-native research workflow</em>。</p>
-</div>
-<div class="fragment">
-<p><strong>一句话概括</strong></p>
 <p>AI 不是识别策略的替代品，而是研究 workflow 的放大器。</p>
 </div>
 </section>
 <section>
-<section id="从估计器到研究-workflow" class="title-slide slide level1 center" data-background-color="#AE0B2A">
-<h1>从估计器到研究 workflow</h1>
+<section id="从估计工具到研究-workflow" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>从估计工具到研究 workflow</h1>
 
 </section>
 <section id="ai-在因果研究中的位置" class="slide level2">
@@ -273,7 +269,7 @@
 <div class="concept-box">
 <p><strong>AI 最适合做的事</strong></p>
 <ul>
-<li><em>问题分解</em>：把模糊研究问题拆成 estimand、样本和假设</li>
+<li><em>问题分解</em>：把模糊研究问题拆成被估量（estimand)、样本和假设</li>
 <li><em>代码脚手架</em>：快速生成数据审计、建模、作图原型</li>
 <li><em>文本结构化</em>：把非结构化材料转成表格、标签和摘要</li>
 <li><em>复现辅助</em>：整理分析日志、稳健性清单和 write-up 草稿</li>
@@ -284,7 +280,7 @@
 <p><strong>AI 不能替代的事</strong></p>
 <ul>
 <li>识别假设是否可信</li>
-<li>控制变量是否引入 post-treatment bias</li>
+<li>控制变量是否控制了中介变量而引入处理后偏差（Post-treatment bias）</li>
 <li>数据边界、制度背景与样本构造</li>
 <li>最终结论与学术责任</li>
 </ul>
@@ -294,6 +290,11 @@
 <section id="ai-能做什么不能替代什么" class="slide level2">
 <h2>AI 能做什么，不能替代什么</h2>
 <table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">环节</th>
@@ -303,27 +304,27 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">问题定义</td>
+<td style="text-align: left;"><strong>问题定义</strong></td>
 <td style="text-align: left;">生成候选 estimand 与变量清单</td>
 <td style="text-align: left;">判定研究问题是否有因果含义</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">识别设计</td>
+<td style="text-align: left;"><strong>识别设计</strong></td>
 <td style="text-align: left;">列出假设与 DAG 草图</td>
 <td style="text-align: left;">判断假设是否在制度上成立</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">数据处理</td>
-<td style="text-align: left;">生成 EDA、清洗与特征工程脚手架</td>
+<td style="text-align: left;"><strong>数据处理</strong></td>
+<td style="text-align: left;">生成探索性数据分析(Explorative Data Analysis, EDA)、清洗与特征工程脚手架</td>
 <td style="text-align: left;">核对口径、样本选择与泄漏</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">估计推断</td>
+<td style="text-align: left;"><strong>估计推断</strong></td>
 <td style="text-align: left;">组织 DML、CATE、稳健性代码模板</td>
 <td style="text-align: left;">审核模型选择与解释边界</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">写作表达</td>
+<td style="text-align: left;"><strong>写作表达</strong></td>
 <td style="text-align: left;">生成图表说明、报告框架与审稿清单</td>
 <td style="text-align: left;">对结论负责并保证可复现</td>
 </tr>
@@ -345,10 +346,10 @@
 <div class="fragment">
 <p><em>高水平 vibe coding 的四个约束</em></p>
 <ul>
-<li>结构化输入：变量字典、样本限制、识别目标</li>
-<li>局部验证：每一步都能单独运行和检查</li>
-<li>明确回滚：AI 生成内容可替换、可重写、可审计</li>
-<li>人类裁决：所有识别与解释最终由研究者签字</li>
+<li><em>结构化输入</em>：变量字典、样本限制、识别目标</li>
+<li><em>局部验证</em>：每一步都能单独运行和检查</li>
+<li><em>明确回滚</em>：AI 生成内容可替换、可重写、可审计</li>
+<li><em>人类裁决</em>：所有识别与解释最终由研究者签字</li>
 </ul>
 </div>
 </section>
@@ -356,7 +357,7 @@
 <h2>例子：把研究问题拆成 estimand</h2>
 <div class="example-box">
 <p><strong>原始问题</strong></p>
-<p>“平台给商家发券，到底能不能提高长期留存？”</p>
+<p>“平台给商家发券，到底能不能提高长期留存概率？”</p>
 </div>
 <div class="fragment">
 <table class="caption-top">
@@ -368,23 +369,23 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">处理变量</td>
+<td style="text-align: left;"><strong>处理变量</strong></td>
 <td style="text-align: left;">是否收到定向优惠券</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">结果变量</td>
+<td style="text-align: left;"><strong>结果变量</strong></td>
 <td style="text-align: left;">30 天后是否继续活跃</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">目标参数</td>
+<td style="text-align: left;"><strong>目标参数</strong></td>
 <td style="text-align: left;">ATE 或 ATT</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">主要混杂</td>
+<td style="text-align: left;"><strong>主要混杂</strong></td>
 <td style="text-align: left;">商家历史销量、地区、类目、平台评级</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">识别风险</td>
+<td style="text-align: left;"><strong>识别风险</strong></td>
 <td style="text-align: left;">平台可能把券发给更有潜力的商家</td>
 </tr>
 </tbody>
@@ -410,15 +411,15 @@
 </div>
 </section></section>
 <section>
-<section id="ai-辅助的因果分析流水线" class="title-slide slide level1 center" data-background-color="#AE0B2A">
-<h1>AI 辅助的因果分析流水线</h1>
+<section id="ai-辅助的因果分析工作流" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>AI 辅助的因果分析工作流</h1>
 
 </section>
 <section id="从研究问题到可复现实验" class="slide level2">
 <h2>从研究问题到可复现实验</h2>
 <div class="cell" data-reveal="true" data-layout-align="default">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href=""></a>flowchart LR</span>
-<span id="cb1-2"><a href=""></a>    A[研究问题] --&gt; B[Estimand]</span>
+<span id="cb1-2"><a href=""></a>    A[研究问题] --&gt; B[被估量 (Estimand)]</span>
 <span id="cb1-3"><a href=""></a>    B --&gt; C[DAG 与识别假设]</span>
 <span id="cb1-4"><a href=""></a>    C --&gt; D[数据审计]</span>
 <span id="cb1-5"><a href=""></a>    D --&gt; E[估计策略]</span>
@@ -430,7 +431,7 @@
 <p></p><figure class=""><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-    A[研究问题] --&gt; B[Estimand]
+    A[研究问题] --&gt; B[被估量 (Estimand)]
     B --&gt; C[DAG 与识别假设]
     C --&gt; D[数据审计]
     D --&gt; E[估计策略]
@@ -449,14 +450,14 @@
 <div class="concept-box">
 <p><strong>提示词最小充分上下文</strong></p>
 <ul>
-<li>数据结构：每列变量的定义、时间点与单位</li>
-<li>研究目标：ATE、ATT、CATE 还是 policy learning</li>
-<li>样本限制：时间窗、剔除规则、缺失处理</li>
-<li>验证要求：输出代码、检查项、风险提示、日志</li>
+<li><strong>数据结构</strong>：每列变量的定义、时间点与单位</li>
+<li><strong>研究目标</strong>：ATE、ATT、CATE 还是 policy learning</li>
+<li><strong>样本限制</strong>：时间窗、剔除规则、缺失处理</li>
+<li><strong>验证要求</strong>：输出代码、检查项、风险提示、日志</li>
 </ul>
 </div>
 <div class="fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href=""></a>你是我的研究协作者。请不要直接给结论，而是先输出：</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href=""></a>Prompt: 你是我的研究协作者。请不要直接给结论，而是先输出：</span>
 <span id="cb2-2"><a href=""></a>1. 处理变量、结果变量、候选混杂变量</span>
 <span id="cb2-3"><a href=""></a>2. 识别风险与不能控制的变量</span>
 <span id="cb2-4"><a href=""></a>3. 数据审计步骤</span>
@@ -476,7 +477,7 @@
 </div>
 <div class="fragment">
 <div style="font-size: 1em;">
-<div id="1f075522" class="cell" data-execution_count="2">
+<div id="f23e9406" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="bu">print</span>(audit_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         变量       类型  缺失率 是否关键
@@ -494,7 +495,7 @@ prior_sales    float 0.11    是
 <section id="本地演示高维混杂下的快速分析脚手架" class="slide level2">
 <h2>本地演示：高维混杂下的快速分析脚手架</h2>
 <div style="font-size: 1em;">
-<div id="c07183c5" class="cell" data-execution_count="3">
+<div id="2241c8f4" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="bu">print</span>(estimate_df.to_string(index<span class="op">=</span><span class="va">False</span>, float_format<span class="op">=</span><span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.3f}</span><span class="ss">"</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   方法   估计值
@@ -505,17 +506,17 @@ prior_sales    float 0.11    是
 </div>
 </div>
 <div class="fragment">
-<p><strong>课堂解读</strong></p>
+<p><strong>解读</strong></p>
 <ul>
-<li>朴素回归把混杂当成处理效应</li>
+<li>简单回归把混杂当成处理效应</li>
 <li>残差化回归更接近第十一讲的 DML 思想</li>
-<li>AI 的价值不在替代估计器，而在更快搭好并审查这条分析链</li>
+<li><strong>AI 的价值不在替代估计工具，而在更快搭好并审查这条分析链</strong></li>
 </ul>
 </div>
 </section>
 <section id="估计结果可视化" class="slide level2">
 <h2>估计结果可视化</h2>
-<div id="331d62f3" class="cell" data-execution_count="4">
+<div id="89cb51b7" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -525,8 +526,8 @@ prior_sales    float 0.11    是
 </div>
 </div>
 </section>
-<section id="写作与复现ai-最适合产出哪些中间件" class="slide level2">
-<h2>写作与复现：AI 最适合产出哪些中间件</h2>
+<section id="写作与复现ai-最适合产出哪些中间品" class="slide level2">
+<h2>写作与复现：AI 最适合产出哪些中间品？</h2>
 <table class="caption-top">
 <colgroup>
 <col style="width: 33%">
@@ -535,29 +536,29 @@ prior_sales    float 0.11    是
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">中间件</th>
+<th style="text-align: left;">中间品</th>
 <th style="text-align: left;">AI 可以生成</th>
 <th style="text-align: left;">人类要检查</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">分析计划</td>
+<td style="text-align: left;"><strong>分析计划</strong></td>
 <td style="text-align: left;">研究流程、变量字典、检查清单</td>
 <td style="text-align: left;">是否遗漏关键假设</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">代码脚手架</td>
+<td style="text-align: left;"><strong>代码脚手架</strong></td>
 <td style="text-align: left;">导包、建模模板、作图模板</td>
 <td style="text-align: left;">是否存在样本泄漏、错误控制</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">报告草稿</td>
+<td style="text-align: left;"><strong>报告草稿</strong></td>
 <td style="text-align: left;">图表说明、结果摘要、局限性模板</td>
 <td style="text-align: left;">是否过度外推、是否把相关当因果</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">审稿清单</td>
+<td style="text-align: left;"><strong>审稿清单</strong></td>
 <td style="text-align: left;">反问式 checklist</td>
 <td style="text-align: left;">是否覆盖识别、稳健性、外部效度</td>
 </tr>
@@ -574,7 +575,7 @@ prior_sales    float 0.11    是
 <div class="example-box">
 <p><strong>高价值用法</strong></p>
 <p>把 5 篇论文摘要整理成“研究问题—处理—结果—识别—数据—局限性”矩阵。</p>
-<p>这样能快速看到哪些论文是随机实验、哪些是工具变量、哪些是 DML。</p>
+<p>这样能快速看到哪些论文是<strong>随机实验</strong>、哪些是<strong>工具变量</strong>、哪些是<strong>DML</strong>。</p>
 </div>
 <div class="fragment">
 <table class="caption-top">
@@ -589,21 +590,21 @@ prior_sales    float 0.11    是
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">平台补贴研究</td>
+<td style="text-align: left;"><strong>平台补贴研究</strong></td>
 <td style="text-align: left;">补贴曝光</td>
 <td style="text-align: left;">留存</td>
 <td style="text-align: left;">ATE</td>
 <td style="text-align: left;">自选择</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">培训项目评估</td>
+<td style="text-align: left;"><strong>培训项目评估</strong></td>
 <td style="text-align: left;">培训参与</td>
 <td style="text-align: left;">工资</td>
 <td style="text-align: left;">ATT</td>
 <td style="text-align: left;">样本流失</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">信贷政策研究</td>
+<td style="text-align: left;"><strong>信贷政策研究</strong></td>
 <td style="text-align: left;">政策覆盖</td>
 <td style="text-align: left;">营收增长</td>
 <td style="text-align: left;">LATE</td>
@@ -631,14 +632,14 @@ prior_sales    float 0.11    是
 <section id="python-演示结构化输出先验证再入库" class="slide level2">
 <h2>Python 演示：结构化输出先验证再入库</h2>
 <div style="font-size: 1em;">
-<div id="98b73924" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a>structured_df <span class="op">=</span> pd.DataFrame(json.loads(mock_llm_json))</span>
+<div id="b751af51" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a>structured_df <span class="op">=</span> pd.DataFrame(json.loads(mock_structured_output))</span>
 <span id="cb7-2"><a href=""></a><span class="bu">print</span>(structured_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                         paper treatment outcome estimand  risk
-Platform subsidy and retention      补贴曝光  30 天留存      ATE 自选择偏误
-            Training and wages    职业培训参与    工资增长      ATT  样本流失
-  Credit policy and SME growth    信贷政策覆盖    营收增长     LATE  政策外溢</code></pre>
+<pre><code>document policy_type timing strength     risk
+地方补贴政策说明          补贴    处理前        高  政策选择性覆盖
+  平台治理公告          监管    处理前        中 执行力度地区差异
+处罚政策访谈纪要          处罚    处理后        低     回忆偏误</code></pre>
 </div>
 </div>
 </div>
@@ -656,7 +657,7 @@ Platform subsidy and retention      补贴曝光  30 天留存      ATE 自选�
 <div class="warning-box">
 <p><strong>正确姿势</strong></p>
 <p>让 AI 起草查询，再在本地数据库执行。</p>
-<p>不要把大数据直接扔给 LLM，也不要让它在没有 schema 的情况下自由发挥。</p>
+<p>不要把大数据直接扔给 LLM，也不要让它在没有架构(schema)的情况下自由发挥。</p>
 </div>
 <div class="fragment">
 <p><em>推荐 workflow</em></p>
@@ -713,11 +714,23 @@ Platform subsidy and retention      补贴曝光  30 天留存      ATE 自选�
 </ul>
 </div>
 <div class="fragment">
-<p><em>课堂纪律</em></p>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>纪律</strong></p>
 <ul>
 <li>AI 给的是候选答案，不是最终结论</li>
 <li>每一个 AI 建议都要回答四个问题：它替代了什么劳动？可能犯什么错？如何验证？失败后如何回退？</li>
 </ul>
+</div>
+</div>
+</div>
 </div>
 </section></section>
 <section>
@@ -767,22 +780,22 @@ Platform subsidy and retention      补贴曝光  30 天留存      ATE 自选�
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">信息处理</td>
+<td style="text-align: left;"><strong>信息处理</strong></td>
 <td style="text-align: left;">摘要、归类、补全模板</td>
 <td style="text-align: left;">提出问题、判断重点</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">代码原型</td>
+<td style="text-align: left;"><strong>代码原型</strong></td>
 <td style="text-align: left;">搭脚手架、重构、补文档</td>
 <td style="text-align: left;">审核逻辑、设计测试</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">识别设计</td>
+<td style="text-align: left;"><strong>识别设计</strong></td>
 <td style="text-align: left;">罗列可能方案</td>
 <td style="text-align: left;">判断制度背景与可信度</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">研究表达</td>
+<td style="text-align: left;"><strong>研究表达</strong></td>
 <td style="text-align: left;">生成初稿、图注、问答稿</td>
 <td style="text-align: left;">负责叙事、边界与学术声誉</td>
 </tr>
@@ -797,16 +810,17 @@ Platform subsidy and retention      补贴曝光  30 天留存      ATE 自选�
 <ol type="1">
 <li><em>识别能力</em>：知道什么可以识别，什么不能</li>
 <li><em>工程能力</em>：会把分析流程拆成可执行模块</li>
-<li><em>验证能力</em>：能审查 AI 输出并快速回退</li>
+<li><em>验证/评审能力</em>：能审查 AI 输出并快速回退</li>
 <li><em>表达能力</em>：把证据、假设与局限说清楚</li>
 </ol>
 </div>
 <div class="fragment">
-<p><em>从“会跑数”到“会驾驭 workflow”</em></p>
+<p><em>从“会跑数据”到“会驾驭 workflow”</em></p>
 <ul>
 <li>能让 AI 写第一版</li>
 <li>能发现第一版哪里错</li>
-<li>能把正确版本沉淀成团队资产</li>
+<li>能把正确版本沉淀成团队与同行资产</li>
+<li>快速迭代，不断升级</li>
 </ul>
 </div>
 </section>
@@ -893,9 +907,8 @@ Platform subsidy and retention      补贴曝光  30 天留存      ATE 自选�
 </ol>
 </div>
 </section>
-<section id="下节课预告" class="slide level2">
-<h2>下节课预告</h2>
-<p><strong>课程收官：项目答辩与研究展示</strong></p>
+<section id="课程收官项目答辩与研究展示" class="slide level2">
+<h2>课程收官：项目答辩与研究展示</h2>
 <ul>
 <li>如何用清晰的识别逻辑讲好你的研究故事</li>
 <li>如何展示数据、代码、稳健性与 AI 协作日志</li>
@@ -918,16 +931,131 @@ Platform subsidy and retention      补贴曝光  30 天留存      ATE 自选�
 </div>
 </div>
 </section></section>
-<section id="参考文献" class="title-slide slide level1 center">
-<h1>参考文献</h1>
-<ul>
-<li><p>Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., &amp; Syrgkanis, V. (2024). <em>Applied Causal Inference Powered by Machine Learning and AI</em>. https://causalml-book.org/</p></li>
-<li><p>Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., &amp; Robins, J. (2018). Double/Debiased Machine Learning for Treatment and Structural Parameters. <em>The Econometrics Journal</em>, 21(1), C1–C68.</p></li>
-<li><p>Battocchi, K., Dillon, E., Hei, M., Lewis, G., Oka, P., Oprescu, M., Syrgkanis, V. (2019). EconML: A Python Package for ML-Based Heterogeneous Treatment Effects Estimation. https://econml.azurewebsites.net/</p></li>
-<li><p>DoubleML Team. (2026). <em>DoubleML Documentation</em>. https://docs.doubleml.org/</p></li>
-</ul>
+<section>
+<section id="从-workflow-到终极追问" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>从 workflow 到终极追问</h1>
 
 </section>
+<section id="科学研究的本质是什么" class="slide level2">
+<h2>科学研究的本质是什么？</h2>
+<div class="concept-box">
+<p><strong>研究不是“生产文本”，而是“生产可检验的新解释”</strong></p>
+<ul>
+<li>用明确问题把世界切开</li>
+<li>用证据区分看起来合理与经得起检验</li>
+<li>用可复现流程让别人能够反驳、修正、继承</li>
+</ul>
+</div>
+<div class="fragment">
+<p><em>所以真正稀缺的不是生成速度，而是：</em></p>
+<ul>
+<li>你提出了什么值得问的问题</li>
+<li>你愿意接受什么证据作为回答</li>
+<li>你如何设计让自己也可能被推翻的检验</li>
+</ul>
+</div>
+</section>
+<section id="人类的思考是独特的吗" class="slide level2">
+<h2>人类的思考是独特的吗？</h2>
+<div class="concept-box">
+<p><strong>如果把“思考”理解为模式组合，AI 当然会越来越强。</strong></p>
+<p>但研究并不只是在已有语料上做重组。</p>
+</div>
+<div class="fragment">
+<p><em>人类仍有三个难以外包的维度</em></p>
+<ul>
+<li>选择问题：什么值得研究，本身带有价值判断</li>
+<li>承担责任：结论进入社会后，谁为误判负责</li>
+<li>赋予意义：把事实、制度与人的处境连接起来</li>
+</ul>
+</div>
+</section>
+<section id="如果-ai-超过人类对于人类意味着什么" class="slide level2">
+<h2>如果 AI 超过人类，对于人类意味着什么？</h2>
+<div class="warning-box">
+<p><strong>这不只是效率问题，而是认知秩序(Epistemic Order)的变化。</strong></p>
+<p>当 AI 能更快提出假说、跑实验、写论文时，瓶颈会从“生产知识”转向“筛选、解释与治理知识”。</p>
+</div>
+<div class="fragment">
+<p><em>对研究者的含义</em></p>
+<ul>
+<li>研究不再稀缺，可信度会更稀缺</li>
+<li>论文不再稀缺，判断哪些值得信会更稀缺</li>
+<li>自动化不再是终点，如何治理自动化才是终极问题</li>
+</ul>
+</div>
+</section>
+<section id="最后的追问" class="slide level2">
+<h2>最后的追问</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>注记</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>也许未来最重要的能力，不是比 AI 更快，而是比 AI 更知道什么值得慢下来。</strong></p>
+</div>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li>在海量候选答案里，坚持追问真正的问题</li>
+<li>在高效自动化面前，保留怀疑、节制与责任</li>
+<li>在“模型比人更强”之后，重新定义人的角色：提问者、裁决者、承担者</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="参考文献" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>参考文献</h1>
+
+</section>
+<section id="工作流与复现" class="slide level2">
+<h2>工作流与复现</h2>
+<ul>
+<li>[GitHub] Assaf Elovic. <em>GPT Researcher</em>. <a href="https://github.com/assafelovic/gpt-researcher" class="uri">https://github.com/assafelovic/gpt-researcher</a>
+<ul>
+<li>自动化深度研究代理，强调 planner + execution agents、来源追踪、报告聚合与 observability，适合展示“AI 如何把 research 任务组织成可重复流程”。</li>
+</ul></li>
+<li>[GitHub] Hugging Face. <em>smolagents</em>. <a href="https://github.com/huggingface/smolagents" class="uri">https://github.com/huggingface/smolagents</a>
+<ul>
+<li>以 code agents 为核心的轻量代理框架，突出“agents that think in code”、工具调用、sandbox 执行和 agentic workflow benchmark，适合说明 vibe coding 与代码代理的工程化实现。</li>
+</ul></li>
+<li>[GitHub] Microsoft Research / community. <em>AutoGen</em>. <a href="https://github.com/microsoft/autogen" class="uri">https://github.com/microsoft/autogen</a>
+<ul>
+<li>多代理编排框架，文档展示了 MCP、multi-agent orchestration 与 no-code studio 等模式，适合说明研究工作流如何分解为多个专门角色协作。</li>
+</ul></li>
+<li>[Web] The Turing Way Community. <em>Guide for Reproducible Research</em>. <a href="https://book.the-turing-way.org/reproducible-research/reproducible-research.html" class="uri">https://book.the-turing-way.org/reproducible-research/reproducible-research.html</a>
+<ul>
+<li>公开的可复现研究指南，系统强调 version control、testing、computational environment 与 data/code 复跑，是 automated research workflow 中“可验证、可复现”原则的最好支撑材料之一。</li>
+</ul></li>
+</ul>
+</section>
+<section id="自动化社会科学与-ai-科学家" class="slide level2">
+<h2>自动化社会科学与 AI 科学家</h2>
+<ul>
+<li>[GitHub] Kehang Zhu et al.&nbsp;<em>Automated Social Science: Language Models as Scientist and Subjects</em>. <a href="https://github.com/KeHang-Zhu/lm-automated-social-science/tree/main" class="uri">https://github.com/KeHang-Zhu/lm-automated-social-science/tree/main</a>
+<ul>
+<li>该项目把 LLM 同时当作“科学家”和“受试主体”，从自然语言场景出发自动构建 SCM、模拟互动并输出可分析结果，适合说明 AI 如何进入社会科学实验与机制建模。</li>
+</ul></li>
+<li>[Web] Social Catalyst Lab. <em>Project APE: Autonomous Policy Evaluation</em>. <a href="https://ape.socialcatalystlab.org/" class="uri">https://ape.socialcatalystlab.org/</a>
+<ul>
+<li>APE 公开展示 AI 端到端生成政策评估论文、自动锦标赛比较与人工反馈回路，特别适合课堂讨论“自动化研究系统如何公开暴露失败、并用评审机制逼近可靠性”。</li>
+</ul></li>
+<li>[GitHub] Sakana AI. <em>The AI Scientist</em>. <a href="https://github.com/SakanaAI/AI-Scientist" class="uri">https://github.com/SakanaAI/AI-Scientist</a>
+<ul>
+<li>这是一个强调自动提出想法、运行实验、生成论文并进行模型审稿的系统，也明确提示会执行模型生成代码并要求容器化与责任披露，适合讨论“自动科学家”的能力边界与风险治理。</li>
+</ul></li>
+<li>[GitHub] EvoScientist Team. <em>EvoScientist</em>. <a href="https://github.com/EvoScientist/EvoScientist" class="uri">https://github.com/EvoScientist/EvoScientist</a>
+<ul>
+<li>EvoScientist 把 research workflow 组织成多代理、持久记忆和 verify loop，并明确提出 human-on-the-loop 范式，适合补充说明“未来研究者更像编排者与裁决者，而非唯一执行者”。</li>
+</ul></li>
+</ul>
+
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">

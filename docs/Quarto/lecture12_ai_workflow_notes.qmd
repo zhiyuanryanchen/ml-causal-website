@@ -50,21 +50,21 @@ plt.rcParams['figure.dpi'] = 150
 
 np.random.seed(42)
 
-n, p = 2400, 30
+n, p = 1800, 24
 X = np.random.normal(size=(n, p))
 theta_0 = 1.5
 
-beta_y = np.array([1.0, -0.9, 0.8, 0.6, -0.5, 0.3] + [0.0] * (p - 6))
-beta_d = np.array([0.8, -0.5, 0.4, 0.0, 0.4, -0.2] + [0.0] * (p - 6))
+beta_y = np.array([1.1, -0.8, 0.7, 0.5, -0.4] + [0.0] * (p - 5))
+beta_d = np.array([0.9, -0.6, 0.2, 0.0, 0.4] + [0.0] * (p - 5))
 
-D = 0.7 * (X @ beta_d) + 0.5 * np.sin(X[:, 0]) + np.random.normal(scale=1.0, size=n)
-Y = theta_0 * D + 0.6 * (X @ beta_y) + 0.6 * np.cos(X[:, 1]) + np.random.normal(scale=1.0, size=n)
+D = 0.8 * (X @ beta_d) + 0.4 * np.sin(X[:, 0]) + np.random.normal(scale=1.0, size=n)
+Y = theta_0 * D + 0.7 * (X @ beta_y) + 0.5 * np.cos(X[:, 1]) + np.random.normal(scale=1.0, size=n)
 
 theta_naive = LinearRegression().fit(D.reshape(-1, 1), Y).coef_[0]
 theta_controlled = LinearRegression().fit(np.column_stack([D, X[:, :6]]), Y).coef_[0]
 
-model_y = LassoCV(cv=5, random_state=42, n_alphas=30, max_iter=5000)
-model_d = LassoCV(cv=5, random_state=42, n_alphas=30, max_iter=5000)
+model_y = LassoCV(cv=5, random_state=42, n_alphas=25, max_iter=5000)
+model_d = LassoCV(cv=5, random_state=42, n_alphas=25, max_iter=5000)
 
 Y_hat = cross_val_predict(model_y, X, Y, cv=5)
 D_hat = cross_val_predict(model_d, X, D, cv=5)
@@ -72,6 +72,11 @@ D_hat = cross_val_predict(model_d, X, D, cv=5)
 Y_tilde = Y - Y_hat
 D_tilde = D - D_hat
 theta_resid = np.sum(D_tilde * Y_tilde) / np.sum(D_tilde ** 2)
+
+estimate_df = pd.DataFrame({
+    '方法': ['朴素回归', '残差化回归', '真实值'],
+    '估计值': [theta_naive, theta_resid, theta_0]
+})
 
 comparison_df = pd.DataFrame({
     '方法': ['朴素回归', '部分控制 OLS', '残差化回归', '真实值'],
@@ -118,8 +123,8 @@ mock_structured_output = json.dumps([
         'risk': '执行力度地区差异'
     },
     {
-        'document': '商家访谈纪要',
-        'policy_type': '访谈',
+        'document': '处罚政策访谈纪要',
+        'policy_type': '处罚',
         'timing': '处理后',
         'strength': '低',
         'risk': '回忆偏误'
@@ -127,17 +132,17 @@ mock_structured_output = json.dumps([
 ], ensure_ascii=False)
 
 structured_df = pd.DataFrame(json.loads(mock_structured_output))
-allowed_labels = {'补贴', '监管', '税收', '访谈'}
+allowed_labels = {'补贴', '监管', '处罚', '信息披露'}
 structured_df['标签合法'] = structured_df['policy_type'].isin(allowed_labels)
 ```
 
 # 引言 {#sec-intro}
 
-在第十一讲中，我们完成了从“机器学习用于预测”到“机器学习用于因果估计”的关键跨越。双重机器学习（Double/Debiased Machine Learning, DML）告诉我们：即使控制变量很多、关系很复杂，只要估计量满足 Neyman 正交性并配合交叉拟合，仍然可以对低维因果参数进行有效推断。
+经过一整个学期，我们已经从潜在结果框架、DAG、匹配法、工具变量、双重差分一路走到因果森林与双重机器学习。到这里，大家已经掌握了相当完整的因果推断工具箱，也知道在高维控制和异质性分析中，机器学习如何真正进入因果研究。
 
-但真正的研究工作并不只是在最后一步跑一个估计器。研究者还需要决定：问题如何定义、数据如何清洗、变量如何构造、识别策略是否可信、结果该如何解释、反对意见如何回应、最终报告如何组织。*换言之，估计器只是 workflow 中的一个环节，而不是全部。*
+但真正的研究工作并不只是在最后一步跑一个估计工具。研究者还需要决定：问题如何定义、变量如何组织、数据如何清洗、识别策略是否可信、结果该如何解释、反对意见如何回应、最终报告如何组织。*换言之，估计工具只是 workflow 中的一个环节，而不是全部。*
 
-这一讲的任务，就是把 AI 放回到完整的 research workflow 里来理解。
+因此，这一讲更像课程收官时的一次方法论升级：把 AI 放回到完整的 research workflow 里来理解，看看在 AI 时代，研究者应如何更高效地与工具协作，同时保持识别、验证与复现的严谨性。
 
 ::: {.callout-note}
 ## 本讲核心观点
@@ -149,25 +154,25 @@ AI 不是识别策略的替代品，也不是因果结论的自动生成器。�
 完成本讲后，你应能够：
 
 1. 区分 AI 在因果研究中的高价值用途与高风险误用
-2. 把一个因果问题拆解成 estimand、识别假设、数据审计与估计流程
+2. 把一个因果问题拆解成被估量（estimand）、识别假设、数据审计与估计流程
 3. 使用大语言模型协助搭建本地可运行的分析脚手架
 4. 理解“严谨版 vibe coding”的基本原则
 5. 设计一套包含验证、日志与回滚机制的 AI 协作研究 workflow
 
-## 上节课回顾 {#sec-review}
+## 学期回顾 {#sec-review}
 
-第十一讲的关键贡献可以概括为四点：
+到本讲为止，本课程已经形成了一个从经典识别到现代工具的完整链条。最值得保留的四条主线是：
 
-- **高维控制**：当混杂变量很多时，简单的 OLS 已经不够
-- **正交化**：用 Neyman 正交性降低 nuisance estimation error 带来的偏差
-- **交叉拟合**：用样本分割控制过拟合
-- **DML**：把机器学习预测能力与半参数推断理论结合起来
+- **潜在结果分析框架**：经典因果推断的理论基础
+- **DAG**：识别假设与偏误路径的可视化工具
+- **机器学习基本工具**：回归、决策树、随机森林、交叉验证
+- **因果机器学习与异质性处理效应**：因果森林与双重机器学习
 
-这些工具为我们提供了一个强大的估计层。但在真实研究中，仅仅“会用 DML”还不够。你还需要组织完整工作流，并保证过程可复核、结论可追踪。AI 正是在这一层开始产生真正价值。
+这些内容共同回答了一个学期的核心目标：我们不只是在学“怎么跑一个回归”，而是在学如何从数据中提出并回答“为什么”的问题。现在课程进入收束阶段，最终的问题就变成了：在已经掌握这些工具之后，如何把 AI 纳入完整研究流程，同时不牺牲识别、验证与复现？
 
 # 第一部分：AI 不是识别策略的替代品 {#sec-boundary}
 
-## DML 之后为什么要讲 AI workflow {#sec-why-ai}
+## 为什么在课程收官讲 AI workflow {#sec-why-ai}
 
 许多同学第一次接触 AI 时，会自然地产生两个误解：
 
@@ -181,7 +186,7 @@ AI 不是识别策略的替代品，也不是因果结论的自动生成器。�
 识别来自研究设计、时间顺序、制度背景和可辩护的假设；不会因为提示词写得漂亮就自动成立。
 :::
 
-因此，这一讲不是在说“AI 会替代因果推断”，而是在说“当我们已经掌握因果推断工具之后，如何把 AI 变成高效且受控的研究协作者”。
+因此，这一讲不是在说“AI 会替代因果推断”，而是在说“当我们已经掌握一套因果推断工具之后，如何把 AI 变成高效且受控的研究协作者”。
 
 ## AI 在因果研究中的合理位置 {#sec-position}
 
@@ -189,11 +194,11 @@ AI 不是识别策略的替代品，也不是因果结论的自动生成器。�
 
 | 研究环节 | AI 的合理角色 | 研究者的核心责任 |
 |:---|:---|:---|
-| 问题定义 | 帮助提炼 estimand、梳理变量、生成候选路径 | 确认问题是否具有因果含义 |
-| 识别设计 | 列出假设、给出反例、画出 DAG 草图 | 判断假设是否在现实中成立 |
-| 数据工作 | 生成清洗、EDA、特征工程、文本结构化脚手架 | 审核口径、时间顺序、样本边界 |
-| 估计推断 | 组织 DML、因果森林、稳健性模板 | 审查模型与解释边界 |
-| 写作表达 | 生成图注、摘要、审稿清单、问答稿 | 对结论、措辞和声誉负责 |
+| **问题定义** | 帮助提炼 estimand、梳理变量、生成候选路径 | 确认问题是否具有因果含义 |
+| **识别设计** | 列出假设、给出反例、画出 DAG 草图 | 判断假设是否在现实中成立 |
+| **数据工作** | 生成探索性数据分析（Explorative Data Analysis, EDA）、清洗、特征工程与文本结构化脚手架 | 审核口径、时间顺序、样本边界 |
+| **估计推断** | 组织 DML、因果森林、稳健性模板 | 审查模型与解释边界 |
+| **写作表达** | 生成图注、摘要、审稿清单、问答稿 | 对结论、措辞和声誉负责 |
 
 从这个表格可以看出，AI 最强的是 *组织与加速*，而不是 *承担责任*。
 
@@ -235,15 +240,15 @@ AI 不是识别策略的替代品，也不是因果结论的自动生成器。�
 3. 我如何验证？
 4. 失败之后如何回退？
 
-# 第二部分：AI 辅助的因果分析流水线 {#sec-workflow}
+# 第二部分：AI 辅助的因果分析工作流 {#sec-workflow}
 
-## 从研究问题到 estimand {#sec-estimand}
+## 从研究问题到被估量（estimand） {#sec-estimand}
 
 因果研究的第一步永远不是打开 Python，而是明确“我要估计什么”。AI 在这里最有价值的用途，是帮助研究者把模糊问题拆成一个可分析对象。
 
 例如，原始问题可能是：
 
-> “平台给商家发券，到底能不能提高长期留存？”
+> “平台给商家发券，到底能不能提高长期留存概率？”
 
 一个更好的结构化表达应当包含：
 
@@ -258,7 +263,7 @@ AI 不是识别策略的替代品，也不是因果结论的自动生成器。�
 ### 一个推荐的提示模板
 
 ```text
-请把下面的研究问题拆解成因果分析输入，不要直接做结论：
+Prompt: 请把下面的研究问题拆解成因果分析输入，不要直接做结论：
 1. 处理变量
 2. 结果变量
 3. 目标 estimand
@@ -355,7 +360,7 @@ print(comparison_df.to_string(index=False, float_format=lambda x: f"{x:.3f}"))
 
 ### 结果解释
 
-- **朴素回归**：把混杂的一部分也算进了处理效应，通常偏高或偏低
+- **简单回归**：把混杂的一部分也算进了处理效应，通常偏高或偏低
 - **部分控制 OLS**：如果研究者只控制少数显眼变量，往往仍然不足
 - **残差化回归**：更接近第十一讲的 DML 思路，用 ML 先吸收高维控制带来的系统部分，再对残差做低维回归
 
@@ -396,7 +401,7 @@ AI 在这一步的真正价值，不是给你一个神奇新估计器，而是�
 - 生成对照组、对比表和可视化
 - 把估计阶段接进一个更大的验证循环
 
-## 结果解释、写作与复现 {#sec-writeup}
+## 写作与复现：AI 最适合产出哪些中间品？ {#sec-writeup}
 
 研究完成之后，很多工作仍然耗时：
 
@@ -412,6 +417,13 @@ AI 在这一步的真正价值，不是给你一个神奇新估计器，而是�
 4. 结论只适用于哪些边界条件
 
 如果没有这四项，AI 生成的“流畅解释”很容易沦为相关性包装术。
+
+| 中间品 | AI 可以生成 | 人类要检查 |
+|:---|:---|:---|
+| **分析计划** | 研究流程、变量字典、检查清单 | 是否遗漏关键假设 |
+| **代码脚手架** | 导包、建模模板、作图模板 | 是否存在样本泄漏、错误控制 |
+| **报告草稿** | 图表说明、结果摘要、局限性模板 | 是否过度外推、是否把相关当因果 |
+| **审稿清单** | 反问式 checklist | 是否覆盖识别、稳健性、外部效度 |
 
 # 第三部分：大语言模型的具体应用场景 {#sec-llm-use-cases}
 
@@ -502,6 +514,11 @@ print(structured_df.to_string(index=False))
 
 这种对话方式的价值在于：你让 AI 产出的是 *可检查对象*，而不是不可追踪的“智能答案”。
 
+::: {.callout-warning}
+## 正确姿势
+不要把大数据直接扔给 LLM，也不要让它在没有架构（schema）的情况下自由发挥。
+:::
+
 ## 场景四：调试、审稿与结果解释 {#sec-debug-review}
 
 当项目进入中后期，AI 往往在这三类任务上最省时间：
@@ -517,6 +534,11 @@ print(structured_df.to_string(index=False))
 - 我最脆弱的识别假设是什么？
 - 如果 reviewer 质疑样本选择，我该补什么证据？
 - 这张图是否把相关误写成了因果？
+
+::: {.callout-tip}
+## 纪律
+AI 给的是候选答案，不是最终结论。每一个 AI 建议都要回答四个问题：它替代了什么劳动？可能犯什么错？如何验证？失败后如何回退？
+:::
 
 # 第四部分：验证、审计与伦理 {#sec-validation}
 
@@ -634,19 +656,25 @@ AI 可以帮助你快速整理：
 
 但你必须保证每一条叙述都能指回具体代码、图表和结果对象。
 
-# 第六部分：项目准备与研究能力升级 {#sec-project}
+# 第六部分：课程收官与研究能力升级 {#sec-project}
 
 ## AI 时代的研究能力栈 {#sec-skill-stack}
 
 过去，很多人把研究能力理解成两件事：懂理论、会跑回归。今天这已经不够了。你还需要三类新增能力：
 
 1. **工程能力**：把分析流程拆成模块，让 AI 能协作而不失控
-2. **验证能力**：快速定位 AI 输出的错误并建立回滚机制
+2. **验证/评审能力**：快速定位 AI 输出的错误并建立回滚机制
 3. **编排能力**：把文献、数据、代码、图表和叙事组织成一个一致系统
 
 换句话说，AI 并没有降低研究门槛，它只是把门槛从“会不会写代码”进一步提高到“能不能驾驭完整 workflow”。
 
-## 给课程项目的具体建议 {#sec-project-advice}
+## 课程收官：项目答辩与研究展示 {#sec-project-advice}
+
+课程最后的重点，不再是再学一个新工具，而是把整个学期形成的方法论、代码能力和研究表达整合起来，完成一次可信的项目展示。答辩时，最值得展示的不是“我让 AI 帮我写了多少代码”，而是：
+
+- 如何用清晰的识别逻辑讲好你的研究故事
+- 如何展示数据、代码、稳健性与 AI 协作日志
+- 如何把“会做分析”呈现成“会做研究”
 
 如果你准备把 AI 纳入期末项目，可以按照以下顺序：
 
@@ -676,6 +704,74 @@ AI 可以帮助你快速整理：
 AI 时代的核心竞争力，不是让模型替你思考，而是让模型帮你更快地提出问题、检查证据，并把正确答案组织成可信研究。
 :::
 
+# 第七部分：终极问题与哲学追问 {#sec-philosophy}
+
+## 科学研究的本质是什么？ {#sec-philosophy-science}
+
+如果沿着本讲一路回看，我们其实已经触碰到一个比 workflow 更深的问题：**科学研究到底在做什么？**
+
+最浅的一层回答是，研究是在生产结论；再深一层，是在生产解释；更深一层，是在生产一种可以被别人检验、反驳和继承的公共知识。也就是说，科学研究不是单纯“写出一段看起来合理的话”，而是把一个问题转化为：
+
+1. 可定义的对象
+2. 可检验的证据
+3. 可复现的过程
+4. 可争辩的结论
+
+这也是为什么 AI 虽然能极大提升文本生成、代码搭建和资料整理效率，却并没有因此自动成为“科学本身”。模型可以帮助你生产候选解释，但是否形成知识，取决于它能否进入检验、批评和复现的共同体。
+
+从这个角度看，研究最核心的品质并不是“产出很多”，而是：
+
+- 问了一个真正值得问的问题
+- 给出了能够区分真假、优劣、强弱的证据路径
+- 愿意让结论暴露在反驳与失败面前
+
+这也是本讲反复强调日志、版本、验证循环的原因。没有这些，AI 只能帮助我们更快地产生文本；有了这些，AI 才可能帮助我们更快地产生知识。
+
+## 人类的思考是独特的吗？ {#sec-philosophy-human}
+
+一旦 AI 能写代码、归纳文献、提出假说，很多人自然会问：**人类的思考到底还有什么独特之处？**
+
+如果把思考理解为模式识别、文本重组和候选答案生成，那么 AI 确实会越来越强，甚至在许多局部任务上已经比人更快、更广、更稳定。但研究中的“思考”并不只包括这些。
+
+至少还有三类能力，今天仍然更接近人的核心角色：
+
+1. **问题选择**：研究什么，从来不只是技术问题，而是价值判断。什么值得投入时间？什么问题真正重要？这涉及制度背景、社会后果与人的处境。
+2. **责任承担**：一个结论进入公共讨论、政策制定或商业决策后，若它有误，谁来承担责任？模型不会承担学术伦理和社会后果，人必须承担。
+3. **意义建构**：同一组证据可以被写成不同叙事。如何把事实、机制和人的经验连接起来，使知识真正“有意义”，这并不等同于句子通顺或结构完整。
+
+因此，人类思考的独特性，也许不在于永远比机器更聪明，而在于：人类不仅生成答案，还要决定什么问题值得回答，什么代价可以接受，什么结论可以进入世界。
+
+## 如果 AI 超过人类，对于人类意味着什么？ {#sec-philosophy-surpass}
+
+如果未来 AI 在提出假说、调度工具、运行实验、写作与审稿上都系统性超过大多数人类研究者，那么真正变化的就不只是“谁写得更快”，而是整个知识秩序会如何重组。
+
+第一个变化是：**知识生产会从稀缺变成过剩**。届时真正稀缺的，不再是论文草稿、图表或候选解释，而是对这些产出的筛选、验证、归档和治理能力。
+
+第二个变化是：**研究者的角色会从主要执行者转向提问者、裁决者和编排者**。谁能设定好的目标函数、建立合理的评估标准、把自动化流程约束在可解释与可追责的轨道上，谁就更接近未来的核心研究能力。
+
+第三个变化是：**我们必须重新理解“人类价值”**。如果效率、记忆、检索、组合、写作、乃至局部推理都不再是人的独占优势，那么人的价值可能更多体现在：
+
+- 对何为重要问题的判断
+- 对何为可接受风险的判断
+- 对制度、伦理与公共后果的判断
+
+换句话说，AI 超过人类，不必然意味着人类失去意义；它更可能迫使我们放弃把“快”和“多”误当成“高价值”的旧观念，转而重新定义研究者为什么存在。
+
+## 最后的递进结论 {#sec-philosophy-conclusion}
+
+把这三个问题连起来，可以形成一个递进链条：
+
+1. **科学研究的本质**不是生成文本，而是生成可检验、可争辩、可继承的知识。
+2. **人类思考的独特性**不只在于计算或表达，而在于价值判断、责任承担和意义建构。
+3. **AI 超过人类之后**，真正不会被自动化替代的，恰恰是那些决定问题、约束流程、承担后果的能力。
+
+因此，本讲关于 AI workflow 的讨论，最终并不是为了把研究完全自动化，而是为了逼近一个更深的目标：**让自动化越强，人类对问题、证据与责任的把握也必须越强。**
+
+::: {.callout-important}
+## 最后的追问
+也许未来最重要的能力，不是比 AI 更快，而是比 AI 更知道什么值得慢下来；不是比 AI 产出更多，而是比 AI 更清楚哪些结论值得相信、哪些判断值得负责。
+:::
+
 # 练习题 {#sec-exercises}
 
 ## 概念题
@@ -694,12 +790,38 @@ AI 时代的核心竞争力，不是让模型替你思考，而是让模型帮�
 
 # 参考文献 {#sec-references}
 
-1. Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., & Syrgkanis, V. (2024). *Applied Causal Inference Powered by Machine Learning and AI*. [在线阅读](https://causalml-book.org/)
+1. [GitHub] Assaf Elovic. *GPT Researcher*. <https://github.com/assafelovic/gpt-researcher>
 
-2. Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., & Robins, J. (2018). Double/Debiased Machine Learning for Treatment and Structural Parameters. *The Econometrics Journal*, 21(1), C1–C68.
+    该项目把 automated research workflow 具体化为 planner、execution agents、source tracking、report aggregation 与 observability 等模块。它特别适合作为课堂示例，因为它展示了“研究问题分解 -> 多来源抓取 -> 汇总成文”的完整代理化流程，而不只是一个单步问答机器人。
 
-3. Battocchi, K., Dillon, E., Hei, M., Lewis, G., Oka, P., Oprescu, M., & Syrgkanis, V. (2019). EconML: A Python Package for ML-Based Heterogeneous Treatment Effects Estimation. [文档](https://econml.azurewebsites.net/)
+2. [GitHub] Hugging Face. *smolagents*. <https://github.com/huggingface/smolagents>
 
-4. DoubleML Team. (2026). *DoubleML Documentation*. [文档](https://docs.doubleml.org/)
+    `smolagents` 强调 code agents，也就是让模型把动作写成代码，再通过工具和 sandbox 执行。这与本讲讨论的 vibe coding 和 AI coding workflow 高度相关，因为它体现了“自然语言提出任务，代码作为可检查中间对象”的设计思想。
 
-5. Cunningham, S. (2021). *Causal Inference: The Mixtape*. [在线阅读](https://mixtape.scunning.com/)
+3. [GitHub] Microsoft Research / community. *AutoGen*. <https://github.com/microsoft/autogen>
+
+    AutoGen 虽已进入 maintenance mode，但它仍然是多代理 workflow 的代表性框架之一。它提供了 MCP、multi-agent orchestration、AgentChat 和 AutoGen Studio 等示例，适合说明如何把复杂研究任务拆成多个角色并进行编排。
+
+4. [Web] The Turing Way Community. *Guide for Reproducible Research*. <https://book.the-turing-way.org/reproducible-research/reproducible-research.html>
+
+    The Turing Way 从 reproducibility 的角度系统说明了数据、代码、版本控制、测试和计算环境为什么必须能够“重新跑通”。这与本讲强调的“AI 协作必须留下证据、日志和回滚路径”完全一致，是 automated research workflow 的规范性基础。
+
+5. [Web] Quarto. *Project Basics*. <https://quarto.org/docs/projects/quarto-projects.html>
+
+    Quarto 的项目文档说明了 `_quarto.yml`、render targets、shared metadata、output-dir 与 freeze 等机制。对本课程而言，这正对应“如何把分析代码、文字说明、图表和输出文档整合成可复现、可发布、可维护的研究资产”。
+
+6. [GitHub] Kehang Zhu et al. *Automated Social Science: Language Models as Scientist and Subjects*. <https://github.com/KeHang-Zhu/lm-automated-social-science/tree/main>
+
+    该项目展示了如何让 LLM 同时担任“科学家”和“受试主体”：从一个社会互动场景出发，自动生成结构因果模型、运行文本互动实验、清洗输出并进行后续分析。它特别适合补充本讲对社会科学自动化的讨论，因为它把 hypothesis generation、simulation 和 SCM estimation 串成了一个相对完整的实验链条。
+
+7. [Web] Social Catalyst Lab. *Project APE: Autonomous Policy Evaluation*. <https://ape.socialcatalystlab.org/>
+
+    APE 项目公开展示 AI 端到端生成政策评估论文、自动锦标赛比较与人工反馈机制。按本讲制作时网站公开信息，它已累计展示约 1000 篇 APE 论文和 1.8 万余次 head-to-head matches，并明确提醒这些结果并非同行评审结论。它非常适合用来讨论：自动化研究系统如何通过公开失败、公开比较和持续反馈，逼近可靠性而非假装完美。
+
+8. [GitHub] Sakana AI. *The AI Scientist*. <https://github.com/SakanaAI/AI-Scientist>
+
+    The AI Scientist 强调从想法生成、实验执行、论文撰写到模型审稿的完整自动科研循环，并提供不同研究模板与 review pipeline。它同时明确警告会执行模型生成代码，建议容器化并要求在论文中披露 AI 使用情况，因此非常适合作为“自动化科学家能力与风险同时上升”的代表性案例。
+
+9. [GitHub] EvoScientist Team. *EvoScientist*. <https://github.com/EvoScientist/EvoScientist>
+
+    EvoScientist 代表的是 2026 年更偏“多代理、持久记忆、verify loop、human-on-the-loop”的研究代理系统。它把科学 workflow 显式组织为 plan、research、code、analyze、write、verify 等环节，强调研究者从执行者转向编排者与裁决者，正好与本讲最后的哲学追问形成呼应。
