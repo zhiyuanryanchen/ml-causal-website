@@ -194,10 +194,6 @@
       margin-right: 0; 
     }
   </style>
-  <meta name="mermaid-theme" content="default">
-  <script src="lecture12_ai_workflow_files/libs/quarto-diagram/mermaid.min.js"></script>
-  <script src="lecture12_ai_workflow_files/libs/quarto-diagram/mermaid-init.js"></script>
-  <link href="lecture12_ai_workflow_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -417,34 +413,8 @@
 </section>
 <section id="从研究问题到可复现实验" class="slide level2">
 <h2>从研究问题到可复现实验</h2>
-<div class="cell" data-reveal="true" data-layout-align="default">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href=""></a>flowchart LR</span>
-<span id="cb1-2"><a href=""></a>    A[研究问题] --&gt; B[被估量 (Estimand)]</span>
-<span id="cb1-3"><a href=""></a>    B --&gt; C[DAG 与识别假设]</span>
-<span id="cb1-4"><a href=""></a>    C --&gt; D[数据审计]</span>
-<span id="cb1-5"><a href=""></a>    D --&gt; E[估计策略]</span>
-<span id="cb1-6"><a href=""></a>    E --&gt; F[稳健性检验]</span>
-<span id="cb1-7"><a href=""></a>    F --&gt; G[研究表达]</span>
-<span id="cb1-8"><a href=""></a>    G --&gt; H[可复现归档]</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    A[研究问题] --&gt; B[被估量 (Estimand)]
-    B --&gt; C[DAG 与识别假设]
-    C --&gt; D[数据审计]
-    D --&gt; E[估计策略]
-    E --&gt; F[稳健性检验]
-    F --&gt; G[研究表达]
-    G --&gt; H[可复现归档]
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</section>
+
+<img data-src="../Figures/lecture12_workflow_pipeline.png" style="width:90.0%" class="r-stretch"></section>
 <section id="提示模板先定义问题再让-ai-干活" class="slide level2">
 <h2>提示模板：先定义问题，再让 AI 干活</h2>
 <div class="concept-box">
@@ -457,12 +427,12 @@
 </ul>
 </div>
 <div class="fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href=""></a>Prompt: 你是我的研究协作者。请不要直接给结论，而是先输出：</span>
-<span id="cb2-2"><a href=""></a>1. 处理变量、结果变量、候选混杂变量</span>
-<span id="cb2-3"><a href=""></a>2. 识别风险与不能控制的变量</span>
-<span id="cb2-4"><a href=""></a>3. 数据审计步骤</span>
-<span id="cb2-5"><a href=""></a>4. 一个可本地执行的 Python 分析脚手架</span>
-<span id="cb2-6"><a href=""></a>5. 需要人工复核的地方</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href=""></a>Prompt: 你是我的研究协作者。请不要直接给结论，而是先输出：</span>
+<span id="cb1-2"><a href=""></a>1. 处理变量、结果变量、候选混杂变量</span>
+<span id="cb1-3"><a href=""></a>2. 识别风险与不能控制的变量</span>
+<span id="cb1-4"><a href=""></a>3. 数据审计步骤</span>
+<span id="cb1-5"><a href=""></a>4. 一个可本地执行的 Python 分析脚手架</span>
+<span id="cb1-6"><a href=""></a>5. 需要人工复核的地方</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="数据审计让-ai-先读-schema人来定样本" class="slide level2">
@@ -477,8 +447,8 @@
 </div>
 <div class="fragment">
 <div style="font-size: 1em;">
-<div id="f23e9406" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="bu">print</span>(audit_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="5738109b" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href=""></a><span class="bu">print</span>(audit_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         变量       类型  缺失率 是否关键
     outcome    float 0.00    是
@@ -495,8 +465,8 @@ prior_sales    float 0.11    是
 <section id="本地演示高维混杂下的快速分析脚手架" class="slide level2">
 <h2>本地演示：高维混杂下的快速分析脚手架</h2>
 <div style="font-size: 1em;">
-<div id="2241c8f4" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="bu">print</span>(estimate_df.to_string(index<span class="op">=</span><span class="va">False</span>, float_format<span class="op">=</span><span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.3f}</span><span class="ss">"</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="a88a3308" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="bu">print</span>(estimate_df.to_string(index<span class="op">=</span><span class="va">False</span>, float_format<span class="op">=</span><span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.3f}</span><span class="ss">"</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   方法   估计值
  朴素回归 1.953
@@ -516,7 +486,7 @@ prior_sales    float 0.11    是
 </section>
 <section id="估计结果可视化" class="slide level2">
 <h2>估计结果可视化</h2>
-<div id="89cb51b7" class="cell" data-execution_count="4">
+<div id="10f42569" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -632,9 +602,9 @@ prior_sales    float 0.11    是
 <section id="python-演示结构化输出先验证再入库" class="slide level2">
 <h2>Python 演示：结构化输出先验证再入库</h2>
 <div style="font-size: 1em;">
-<div id="b751af51" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href=""></a>structured_df <span class="op">=</span> pd.DataFrame(json.loads(mock_structured_output))</span>
-<span id="cb7-2"><a href=""></a><span class="bu">print</span>(structured_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="d6883e49" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href=""></a>structured_df <span class="op">=</span> pd.DataFrame(json.loads(mock_structured_output))</span>
+<span id="cb6-2"><a href=""></a><span class="bu">print</span>(structured_df.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>document policy_type timing strength     risk
 地方补贴政策说明          补贴    处理前        高  政策选择性覆盖
@@ -740,34 +710,8 @@ prior_sales    float 0.11    是
 </section>
 <section id="验证循环" class="slide level2">
 <h2>验证循环</h2>
-<div class="cell" data-reveal="true" data-layout-align="default">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb9-1"><a href=""></a>flowchart TD</span>
-<span id="cb9-2"><a href=""></a>    A[自然语言需求] --&gt; B[AI 生成脚手架]</span>
-<span id="cb9-3"><a href=""></a>    B --&gt; C[本地运行]</span>
-<span id="cb9-4"><a href=""></a>    C --&gt; D[结果诊断]</span>
-<span id="cb9-5"><a href=""></a>    D --&gt; E[反问 AI]</span>
-<span id="cb9-6"><a href=""></a>    E --&gt; F[修订代码与假设]</span>
-<span id="cb9-7"><a href=""></a>    F --&gt; G[记录日志]</span>
-<span id="cb9-8"><a href=""></a>    G --&gt; H[可复现报告]</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart TD
-    A[自然语言需求] --&gt; B[AI 生成脚手架]
-    B --&gt; C[本地运行]
-    C --&gt; D[结果诊断]
-    D --&gt; E[反问 AI]
-    E --&gt; F[修订代码与假设]
-    F --&gt; G[记录日志]
-    G --&gt; H[可复现报告]
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</section>
+
+<img data-src="../Figures/lecture12_verify_loop.png" style="width:70.0%" class="r-stretch"></section>
 <section id="人机分工矩阵" class="slide level2">
 <h2>人机分工矩阵</h2>
 <table class="caption-top">

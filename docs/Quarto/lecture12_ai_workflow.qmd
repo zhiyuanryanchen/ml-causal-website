@@ -269,16 +269,7 @@ AI 很容易把“发券后的点击率”“发券后的曝光量”也加入�
 
 ## 从研究问题到可复现实验
 
-```{mermaid}
-flowchart LR
-    A[研究问题] --> B[被估量 (Estimand)]
-    B --> C[DAG 与识别假设]
-    C --> D[数据审计]
-    D --> E[估计策略]
-    E --> F[稳健性检验]
-    F --> G[研究表达]
-    G --> H[可复现归档]
-```
+![](../Figures/lecture12_workflow_pipeline.png){width="90%"}
 
 ## 提示模板：先定义问题，再让 AI 干活
 
@@ -484,16 +475,7 @@ print(structured_df.to_string(index=False))
 
 ## 验证循环
 
-```{mermaid}
-flowchart TD
-    A[自然语言需求] --> B[AI 生成脚手架]
-    B --> C[本地运行]
-    C --> D[结果诊断]
-    D --> E[反问 AI]
-    E --> F[修订代码与假设]
-    F --> G[记录日志]
-    G --> H[可复现报告]
-```
+![](../Figures/lecture12_verify_loop.png){width="70%"}
 
 ## 人机分工矩阵
 
