@@ -2316,7 +2316,7 @@ vertical-align: -.125em;
   </ul></li>
   <li><a href="#sec-exercises" id="toc-sec-exercises" class="nav-link" data-scroll-target="#sec-exercises"><span class="header-section-number">8.4</span> 练习题</a>
   <ul class="collapse">
-  <li><a href="#概念题" id="toc-概念题" class="nav-link" data-scroll-target="#概念题"><span class="header-section-number">8.4.1</span> 概念题</a></li>
+  <li><a href="#概念题难" id="toc-概念题难" class="nav-link" data-scroll-target="#概念题难"><span class="header-section-number">8.4.1</span> 概念题(难)</a></li>
   <li><a href="#编程题" id="toc-编程题" class="nav-link" data-scroll-target="#编程题"><span class="header-section-number">8.4.2</span> 编程题</a></li>
   </ul></li>
   </ul></li>
@@ -2694,7 +2694,7 @@ vertical-align: -.125em;
 <section id="sec-ols-bias" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="sec-ols-bias"><span class="header-section-number">3.3</span> Python 演示：设定偏误</h2>
 <p>让我们通过模拟数据来直观展示高维非线性混杂下 OLS 的失败。</p>
-<div id="637179d0" class="cell" data-execution_count="2">
+<div id="40232d3c" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression, LassoCV</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_predict</span>
@@ -3033,7 +3033,7 @@ OLS 存在设定偏误：
 </section>
 <section id="sec-econml" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="sec-econml"><span class="header-section-number">6.3</span> Python 实现：econml LinearDML</h2>
-<div id="b900391d" class="cell" data-execution_count="3">
+<div id="88decfb7" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> econml.dml <span class="im">import</span> LinearDML</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 使用随机森林作为 ML 学习器</span></span>
@@ -3079,7 +3079,7 @@ DML 估计值:     1.9124
 <section id="sec-manual-dml" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="sec-manual-dml"><span class="header-section-number">6.4</span> 手动实现双重残差化</h2>
 <p>为了深入理解 DML 的工作原理，下面用 scikit-learn 手动实现双重残差化过程。</p>
-<div id="4a993d8f" class="cell" data-execution_count="4">
+<div id="ab181996" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: 残差化 Y（交叉拟合）</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Y_hat <span class="op">=</span> cross_val_predict(</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">200</span>, max_depth<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
@@ -3132,7 +3132,7 @@ econml 95% CI: [1.7908, 2.0341]</code></pre>
 </section>
 <section id="sec-visualization" class="level2" data-number="6.5">
 <h2 data-number="6.5" class="anchored" data-anchor-id="sec-visualization"><span class="header-section-number">6.5</span> 估计结果可视化</h2>
-<div id="4512f18a" class="cell" data-execution_count="5">
+<div id="e56d024a" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 左图：估计对比</span></span>
@@ -3183,7 +3183,7 @@ econml 95% CI: [1.7908, 2.0341]</code></pre>
 <section id="sec-learner-comparison" class="level2" data-number="6.6">
 <h2 data-number="6.6" class="anchored" data-anchor-id="sec-learner-comparison"><span class="header-section-number">6.6</span> 不同 ML 学习器的比较</h2>
 <p>DML 的一个重要优势是支持任意 ML 学习器。不同学习器的选择如何影响结果？</p>
-<div id="6403d819" class="cell" data-execution_count="6">
+<div id="bb01af49" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> GradientBoostingRegressor</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>learners <span class="op">=</span> {</span>
@@ -3482,8 +3482,8 @@ LASSO          2.0197  +0.0197 [1.8462, 2.1932]
 </section>
 <section id="sec-exercises" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="sec-exercises"><span class="header-section-number">8.4</span> 练习题</h2>
-<section id="概念题" class="level3" data-number="8.4.1">
-<h3 data-number="8.4.1" class="anchored" data-anchor-id="概念题"><span class="header-section-number">8.4.1</span> 概念题</h3>
+<section id="概念题难" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="概念题难"><span class="header-section-number">8.4.1</span> 概念题(难)</h3>
 <ol type="1">
 <li><p>解释为什么朴素 ML 插件方法（先用 ML 估计 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>0</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>X</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">g_0(X)</annotation></semantics></math>，再 OLS）不能得到无偏的 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\theta}</annotation></semantics></math>。偏差的两个来源分别是什么？</p></li>
 <li><p>Neyman 正交性如何消除正则化偏差？试用 Taylor 展开说明。</p></li>
@@ -4819,7 +4819,7 @@ LASSO          2.0197  +0.0197 [1.8462, 2.1932]
 <span id="cb11-871"><a href="#cb11-871" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-872"><a href="#cb11-872" aria-hidden="true" tabindex="-1"></a><span class="fu">## 练习题 {#sec-exercises}</span></span>
 <span id="cb11-873"><a href="#cb11-873" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-874"><a href="#cb11-874" aria-hidden="true" tabindex="-1"></a><span class="fu">### 概念题</span></span>
+<span id="cb11-874"><a href="#cb11-874" aria-hidden="true" tabindex="-1"></a><span class="fu">### 概念题(难)</span></span>
 <span id="cb11-875"><a href="#cb11-875" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-876"><a href="#cb11-876" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>解释为什么朴素 ML 插件方法（先用 ML 估计 $g_0(X)$，再 OLS）不能得到无偏的 $\hat{\theta}$。偏差的两个来源分别是什么？</span>
 <span id="cb11-877"><a href="#cb11-877" aria-hidden="true" tabindex="-1"></a></span>

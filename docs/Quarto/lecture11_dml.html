@@ -273,9 +273,9 @@
 <div class="fragment">
 <p><strong>典型场景</strong></p>
 <ul>
-<li>医学研究：控制上百种基因表达量</li>
-<li>营销归因：控制用户画像的数百个特征</li>
-<li>政策评估：控制地区层面的多种经济社会指标</li>
+<li><strong>医学研究</strong>：控制上百种基因表达量</li>
+<li><strong>营销归因</strong>：控制用户画像的数百个特征</li>
+<li><strong>政策评估</strong>：控制地区层面的多种经济社会指标</li>
 </ul>
 </div>
 </section>
@@ -331,21 +331,23 @@
 <div class="concept-box">
 <p><strong>核心思想</strong></p>
 <p>能否 <em>结合两者</em>？用 ML 灵活地控制高维混杂，同时保留传统方法的 <span class="math inline">\sqrt{n}</span> 推断能力？</p>
-<p>这正是 <em>双重机器学习</em>（Double/Debiased Machine Learning）的目标。</p>
+<p>这正是 <em>双重机器学习</em>（<em>Double/Debiased Machine Learning, DML</em>）的目标。</p>
 </div>
 </div>
 </section>
 <section id="朴素想法直接用-ml" class="slide level2">
 <h2>朴素想法：直接用 ML</h2>
+<div class="concept-box">
 <p><strong>天真的两步策略</strong></p>
 <ol type="1">
 <li>用 LASSO / 随机森林估计 <span class="math inline">\hat{g}(X) \approx g_0(X)</span></li>
 <li>计算残差 <span class="math inline">\tilde{Y} = Y - \hat{g}(X)</span></li>
 <li>用 OLS 回归 <span class="math inline">\tilde{Y}</span> 对 <span class="math inline">D</span>，得到 <span class="math inline">\hat{\theta}</span></li>
 </ol>
+</div>
 <div class="fragment">
 <div class="warning-box">
-<p><strong>这行不通</strong></p>
+<p><strong>问题</strong></p>
 <ul>
 <li><em>正则化偏差</em>：ML 的偏差通过 <span class="math inline">D</span> 与 <span class="math inline">X</span> 的相关性污染 <span class="math inline">\hat{\theta}</span></li>
 <li><em>过拟合偏差</em>：样本内预测过拟合，使 <span class="math inline">\hat{g}(X)</span> 与误差项相关</li>
@@ -369,9 +371,9 @@
 <div class="fragment">
 <ul>
 <li><span class="math inline">\theta_0</span>：感兴趣的 <em>因果参数</em>（低维，通常是标量）</li>
-<li><span class="math inline">g_0(X)</span>：<em>混杂函数</em>（高维，可以非线性——是讨厌参数）</li>
-<li><span class="math inline">m_0(X) = E[D|X]</span>：<em>倾向得分函数</em></li>
-<li><span class="math inline">V_i</span>：处理中不能被 <span class="math inline">X</span> 解释的“外生变异”</li>
+<li><span class="math inline">g_0(X_i)</span>：<em>混杂函数</em>（高维，可以非线性——是冗余参数(Nuisance Parameter)）</li>
+<li><span class="math inline">m_0(X_i) = E[D_i|X_i]</span>：<em>倾向得分函数</em></li>
+<li><span class="math inline">V_i</span>：处理中不能被 <span class="math inline">X_i</span> 解释的“外生变异”</li>
 </ul>
 </div>
 </section>
@@ -395,15 +397,43 @@
 <section id="python-演示ols-的偏差" class="slide level2">
 <h2>Python 演示：OLS 的偏差</h2>
 <div style="font-size: 1em;">
-<div id="1f0dd562" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="co"># OLS 回归：以线性方式控制 X</span></span>
-<span id="cb1-2"><a href=""></a><span class="bu">print</span>(<span class="ss">f"真实处理效应: theta_0 = </span><span class="sc">{</span>theta_0<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-3"><a href=""></a><span class="bu">print</span>(<span class="ss">f"OLS（线性控制）:  hat_theta = </span><span class="sc">{</span>theta_ols<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-4"><a href=""></a><span class="bu">print</span>(<span class="ss">f"偏差:              </span><span class="sc">{</span>theta_ols <span class="op">-</span> theta_0<span class="sc">:+.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-5"><a href=""></a><span class="bu">print</span>()</span>
-<span id="cb1-6"><a href=""></a><span class="bu">print</span>(<span class="st">"OLS 存在设定偏误："</span>)</span>
-<span id="cb1-7"><a href=""></a><span class="bu">print</span>(<span class="st">"  g_0(X) 包含 X^2 和 sin(X) 等非线性项，"</span>)</span>
-<span id="cb1-8"><a href=""></a><span class="bu">print</span>(<span class="st">"  线性控制无法完全消除混杂"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="a683c2da" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression, LassoCV</span>
+<span id="cb1-2"><a href=""></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
+<span id="cb1-3"><a href=""></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_predict</span>
+<span id="cb1-4"><a href=""></a></span>
+<span id="cb1-5"><a href=""></a><span class="co"># ===== 模拟数据：部分线性模型 =====</span></span>
+<span id="cb1-6"><a href=""></a>n <span class="op">=</span> <span class="dv">2000</span></span>
+<span id="cb1-7"><a href=""></a>p <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb1-8"><a href=""></a>X <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, (n, p))</span>
+<span id="cb1-9"><a href=""></a></span>
+<span id="cb1-10"><a href=""></a><span class="co"># 非线性混杂函数 g₀(X)：影响结果 Y</span></span>
+<span id="cb1-11"><a href=""></a>g0 <span class="op">=</span> X[:, <span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> np.sin(X[:, <span class="dv">1</span>]) <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> X[:, <span class="dv">2</span>] <span class="op">*</span> X[:, <span class="dv">3</span>]</span>
+<span id="cb1-12"><a href=""></a></span>
+<span id="cb1-13"><a href=""></a><span class="co"># 处理方程 m₀(X)：影响处理分配 D</span></span>
+<span id="cb1-14"><a href=""></a>m0 <span class="op">=</span> <span class="fl">0.8</span> <span class="op">*</span> X[:, <span class="dv">0</span>] <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> X[:, <span class="dv">1</span>] <span class="op">-</span> <span class="fl">0.3</span> <span class="op">*</span> X[:, <span class="dv">2</span>]</span>
+<span id="cb1-15"><a href=""></a></span>
+<span id="cb1-16"><a href=""></a><span class="co"># 二值处理变量（受 X 混杂）</span></span>
+<span id="cb1-17"><a href=""></a>D <span class="op">=</span> (m0 <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n) <span class="op">&gt;</span> <span class="dv">0</span>).astype(<span class="bu">float</span>)</span>
+<span id="cb1-18"><a href=""></a></span>
+<span id="cb1-19"><a href=""></a><span class="co"># 真实处理效应</span></span>
+<span id="cb1-20"><a href=""></a>theta_0 <span class="op">=</span> <span class="fl">2.0</span></span>
+<span id="cb1-21"><a href=""></a></span>
+<span id="cb1-22"><a href=""></a><span class="co"># 观测结果</span></span>
+<span id="cb1-23"><a href=""></a>Y <span class="op">=</span> theta_0 <span class="op">*</span> D <span class="op">+</span> g0 <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n)</span>
+<span id="cb1-24"><a href=""></a></span>
+<span id="cb1-25"><a href=""></a><span class="co"># ===== 预计算 OLS =====</span></span>
+<span id="cb1-26"><a href=""></a>DX <span class="op">=</span> np.column_stack([D.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>), X])</span>
+<span id="cb1-27"><a href=""></a>ols <span class="op">=</span> LinearRegression().fit(DX, Y)</span>
+<span id="cb1-28"><a href=""></a>theta_ols <span class="op">=</span> ols.coef_[<span class="dv">0</span>]</span>
+<span id="cb1-29"><a href=""></a><span class="co"># OLS 回归：以线性方式控制 X</span></span>
+<span id="cb1-30"><a href=""></a><span class="bu">print</span>(<span class="ss">f"真实处理效应: theta_0 = </span><span class="sc">{</span>theta_0<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb1-31"><a href=""></a><span class="bu">print</span>(<span class="ss">f"OLS（线性控制）:  hat_theta = </span><span class="sc">{</span>theta_ols<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb1-32"><a href=""></a><span class="bu">print</span>(<span class="ss">f"偏差:              </span><span class="sc">{</span>theta_ols <span class="op">-</span> theta_0<span class="sc">:+.3f}</span><span class="ss">"</span>)</span>
+<span id="cb1-33"><a href=""></a><span class="bu">print</span>()</span>
+<span id="cb1-34"><a href=""></a><span class="bu">print</span>(<span class="st">"OLS 存在设定偏误："</span>)</span>
+<span id="cb1-35"><a href=""></a><span class="bu">print</span>(<span class="st">"  g_0(X) 包含 X^2 和 sin(X) 等非线性项，"</span>)</span>
+<span id="cb1-36"><a href=""></a><span class="bu">print</span>(<span class="st">"  线性控制无法完全消除混杂"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>真实处理效应: theta_0 = 2.000
 OLS（线性控制）:  hat_theta = 2.011
@@ -439,7 +469,7 @@ OLS 存在设定偏误：
 </section>
 <section id="neyman-正交条件" class="slide level2">
 <h2>Neyman 正交条件</h2>
-<p>定义 <em>得分函数</em>（矩条件）<span class="math inline">\psi(W; \theta, \eta) = 0</span>，其中 <span class="math inline">\eta = (\ell_0, m_0)</span> 是讨厌参数</p>
+<p>定义 <em>得分函数</em>（Score Function, 矩条件）<span class="math inline">\psi(W; \theta, \eta) = 0</span>，其中 <span class="math inline">\eta = (\ell_0, m_0)</span> 是冗余参数</p>
 <div class="fragment">
 <div class="concept-box">
 <p><strong>Neyman 正交性</strong></p>
@@ -449,7 +479,7 @@ OLS 存在设定偏误：
 </div>
 </div>
 <div class="fragment">
-<p><em>直觉</em>：正交条件确保 <span class="math inline">\hat{\theta}</span> 对讨厌参数的估计误差“不敏感”</p>
+<p><em>直觉</em>：正交条件确保 <span class="math inline">\hat{\theta}</span> 对冗余参数的估计误差“不敏感”</p>
 </div>
 </section>
 <section id="双重的含义" class="slide level2">
@@ -501,7 +531,7 @@ OLS 存在设定偏误：
 <h2>交叉拟合（Cross-Fitting）</h2>
 <div class="warning-box">
 <p><strong>为什么不能用全样本训练？</strong></p>
-<p>样本内 ML 预测过拟合：<span class="math inline">\hat{g}(X_i)</span> 会01c记住01d个体 <span class="math inline">U_i</span>，导致残差被扭曲</p>
+<p>样本内 ML 预测过拟合：<span class="math inline">\hat{g}(X_i)</span> 会 “记住” 个体异质性 <span class="math inline">U_i</span>，导致残差被扭曲</p>
 </div>
 <div class="fragment">
 <div class="concept-box">
@@ -544,7 +574,7 @@ OLS 存在设定偏误：
 <ul>
 <li><em>乘积率条件</em>：<span class="math inline">\|\hat{\ell} - \ell_0\| \cdot \|\hat{m} - m_0\| = o(n^{-1/2})</span></li>
 <li>两个模型 <em>不需要单独</em> 达到 <span class="math inline">n^{-1/2}</span> 收敛率</li>
-<li>只要误差之 <em>积</em> 足够小即可——对 ML 学习器要求宽松</li>
+<li>只要<em>误差之积</em> 足够小即可——对 ML 学习器要求宽松</li>
 </ul>
 </div>
 <div class="fragment">
@@ -562,7 +592,7 @@ OLS 存在设定偏误：
 <section id="python-lineardml-估计" class="slide level2">
 <h2>Python: LinearDML 估计</h2>
 <div style="font-size: 1em;">
-<div id="3fe2b48e" class="cell" data-execution_count="4">
+<div id="4a5da3bd" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="im">from</span> econml.dml <span class="im">import</span> LinearDML</span>
 <span id="cb3-2"><a href=""></a></span>
 <span id="cb3-3"><a href=""></a>dml <span class="op">=</span> LinearDML(</span>
@@ -592,11 +622,11 @@ OLS 存在设定偏误：
 </section>
 <section id="估计结果对比" class="slide level2">
 <h2>估计结果对比</h2>
-<div id="d69cee08" class="cell" data-execution_count="5">
+<div id="c5a21f14" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="lecture11_dml_files/figure-revealjs/cell-6-output-1.png" class="quarto-figure quarto-figure-center" width="1335" height="735"></p>
+<p><img data-src="lecture11_dml_files/figure-revealjs/cell-5-output-1.png" class="quarto-figure quarto-figure-center" width="1335" height="735"></p>
 </figure>
 </div>
 </div>
@@ -605,7 +635,7 @@ OLS 存在设定偏误：
 <section id="理解-dml手动双重残差化" class="slide level2">
 <h2>理解 DML：手动双重残差化</h2>
 <div style="font-size: 1em;">
-<div id="c113aa49" class="cell" data-execution_count="6">
+<div id="f6603ded" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="co"># Step 1: 残差化 Y（交叉拟合）</span></span>
 <span id="cb5-2"><a href=""></a>Y_hat <span class="op">=</span> cross_val_predict(RandomForestRegressor(</span>
 <span id="cb5-3"><a href=""></a>    n_estimators<span class="op">=</span><span class="dv">200</span>, max_depth<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
@@ -633,11 +663,11 @@ econml DML:    1.9124
 </section>
 <section id="双重残差化可视化" class="slide level2">
 <h2>双重残差化可视化</h2>
-<div id="1bb9d84b" class="cell" data-execution_count="7">
+<div id="c6dac1bc" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="lecture11_dml_files/figure-revealjs/cell-8-output-1.png" class="quarto-figure quarto-figure-center" width="1332" height="884"></p>
+<p><img data-src="lecture11_dml_files/figure-revealjs/cell-7-output-1.png" class="quarto-figure quarto-figure-center" width="1332" height="884"></p>
 </figure>
 </div>
 </div>
@@ -712,7 +742,7 @@ econml DML:    1.9124
 <ol start="4" type="1">
 <li><em>Neyman 正交性</em>
 <ul>
-<li>正交矩条件对讨厌参数的一阶估计误差免疫</li>
+<li>正交矩条件对冗余参数的一阶估计误差免疫</li>
 <li>双重残差化同时去除 <span class="math inline">Y</span> 和 <span class="math inline">D</span> 中 <span class="math inline">X</span> 的影响</li>
 </ul></li>
 <li><em>交叉拟合</em>
@@ -738,9 +768,20 @@ econml DML:    1.9124
 <li>课程总结与项目准备</li>
 </ul>
 <div class="fragment">
-<div class="concept-box">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
 <p><strong>核心展望</strong></p>
-<p>从传统统计方法到现代机器学习框架，我们已经拥有了完整的工具箱。因果推断与人工智能的融合正在重塑社会科学研究和商业决策。<em>最重要的是学会在正确的场景选择正确的工具</em>。</p>
+<p>从经典因果推断方法到现代机器学习框架，我们已经拥有了完整的工具箱。因果推断与人工智能的融合正在重塑社会科学研究、商业决策与政策制定。</p>
+<p><em>最重要的是学会在正确的场景选择正确的工具</em>。</p>
+</div>
+</div>
 </div>
 </div>
 </section></section>
