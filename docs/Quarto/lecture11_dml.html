@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="zh-Hans"><head>
+<script src="lecture11_dml_files/libs/clipboard/clipboard.min.js"></script>
+<script src="lecture11_dml_files/libs/quarto-html/tabby.min.js"></script>
+<script src="lecture11_dml_files/libs/quarto-html/popper.min.js"></script>
+<script src="lecture11_dml_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="lecture11_dml_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="lecture11_dml_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="lecture11_dml_files/libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.36">
+
+  <meta name="author" content="陈志远">
+  <meta name="dcterms.date" content="2026-06-02">
+  <title>机器学习与因果推断</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="lecture11_dml_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="lecture11_dml_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="lecture11_dml_files/libs/revealjs/dist/theme/quarto-8b8acb134ad08796896ab318cb276518.css">
+  <link rel="stylesheet" href="ruc-theme.scss">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <link href="lecture11_dml_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="lecture11_dml_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="lecture11_dml_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="lecture11_dml_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="lecture11_dml_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="lecture11_dml_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">机器学习与因果推断</h1>
+  <p class="subtitle">第十一讲：双重机器学习——高维控制与去偏估计</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+陈志远 
+</div>
+        <p class="quarto-title-affiliation">
+            中国人民大学商学院
+          </p>
+    </div>
+</div>
+
+  <p class="date">2026-06-02</p>
+</section><section id="TOC">
+<nav role="doc-toc"> 
+<h2 id="toc-title">目录</h2>
+<ul>
+<li><a href="#/从预测到因果高维控制的挑战" id="/toc-从预测到因果高维控制的挑战">从预测到因果——高维控制的挑战</a></li>
+<li><a href="#/部分线性模型" id="/toc-部分线性模型">部分线性模型</a></li>
+<li><a href="#/neyman-正交性去偏的关键" id="/toc-neyman-正交性去偏的关键">Neyman 正交性——去偏的关键</a></li>
+<li><a href="#/dml-算法框架" id="/toc-dml-算法框架">DML 算法框架</a></li>
+<li><a href="#/python-实现" id="/toc-python-实现">Python 实现</a></li>
+<li><a href="#/参考文献" id="/toc-参考文献">参考文献</a></li>
+</ul>
+</nav>
+</section>
+<section id="上节课回顾" class="slide level2">
+<h2>上节课回顾</h2>
+<div class="concept-box">
+<p><strong>因果森林与异质性分析</strong></p>
+<ul>
+<li><em>BLP / GATES 检验</em>：验证异质性是否真实存在</li>
+<li><em>TOC / Qini 曲线</em>：评估 CATE 模型的排序性能</li>
+<li><em>变量重要性</em>：识别驱动异质性的关键特征</li>
+<li><em>政策树</em>：将 CATE 转化为可解释的决策规则</li>
+</ul>
+</div>
+<div class="fragment">
+<p><em>本节课核心问题</em></p>
+<ul>
+<li>当控制变量维度很高时，如何进行有效的因果推断？</li>
+<li>如何同时利用 ML 的灵活性和传统推断的严谨性？</li>
+</ul>
+</div>
+</section>
+<section id="从异质性到高维控制" class="slide level2">
+<h2>从异质性到高维控制</h2>
+<div class="example-box">
+<p><strong>从 CATE 到 ATE：另一类问题</strong></p>
+<p>因果森林回答的是“效应对谁更大？”</p>
+<p>但更基本的问题是：当需要控制的混杂变量 <em>很多</em> 时，如何准确估计 <em>平均处理效应</em>？</p>
+</div>
+<div class="fragment">
+<p><strong>典型场景</strong></p>
+<ul>
+<li>医学研究：控制上百种基因表达量</li>
+<li>营销归因：控制用户画像的数百个特征</li>
+<li>政策评估：控制地区层面的多种经济社会指标</li>
+</ul>
+</div>
+</section>
+<section>
+<section id="从预测到因果高维控制的挑战" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>从预测到因果——高维控制的挑战</h1>
+
+</section>
+<section id="高维数据的因果挑战" class="slide level2">
+<h2>高维数据的因果挑战</h2>
+<p><strong>设定</strong>：估计处理 <span class="math inline">D</span> 对结果 <span class="math inline">Y</span> 的因果效应 <span class="math inline">\theta_0</span>，同时需要控制大量混杂变量 <span class="math inline">X</span></p>
+<p><span class="math display">Y = \theta_0 D + g_0(X) + U</span></p>
+<div class="fragment">
+<div class="warning-box">
+<p><strong>挑战</strong></p>
+<ul>
+<li>当 <span class="math inline">p</span>（控制变量数）接近甚至超过 <span class="math inline">n</span>（样本量）时，OLS 不可用</li>
+<li>即使 <span class="math inline">p &lt; n</span>，高维 OLS 估计不稳定，置信区间过宽</li>
+<li><span class="math inline">g_0(X)</span> 可能是 <em>非线性</em> 的，线性 OLS 存在设定偏误</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="两种工具的局限" class="slide level2">
+<h2>两种工具的局限</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">方法</th>
+<th style="text-align: left;">优势</th>
+<th style="text-align: left;">用于因果推断的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><em>传统 OLS</em></td>
+<td style="text-align: left;"><span class="math inline">\sqrt{n}</span> 一致性，有效推断</td>
+<td style="text-align: left;">无法处理 <span class="math inline">p \gg n</span>，非线性混杂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><em>机器学习</em></td>
+<td style="text-align: left;">灵活建模，高维预测</td>
+<td style="text-align: left;">正则化导致偏差，无有效推断</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div class="concept-box">
+<p><strong>核心思想</strong></p>
+<p>能否 <em>结合两者</em>？用 ML 灵活地控制高维混杂，同时保留传统方法的 <span class="math inline">\sqrt{n}</span> 推断能力？</p>
+<p>这正是 <em>双重机器学习</em>（Double/Debiased Machine Learning）的目标。</p>
+</div>
+</div>
+</section>
+<section id="朴素想法直接用-ml" class="slide level2">
+<h2>朴素想法：直接用 ML</h2>
+<p><strong>天真的两步策略</strong></p>
+<ol type="1">
+<li>用 LASSO / 随机森林估计 <span class="math inline">\hat{g}(X) \approx g_0(X)</span></li>
+<li>计算残差 <span class="math inline">\tilde{Y} = Y - \hat{g}(X)</span></li>
+<li>用 OLS 回归 <span class="math inline">\tilde{Y}</span> 对 <span class="math inline">D</span>，得到 <span class="math inline">\hat{\theta}</span></li>
+</ol>
+<div class="fragment">
+<div class="warning-box">
+<p><strong>这行不通</strong></p>
+<ul>
+<li><em>正则化偏差</em>：ML 的偏差通过 <span class="math inline">D</span> 与 <span class="math inline">X</span> 的相关性污染 <span class="math inline">\hat{\theta}</span></li>
+<li><em>过拟合偏差</em>：样本内预测过拟合，使 <span class="math inline">\hat{g}(X)</span> 与误差项相关</li>
+<li>结果：<span class="math inline">\hat{\theta}</span> 有偏且 <em>置信区间不可靠</em></li>
+</ul>
+</div>
+</div>
+</section></section>
+<section>
+<section id="部分线性模型" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>部分线性模型</h1>
+
+</section>
+<section id="部分线性模型plm" class="slide level2">
+<h2>部分线性模型（PLM）</h2>
+<div class="concept-box">
+<p><strong>Partially Linear Model (Robinson, 1988)</strong></p>
+<p><span class="math display">Y_i = \theta_0 D_i + g_0(X_i) + U_i, \quad E[U_i | D_i, X_i] = 0</span></p>
+<p><span class="math display">D_i = m_0(X_i) + V_i, \quad E[V_i | X_i] = 0</span></p>
+</div>
+<div class="fragment">
+<ul>
+<li><span class="math inline">\theta_0</span>：感兴趣的 <em>因果参数</em>（低维，通常是标量）</li>
+<li><span class="math inline">g_0(X)</span>：<em>混杂函数</em>（高维，可以非线性——是讨厌参数）</li>
+<li><span class="math inline">m_0(X) = E[D|X]</span>：<em>倾向得分函数</em></li>
+<li><span class="math inline">V_i</span>：处理中不能被 <span class="math inline">X</span> 解释的“外生变异”</li>
+</ul>
+</div>
+</section>
+<section id="fwl-定理的启示" class="slide level2">
+<h2>FWL 定理的启示</h2>
+<div class="concept-box">
+<p><strong>Frisch-Waugh-Lovell 定理</strong></p>
+<p>在线性回归中，<span class="math inline">\theta_0</span> 等价于对残差的回归：</p>
+<p><span class="math display">\tilde{Y}_i = \theta_0 \tilde{D}_i + \tilde{U}_i</span></p>
+<p>其中 <span class="math inline">\tilde{Y} = Y - \text{proj}_X Y</span>，<span class="math inline">\tilde{D} = D - \text{proj}_X D</span></p>
+</div>
+<div class="fragment">
+<p><em>非参数推广</em>：Robinson (1988) 的关键洞见</p>
+<p><span class="math display">Y_i - E[Y_i|X_i] = \theta_0 (D_i - E[D_i|X_i]) + U_i</span></p>
+</div>
+<div class="fragment">
+<p>如果我们知道 <span class="math inline">E[Y|X]</span> 和 <span class="math inline">E[D|X]</span>，只需回归残差就能恢复 <span class="math inline">\theta_0</span>！</p>
+<p><strong>问题</strong>：<span class="math inline">E[Y|X]</span> 和 <span class="math inline">E[D|X]</span> 未知，需要用 ML 估计。</p>
+</div>
+</section>
+<section id="python-演示ols-的偏差" class="slide level2">
+<h2>Python 演示：OLS 的偏差</h2>
+<div style="font-size: 1em;">
+<div id="1f0dd562" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="co"># OLS 回归：以线性方式控制 X</span></span>
+<span id="cb1-2"><a href=""></a><span class="bu">print</span>(<span class="ss">f"真实处理效应: theta_0 = </span><span class="sc">{</span>theta_0<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb1-3"><a href=""></a><span class="bu">print</span>(<span class="ss">f"OLS（线性控制）:  hat_theta = </span><span class="sc">{</span>theta_ols<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb1-4"><a href=""></a><span class="bu">print</span>(<span class="ss">f"偏差:              </span><span class="sc">{</span>theta_ols <span class="op">-</span> theta_0<span class="sc">:+.3f}</span><span class="ss">"</span>)</span>
+<span id="cb1-5"><a href=""></a><span class="bu">print</span>()</span>
+<span id="cb1-6"><a href=""></a><span class="bu">print</span>(<span class="st">"OLS 存在设定偏误："</span>)</span>
+<span id="cb1-7"><a href=""></a><span class="bu">print</span>(<span class="st">"  g_0(X) 包含 X^2 和 sin(X) 等非线性项，"</span>)</span>
+<span id="cb1-8"><a href=""></a><span class="bu">print</span>(<span class="st">"  线性控制无法完全消除混杂"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>真实处理效应: theta_0 = 2.000
+OLS（线性控制）:  hat_theta = 2.011
+偏差:              +0.011
+
+OLS 存在设定偏误：
+  g_0(X) 包含 X^2 和 sin(X) 等非线性项，
+  线性控制无法完全消除混杂</code></pre>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="neyman-正交性去偏的关键" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>Neyman 正交性——去偏的关键</h1>
+
+</section>
+<section id="偏差的两个来源" class="slide level2">
+<h2>偏差的两个来源</h2>
+<p><strong>来源一：正则化偏差</strong></p>
+<p>ML 模型（如 LASSO）为避免过拟合而引入正则化，使 <span class="math inline">\hat{g}(X)</span> 有系统性偏差</p>
+<p><span class="math display">\hat{g}(X) = g_0(X) + \Delta_g(X)</span></p>
+<div class="fragment">
+<p><strong>来源二：过拟合偏差</strong></p>
+<p>用全部数据训练 ML 又在同一数据上预测 → <span class="math inline">\hat{g}(X_i)</span> 与 <span class="math inline">U_i</span> 不独立</p>
+</div>
+<div class="fragment">
+<div class="warning-box">
+<p><strong>关键问题</strong></p>
+<p>当 <span class="math inline">\Delta_g</span> 与 <span class="math inline">D</span> 相关时（几乎必然），<span class="math inline">\hat{\theta}</span> 的偏差为 <span class="math inline">O(n^{-1/2})</span> 量级，<em>无法忽略</em></p>
+</div>
+</div>
+</section>
+<section id="neyman-正交条件" class="slide level2">
+<h2>Neyman 正交条件</h2>
+<p>定义 <em>得分函数</em>（矩条件）<span class="math inline">\psi(W; \theta, \eta) = 0</span>，其中 <span class="math inline">\eta = (\ell_0, m_0)</span> 是讨厌参数</p>
+<div class="fragment">
+<div class="concept-box">
+<p><strong>Neyman 正交性</strong></p>
+<p>如果得分函数满足</p>
+<p><span class="math display">\frac{\partial}{\partial \eta} E[\psi(W; \theta_0, \eta)] \Big|_{\eta = \eta_0} = 0</span></p>
+<p>则 <span class="math inline">\hat{\eta}</span> 的 <em>一阶估计误差</em> 不影响 <span class="math inline">\hat{\theta}</span> 的一致性</p>
+</div>
+</div>
+<div class="fragment">
+<p><em>直觉</em>：正交条件确保 <span class="math inline">\hat{\theta}</span> 对讨厌参数的估计误差“不敏感”</p>
+</div>
+</section>
+<section id="双重的含义" class="slide level2">
+<h2>“双重”的含义</h2>
+<p><strong>标准矩条件</strong>（非正交）</p>
+<p><span class="math display">\psi_{naive} = (Y - \ell(X) - \theta D) \cdot D</span></p>
+<p>→ 对 <span class="math inline">\hat{\ell}</span> 的误差敏感，因为 <span class="math inline">D</span> 与 <span class="math inline">X</span> 相关</p>
+<div class="fragment">
+<p><strong>Neyman 正交矩条件</strong></p>
+<p><span class="math display">\psi_{DML} = \big(Y - \ell(X) - \theta(D - m(X))\big) \cdot (D - m(X))</span></p>
+</div>
+<div class="fragment">
+<div class="concept-box">
+<p><strong>双重残差化</strong></p>
+<ul>
+<li><em>第一重</em>：从 <span class="math inline">Y</span> 中去除 <span class="math inline">X</span> 的影响 → <span class="math inline">\tilde{Y} = Y - \hat{\ell}(X)</span></li>
+<li><em>第二重</em>：从 <span class="math inline">D</span> 中去除 <span class="math inline">X</span> 的影响 → <span class="math inline">\tilde{D} = D - \hat{m}(X)</span></li>
+<li>回归 <span class="math inline">\tilde{Y}</span> 对 <span class="math inline">\tilde{D}</span>：正则化偏差被消除</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="直观理解为什么需要双重" class="slide level2">
+<h2>直观理解：为什么需要“双重”</h2>
+<div class="example-box">
+<p><strong>类比：分离信号与背景</strong></p>
+<p><span class="math inline">X</span> 是“共同背景噪声”，同时影响 <span class="math inline">Y</span> 和 <span class="math inline">D</span>。DML 的双重残差化就是：</p>
+<ol type="1">
+<li>去掉 <span class="math inline">Y</span> 中来自 <span class="math inline">X</span> 的背景 → 只剩 <span class="math inline">D</span> 的效应 + 随机波动</li>
+<li>去掉 <span class="math inline">D</span> 中来自 <span class="math inline">X</span> 的背景 → 只剩“真实的处理变异”</li>
+<li>用“纯净的 <span class="math inline">D</span> 变异”解释“纯净的 <span class="math inline">Y</span> 变异” → 因果效应 <span class="math inline">\theta_0</span></li>
+</ol>
+</div>
+<div class="fragment">
+<p><em>只做一重（只残差化 <span class="math inline">Y</span>）会怎样？</em></p>
+<ul>
+<li><span class="math inline">\hat{\ell}(X)</span> 的偏差 <span class="math inline">\Delta_\ell</span> 与 <span class="math inline">D</span> 相关（因为 <span class="math inline">D</span> 依赖 <span class="math inline">X</span>）</li>
+<li>偏差 <span class="math inline">\approx E[\Delta_\ell \cdot D] \neq 0</span>，无法消除</li>
+<li>残差化 <span class="math inline">D</span> 后，<span class="math inline">\tilde{D}</span> 与 <span class="math inline">\Delta_\ell</span> 不相关 → 偏差消失！</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="dml-算法框架" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>DML 算法框架</h1>
+
+</section>
+<section id="交叉拟合cross-fitting" class="slide level2">
+<h2>交叉拟合（Cross-Fitting）</h2>
+<div class="warning-box">
+<p><strong>为什么不能用全样本训练？</strong></p>
+<p>样本内 ML 预测过拟合：<span class="math inline">\hat{g}(X_i)</span> 会01c记住01d个体 <span class="math inline">U_i</span>，导致残差被扭曲</p>
+</div>
+<div class="fragment">
+<div class="concept-box">
+<p><strong>交叉拟合策略</strong></p>
+<p>将数据随机分成 <span class="math inline">K</span> 折（通常 <span class="math inline">K = 5</span>）。对每一折 <span class="math inline">k</span>：</p>
+<ol type="1">
+<li>在 <em>除第 <span class="math inline">k</span> 折之外的数据</em> 上训练 <span class="math inline">\hat{\ell}_{-k}</span> 和 <span class="math inline">\hat{m}_{-k}</span></li>
+<li>在 <em>第 <span class="math inline">k</span> 折数据</em> 上计算残差</li>
+</ol>
+<p><span class="math display">\tilde{Y}_i = Y_i - \hat{\ell}_{-k}(X_i), \quad \tilde{D}_i = D_i - \hat{m}_{-k}(X_i), \quad i \in I_k</span></p>
+</div>
+</div>
+</section>
+<section id="dml-算法步骤" class="slide level2">
+<h2>DML 算法步骤</h2>
+<p><strong>输入</strong>：数据 <span class="math inline">\{(Y_i, D_i, X_i)\}_{i=1}^n</span>，ML 学习器，折数 <span class="math inline">K</span></p>
+<div class="fragment">
+<ol type="1">
+<li><p>将样本随机分成 <span class="math inline">K</span> 折：<span class="math inline">I_1, I_2, \ldots, I_K</span></p></li>
+<li><p>对每折 <span class="math inline">k = 1, \ldots, K</span>：</p>
+<ul>
+<li>在 <span class="math inline">I_{-k}</span> 上拟合 <span class="math inline">\hat{\ell}_{-k}</span>（预测 <span class="math inline">Y</span>）和 <span class="math inline">\hat{m}_{-k}</span>（预测 <span class="math inline">D</span>）</li>
+<li>计算残差：<span class="math inline">\tilde{Y}_i = Y_i - \hat{\ell}_{-k}(X_i)</span>，<span class="math inline">\tilde{D}_i = D_i - \hat{m}_{-k}(X_i)</span></li>
+</ul></li>
+<li><p>DML 估计量：</p></li>
+</ol>
+<p><span class="math display">\hat{\theta}_{DML} = \frac{\displaystyle\sum_{k=1}^K \sum_{i \in I_k} \tilde{D}_i \tilde{Y}_i}{\displaystyle\sum_{k=1}^K \sum_{i \in I_k} \tilde{D}_i^2}</span></p>
+</div>
+</section>
+<section id="渐近性质" class="slide level2">
+<h2>渐近性质</h2>
+<div class="concept-box">
+<p><strong>定理 (Chernozhukov et al., 2018)</strong></p>
+<p>在适当条件下，DML 估计量满足：</p>
+<p><span class="math display">\sqrt{n}(\hat{\theta}_{DML} - \theta_0) \xrightarrow{d} N(0, \sigma^2)</span></p>
+<p>其中 <span class="math inline">\sigma^2 = \frac{E[\tilde{D}^2 U^2]}{(E[\tilde{D}^2])^2}</span></p>
+</div>
+<div class="fragment">
+<p><strong>关键条件</strong></p>
+<ul>
+<li><em>乘积率条件</em>：<span class="math inline">\|\hat{\ell} - \ell_0\| \cdot \|\hat{m} - m_0\| = o(n^{-1/2})</span></li>
+<li>两个模型 <em>不需要单独</em> 达到 <span class="math inline">n^{-1/2}</span> 收敛率</li>
+<li>只要误差之 <em>积</em> 足够小即可——对 ML 学习器要求宽松</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="example-box">
+<p><strong>例子</strong></p>
+<p>若 <span class="math inline">\hat{\ell}</span> 和 <span class="math inline">\hat{m}</span> 各以 <span class="math inline">n^{-1/4}</span> 的速率收敛，乘积率为 <span class="math inline">n^{-1/2}</span>，满足条件。随机森林、LASSO、神经网络等常见 ML 方法通常满足此条件。</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="python-实现" class="title-slide slide level1 center" data-background-color="#AE0B2A">
+<h1>Python 实现</h1>
+
+</section>
+<section id="python-lineardml-估计" class="slide level2">
+<h2>Python: LinearDML 估计</h2>
+<div style="font-size: 1em;">
+<div id="3fe2b48e" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a><span class="im">from</span> econml.dml <span class="im">import</span> LinearDML</span>
+<span id="cb3-2"><a href=""></a></span>
+<span id="cb3-3"><a href=""></a>dml <span class="op">=</span> LinearDML(</span>
+<span id="cb3-4"><a href=""></a>    model_y<span class="op">=</span>RandomForestRegressor(</span>
+<span id="cb3-5"><a href=""></a>        n_estimators<span class="op">=</span><span class="dv">200</span>, max_depth<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
+<span id="cb3-6"><a href=""></a>    model_t<span class="op">=</span>RandomForestRegressor(</span>
+<span id="cb3-7"><a href=""></a>        n_estimators<span class="op">=</span><span class="dv">200</span>, max_depth<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
+<span id="cb3-8"><a href=""></a>    cv<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">42</span></span>
+<span id="cb3-9"><a href=""></a>)</span>
+<span id="cb3-10"><a href=""></a>dml.fit(Y, D, W<span class="op">=</span>X)</span>
+<span id="cb3-11"><a href=""></a></span>
+<span id="cb3-12"><a href=""></a>theta_dml <span class="op">=</span> <span class="bu">float</span>(dml.const_marginal_effect())</span>
+<span id="cb3-13"><a href=""></a>ci <span class="op">=</span> dml.const_marginal_effect_interval(alpha<span class="op">=</span><span class="fl">0.05</span>)</span>
+<span id="cb3-14"><a href=""></a>ci_lower, ci_upper <span class="op">=</span> <span class="bu">float</span>(ci[<span class="dv">0</span>]), <span class="bu">float</span>(ci[<span class="dv">1</span>])</span>
+<span id="cb3-15"><a href=""></a></span>
+<span id="cb3-16"><a href=""></a><span class="bu">print</span>(<span class="ss">f"DML 估计值:  </span><span class="sc">{</span>theta_dml<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb3-17"><a href=""></a><span class="bu">print</span>(<span class="ss">f"95% 置信区间: [</span><span class="sc">{</span>ci_lower<span class="sc">:.4f}</span><span class="ss">, </span><span class="sc">{</span>ci_upper<span class="sc">:.4f}</span><span class="ss">]"</span>)</span>
+<span id="cb3-18"><a href=""></a><span class="bu">print</span>(<span class="ss">f"真实值 theta_0 = </span><span class="sc">{</span>theta_0<span class="sc">}</span><span class="ss"> 在 CI 内: "</span></span>
+<span id="cb3-19"><a href=""></a>      <span class="ss">f"</span><span class="sc">{</span><span class="st">'Yes'</span> <span class="cf">if</span> ci_lower <span class="op">&lt;=</span> theta_0 <span class="op">&lt;=</span> ci_upper <span class="cf">else</span> <span class="st">'No'</span><span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>DML 估计值:  1.9124
+95% 置信区间: [1.7908, 2.0341]
+真实值 theta_0 = 2.0 在 CI 内: Yes</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="估计结果对比" class="slide level2">
+<h2>估计结果对比</h2>
+<div id="d69cee08" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="lecture11_dml_files/figure-revealjs/cell-6-output-1.png" class="quarto-figure quarto-figure-center" width="1335" height="735"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="理解-dml手动双重残差化" class="slide level2">
+<h2>理解 DML：手动双重残差化</h2>
+<div style="font-size: 1em;">
+<div id="c113aa49" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="co"># Step 1: 残差化 Y（交叉拟合）</span></span>
+<span id="cb5-2"><a href=""></a>Y_hat <span class="op">=</span> cross_val_predict(RandomForestRegressor(</span>
+<span id="cb5-3"><a href=""></a>    n_estimators<span class="op">=</span><span class="dv">200</span>, max_depth<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
+<span id="cb5-4"><a href=""></a>    X, Y, cv<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb5-5"><a href=""></a>Y_tilde <span class="op">=</span> Y <span class="op">-</span> Y_hat</span>
+<span id="cb5-6"><a href=""></a></span>
+<span id="cb5-7"><a href=""></a><span class="co"># Step 2: 残差化 D（交叉拟合）</span></span>
+<span id="cb5-8"><a href=""></a>D_hat <span class="op">=</span> cross_val_predict(RandomForestRegressor(</span>
+<span id="cb5-9"><a href=""></a>    n_estimators<span class="op">=</span><span class="dv">200</span>, max_depth<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
+<span id="cb5-10"><a href=""></a>    X, D, cv<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb5-11"><a href=""></a>D_tilde <span class="op">=</span> D <span class="op">-</span> D_hat</span>
+<span id="cb5-12"><a href=""></a></span>
+<span id="cb5-13"><a href=""></a><span class="co"># Step 3: OLS 回归残差</span></span>
+<span id="cb5-14"><a href=""></a>theta_manual <span class="op">=</span> np.<span class="bu">sum</span>(D_tilde <span class="op">*</span> Y_tilde) <span class="op">/</span> np.<span class="bu">sum</span>(D_tilde<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb5-15"><a href=""></a><span class="bu">print</span>(<span class="ss">f"手动 DML 估计: </span><span class="sc">{</span>theta_manual<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb5-16"><a href=""></a><span class="bu">print</span>(<span class="ss">f"econml DML:    </span><span class="sc">{</span>theta_dml<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb5-17"><a href=""></a><span class="bu">print</span>(<span class="ss">f"真实值:         </span><span class="sc">{</span>theta_0<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>手动 DML 估计: 1.9305
+econml DML:    1.9124
+真实值:         2.0000</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="双重残差化可视化" class="slide level2">
+<h2>双重残差化可视化</h2>
+<div id="1bb9d84b" class="cell" data-execution_count="7">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="lecture11_dml_files/figure-revealjs/cell-8-output-1.png" class="quarto-figure quarto-figure-center" width="1332" height="884"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="推荐工具" class="slide level2">
+<h2>推荐工具</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>Python</strong></p>
+<ul>
+<li><code>econml</code>：LinearDML, DML, CausalForestDML</li>
+<li><code>doubleml</code>：DoubleMLPLR, DoubleMLIRM（推荐）</li>
+<li><code>scikit-learn</code>：交叉验证、ML 学习器</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>R</strong></p>
+<ul>
+<li><code>DoubleML</code>：基于 mlr3 生态系统</li>
+<li><code>grf</code>：forest-based DML（内置交叉拟合）</li>
+<li><code>hdm</code>：高维稀疏模型，Double Selection</li>
+</ul>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="本讲要点一" class="slide level2">
+<h2>本讲要点（一）</h2>
+<div class="concept-box">
+<ol type="1">
+<li><em>高维控制</em>
+<ul>
+<li>传统 OLS 无法处理 <span class="math inline">p \gg n</span>；ML 能预测但不能直接做因果推断</li>
+</ul></li>
+<li><em>部分线性模型</em>
+<ul>
+<li><span class="math inline">Y = \theta_0 D + g_0(X) + U</span>，目标是估计低维参数 <span class="math inline">\theta_0</span></li>
+<li>Robinson 偏微分思想：去掉条件期望后回归残差</li>
+</ul></li>
+<li><em>朴素 ML 插件的失败</em>
+<ul>
+<li>正则化偏差 + 过拟合偏差使 <span class="math inline">\hat{\theta}</span> 有偏且推断无效</li>
+</ul></li>
+</ol>
+</div>
+</section>
+<section id="本讲要点二" class="slide level2">
+<h2>本讲要点（二）</h2>
+<div class="concept-box">
+<ol start="4" type="1">
+<li><em>Neyman 正交性</em>
+<ul>
+<li>正交矩条件对讨厌参数的一阶估计误差免疫</li>
+<li>双重残差化同时去除 <span class="math inline">Y</span> 和 <span class="math inline">D</span> 中 <span class="math inline">X</span> 的影响</li>
+</ul></li>
+<li><em>交叉拟合</em>
+<ul>
+<li><span class="math inline">K</span> 折样本分割避免过拟合偏差</li>
+<li>确保预测残差与误差项独立</li>
+</ul></li>
+<li><em>DML 的渐近性质</em>
+<ul>
+<li><span class="math inline">\sqrt{n}</span> 一致性和渐近正态性</li>
+<li>乘积率条件：两个学习器误差之积达到 <span class="math inline">n^{-1/2}</span> 即可</li>
+</ul></li>
+</ol>
+</div>
+</section>
+<section id="下节课预告" class="slide level2">
+<h2>下节课预告</h2>
+<p><strong>第十二讲：前沿专题——因果推断与 AI</strong></p>
+<ul>
+<li>因果推断在大语言模型中的应用</li>
+<li>AI 赋能的因果效应估计</li>
+<li>因果推断未来的研究方向</li>
+<li>课程总结与项目准备</li>
+</ul>
+<div class="fragment">
+<div class="concept-box">
+<p><strong>核心展望</strong></p>
+<p>从传统统计方法到现代机器学习框架，我们已经拥有了完整的工具箱。因果推断与人工智能的融合正在重塑社会科学研究和商业决策。<em>最重要的是学会在正确的场景选择正确的工具</em>。</p>
+</div>
+</div>
+</section></section>
+<section id="参考文献" class="title-slide slide level1 center">
+<h1>参考文献</h1>
+<ul>
+<li><p>Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W., &amp; Robins, J. (2018). Double/Debiased Machine Learning for Treatment and Structural Parameters. <em>The Econometrics Journal</em>, 21(1), C1–C68.</p></li>
+<li><p>Robinson, P.M. (1988). Root-N-Consistent Semiparametric Regression. <em>Econometrica</em>, 56(4), 931–954.</p></li>
+<li><p>Bach, P., Chernozhukov, V., Kurz, M., &amp; Spindler, M. (2022). DoubleML: An Object-Oriented Implementation of Double Machine Learning in Python. <em>Journal of Machine Learning Research</em>, 23(53), 1–6.</p></li>
+<li><p>Chernozhukov, V., Hansen, C., Kallus, N., Spindler, M., &amp; Syrgkanis, V. (2024). <em>Applied Causal Inference Powered by ML and AI</em>. <a href="https://causalml-book.org/">causalml-book.org</a></p></li>
+<li><p>Athey, S., &amp; Imbens, G.W. (2019). Machine Learning Methods That Economists Should Know About. <em>Annual Review of Economics</em>, 11, 685–725.</p></li>
+<li><p>Angrist, J.D. &amp; Pischke, J.S. (2009). <em>Mostly Harmless Econometrics</em>. Princeton University Press.</p></li>
+</ul>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="lecture11_dml_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="lecture11_dml_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="lecture11_dml_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="lecture11_dml_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="lecture11_dml_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="lecture11_dml_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="lecture11_dml_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="lecture11_dml_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="lecture11_dml_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="lecture11_dml_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1400,
+
+        height: 788,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 5.0e-2,
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "已复制");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "已复制");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
