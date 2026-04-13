@@ -1,0 +1,745 @@
+---
+title: "机器学习与因果推断"
+subtitle: "第十讲：因果森林——异质性分析与政策学习"
+author: "陈志远"
+institute: "中国人民大学商学院"
+date: "2026-05-26"
+format:
+  revealjs:
+    theme: [default, ruc-theme.scss]
+    css: ruc-theme.scss
+    slide-number: true
+    progress: true
+    code-fold: false
+    code-tools: true
+    highlight-style: github
+    pdf-separate-fragments: false
+    width: 1400
+    height: 788
+    margin: 0.05
+    transition: slide
+    background-transition: fade
+    toc: true
+    toc-depth: 1
+    chalkboard:
+      buttons: true
+    preview-links: auto
+    mermaid:
+      theme: default
+      flowchart:
+        useMaxWidth: true
+        htmlLabels: true
+        nodeSpacing: 70
+        rankSpacing: 90
+        diagramPadding: 20
+      themeCSS: |
+        .label text,
+        .nodeLabel,
+        .edgeLabel,
+        .edgeLabel p,
+        .cluster-label text {
+          font-size: 28px !important;
+          font-family: "Source Han Sans SC", "Noto Sans CJK SC", "WenQuanYi Micro Hei", sans-serif !important;
+          font-weight: 600 !important;
+        }
+      themeVariables:
+        fontSize: 32px
+        fontFamily: "Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif"
+        fontWeight: 600
+  beamer:
+    pdf-engine: xelatex
+    include-in-header:
+      text: |
+        \usepackage[UTF8]{ctex}
+        \usetheme{Madrid}
+        \usecolortheme{default}
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: true
+  cache: false
+lang: zh
+html-math-method: katex
+---
+
+```{python}
+#| echo: false
+#| output: false
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+import warnings
+warnings.filterwarnings('ignore')
+
+plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['figure.dpi'] = 150
+
+np.random.seed(42)
+```
+
+```{python}
+#| echo: false
+#| output: false
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression, LassoCV
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.tree import DecisionTreeRegressor, plot_tree
+from econml.dml import CausalForestDML
+
+# 模拟随机实验：异质性处理效应
+n = 2000
+X = np.column_stack([
+    np.random.normal(0, 1, n),      # X0: 年龄
+    np.random.binomial(1, 0.5, n),  # X1: 性别
+    np.random.normal(0, 1, n),      # X2: 收入
+    np.random.normal(0, 1, n),      # X3: 噪声
+    np.random.normal(0, 1, n)       # X4: 噪声
+])
+feature_names = ['年龄', '性别', '收入', '噪声1', '噪声2']
+
+# 随机分配（已知 e(x) = 0.5）
+T = np.random.binomial(1, 0.5, n)
+
+# 真实 CATE: τ(x) = 2 + x₀ + 2·x₁
+tau_true = 2 + X[:, 0] + 2 * X[:, 1]
+
+# 观测结果
+Y = 1 + X[:, 0] + 0.5 * X[:, 2] + T * tau_true + np.random.normal(0, 1, n)
+
+# 样本分割：训练集估计 CATE，测试集评估
+train_idx, test_idx = train_test_split(
+    np.arange(n), test_size=0.5, random_state=42
+)
+X_tr, X_te = X[train_idx], X[test_idx]
+Y_tr, Y_te = Y[train_idx], Y[test_idx]
+T_tr, T_te = T[train_idx], T[test_idx]
+tau_true_te = tau_true[test_idx]
+
+# 在训练集上估计 CATE
+cf = CausalForestDML(
+    model_y=LassoCV(),
+    model_t=LassoCV(),
+    n_estimators=500,
+    min_samples_leaf=10,
+    random_state=42
+)
+cf.fit(Y_tr, T_tr, X=X_tr, W=X_tr)
+tau_hat = cf.effect(X_te).flatten()
+n_te = len(Y_te)
+```
+
+## 上节课回顾
+
+::: {.concept-box}
+**广义随机森林（GRF）**
+
+- *异质性处理效应*：CATE $\tau(x) = E[Y(1) - Y(0) | X = x]$ 刻画效应随特征的变化
+- *因果树思想*：最大化处理效应的异质性，而非 $Y$ 的可预测性
+- *GRF 框架*：Robinson 变换去除混杂，因果森林学习自适应权重
+- *统计推断*：渐近正态性保证有效置信区间
+:::
+
+. . .
+
+*本节课核心问题*
+
+- 如何 *检验* 异质性是否真实存在？
+- 如何 *评估* CATE 排序模型的质量？
+- 如何将 CATE 估计转化为 *最优决策*？
+
+# 从估计到评估 {background-color="#AE0B2A"}
+
+## 估计 CATE 只是第一步
+
+::: {.warning-box}
+**过拟合陷阱**
+
+机器学习模型可以在训练数据中发现“虚假异质性”——即使真实效应完全均匀，灵活的模型也可能拟合出**看似显著**的异质性模式。
+:::
+
+. . .
+
+*一个危险的场景*
+
+- 研究者用因果森林估计了 $\hat{\tau}(x)$，发现不同群体的效应差异很大
+- 基于此推荐了差异化政策
+- 但如果异质性只是噪声拟合的结果……**后果可能很严重**!
+
+## 从估计到决策的三步框架
+
+::: {.concept-box}
+**三个递进问题**
+
+1. *检验*：估计到的异质性是真实的吗？→ BLP 检验
+2. *评估*：我的 CATE 模型排序得有多好？→ TOC、RATE、Qini 曲线
+3. *决策*：如何将估计转化为最优分配规则？→ 政策树
+:::
+
+. . .
+
+*类比：预测建模 vs 因果推断*
+
+| 预测建模 | 因果推断 |
+|:---|:---|
+| *模型训练* | CATE 估计（上节课） |
+| *模型验证* | 异质性检验 + 排序评估（本节课前半） |
+| *模型部署* | 政策学习与分配规则（本节课后半） |
+
+# 异质性检验——BLP 与 GATES {background-color="#AE0B2A"}
+
+## 为什么需要检验异质性
+
+::: {.example-box}
+**场景：就业培训项目**
+
+政府拨出预算进行就业培训，但名额有限。你用因果森林估计了每个人的 $\hat{\tau}(x)$。
+
+- *问题 1*：$\hat{\tau}(x)$ 的变化是真实效应异质性，还是统计噪声？
+- *问题 2*：如果基于噪声做政策，资源会浪费在错误的人身上
+:::
+
+. . .
+
+*核心挑战*
+
+- 传统 t 检验只能检验 ATE $\neq 0$，无法回答“异质性是否存在”
+- 我们需要一个专门针对 *异质性显著性* 的检验方法
+
+## BLP 核心思想
+
+::: {.concept-box}
+**最佳线性预测器（Best Linear Predictor, BLP）**
+
+*核心思路*：如果 $\hat{\tau}(x)$ 真的捕捉了异质性，那么用它来预测真实 $\tau(x)$ 时，应该有正的线性关系。
+
+$$\tau_{BLP}(x) = \alpha_0 + \alpha_1 (\hat{\tau}(x) - \bar{\hat{\tau}})$$
+:::
+
+. . .
+
+*两个关键参数*
+
+- $\alpha_0 = E[\tau(X)]$：平均处理效应（ATE）
+- $\alpha_1 = \text{Cov}(\tau(X), \hat{\tau}(X)) / \text{Var}(\hat{\tau}(X))$：异质性信号强度
+- 如果 $\alpha_1 > 0$ → $\hat{\tau}(x)$ 确实捕捉了真实的异质性方向
+
+## BLP 回归方程
+
+::: {.concept-box}
+**BLP 检验的实现**
+
+在 *独立的测试样本* 上运行回归：
+
+$$Y_i = \gamma' X_i + \alpha_0 (D_i - e(X_i)) + \alpha_1 (D_i - e(X_i))(\hat{\tau}(X_i) - \bar{\hat{\tau}}) + \varepsilon_i$$
+:::
+
+. . .
+
+*为什么需要样本分割*
+
+- *训练集*：估计 $\hat{\tau}(x)$
+- *测试集*：运行 BLP 回归，检验异质性
+- 如果用同一份数据做估计和检验 → 过拟合导致虚假显著
+
+## BLP 的两个检验
+
+| 检验 | 原假设 | 含义 |
+|:---|:---|:---|
+| *校准检验* | $\alpha_0 = 0$ | ATE 是否显著不为零 |
+| *异质性检验* | $\alpha_1 = 0$ | CATE 模型是否捕捉了真实异质性 |
+
+. . .
+
+::: {.concept-box}
+**解读逻辑**
+
+- $\alpha_1 > 0$ 且显著 → 存在真实异质性，模型捕捉到了
+- $\alpha_1 \approx 1$ → 模型完美校准
+- $\alpha_1 \approx 0$ → 模型估计的异质性只是噪声
+:::
+
+## Python 实现：BLP 检验
+
+*模拟场景*：2000 人随机实验，真实 $\tau(x) = 2 + x_0 + 2x_1$，在训练集上估计 CATE，测试集上检验
+
+::: {style="font-size: 1em;"}
+```{python}
+# BLP 检验：在测试样本上验证
+D_c = T_te - 0.5                       # 中心化处理（已知 e=0.5）
+S = tau_hat - np.mean(tau_hat)          # 中心化 CATE 估计
+
+# 回归矩阵: [1, X, D-e, (D-e)·(τ̂-τ̄)]
+Z = np.column_stack([np.ones(n_te), X_te, D_c, D_c * S])
+
+# OLS 估计 + 标准误
+b = np.linalg.solve(Z.T @ Z, Z.T @ Y_te)
+r = Y_te - Z @ b
+se = np.sqrt(np.sum(r**2) / (n_te - Z.shape[1])
+             * np.diag(np.linalg.inv(Z.T @ Z)))
+
+print(f"α₀ (ATE 估计)   = {b[-2]:.3f}  (SE = {se[-2]:.3f}, t = {b[-2]/se[-2]:.1f})")
+print(f"α₁ (异质性检验) = {b[-1]:.3f}  (SE = {se[-1]:.3f}, t = {b[-1]/se[-1]:.1f})")
+```
+:::
+
+## 分组平均处理效应（GATES）
+
+::: {.concept-box}
+**GATES（Group Average Treatment Effects）**
+
+将样本按 $\hat{\tau}(x)$ 的大小分为 $K$ 组（通常 $K = 5$），计算每组的平均效应：
+
+$$\text{GATE}_k = E[Y(1) - Y(0) \mid X \in G_k]$$
+
+*如果异质性真实存在，GATE 应当从 Q1 到 Q5 递增。*
+:::
+
+. . .
+
+*GATES 的优势*
+
+- 直观可视化异质性的梯度
+- 不依赖 $\hat{\tau}(x)$ 的绝对值，只关注相对排序
+- 可以加上置信区间，检验各组差异的显著性
+
+## Python 实现：GATES 可视化
+
+::: {style="font-size: 1em;"}
+```{python}
+fig, ax = plt.subplots(figsize=(10, 6))
+order = np.argsort(tau_hat)
+n_groups = 5
+effects, true_effs = [], []
+for g in range(n_groups):
+    idx = order[g * n_te // n_groups:(g + 1) * n_te // n_groups]
+    effects.append(Y_te[idx][T_te[idx]==1].mean() - Y_te[idx][T_te[idx]==0].mean())
+    true_effs.append(np.mean(tau_true_te[idx]))
+
+x_pos = np.arange(n_groups)
+ax.bar(x_pos - 0.15, effects, 0.3, color='#3498db', label='估计 GATE')
+ax.bar(x_pos + 0.15, true_effs, 0.3, color='#e74c3c', alpha=0.7, label='真实 GATE')
+ax.set_xticks(x_pos)
+labels = [f'Q{i+1}\n(低效应)' if i == 0 else
+          f'Q{i+1}\n(高效应)' if i == 4 else f'Q{i+1}' for i in range(5)]
+ax.set_xticklabels(labels)
+ax.set_ylabel('组平均处理效应', fontsize=14)
+ax.set_title('分组平均处理效应（GATES）', fontsize=16, fontweight='bold')
+ax.legend(fontsize=12); plt.tight_layout(); plt.show()
+```
+:::
+
+# 效应排序评估——TOC 与 Qini {background-color="#AE0B2A"}
+
+## 处理优先级问题
+
+::: {.example-box}
+**场景**
+
+你有两个 CATE 模型（如因果森林 vs X-Learner），两者都声称能识别异质性。
+
+*问题*：哪个模型更好地 *排序* 了谁应该优先接受处理？
+:::
+
+. . .
+
+*为什么需要排序评估*
+
+- BLP 只告诉你“异质性是否存在”，不比较模型间的排序质量
+- 预测建模用 MSE、AUC 评估；因果建模需要 *专门的排序指标*
+- 关键洞察：我们不需要 $\hat{\tau}(x)$ 的绝对值准确，只需要 *排序正确*
+
+## 处理操作特征曲线（TOC）
+
+::: {.concept-box}
+**TOC 曲线（Treatment Operating Characteristic）**
+
+按 $\hat{\tau}(x)$ 从高到低排序，计算 *top-$q$ 人群* 的平均处理效应：
+
+$$\text{TOC}(q) = E[\tau(X) \mid \hat{\tau}(X) \geq \hat{\tau}_{1-q}]$$
+:::
+
+. . .
+
+*解读*
+
+- 横轴：目标人群比例 $q$（0% → 100%）
+- 纵轴：被选中人群的平均效应
+- *好的模型*：TOC 从高开始，随 $q$ 增大逐渐下降
+- 全部选中时（$q = 1$）：TOC = ATE
+
+## AUTOC 与 RATE
+
+::: {.concept-box}
+**AUTOC（Area Under the TOC）**
+
+$$\text{AUTOC} = \int_0^1 [\text{TOC}(q) - \text{ATE}] \, dq$$
+
+*AUTOC 衡量模型的排序能力优于随机分配的程度。*
+:::
+
+. . .
+
+*更一般的框架：RATE*
+
+$$\text{RATE}(\hat{\tau}, \omega) = \int_0^1 \text{TOC}(q) \cdot \omega(q) \, dq$$
+
+- *AUTOC*：$\omega(q) = 1$（均匀权重）
+- *Qini 系数*：$\omega(q) = q$（更关注高优先级群体）
+- RATE 框架统一了多种评估指标
+
+## Qini 曲线与 Qini 系数
+
+::: {.concept-box}
+**Qini 曲线**
+
+按 $\hat{\tau}(x)$ 从高到低排序，绘制 *累积增益*：
+
+$$\text{Qini}(q) = q \cdot [\text{TOC}(q) - \text{ATE}]$$
+:::
+
+. . .
+
+*Qini 系数 = Qini 曲线下面积*
+
+| 指标 | Qini 系数含义 |
+|:---|:---|
+| *Qini > 0* | 模型优于随机分配 |
+| *Qini ≈ 0* | 模型的排序与随机无异 |
+| *Qini 越大* | 排序效果越好 |
+
+## Python 实现：TOC 与 Qini 曲线
+
+::: {style="font-size: 1em;"}
+```{python}
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+sorted_idx = np.argsort(-tau_hat)
+
+# 左图：TOC 曲线
+fracs = np.linspace(0.05, 1.0, 20)
+toc_est, toc_true = [], []
+for q in fracs:
+    k = int(q * n_te)
+    idx = sorted_idx[:k]
+    toc_est.append(Y_te[idx][T_te[idx]==1].mean() - Y_te[idx][T_te[idx]==0].mean())
+    toc_true.append(np.mean(tau_true_te[idx]))
+
+axes[0].plot(fracs, toc_est, 'b-o', ms=4, lw=2, label='估计 TOC')
+axes[0].plot(fracs, toc_true, 'r--', lw=2, alpha=0.7, label='真实 TOC')
+axes[0].axhline(np.mean(tau_true_te), color='gray', ls=':', label='ATE')
+axes[0].set_xlabel('目标人群比例 q', fontsize=13)
+axes[0].set_ylabel('Top-q 组平均效应', fontsize=13)
+axes[0].set_title('TOC 曲线', fontsize=15, fontweight='bold')
+axes[0].legend(fontsize=11)
+
+# 右图：Qini 曲线
+ate = np.mean(tau_true_te)
+qini_vals = [q * (t - ate) for q, t in zip(fracs, toc_true)]
+axes[1].plot(fracs, qini_vals, 'b-o', ms=4, lw=2, label='因果森林')
+axes[1].axhline(0, color='gray', ls=':', label='随机分配')
+axes[1].fill_between(fracs, 0, qini_vals, alpha=0.15, color='blue')
+axes[1].set_xlabel('目标人群比例', fontsize=13)
+axes[1].set_ylabel('累积增益（vs 随机）', fontsize=13)
+axes[1].set_title('Qini 曲线', fontsize=15, fontweight='bold')
+axes[1].legend(fontsize=11)
+plt.tight_layout(); plt.show()
+```
+:::
+
+## 评估指标的选择
+
+| 指标 | 衡量内容 | 适用场景 |
+|:---|:---|:---|
+| *BLP $\alpha_1$* | 异质性是否真实存在 | 初步验证，单模型 |
+| *GATES* | 各组效应的梯度 | 可视化异质性强度 |
+| *AUTOC* | 排序整体优劣 | 模型间比较 |
+| *Qini 系数* | 高优先级排序质量 | 预算受限的场景 |
+
+. . .
+
+::: {.warning-box}
+**注意**
+
+所有指标都需要 *样本分割*——在训练集上估计 CATE，在测试集上评估。否则过拟合会让任何模型看起来都很好。
+:::
+
+# 变量重要性分析 {background-color="#AE0B2A"}
+
+## 因果森林变量重要性
+
+::: {.concept-box}
+**什么驱动了异质性**
+
+在识别异质性存在后，自然要问：*哪些特征驱动了处理效应的差异？*
+
+因果森林变量重要性衡量每个特征对 CATE 变异的贡献。
+:::
+
+. . .
+
+*两种计算方法*
+
+- *分裂频率法*：统计因果森林中每个变量被用于分裂的频率
+- *代理模型法*：用梯度提升模型学习 $\hat{\tau}(x)$，提取特征重要性
+
+两者衡量的都是对 *预测异质性的贡献*，而非因果关系
+
+## Python 实现：变量重要性
+
+::: {style="font-size: 1em;"}
+```{python}
+# 代理模型法：用 GBRT 学习 CATE → 提取特征重要性
+surrogate = GradientBoostingRegressor(
+    n_estimators=200, max_depth=3, random_state=42
+)
+surrogate.fit(X_te, tau_hat)
+importances = surrogate.feature_importances_
+
+fig, ax = plt.subplots(figsize=(10, 5))
+sorted_imp = np.argsort(importances)
+colors = ['#e74c3c' if feature_names[i] in ['年龄', '性别']
+          else '#bdc3c7' for i in sorted_imp]
+ax.barh(range(len(importances)), importances[sorted_imp],
+        color=colors, edgecolor='white')
+ax.set_yticks(range(len(importances)))
+ax.set_yticklabels([feature_names[i] for i in sorted_imp])
+ax.set_xlabel('重要性得分', fontsize=14)
+ax.set_title('CATE 变量重要性', fontsize=16, fontweight='bold')
+plt.tight_layout(); plt.show()
+```
+:::
+
+红色 = 真实驱动变量（年龄、性别）；灰色 = 噪声变量
+
+## 变量重要性 ≠ 因果关系
+
+::: {.warning-box}
+**重要区分**
+
+变量重要性回答的是“哪些特征 *预测* 了异质性”，而非“哪些特征 *导致* 了异质性”。
+:::
+
+. . .
+
+*常见误读*
+
+- 年龄重要性高 ≠ 年龄导致了处理效应的差异
+- 可能是年龄与未观测的真正调节变量相关
+- 变量重要性是 *探索性工具*，不能替代因果论证
+
+**最佳实践**：将变量重要性作为假设生成的起点，结合领域知识验证
+
+# 政策树与政策学习 {background-color="#AE0B2A"}
+
+## 从 CATE 到最优决策
+
+::: {.example-box}
+**回到就业培训问题**
+
+你已经估计了每个人的 $\hat{\tau}(x)$，验证了异质性真实存在。
+
+*现在的问题*：预算只够培训 50% 的申请者，谁应该被优先选中？
+:::
+
+. . .
+
+**朴素方案 vs 最优方案**
+
+- *朴素*：按 $\hat{\tau}(x)$ 从高到低排序，选 top-50%
+- *更好*：学习一棵简单的决策树，给出可解释的分配规则
+- *为什么用树*：规则透明、可审计、便于向决策者解释
+
+## 政策学习的形式化
+
+::: {.concept-box}
+**最优处理分配**
+
+寻找政策规则 $\pi: \mathcal{X} \to \{0, 1\}$，最大化社会福利：
+
+$$\pi^* = \arg\max_{\pi \in \Pi} \frac{1}{n} \sum_{i=1}^{n} \hat{\Gamma}_i \cdot \pi(X_i)$$
+
+其中 $\hat{\Gamma}_i$ 是双重稳健得分（AIPW score），$\Pi$ 是政策空间。
+:::
+
+. . .
+
+*为什么用 AIPW 得分而不是 $\hat{\tau}(x)$*
+
+- $\hat{\Gamma}_i$ 是 $\tau(X_i)$ 的无偏个体级估计
+- 对 $\hat{\Gamma}_i$ 求加权平均直接给出福利估计
+- 双重稳健性：即使倾向得分或结果模型之一有偏，仍然一致
+
+## 最优政策树
+
+::: {.concept-box}
+**深度有限的决策树**
+
+$$\Pi = \{\text{深度} \leq d \text{ 的决策树}\}$$
+
+*限制树的深度确保规则可解释*——深度 2 意味着最多 4 个叶节点、3 个简单条件。
+:::
+
+. . .
+
+*实现思路*
+
+1. 计算 AIPW 得分 $\hat{\Gamma}_i$（或近似使用 $\hat{\tau}(X_i)$）
+2. 搜索使 $\sum \hat{\Gamma}_i \cdot \pi(X_i)$ 最大的深度-$d$ 树
+3. 叶节点中 $\bar{\Gamma} > 0$ → 分配处理；$\bar{\Gamma} \leq 0$ → 不分配
+
+## Python 实现：政策树
+
+::: {style="font-size: 1em;"}
+```{python}
+# 深度-2 政策树（基于 CATE 估计）
+tree = DecisionTreeRegressor(max_depth=2, random_state=42)
+tree.fit(X_te, tau_hat)
+
+fig, ax = plt.subplots(figsize=(14, 7))
+plot_tree(tree, feature_names=feature_names, filled=True,
+          rounded=True, fontsize=11, ax=ax, impurity=False)
+ax.set_title('深度-2 政策树', fontsize=16, fontweight='bold')
+plt.tight_layout(); plt.show()
+```
+:::
+
+*叶节点值 > 0 → 建议干预；值 ≤ 0 → 不建议干预*
+
+## Python 实现：分配策略比较
+
+::: {style="font-size: 1em;"}
+```{python}
+# 预算约束：只能干预 50% 的人群
+budget = n_te // 2
+np.random.seed(123)
+random_idx = np.random.choice(n_te, budget, replace=False)
+model_idx = np.argsort(-tau_hat)[:budget]
+oracle_idx = np.argsort(-tau_true_te)[:budget]
+
+strats = ['随机分配', '因果森林\nTop-50%', '神谕策略\n(理论最优)']
+effs = [np.mean(tau_true_te[random_idx]),
+        np.mean(tau_true_te[model_idx]),
+        np.mean(tau_true_te[oracle_idx])]
+
+fig, ax = plt.subplots(figsize=(9, 5))
+bars = ax.bar(strats, effs, color=['#95a5a6', '#3498db', '#e74c3c'], width=0.5)
+for bar, val in zip(bars, effs):
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.05,
+            f'{val:.2f}', ha='center', fontsize=14, fontweight='bold')
+ax.set_ylabel('被干预人群的平均处理效应', fontsize=14)
+ax.set_title('预算约束下的分配策略比较', fontsize=16, fontweight='bold')
+plt.tight_layout(); plt.show()
+```
+:::
+
+## 政策学习的实践要点
+
+::: {.warning-box}
+**三条核心准则**
+
+1. *交叉验证福利*：不要在训练政策的数据上评估福利
+2. *约束要明确*：预算上限、公平性约束、伦理限制
+3. *简单优先*：优先选择可解释的规则（浅树、线性规则）
+:::
+
+. . .
+
+::: {.callout-important}
+**伦理考量**
+
+- 按种族、性别等敏感属性差异化分配可能引发公平性问题
+- $\hat{\tau}(x)$ 可能反映历史偏见而非真实因果效应
+- 政策学习 ≠ 自动决策，领域专家的判断不可或缺
+:::
+
+## 本讲要点（一）
+
+::: {.concept-box}
+
+1. **BLP 检验**
+   - 通过样本分割 + 辅助回归检验异质性是否真实
+   - $\alpha_1 > 0$ 表明模型捕捉到了真实异质性
+
+2. **GATES**
+   - 按 $\hat{\tau}(x)$ 分组计算平均效应，可视化异质性梯度
+   - 递增的 GATE 模式支持异质性结论
+
+3. **TOC、AUTOC 与 Qini**
+   - TOC 曲线衡量模型的排序效率
+   - AUTOC / Qini 系数量化排序优于随机的程度
+
+:::
+
+## 本讲要点（二）
+
+::: {.concept-box}
+
+4. **变量重要性**
+   - 识别驱动异质性的关键特征
+   - 重要性 ≠ 因果关系，需结合领域知识解读
+
+5. **政策树与政策学习**
+   - 将 CATE 估计转化为可解释的决策规则
+   - 深度有限的树平衡了效率与可解释性
+   - 交叉验证福利 + 公平性约束是实践关键
+
+:::
+
+## 推荐工具
+
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.callout-tip}
+**Python**
+
+- `econml`：CausalForestDML（CATE 估计 + 推断）
+- `causalml`：UpliftTreeClassifier，plot_qini
+- `scikit-learn`：DecisionTreeRegressor（简易政策树）
+:::
+:::
+
+::: {.column width="50%"}
+::: {.callout-tip}
+**R**
+
+- `grf`：causal_forest，best_linear_projection，rank_average_treatment_effect
+- `policytree`：optimal_policy_tree（推荐，原始实现）
+- `uplift`：Qini 曲线绘制
+:::
+:::
+
+::::
+
+## 下节课预告
+
+**第十一讲：双重机器学习——高维控制与去偏估计**
+
+- 朴素 ML 插件估计的偏差问题
+- Neyman 正交性：为什么需要“双重”修正
+- DML 框架与部分线性模型
+- 高维控制变量的因果效应估计
+
+. . .
+
+::: {.concept-box}
+**核心思想**
+
+当控制变量数量很多时（甚至超过样本量），传统方法失效。*双重机器学习* 通过正交化技巧，让我们在使用 ML 控制混杂的同时得到 *有效的因果推断*。
+:::
+
+# 参考文献
+
+- Chernozhukov, V., Demirer, M., Duflo, E., & Fernández-Val, I. (2023). Generic Machine Learning Inference on Heterogeneous Treatment Effects in Randomized Experiments. *NBER Working Paper No. 24678*.
+
+- Yadlowsky, S., Fleming, S., Shah, N., Brunskill, E., & Wager, S. (2021). Evaluating Treatment Prioritization Rules via Rank-Weighted Average Treatment Effects. *arXiv:2111.07966*.
+
+- Athey, S., & Wager, S. (2021). Policy Learning with Observational Data. *Econometrica*, 89(1), 133–161.
+
+- Athey, S., & Imbens, G. W. (2016). Recursive Partitioning for Heterogeneous Causal Effects. *Proceedings of the National Academy of Sciences*, 113(27), 7353–7360.
+
+- Athey, S., Tibshirani, J., & Wager, S. (2019). Generalized Random Forests. *Annals of Statistics*, 47(2), 1148–1178.
+
+- Radcliffe, N. J., & Surry, P. D. (2011). Real-World Uplift Modelling with Significance-Based Uplift Trees. *Stochastic Solutions White Paper*.

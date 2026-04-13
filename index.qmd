@@ -227,4 +227,8 @@ date: "2026-03-05"
 ::: {.learning-grid-item}
 [📊 第九讲](Quarto/lecture09_grf.html){.btn .btn-primary .course-start-btn}
 :::
+
+::: {.learning-grid-item}
+[📊 第十讲](Quarto/lecture10_causal_forest.html){.btn .btn-primary .course-start-btn}
+:::
 :::
