@@ -19,6 +19,12 @@ project:
     - Quarto/lecture06_panel_did_notes.html
     - Quarto/lecture07_ml_basics.html
     - Quarto/lecture07_ml_basics_notes.html
+    - Quarto/lecture08_ml_basics_ii.html
+    - Quarto/lecture08_ml_basics_ii_notes.html
+    - Quarto/lecture09_grf.html
+    - Quarto/lecture09_grf_notes.html
+    - Quarto/lecture10_causal_forest.html
+    - Quarto/lecture10_causal_forest_notes.html
 
 website:
   title: "机器学习与因果推断"
@@ -61,6 +67,18 @@ website:
             file: Quarto/lecture07_ml_basics.html
           - text: "第七讲：详细讲义"
             file: Quarto/lecture07_ml_basics_notes.html
+          - text: "第八讲：机器学习基础 II"
+            file: Quarto/lecture08_ml_basics_ii.html
+          - text: "第八讲：详细讲义"
+            file: Quarto/lecture08_ml_basics_ii_notes.html
+          - text: "第九讲：广义随机森林"
+            file: Quarto/lecture09_grf.html
+          - text: "第九讲：详细讲义"
+            file: Quarto/lecture09_grf_notes.html
+          - text: "第十讲：因果森林"
+            file: Quarto/lecture10_causal_forest.html
+          - text: "第十讲：详细讲义"
+            file: Quarto/lecture10_causal_forest_notes.html
       - text: "资源"
         file: resources.qmd
     right:
@@ -115,6 +133,18 @@ website:
               file: Quarto/lecture07_ml_basics.html
             - text: "第七讲：详细讲义"
               file: Quarto/lecture07_ml_basics_notes.html
+            - text: "第八讲：机器学习基础 II"
+              file: Quarto/lecture08_ml_basics_ii.html
+            - text: "第八讲：详细讲义"
+              file: Quarto/lecture08_ml_basics_ii_notes.html
+            - text: "第九讲：广义随机森林"
+              file: Quarto/lecture09_grf.html
+            - text: "第九讲：详细讲义"
+              file: Quarto/lecture09_grf_notes.html
+            - text: "第十讲：因果森林"
+              file: Quarto/lecture10_causal_forest.html
+            - text: "第十讲：详细讲义"
+              file: Quarto/lecture10_causal_forest_notes.html
 
 format:
   html:
