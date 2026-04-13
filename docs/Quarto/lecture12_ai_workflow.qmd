@@ -13,7 +13,6 @@ format:
     code-fold: false
     code-tools: true
     highlight-style: github
-    pdf-separate-fragments: false
     width: 1400
     height: 788
     margin: 0.05
@@ -269,7 +268,7 @@ AI 很容易把“发券后的点击率”“发券后的曝光量”也加入�
 
 ## 从研究问题到可复现实验
 
-![](../Figures/lecture12_workflow_pipeline.png){width="90%"}
+![](diagrams/lecture12/lecture12_workflow_pipeline.png){width="80%"}
 
 ## 提示模板：先定义问题，再让 AI 干活
 
@@ -293,7 +292,7 @@ Prompt: 你是我的研究协作者。请不要直接给结论，而是先输出
 5. 需要人工复核的地方
 ```
 
-## 数据审计：让 AI 先读 schema，人来定样本
+## 数据审计：让 AI 先读架构(schema)，人来定样本
 
 ::: {.concept-box}
 **数据审计不是机械清洗**
@@ -475,7 +474,7 @@ print(structured_df.to_string(index=False))
 
 ## 验证循环
 
-![](../Figures/lecture12_verify_loop.png){width="70%"}
+![](diagrams/lecture12/lecture12_verify_loop.png){width="80%"}
 
 ## 人机分工矩阵
 
