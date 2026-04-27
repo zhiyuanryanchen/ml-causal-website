@@ -5,6 +5,7 @@
 # - docs/ (generated website)
 # - _quarto.yml (website config)
 # - index.qmd, syllabus.qmd, resources.qmd (source files)
+# - Assignments/ (assignment source files)
 # - styles.css (custom styles)
 # - .github/workflows/ (CI/CD)
 # - README.md
@@ -20,6 +21,8 @@
 !index.qmd
 !syllabus.qmd
 !resources.qmd
+!Assignments/
+!Assignments/**
 !styles.css
 !.github/
 !.github/**

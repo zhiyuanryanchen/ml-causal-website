@@ -1,173 +1,170 @@
 [
   {
-    "objectID": "resources.html",
-    "href": "resources.html",
-    "title": "学习资源",
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
     "section": "",
-    "text": "Angrist, J.D. & Pischke, J.S. (2020)\n经济学因果推断的经典教材，语言通俗，案例丰富。重点阅读第1-5章。\n豆瓣链接\n\n\n\nHuntington-Klein, N. (2022)\n从研究设计的角度系统介绍因果推断，配有R和Stata代码。\n在线阅读\n\n\n\nChernozhukov et al. (2024)\n机器学习与因果推断结合的最新教材，免费在线阅读。\n在线阅读\n\n\n\n\n\nCunningham, S. (2021). Causal Inference: The Mixtape. 在线阅读\nImbens, G.W. & Rubin, D.B. (2015). Causal Inference in Statistics, Social, and Biomedical Sciences"
+    "text": "本次作业要求你使用 Monte Carlo 模拟研究 PSM-DID 方法的识别逻辑、优势、局限和适用场景。你需要自行构造数据生成过程，比较 PSM-DID、单独 PSM 和单独 DID 的估计表现，并结合模拟结果进行严格的理论解释。最后，你需要选择一篇使用 PSM-DID 的中文或英文经济学期刊论文，评价其方法适用性与结论可信度。\n本作业对应课程前六讲内容：潜在结果框架、混淆变量、DAG、匹配、工具变量、面板数据与双重差分。",
+    "crumbs": [
+      "首页",
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
+    ]
   },
   {
-    "objectID": "resources.html#推荐教材",
-    "href": "resources.html#推荐教材",
-    "title": "学习资源",
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#作业目标",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#作业目标",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
     "section": "",
-    "text": "Angrist, J.D. & Pischke, J.S. (2020)\n经济学因果推断的经典教材，语言通俗，案例丰富。重点阅读第1-5章。\n豆瓣链接\n\n\n\nHuntington-Klein, N. (2022)\n从研究设计的角度系统介绍因果推断，配有R和Stata代码。\n在线阅读\n\n\n\nChernozhukov et al. (2024)\n机器学习与因果推断结合的最新教材，免费在线阅读。\n在线阅读\n\n\n\n\n\nCunningham, S. (2021). Causal Inference: The Mixtape. 在线阅读\nImbens, G.W. & Rubin, D.B. (2015). Causal Inference in Statistics, Social, and Biomedical Sciences"
-  },
-  {
-    "objectID": "resources.html#在线资源",
-    "href": "resources.html#在线资源",
-    "title": "学习资源",
-    "section": "在线资源",
-    "text": "在线资源\n\nPython库\n\n\n\n库名\n用途\n文档链接\n\n\n\n\nEconML\n微软开发的因果推断ML库\n文档\n\n\nDoubleML\n双重机器学习实现\n文档\n\n\nCausalML\nUber开发的因果ML库\n文档\n\n\nDoWhy\n因果推理端到端框架\n文档\n\n\nstatsmodels\n传统计量经济学方法\n文档\n\n\n\n\n\nR包\n\n\n\n包名\n用途\n文档链接\n\n\n\n\nMatchIt\n倾向得分匹配\nCRAN\n\n\nfixest\n固定效应估计\n文档\n\n\ngrf\n广义随机森林\nCRAN\n\n\nDoubleML\n双重机器学习\n文档\n\n\nrdrobust\n断点回归\nCRAN\n\n\n\n\n\n在线课程\n\nHarvard Gov 2003: 因果推断研究生课程\nStanford Econ 293: 机器学习与因果推断\nFast.ai: Practical Deep Learning for Coders（第2部分涉及因果推断）\n\n\n\n博客与文章\n\nAndrew Gelman’s Blog: Statistical Modeling, Causal Inference, and Social Science\nScott Cunningham’s Substack: Causal Inference with C"
-  },
-  {
-    "objectID": "resources.html#数据集资源",
-    "href": "resources.html#数据集资源",
-    "title": "学习资源",
-    "section": "数据集资源",
-    "text": "数据集资源\n\n经典数据集\n\n\n\n数据集\n描述\n用途\n\n\n\n\nLaLonde (1986)\n就业培训项目评估\n匹配法教学\n\n\nCard & Krueger (1994)\n最低工资对就业的影响\nDID教学\n\n\nAbadie et al. (2010)\n加州控烟法案\n合成控制法\n\n\nAngrist & Evans (1998)\n家庭规模与劳动供给\nIV教学\n\n\n\n\n\n数据仓库\n\nKaggle: Datasets\nUCI Machine Learning Repository: Archive\nGoogle Dataset Search: Search\nOur World in Data: Data"
-  },
-  {
-    "objectID": "resources.html#软件安装指南",
-    "href": "resources.html#软件安装指南",
-    "title": "学习资源",
-    "section": "软件安装指南",
-    "text": "软件安装指南\n\nPython环境\n# 推荐使用conda创建虚拟环境\nconda create -n ml-causal python=3.11\nconda activate ml-causal\n\n# 安装核心包\npip install numpy pandas matplotlib seaborn scikit-learn jupyter\n\n# 安装因果推断专用包\npip install econml doubleml causalml dowhy\n\n\nR环境\n# 安装核心包\ninstall.packages(c(\"tidyverse\", \"ggplot2\", \"fixest\", \"MatchIt\", \"grf\"))\n\n# 安装DoubleML\ninstall.packages(\"DoubleML\")\n\n\nJupyter Notebook\n推荐使用JupyterLab作为开发环境：\npip install jupyterlab\njupyter lab\n或使用VS Code + Jupyter插件。"
-  },
-  {
-    "objectID": "resources.html#编程规范",
-    "href": "resources.html#编程规范",
-    "title": "学习资源",
-    "section": "编程规范",
-    "text": "编程规范\n\nPython代码规范\n\n遵循PEP 8风格指南\n使用有意义的变量名\n添加文档字符串（docstrings）\n固定随机种子保证可重复性\n\nimport numpy as np\nimport pandas as pd\n\n# 固定随机种子\nnp.random.seed(42)\n\n# 清晰的变量名\ntreatment_effect = -2.0  # 真实处理效应\nconfounding_strength = 3.0  # 混淆强度\n\n# 添加注释\n# 生成混淆变量：疫情严重程度\nseverity = np.random.normal(0, 1, n_cities)\n\n\nR代码规范\n\n使用tidyverse风格\n管道操作符 |&gt;\n有意义的变量名\n固定随机种子\n\nlibrary(tidyverse)\n\n# 固定随机种子\nset.seed(42)\n\n# 使用管道和清晰命名\ndata &lt;- tibble(\n  severity = rnorm(n),\n  treatment = ifelse(severity &gt; 0, 1, 0)\n) |&gt;\n  mutate(\n    recovery = 10 + severity * 3 + treatment * true_effect\n  )"
-  },
-  {
-    "objectID": "resources.html#ai辅助工具",
-    "href": "resources.html#ai辅助工具",
-    "title": "学习资源",
-    "section": "AI辅助工具",
-    "text": "AI辅助工具\n\n大语言模型\n\nClaude: claude.ai - 代码生成与解释\nChatGPT: chat.openai.com - 概念解释与讨论\nGitHub Copilot: IDE集成，自动补全代码\n\n\n\n使用建议\n\n明确提示：描述清楚数据结构和分析目标\n迭代优化：根据输出逐步调整提示词\n验证结果：始终验证AI生成代码的正确性\n理解原理：不要只复制代码，要理解背后的逻辑"
-  },
-  {
-    "objectID": "resources.html#学术资源",
-    "href": "resources.html#学术资源",
-    "title": "学习资源",
-    "section": "学术资源",
-    "text": "学术资源\n\n顶级期刊\n\nEconometrica: 计量经济学顶级期刊\nJournal of Political Economy: 经济学综合顶刊\nReview of Economic Studies: 理论与实证并重\nJournal of Econometrics: 计量方法专刊\nJournal of Machine Learning Research: 机器学习顶刊\n\n\n\n预印本平台\n\narXiv: stat.ML, econ.EM\nSSRN: 社会科学研究网络\n\n\n\n学术搜索引擎\n\nGoogle Scholar: scholar.google.com\nEconPapers: econpapers.repec.org\nJSTOR: 经济学历史文献"
-  },
-  {
-    "objectID": "resources.html#联系我们",
-    "href": "resources.html#联系我们",
-    "title": "学习资源",
-    "section": "联系我们",
-    "text": "联系我们\n如有资源推荐或链接失效，请通过以下方式联系：\n\n📧 邮箱: chenzhiyuan@rmbs.ruc.edu.cn\n🏢 办公室: 919\n🕒 Office Hours: 周四 14:00-15:00"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "学习资源",
-    "section": "",
-    "text": "用数据回答“为什么”",
+    "text": "本次作业要求你使用 Monte Carlo 模拟研究 PSM-DID 方法的识别逻辑、优势、局限和适用场景。你需要自行构造数据生成过程，比较 PSM-DID、单独 PSM 和单独 DID 的估计表现，并结合模拟结果进行严格的理论解释。最后，你需要选择一篇使用 PSM-DID 的中文或英文经济学期刊论文，评价其方法适用性与结论可信度。\n本作业对应课程前六讲内容：潜在结果框架、混淆变量、DAG、匹配、工具变量、面板数据与双重差分。",
     "crumbs": [
       "首页",
-      "课程信息",
-      "机器学习与因果推断"
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
     ]
   },
   {
-    "objectID": "index.html#从相关性到因果性",
-    "href": "index.html#从相关性到因果性",
-    "title": "学习资源",
-    "section": "",
-    "text": "用数据回答“为什么”",
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#背景一monte-carlo-模拟是什么",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#背景一monte-carlo-模拟是什么",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "背景一：Monte Carlo 模拟是什么",
+    "text": "背景一：Monte Carlo 模拟是什么\nMonte Carlo 模拟是一种用重复随机抽样来研究统计方法性质的工具。它的核心思想是：如果我们知道真实的数据生成过程，就可以在许多次重复实验中观察不同估计方法的表现。\n在因果推断中，真实世界通常看不到反事实结果，因此无法直接知道估计量是否有偏。但在模拟中，你可以自行设定：\n\n真实处理效应 \\(\\tau\\)\n个体特征 \\(X_i\\)\n未观测异质性 \\(\\alpha_i\\)\n时间冲击 \\(\\lambda_t\\)\n处理分配机制 \\(D_i\\)\n潜在结果 \\(Y_i(1), Y_i(0)\\)\n\n这样，每次模拟都能比较估计值 \\(\\hat{\\tau}\\) 与真实值 \\(\\tau\\) 的差异。\n常见评价指标包括：\n\\[\nBias(\\hat{\\tau}) = E[\\hat{\\tau}] - \\tau\n\\]\n\\[\nRMSE(\\hat{\\tau}) = \\sqrt{E[(\\hat{\\tau} - \\tau)^2]}\n\\]\n你也可以报告标准差、中位数偏误、置信区间覆盖率，或估计值分布图。请注意，Monte Carlo 不是简单地“跑很多次代码”，而是用可控的数据生成过程检验理论命题。",
     "crumbs": [
       "首页",
-      "课程信息",
-      "机器学习与因果推断"
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
     ]
   },
   {
-    "objectID": "index.html#课程信息",
-    "href": "index.html#课程信息",
-    "title": "学习资源",
-    "section": "课程信息",
-    "text": "课程信息\n\n\n\n基本信息\n\n课程名称: 机器学习与因果推断\n授课对象: 高年级本科生\n学分: 2学分\n时间: 周一 16：00-17：30\n地点: 明德商学楼0207\n学期: 2025-2026学年春季学期\n\n\n\n授课教师\n陈志远 中国人民大学商学院 助理教授（贸易经济系）\n\n📧 chenzhiyuan@rmbs.ruc.edu.cn\n🏢 办公室: 919\n🕒 Office Hours: 周四 14:00-15:00\n\n\n\n\n\n\n📎 讲义\n\n\n\n📋 课程大纲\n第一讲：课程导论 [课件] [详细讲义]\n第二讲：概率与回归基础 [课件] [详细讲义]\n第三讲：有向无环图 [课件] [详细讲义]\n第四讲：匹配与分层 [课件] [详细讲义]\n第五讲：工具变量法 [课件] [详细讲义]\n第六讲：面板数据与双重差分法 [课件] [详细讲义]\n第七讲：机器学习基础 I [课件] [详细讲义]\n第八讲：机器学习基础 II [课件] [详细讲义]\n第九讲：广义随机森林 [课件] [详细讲义]\n第十讲：因果森林 [课件] [详细讲义]\n第十一讲：双重机器学习 [课件] [详细讲义]\n第十二讲：因果推断与 AI [课件] [详细讲义]\n💻 课程代码仓库\n\n\n\n\n\n📢 最新公告\n\n\n2026-06-09 — 第十二讲课件和详细讲义已发布！ 📊 课件：因果推断与 AI · 📖 详细讲义\n\n2026-06-02 — 第十一讲课件和详细讲义已发布！ 📊 课件：双重机器学习 · 📖 详细讲义\n\n2026-05-26 — 第十讲课件和详细讲义已发布！ 📊 课件：因果森林 · 📖 详细讲义\n\n2026-04-28 — 第九讲课件和详细讲义已发布！ 📊 课件：广义随机森林 · 📖 详细讲义\n\n2026-04-26 — 第八讲课件和详细讲义已发布！ 📊 课件：机器学习基础 II · 📖 详细讲义\n2026-04-19 — 第七讲课件和详细讲义已发布！ 📊 课件：机器学习基础 I · 📖 详细讲义\n2026-04-12 — 第六讲课件和详细讲义已发布！ 📊 课件：面板数据与双重差分法 · 📖 详细讲义\n2026-04-07 — 第五讲课件和详细讲义已发布！ 📊 课件：工具变量法 · 📖 详细讲义\n2026-03-30 — 第三、四讲课件和详细讲义已发布！ 📊 第四讲课件 · 📖 讲义 📊 第三讲课件 · 📖 讲义\n第一、二讲课件和详细讲义已发布！ 📊 第一讲课件 · 📖 讲义 📊 第二讲课件 · 📖 讲义",
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#背景二psm-did-的基本思想",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#背景二psm-did-的基本思想",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "背景二：PSM-DID 的基本思想",
+    "text": "背景二：PSM-DID 的基本思想\nPSM-DID 将倾向得分匹配和双重差分结合起来。它通常用于政策或项目在非随机分配下实施、但研究者可以观察到处理组和控制组在政策前后的结果时。\n一个典型两期设定为：\n\n\\(D_i = 1\\) 表示个体或地区 \\(i\\) 接受处理\n\\(T_i = 1\\) 表示处理后时期，\\(T_i = 0\\) 表示处理前时期\n\\(Y_{it}\\) 是结果变量\n\\(X_i\\) 是处理前协变量\n\nDID 估计量比较处理组和控制组在处理前后的变化：\n\\[\n\\hat{\\tau}_{DID}\n= [\\bar{Y}_{1,post} - \\bar{Y}_{1,pre}]\n- [\\bar{Y}_{0,post} - \\bar{Y}_{0,pre}]\n\\]\nPSM-DID 的做法是先基于处理前协变量估计倾向得分：\n\\[\ne(X_i) = P(D_i = 1 \\mid X_i)\n\\]\n然后在共同支持区域内为处理组寻找可比的控制组，最后在匹配后的样本上进行 DID 估计。",
     "crumbs": [
       "首页",
-      "课程信息",
-      "机器学习与因果推断"
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
     ]
   },
   {
-    "objectID": "index.html#课程描述",
-    "href": "index.html#课程描述",
-    "title": "学习资源",
-    "section": "课程描述",
-    "text": "课程描述\n本课程系统介绍因果推断的理论基础与机器学习方法的结合，培养学生运用数据回答”为什么”的能力。课程分为两大模块：\n\n模块一：经典因果推断方法（前8周）\n\n\n\n周次\n主题\n核心内容\n\n\n\n\n1\n课程导论\n相关vs因果，潜在结果框架入门\n\n\n2-3\n因果推断基础\n潜在结果框架深入，混淆变量，识别策略\n\n\n4\n匹配法\n倾向得分匹配，精确匹配，重叠条件\n\n\n5-6\n双重差分\nDID原理，平行趋势检验，动态效应\n\n\n7\n合成控制法\n合成控制原理，安慰剂检验\n\n\n8\n工具变量法\nIV原理，2SLS，排他性约束\n\n\n\n\n\n模块二：机器学习与因果推断（后6周）\n\n\n\n周次\n主题\n核心内容\n\n\n\n\n9-10\nML基础\n回归，决策树，随机森林，交叉验证\n\n\n11-12\n广义随机森林\n异质性处理效应，置信区间\n\n\n13\n因果森林\n异质性分析，Policy Learning\n\n\n14\n双重机器学习\nDouble ML，Neyman正交性\n\n\n15-16\n项目答辩\n期末展示与点评",
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#psm-did-的关键假设",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#psm-did-的关键假设",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "PSM-DID 的关键假设",
+    "text": "PSM-DID 的关键假设\n你在作业中需要清楚说明并检验以下假设：\n\n处理前协变量可观测\n匹配只能平衡可观测的处理前变量。不要使用处理后变量进行匹配。\n共同支持或重叠条件\n对处理组中的个体，必须存在倾向得分相近的控制组：\n\\[\n0 &lt; P(D_i=1 \\mid X_i) &lt; 1\n\\]\n条件平行趋势\n在给定 \\(X_i\\) 或匹配后的可比样本中，如果没有处理，处理组和控制组的结果变化趋势应当相同：\n\\[\nE[Y_i(0,post)-Y_i(0,pre) \\mid D_i=1, X_i]\n=\nE[Y_i(0,post)-Y_i(0,pre) \\mid D_i=0, X_i]\n\\]\nSUTVA 与无提前反应\n个体之间不存在处理溢出，且处理前结果没有受到未来处理预期的影响。\n稳定样本与可比测量\n处理前后样本构成、变量定义和测量方式不应发生会污染识别的系统性变化。",
     "crumbs": [
       "首页",
-      "课程信息",
-      "机器学习与因果推断"
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
     ]
   },
   {
-    "objectID": "index.html#为什么要学习因果推断",
-    "href": "index.html#为什么要学习因果推断",
-    "title": "学习资源",
-    "section": "为什么要学习因果推断？",
-    "text": "为什么要学习因果推断？\n\n\n\n现实需求\n\n营销投入真的带来销量增长了吗？\n新产品上线真的提升了用户留存吗？\n培训项目真的提高了员工绩效吗？\n政策调整真的促进了经济发展吗？\n\n\n\n\n技术趋势\n\n🚀 AI时代的核心技能\n📊 数据驱动决策的标配\n🌍 学术界与业界的通用语言\n💡 从“跑数”到“洞察”的跃迁",
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#任务一自行设计数据生成过程",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#任务一自行设计数据生成过程",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "任务一：自行设计数据生成过程",
+    "text": "任务一：自行设计数据生成过程\n请设计一个面板数据或重复截面数据的模拟环境。最低要求如下：\n\n至少包含一个处理前协变量 \\(X_i\\)\n至少包含处理前和处理后两个时期\n明确写出处理分配机制 \\(D_i\\)\n明确写出潜在结果或观测结果生成方程\n明确设定真实处理效应 \\(\\tau\\)\n至少重复模拟 500 次\n可以使用 Stata、Python 或 R\n\n你需要至少设计三个场景：\n\n\n\n\n\n\n\n\n场景\n目的\n建议设计\n\n\n\n\n场景 A\nDID 表现较好的基准情形\n处理组和控制组满足无条件平行趋势\n\n\n场景 B\nPSM-DID 可能优于 DID 的情形\n趋势差异与处理前协变量 \\(X_i\\) 有关，匹配后条件平行趋势成立\n\n\n场景 C\nPSM-DID 也可能失败的情形\n存在不可观测的时间变化混淆、共同支持不足、或使用错误匹配变量\n\n\n\n你可以增加更多场景，但不能少于三个。",
     "crumbs": [
       "首页",
-      "课程信息",
-      "机器学习与因果推断"
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
     ]
   },
   {
-    "objectID": "index.html#课程特色",
-    "href": "index.html#课程特色",
-    "title": "学习资源",
-    "section": "课程特色",
-    "text": "课程特色\n\n\n\n🤖 AI辅助编程\n传统编程与Vibe Coding结合，提升学习效率\n\n\n\n\n🐍 Python + R\n双语言实践，覆盖主流数据科学生态\n\n\n\n\n📚 理论与实践\n经典方法与前沿ML方法并重，案例驱动",
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#任务二比较-psmdid-与-psm-did",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#任务二比较-psmdid-与-psm-did",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "任务二：比较 PSM、DID 与 PSM-DID",
+    "text": "任务二：比较 PSM、DID 与 PSM-DID\n在每个模拟场景中，请至少比较以下三类估计方法：\n\n单独 PSM\n使用处理后结果或结果变化作为被解释变量，在匹配样本上比较处理组和控制组。\n单独 DID\n不进行匹配，直接使用全部样本估计 DID。建议同时比较不控制协变量的基础 DID，以及控制处理前协变量的 DID 回归版本，说明两者在不同数据生成机制下的差异。\nPSM-DID\n先使用处理前协变量进行匹配，再在匹配样本上估计 DID。\n\n建议报告下列结果：\n\n各方法估计值的平均值\nBias\nRMSE\n标准差\n估计值分布图\n匹配前后协变量平衡情况\n倾向得分共同支持图\n\n请不要只报告“哪个方法更准”。你需要说明在什么数据生成机制下，为什么它更准或更差。",
     "crumbs": [
       "首页",
-      "课程信息",
-      "机器学习与因果推断"
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
     ]
   },
   {
-    "objectID": "index.html#推荐教材",
-    "href": "index.html#推荐教材",
-    "title": "学习资源",
-    "section": "推荐教材",
-    "text": "推荐教材\n\nAngrist & Pischke (2020). 《基本无害的计量经济学》\nHuntington-Klein (2022). The Effect: An Introduction to Research Design and Causality\nChernozhukov et al. (2024). Applied Causal Inference Powered by ML and AI (在线阅读)\nCunningham (2021). Causal Inference: The Mixtape (在线阅读)\nJames, Witten, Hastie, Tibshirani, Taylor (2021). An Introduction to Statistical Learning: with Applications in Python (在线阅读)\nJames, Witten, Hastie, Tibshirani (2021). An Introduction to Statistical Learning: with Applications in R (在线阅读)",
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#任务三解释模拟结果背后的理论原因",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#任务三解释模拟结果背后的理论原因",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "任务三：解释模拟结果背后的理论原因",
+    "text": "任务三：解释模拟结果背后的理论原因\n请围绕以下问题进行理论分析：\n\n当处理选择只由可观测协变量决定时，PSM 为什么可能有效？\n当存在时间不变的未观测异质性时，DID 为什么可能有效？\n当趋势差异依赖于 \\(X_i\\) 时，为什么 PSM-DID 可能优于未匹配 DID？\n当存在时间变化的未观测混淆时，为什么 PSM-DID 仍然可能失败？\n匹配会改变估计对象吗？你的 PSM-DID 估计更接近 ATE 还是 ATT？\n共同支持不足时，为什么偏误和方差都可能恶化？\n\n你的解释必须和模拟设计逐一对应。不要把理论部分写成泛泛的教材复述。",
     "crumbs": [
       "首页",
-      "课程信息",
-      "机器学习与因果推断"
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
     ]
   },
   {
-    "objectID": "index.html#在线资源",
-    "href": "index.html#在线资源",
-    "title": "学习资源",
-    "section": "在线资源",
-    "text": "在线资源\n\nScikit-Learn文档（Python机器学习库）\nISL-Python资源（《统计学习导论》Python库）\nISL-R资源（《统计学习导论》R库）\nEconML文档（微软）\nDoubleML文档\nCausalML (Uber)\n课程Gitee仓库",
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#任务四评价一篇使用-psm-did-的经济学论文",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#任务四评价一篇使用-psm-did-的经济学论文",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "任务四：评价一篇使用 PSM-DID 的经济学论文",
+    "text": "任务四：评价一篇使用 PSM-DID 的经济学论文\n请在主流中文或英文学术期刊中选择一篇使用 PSM-DID 的论文。论文可以来自经济学、金融、管理、公共政策、劳动、产业组织、环境经济学等相关领域。\n你的评价至少应包括：\n\n研究问题和处理变量是什么？\n作者为什么使用 PSM-DID，而不是只用 PSM 或 DID？\n匹配变量是否都是处理前变量？\n是否报告共同支持和平衡性检验？\nDID 的平行趋势假设是否可信？作者如何检验？\n是否存在不可观测的时间变化混淆或政策同时发生的问题？\n估计结果更接近 ATE 还是 ATT？\n根据你的模拟经验，这篇论文的识别策略最可能在哪些条件下可信，在哪些条件下脆弱？\n\n请完整列出论文引用信息。",
     "crumbs": [
       "首页",
-      "课程信息",
-      "机器学习与因果推断"
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
     ]
   },
   {
-    "objectID": "index.html#开始学习",
-    "href": "index.html#开始学习",
-    "title": "学习资源",
-    "section": "开始学习",
-    "text": "开始学习\n\n\n📊 第一讲\n\n\n📊 第二讲\n\n\n📊 第三讲\n\n\n📊 第四讲\n\n\n📊 第五讲\n\n\n📊 第六讲\n\n\n📊 第七讲\n\n\n📊 第八讲\n\n\n📊 第九讲\n\n\n📊 第十讲\n\n\n📊 第十一讲\n\n\n📊 第十二讲",
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#提交内容",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#提交内容",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "提交内容",
+    "text": "提交内容\n请将全部材料推送到 GitHub 或 Gitee 仓库，并提交你的仓库克隆地址。仓库中应至少包含：\n\n研究报告\nMarkdown 格式，建议 3000-5000 字。报告应包含问题背景、模拟设计、结果展示、理论解释、文献评价和结论。可以同时导出 PDF 或 Word 作为补充，但 Markdown 文件是必交材料。\n可复现代码\nStata do 文件、R 脚本、R Markdown、Python 脚本或 Jupyter Notebook 均可。代码必须能够从头生成模拟数据、运行估计并输出主要图表。\n结果图表\n如果图表已经包含在报告中，可以不单独提交；否则请放入 figures/ 文件夹。\n论文材料\n提交所评价论文的题名、作者、期刊、年份、DOI 或稳定链接。\nAI 工具使用记录\n如果使用人工智能工具辅助编程、写作、调试或文献梳理，请保留全流程记录。记录应包括你的关键 prompt、工具或 agent 的主要输出、你如何判断和修改这些输出，以及最终哪些内容被采纳。要求根据你的记录，读者可以基本复现当时的对话过程或 agent 操作结果。",
     "crumbs": [
       "首页",
-      "课程信息",
-      "机器学习与因果推断"
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
+    ]
+  },
+  {
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#评分标准",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#评分标准",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "评分标准",
+    "text": "评分标准\n\n\n\n\n\n\n\n\n项目\n权重\n评分要点\n\n\n\n\nMonte Carlo 设计\n25%\n数据生成过程清楚，真实效应明确，场景设计能对应方法假设\n\n\n方法实现\n20%\nPSM、DID、PSM-DID 实现正确，代码可复现，结果指标完整\n\n\n理论解释\n25%\n能严格解释模拟结果背后的识别逻辑、偏误来源和估计对象变化\n\n\n文献评价\n20%\n能结合 PSM-DID 假设评价论文适用性和可信度\n\n\n写作与呈现\n10%\n结构清晰，图表规范，引用完整，语言准确",
+    "crumbs": [
+      "首页",
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
+    ]
+  },
+  {
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#技术提示",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#技术提示",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "技术提示",
+    "text": "技术提示\nStata 可考虑使用 teffects psmatch、didregress、xtdidregress、reghdfe、psmatch2 或 kmatch。R 可考虑使用 MatchIt、fixest、tidyverse。Python 可考虑使用 pandas、numpy、statsmodels、scikit-learn。\n你可以自行实现最近邻匹配，也可以使用已有包。无论使用哪种方式，都必须说明匹配方法、卡尺或邻居数、是否放回匹配，以及如何处理共同支持。",
+    "crumbs": [
+      "首页",
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
+    ]
+  },
+  {
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#学术诚信",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#学术诚信",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "学术诚信",
+    "text": "学术诚信\n可以与同学讨论思路，但每位同学必须独立完成模拟设计、代码实现和报告写作。使用 AI 工具辅助编程或写作时，必须在报告末尾说明使用方式，并在仓库中提交完整 AI 使用记录。你需要对所有代码、结果解释和论文评价结论负责。\n严禁复制他人代码、报告或论文评价。引用论文、教材、网页和代码片段时必须标注来源。",
+    "crumbs": [
+      "首页",
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
+    ]
+  },
+  {
+    "objectID": "Assignments/assignment01_psm_did_monte_carlo.html#建议阅读",
+    "href": "Assignments/assignment01_psm_did_monte_carlo.html#建议阅读",
+    "title": "作业 1：用 Monte Carlo 模拟理解 PSM-DID",
+    "section": "建议阅读",
+    "text": "建议阅读\n\nRosenbaum, P. R., & Rubin, D. B. (1983). The central role of the propensity score in observational studies for causal effects.\nHeckman, J. J., Ichimura, H., & Todd, P. E. (1997). Matching as an econometric evaluation estimator.\nSmith, J. A., & Todd, P. E. (2005). Does matching overcome LaLonde’s critique of nonexperimental estimators?\nAngrist, J. D., & Pischke, J. S. (2009). Mostly Harmless Econometrics.\nCunningham, S. (2021). Causal Inference: The Mixtape.",
+    "crumbs": [
+      "首页",
+      "作业",
+      "作业1：PSM-DID Monte Carlo"
     ]
   },
   {
@@ -291,23 +288,11 @@
     ]
   },
   {
-    "objectID": "syllabus.html#更新日志",
-    "href": "syllabus.html#更新日志",
-    "title": "课程大纲",
-    "section": "更新日志",
-    "text": "更新日志\n\n\n\n日期\n更新内容\n\n\n\n\n2026-03-04\n网站上线，发布第一讲资料\n\n\n\n\n本大纲可能在学期中根据实际情况进行调整，最新版本以课程网站为准。",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "课程大纲"
-    ]
-  },
-  {
-    "objectID": "index.html#课程基本信息",
-    "href": "index.html#课程基本信息",
-    "title": "学习资源",
-    "section": "课程基本信息",
-    "text": "课程基本信息\n\n\n\n项目\n内容\n\n\n\n\n课程名称\n机器学习与因果推断\n\n\n英文名称\nMachine Learning and Causal Inference\n\n\n学分\n2学分\n\n\n授课时间\n周二 16:00-17:30\n\n\n授课地点\n明德商学楼 0207\n\n\n授课教师\n陈志远\n\n\n邮箱\nchenzhiyuan@rmbs.ruc.edu.cn\n\n\n办公室\n919\n\n\nOffice Hours\n邮件或微信预约",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "机器学习与因果推断",
+    "section": "",
+    "text": "用数据回答“为什么”",
     "crumbs": [
       "首页",
       "课程信息",
@@ -315,11 +300,35 @@
     ]
   },
   {
-    "objectID": "index.html#课程描述-1",
-    "href": "index.html#课程描述-1",
-    "title": "学习资源",
+    "objectID": "index.html#从相关性到因果性",
+    "href": "index.html#从相关性到因果性",
+    "title": "机器学习与因果推断",
+    "section": "",
+    "text": "用数据回答“为什么”",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "index.html#课程信息",
+    "href": "index.html#课程信息",
+    "title": "机器学习与因果推断",
+    "section": "课程信息",
+    "text": "课程信息\n\n\n\n基本信息\n\n课程名称: 机器学习与因果推断\n授课对象: 高年级本科生\n学分: 2学分\n时间: 周一 16：00-17：30\n地点: 明德商学楼0207\n学期: 2025-2026学年春季学期\n\n\n\n授课教师\n陈志远 中国人民大学商学院 助理教授（贸易经济系）\n\n📧 chenzhiyuan@rmbs.ruc.edu.cn\n🏢 办公室: 919\n🕒 Office Hours: 周四 14:00-15:00\n\n\n\n\n\n\n📎 讲义\n\n\n\n📋 课程大纲\n📝 作业1：PSM-DID Monte Carlo\n第一讲：课程导论 [课件] [详细讲义]\n第二讲：概率与回归基础 [课件] [详细讲义]\n第三讲：有向无环图 [课件] [详细讲义]\n第四讲：匹配与分层 [课件] [详细讲义]\n第五讲：工具变量法 [课件] [详细讲义]\n第六讲：面板数据与双重差分法 [课件] [详细讲义]\n第七讲：机器学习基础 I [课件] [详细讲义]\n第八讲：机器学习基础 II [课件] [详细讲义]\n第九讲：广义随机森林 [课件] [详细讲义]\n第十讲：因果森林 [课件] [详细讲义]\n第十一讲：双重机器学习 [课件] [详细讲义]\n第十二讲：因果推断与 AI [课件] [详细讲义]\n💻 课程代码仓库\n\n\n\n\n\n📢 最新公告\n\n\n2026-04-27 — 作业1已发布：用 Monte Carlo 模拟理解 PSM-DID。 📝 查看作业要求\n\n2026-06-09 — 第十二讲课件和详细讲义已发布！ 📊 课件：因果推断与 AI · 📖 详细讲义\n\n2026-06-02 — 第十一讲课件和详细讲义已发布！ 📊 课件：双重机器学习 · 📖 详细讲义\n\n2026-05-26 — 第十讲课件和详细讲义已发布！ 📊 课件：因果森林 · 📖 详细讲义\n\n2026-04-28 — 第九讲课件和详细讲义已发布！ 📊 课件：广义随机森林 · 📖 详细讲义\n\n2026-04-26 — 第八讲课件和详细讲义已发布！ 📊 课件：机器学习基础 II · 📖 详细讲义\n2026-04-19 — 第七讲课件和详细讲义已发布！ 📊 课件：机器学习基础 I · 📖 详细讲义\n2026-04-12 — 第六讲课件和详细讲义已发布！ 📊 课件：面板数据与双重差分法 · 📖 详细讲义\n2026-04-07 — 第五讲课件和详细讲义已发布！ 📊 课件：工具变量法 · 📖 详细讲义\n2026-03-30 — 第三、四讲课件和详细讲义已发布！ 📊 第四讲课件 · 📖 讲义 📊 第三讲课件 · 📖 讲义\n第一、二讲课件和详细讲义已发布！ 📊 第一讲课件 · 📖 讲义 📊 第二讲课件 · 📖 讲义",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "index.html#课程描述",
+    "href": "index.html#课程描述",
+    "title": "机器学习与因果推断",
     "section": "课程描述",
-    "text": "课程描述\n本课程旨在培养学生运用数据回答“为什么”的能力，系统介绍因果推断的理论基础与机器学习方法的结合。课程分为两大模块：\n模块一（前8周）：经典因果推断方法，包括潜在结果框架、匹配法、双重差分、合成控制法、工具变量法等经济学主流方法。\n模块二（后6周）：机器学习与因果推断的结合，包括广义随机森林、因果森林、双重机器学习等前沿方法。",
+    "text": "课程描述\n本课程系统介绍因果推断的理论基础与机器学习方法的结合，培养学生运用数据回答”为什么”的能力。课程分为两大模块：\n\n模块一：经典因果推断方法（前8周）\n\n\n\n周次\n主题\n核心内容\n\n\n\n\n1\n课程导论\n相关vs因果，潜在结果框架入门\n\n\n2-3\n因果推断基础\n潜在结果框架深入，混淆变量，识别策略\n\n\n4\n匹配法\n倾向得分匹配，精确匹配，重叠条件\n\n\n5-6\n双重差分\nDID原理，平行趋势检验，动态效应\n\n\n7\n合成控制法\n合成控制原理，安慰剂检验\n\n\n8\n工具变量法\nIV原理，2SLS，排他性约束\n\n\n\n\n\n模块二：机器学习与因果推断（后6周）\n\n\n\n周次\n主题\n核心内容\n\n\n\n\n9-10\nML基础\n回归，决策树，随机森林，交叉验证\n\n\n11-12\n广义随机森林\n异质性处理效应，置信区间\n\n\n13\n因果森林\n异质性分析，Policy Learning\n\n\n14\n双重机器学习\nDouble ML，Neyman正交性\n\n\n15-16\n项目答辩\n期末展示与点评",
     "crumbs": [
       "首页",
       "课程信息",
@@ -327,11 +336,11 @@
     ]
   },
   {
-    "objectID": "index.html#学习目标",
-    "href": "index.html#学习目标",
-    "title": "学习资源",
-    "section": "学习目标",
-    "text": "学习目标\n完成本课程后，学生应能够：\n\n理解相关性与因果性的区别，识别常见偏误来源\n掌握潜在结果框架的核心概念\n应用匹配法、DID、IV等方法进行因果效应估计\n使用机器学习方法估计异质性处理效应\n评估因果推断策略的合理性并进行稳健性检验\n独立完成一个应用研究项目",
+    "objectID": "index.html#为什么要学习因果推断",
+    "href": "index.html#为什么要学习因果推断",
+    "title": "机器学习与因果推断",
+    "section": "为什么要学习因果推断？",
+    "text": "为什么要学习因果推断？\n\n\n\n现实需求\n\n营销投入真的带来销量增长了吗？\n新产品上线真的提升了用户留存吗？\n培训项目真的提高了员工绩效吗？\n政策调整真的促进了经济发展吗？\n\n\n\n\n技术趋势\n\n🚀 AI时代的核心技能\n📊 数据驱动决策的标配\n🌍 学术界与业界的通用语言\n💡 从“跑数据”到“洞察”的跃迁",
     "crumbs": [
       "首页",
       "课程信息",
@@ -339,11 +348,11 @@
     ]
   },
   {
-    "objectID": "index.html#考核方式",
-    "href": "index.html#考核方式",
-    "title": "学习资源",
-    "section": "考核方式",
-    "text": "考核方式\n\n\n\n考核项目\n占比\n说明\n\n\n\n\n平时表现\n10%\n出勤率 + 课堂参与\n\n\n作业（4次）\n40%\n理论题 + 编程实践\n\n\n期末项目\n50%\n小组研究项目 + 课堂答辩\n\n\n\n\n作业安排\n\n作业1（第7周）：因果推断方法工具实践大作业\n作业2（第14周）：机器学习方法工具实践大作业\n\n\n\n期末项目\n\n组队：3-4人一组\n选题：选择真实商业或政策问题，应用课程方法进行分析\n要求：\n\n提交研究报告（3000-5000字）\n课堂展示（15分钟 + 5分钟问答）\n提供可复现的代码和数据",
+    "objectID": "index.html#课程特色",
+    "href": "index.html#课程特色",
+    "title": "机器学习与因果推断",
+    "section": "课程特色",
+    "text": "课程特色\n\n\n\n🤖 AI辅助编程\n传统编程与Vibe Coding结合，提升学习效率\n\n\n\n\n🐍 Python + R\n双语言实践，覆盖主流数据科学生态\n\n\n\n\n📚 理论与实践\n经典方法与前沿ML方法并重，案例驱动",
     "crumbs": [
       "首页",
       "课程信息",
@@ -351,23 +360,11 @@
     ]
   },
   {
-    "objectID": "index.html#课程安排",
-    "href": "index.html#课程安排",
-    "title": "学习资源",
-    "section": "课程安排",
-    "text": "课程安排\n\n模块一：经典因果推断方法\n\n\n\n\n\n\n\n\n\n\n周次\n日期\n主题\n内容要点\n阅读材料\n\n\n\n\n1\n3/3\n课程导论\n相关vs因果，课程框架，潜在结果框架入门\nMHE Ch.1-2\n\n\n2\n3/10\n潜在结果框架\n因果效应定义，识别假设，随机实验\nMHE Ch.2\n\n\n3\n3/17\n观察性研究\n条件独立假设，重叠条件，反事实预测\nMHE Ch.3\n\n\n4/5\n3/24, 3/31\n匹配法\n倾向得分匹配，精确匹配，平衡检验\nMHE Ch.3, Mixtape Ch.5\n\n\n6\n4/7\n工具变量\nIV原理，2SLS，排他性约束，弱IV\nMHE Ch.4, Mixtape Ch.7\n\n\n7/8\n4/14, 4/21\n双重差分\n面板数据，交错DID，动态效应，稳健性检验，合成控制\nMixtape Ch. 8-10\n\n\n\n\n\n模块二：机器学习与因果推断\n\n\n\n\n\n\n\n\n\n\n周次\n日期\n主题\n内容要点\n阅读材料\n\n\n\n\n9\n5/5\nML基础I\n回归树，随机森林，交叉验证\nESL Ch.9, 15\n\n\n10\n5/12\nML基础II\n梯度提升，正则化，模型选择\nESL Ch.10\n\n\n11\n5/19\n广义随机森林\n异质性处理效应，置信区间，应用\nAthey & Wager (2019)\n\n\n12\n5/26\n因果森林\n异质性分析，Policy Learning\nAthey & Imbens (2016)\n\n\n13\n6/2\n双重机器学习\nNeyman正交性，去偏估计，高维控制\nChernozhukov et al. (2018)\n\n\n14\n6/9\n前沿专题\n因果推断与AI，大语言模型的应用\n前沿论文\n\n\n15\n6/16\n项目答辩\n小组展示与讨论\n-\n\n\n\nMHE = Mostly Harmless Econometrics, Mixtape = Causal Inference: The Mixtape, ESL = Elements of Statistical Learning, ACRE = Applied Causal Inference Powered by ML and AI",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
-  },
-  {
-    "objectID": "index.html#推荐教材-1",
-    "href": "index.html#推荐教材-1",
-    "title": "学习资源",
+    "objectID": "index.html#推荐教材",
+    "href": "index.html#推荐教材",
+    "title": "机器学习与因果推断",
     "section": "推荐教材",
-    "text": "推荐教材\n\n主要教材\n\nAngrist, J.D. & Pischke, J.S. (2020). 《基本无害的计量经济学》. 中文版.\n\nMostly Harmless Econometrics: An Empiricist’s Companion. 英文原版.\n\nHuntington-Klein, N. (2022). The Effect: An Introduction to Research Design and Causality. Routledge.\n\n在线阅读\n\nChernozhukov, V., Hansen, C., Kallus, N., Spindler, M., & Syrgkanis, V. (2024). Applied Causal Inference Powered by ML and AI.\n\n在线阅读\n\nJames, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An Introduction to Statistical Learning: with Applications in R. Springer.\n\n在线阅读\n\nJames, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An Introduction to Statistical Learning: with Applications in Python. Springer.\n\n\n\n参考书目\n\nCunningham, S. (2021). Causal Inference: The Mixtape. Yale University Press.\n\n在线阅读\n\nHastie, T., Tibshirani, R., & Friedman, J. (2009). The Elements of Statistical Learning (2nd ed.). Springer.\n\n免费PDF\n\nImbens, G.W. & Rubin, D.B. (2015). Causal Inference in Statistics, Social, and Biomedical Sciences. Cambridge University Press.",
+    "text": "推荐教材\n\nAngrist & Pischke (2020). 《基本无害的计量经济学》\nHuntington-Klein (2022). The Effect: An Introduction to Research Design and Causality\nChernozhukov et al. (2024). Applied Causal Inference Powered by ML and AI (在线阅读)\nCunningham (2021). Causal Inference: The Mixtape (在线阅读)\nJames, Witten, Hastie, Tibshirani, Taylor (2021). An Introduction to Statistical Learning: with Applications in Python (在线阅读)\nJames, Witten, Hastie, Tibshirani (2021). An Introduction to Statistical Learning: with Applications in R (在线阅读)",
     "crumbs": [
       "首页",
       "课程信息",
@@ -375,135 +372,90 @@
     ]
   },
   {
-    "objectID": "index.html#软件与工具",
-    "href": "index.html#软件与工具",
+    "objectID": "index.html#在线资源",
+    "href": "index.html#在线资源",
+    "title": "机器学习与因果推断",
+    "section": "在线资源",
+    "text": "在线资源\n\nScikit-Learn文档（Python机器学习库）\nISL-Python资源（《统计学习导论》Python库）\nISL-R资源（《统计学习导论》R库）\nEconML文档（微软）\nDoubleML文档\nCausalML (Uber)\n课程Gitee仓库",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "index.html#开始学习",
+    "href": "index.html#开始学习",
+    "title": "机器学习与因果推断",
+    "section": "开始学习",
+    "text": "开始学习\n\n\n📊 第一讲\n\n\n📊 第二讲\n\n\n📊 第三讲\n\n\n📊 第四讲\n\n\n📊 第五讲\n\n\n📊 第六讲\n\n\n📝 作业1\n\n\n📊 第七讲\n\n\n📊 第八讲\n\n\n📊 第九讲\n\n\n📊 第十讲\n\n\n📊 第十一讲\n\n\n📊 第十二讲",
+    "crumbs": [
+      "首页",
+      "课程信息",
+      "机器学习与因果推断"
+    ]
+  },
+  {
+    "objectID": "resources.html",
+    "href": "resources.html",
     "title": "学习资源",
-    "section": "软件与工具",
-    "text": "软件与工具\n\n编程语言\n\nPython: scikit-learn, pandas, numpy, matplotlib, econml, doubleml\nR: tidyverse, ggplot2, MatchIt, fixest, grf, DoubleML\n\n\n\n环境设置\n推荐使用以下方式之一：\n\n本地安装: Anaconda + Jupyter Notebook/Lab\n云端环境: Google Colab, Kaggle Notebooks\n版本控制: Git + GitHub/Gitee",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
+    "section": "",
+    "text": "Angrist, J.D. & Pischke, J.S. (2020)\n经济学因果推断的经典教材，语言通俗，案例丰富。重点阅读第1-5章。\n豆瓣链接\n\n\n\nHuntington-Klein, N. (2022)\n从研究设计的角度系统介绍因果推断，配有R和Stata代码。\n在线阅读\n\n\n\nChernozhukov et al. (2024)\n机器学习与因果推断结合的最新教材，免费在线阅读。\n在线阅读\n\n\n\n\n\nCunningham, S. (2021). Causal Inference: The Mixtape. 在线阅读\nImbens, G.W. & Rubin, D.B. (2015). Causal Inference in Statistics, Social, and Biomedical Sciences"
   },
   {
-    "objectID": "index.html#学术诚信",
-    "href": "index.html#学术诚信",
+    "objectID": "resources.html#推荐教材",
+    "href": "resources.html#推荐教材",
     "title": "学习资源",
-    "section": "学术诚信",
-    "text": "学术诚信\n\n作业可以讨论，但提交内容必须独立完成\n引用他人代码或成果必须明确标注来源\n抄袭（包括代码和文字）将导致该次作业零分\n期末项目鼓励团队合作，但需明确各成员贡献",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
+    "section": "",
+    "text": "Angrist, J.D. & Pischke, J.S. (2020)\n经济学因果推断的经典教材，语言通俗，案例丰富。重点阅读第1-5章。\n豆瓣链接\n\n\n\nHuntington-Klein, N. (2022)\n从研究设计的角度系统介绍因果推断，配有R和Stata代码。\n在线阅读\n\n\n\nChernozhukov et al. (2024)\n机器学习与因果推断结合的最新教材，免费在线阅读。\n在线阅读\n\n\n\n\n\nCunningham, S. (2021). Causal Inference: The Mixtape. 在线阅读\nImbens, G.W. & Rubin, D.B. (2015). Causal Inference in Statistics, Social, and Biomedical Sciences"
   },
   {
-    "objectID": "index.html#课程政策",
-    "href": "index.html#课程政策",
-    "title": "学习资源",
-    "section": "课程政策",
-    "text": "课程政策\n\n出勤\n\n出勤率计入平时成绩\n请假需提前邮件告知\n无故缺勤超过3次将影响平时成绩\n\n\n\n作业提交\n\n通过课程网站或指定平台提交\n截止日期后每迟交一天扣10%\n迟交超过3天不予接受（特殊情况除外）\n\n\n\n答疑\n\nOffice Hours: 邮件或微信预约\n邮件: 通常24小时内回复\n讨论区: 课程网站设有讨论区，鼓励同学互助\n\n\n本大纲可能在学期中根据实际情况进行调整，最新版本以课程网站为准。",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
-  },
-  {
-    "objectID": "index.html#推荐教材-2",
-    "href": "index.html#推荐教材-2",
-    "title": "学习资源",
-    "section": "推荐教材",
-    "text": "推荐教材\n\n主要教材（必读）\n\n《基本无害的计量经济学》\nAngrist, J.D. & Pischke, J.S. (2020)\n经济学因果推断的经典教材，语言通俗，案例丰富。重点阅读第1-5章。\n豆瓣链接\n\n\nThe Effect: An Introduction to Research Design and Causality\nHuntington-Klein, N. (2022)\n从研究设计的角度系统介绍因果推断，配有R和Stata代码。\n在线阅读\n\n\nApplied Causal Inference Powered by ML and AI\nChernozhukov et al. (2024)\n机器学习与因果推断结合的最新教材，免费在线阅读。\n在线阅读\n\n\n\n参考书目\n\nCunningham, S. (2021). Causal Inference: The Mixtape. 在线阅读\nImbens, G.W. & Rubin, D.B. (2015). Causal Inference in Statistics, Social, and Biomedical Sciences",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
-  },
-  {
-    "objectID": "index.html#在线资源-1",
-    "href": "index.html#在线资源-1",
+    "objectID": "resources.html#在线资源",
+    "href": "resources.html#在线资源",
     "title": "学习资源",
     "section": "在线资源",
-    "text": "在线资源\n\nPython库\n\n\n\n库名\n用途\n文档链接\n\n\n\n\nEconML\n微软开发的因果推断ML库\n文档\n\n\nDoubleML\n双重机器学习实现\n文档\n\n\nCausalML\nUber开发的因果ML库\n文档\n\n\nDoWhy\n因果推理端到端框架\n文档\n\n\nstatsmodels\n传统计量经济学方法\n文档\n\n\n\n\n\nR包\n\n\n\n包名\n用途\n文档链接\n\n\n\n\nMatchIt\n倾向得分匹配\nCRAN\n\n\nfixest\n固定效应估计\n文档\n\n\ngrf\n广义随机森林\nCRAN\n\n\nDoubleML\n双重机器学习\n文档\n\n\nrdrobust\n断点回归\nCRAN\n\n\n\n\n\n在线课程\n\nHarvard Gov 2003: 因果推断研究生课程\nStanford Econ 293: 机器学习与因果推断\nFast.ai: Practical Deep Learning for Coders（第2部分涉及因果推断）\n\n\n\n博客与文章\n\nAndrew Gelman’s Blog: Statistical Modeling, Causal Inference, and Social Science\nScott Cunningham’s Substack: Causal Inference with C",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
+    "text": "在线资源\n\nPython库\n\n\n\n库名\n用途\n文档链接\n\n\n\n\nEconML\n微软开发的因果推断ML库\n文档\n\n\nDoubleML\n双重机器学习实现\n文档\n\n\nCausalML\nUber开发的因果ML库\n文档\n\n\nDoWhy\n因果推理端到端框架\n文档\n\n\nstatsmodels\n传统计量经济学方法\n文档\n\n\n\n\n\nR包\n\n\n\n包名\n用途\n文档链接\n\n\n\n\nMatchIt\n倾向得分匹配\nCRAN\n\n\nfixest\n固定效应估计\n文档\n\n\ngrf\n广义随机森林\nCRAN\n\n\nDoubleML\n双重机器学习\n文档\n\n\nrdrobust\n断点回归\nCRAN\n\n\n\n\n\n在线课程\n\nHarvard Gov 2003: 因果推断研究生课程\nStanford Econ 293: 机器学习与因果推断\nFast.ai: Practical Deep Learning for Coders（第2部分涉及因果推断）\n\n\n\n博客与文章\n\nAndrew Gelman’s Blog: Statistical Modeling, Causal Inference, and Social Science\nScott Cunningham’s Substack: Causal Inference with C"
   },
   {
-    "objectID": "index.html#数据集资源",
-    "href": "index.html#数据集资源",
+    "objectID": "resources.html#数据集资源",
+    "href": "resources.html#数据集资源",
     "title": "学习资源",
     "section": "数据集资源",
-    "text": "数据集资源\n\n经典数据集\n\n\n\n数据集\n描述\n用途\n\n\n\n\nLaLonde (1986)\n就业培训项目评估\n匹配法教学\n\n\nCard & Krueger (1994)\n最低工资对就业的影响\nDID教学\n\n\nAbadie et al. (2010)\n加州控烟法案\n合成控制法\n\n\nAngrist & Evans (1998)\n家庭规模与劳动供给\nIV教学\n\n\n\n\n\n数据仓库\n\nKaggle: Datasets\nUCI Machine Learning Repository: Archive\nGoogle Dataset Search: Search\nOur World in Data: Data",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
+    "text": "数据集资源\n\n经典数据集\n\n\n\n数据集\n描述\n用途\n\n\n\n\nLaLonde (1986)\n就业培训项目评估\n匹配法教学\n\n\nCard & Krueger (1994)\n最低工资对就业的影响\nDID教学\n\n\nAbadie et al. (2010)\n加州控烟法案\n合成控制法\n\n\nAngrist & Evans (1998)\n家庭规模与劳动供给\nIV教学\n\n\n\n\n\n数据仓库\n\nKaggle: Datasets\nUCI Machine Learning Repository: Archive\nGoogle Dataset Search: Search\nOur World in Data: Data"
   },
   {
-    "objectID": "index.html#软件安装指南",
-    "href": "index.html#软件安装指南",
+    "objectID": "resources.html#软件安装指南",
+    "href": "resources.html#软件安装指南",
     "title": "学习资源",
     "section": "软件安装指南",
-    "text": "软件安装指南\n\nPython环境\n# 推荐使用conda创建虚拟环境\nconda create -n ml-causal python=3.11\nconda activate ml-causal\n\n# 安装核心包\npip install numpy pandas matplotlib seaborn scikit-learn jupyter\n\n# 安装因果推断专用包\npip install econml doubleml causalml dowhy\n\n\nR环境\n# 安装核心包\ninstall.packages(c(\"tidyverse\", \"ggplot2\", \"fixest\", \"MatchIt\", \"grf\"))\n\n# 安装DoubleML\ninstall.packages(\"DoubleML\")\n\n\nJupyter Notebook\n推荐使用JupyterLab作为开发环境：\npip install jupyterlab\njupyter lab\n或使用VS Code + Jupyter插件。",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
+    "text": "软件安装指南\n\nPython环境\n# 推荐使用conda创建虚拟环境\nconda create -n ml-causal python=3.11\nconda activate ml-causal\n\n# 安装核心包\npip install numpy pandas matplotlib seaborn scikit-learn jupyter\n\n# 安装因果推断专用包\npip install econml doubleml causalml dowhy\n\n\nR环境\n# 安装核心包\ninstall.packages(c(\"tidyverse\", \"ggplot2\", \"fixest\", \"MatchIt\", \"grf\"))\n\n# 安装DoubleML\ninstall.packages(\"DoubleML\")\n\n\nJupyter Notebook\n推荐使用JupyterLab作为开发环境：\npip install jupyterlab\njupyter lab\n或使用VS Code + Jupyter插件。"
   },
   {
-    "objectID": "index.html#编程规范",
-    "href": "index.html#编程规范",
+    "objectID": "resources.html#编程规范",
+    "href": "resources.html#编程规范",
     "title": "学习资源",
     "section": "编程规范",
-    "text": "编程规范\n\nPython代码规范\n\n遵循PEP 8风格指南\n使用有意义的变量名\n添加文档字符串（docstrings）\n固定随机种子保证可重复性\n\nimport numpy as np\nimport pandas as pd\n\n# 固定随机种子\nnp.random.seed(42)\n\n# 清晰的变量名\ntreatment_effect = -2.0  # 真实处理效应\nconfounding_strength = 3.0  # 混淆强度\n\n# 添加注释\n# 生成混淆变量：疫情严重程度\nseverity = np.random.normal(0, 1, n_cities)\n\n\nR代码规范\n\n使用tidyverse风格\n管道操作符 |&gt;\n有意义的变量名\n固定随机种子\n\nlibrary(tidyverse)\n\n# 固定随机种子\nset.seed(42)\n\n# 使用管道和清晰命名\ndata &lt;- tibble(\n  severity = rnorm(n),\n  treatment = ifelse(severity &gt; 0, 1, 0)\n) |&gt;\n  mutate(\n    recovery = 10 + severity * 3 + treatment * true_effect\n  )",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
+    "text": "编程规范\n\nPython代码规范\n\n遵循PEP 8风格指南\n使用有意义的变量名\n添加文档字符串（docstrings）\n固定随机种子保证可重复性\n\nimport numpy as np\nimport pandas as pd\n\n# 固定随机种子\nnp.random.seed(42)\n\n# 清晰的变量名\ntreatment_effect = -2.0  # 真实处理效应\nconfounding_strength = 3.0  # 混淆强度\n\n# 添加注释\n# 生成混淆变量：疫情严重程度\nseverity = np.random.normal(0, 1, n_cities)\n\n\nR代码规范\n\n使用tidyverse风格\n管道操作符 |&gt;\n有意义的变量名\n固定随机种子\n\nlibrary(tidyverse)\n\n# 固定随机种子\nset.seed(42)\n\n# 使用管道和清晰命名\ndata &lt;- tibble(\n  severity = rnorm(n),\n  treatment = ifelse(severity &gt; 0, 1, 0)\n) |&gt;\n  mutate(\n    recovery = 10 + severity * 3 + treatment * true_effect\n  )"
   },
   {
-    "objectID": "index.html#ai辅助工具",
-    "href": "index.html#ai辅助工具",
+    "objectID": "resources.html#ai辅助工具",
+    "href": "resources.html#ai辅助工具",
     "title": "学习资源",
     "section": "AI辅助工具",
-    "text": "AI辅助工具\n\n大语言模型\n\nClaude: claude.ai - 代码生成与解释\nChatGPT: chat.openai.com - 概念解释与讨论\nGitHub Copilot: IDE集成，自动补全代码\n\n\n\n使用建议\n\n明确提示：描述清楚数据结构和分析目标\n迭代优化：根据输出逐步调整提示词\n验证结果：始终验证AI生成代码的正确性\n理解原理：不要只复制代码，要理解背后的逻辑",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
+    "text": "AI辅助工具\n\n大语言模型\n\nClaude: claude.ai - 代码生成与解释\nChatGPT: chat.openai.com - 概念解释与讨论\nGitHub Copilot: IDE集成，自动补全代码\n\n\n\n使用建议\n\n明确提示：描述清楚数据结构和分析目标\n迭代优化：根据输出逐步调整提示词\n验证结果：始终验证AI生成代码的正确性\n理解原理：不要只复制代码，要理解背后的逻辑"
   },
   {
-    "objectID": "index.html#学术资源",
-    "href": "index.html#学术资源",
+    "objectID": "resources.html#学术资源",
+    "href": "resources.html#学术资源",
     "title": "学习资源",
     "section": "学术资源",
-    "text": "学术资源\n\n顶级期刊\n\nEconometrica: 计量经济学顶级期刊\nJournal of Political Economy: 经济学综合顶刊\nReview of Economic Studies: 理论与实证并重\nJournal of Econometrics: 计量方法专刊\nJournal of Machine Learning Research: 机器学习顶刊\n\n\n\n预印本平台\n\narXiv: stat.ML, econ.EM\nSSRN: 社会科学研究网络\n\n\n\n学术搜索引擎\n\nGoogle Scholar: scholar.google.com\nEconPapers: econpapers.repec.org\nJSTOR: 经济学历史文献",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
+    "text": "学术资源\n\n顶级期刊\n\nEconometrica: 计量经济学顶级期刊\nJournal of Political Economy: 经济学综合顶刊\nReview of Economic Studies: 理论与实证并重\nJournal of Econometrics: 计量方法专刊\nJournal of Machine Learning Research: 机器学习顶刊\n\n\n\n预印本平台\n\narXiv: stat.ML, econ.EM\nSSRN: 社会科学研究网络\n\n\n\n学术搜索引擎\n\nGoogle Scholar: scholar.google.com\nEconPapers: econpapers.repec.org\nJSTOR: 经济学历史文献"
   },
   {
-    "objectID": "index.html#联系我们",
-    "href": "index.html#联系我们",
+    "objectID": "resources.html#联系我们",
+    "href": "resources.html#联系我们",
     "title": "学习资源",
     "section": "联系我们",
-    "text": "联系我们\n如有资源推荐或链接失效，请通过以下方式联系：\n\n📧 邮箱: chenzhiyuan@rmbs.ruc.edu.cn\n🏢 办公室: 919\n🕒 Office Hours: 周四 14:00-15:00",
-    "crumbs": [
-      "首页",
-      "课程信息",
-      "机器学习与因果推断"
-    ]
+    "text": "联系我们\n如有资源推荐或链接失效，请通过以下方式联系：\n\n📧 邮箱: chenzhiyuan@rmbs.ruc.edu.cn\n🏢 办公室: 919\n🕒 Office Hours: 周四 14:00-15:00"
   }
 ]

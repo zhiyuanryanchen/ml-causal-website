@@ -41,6 +41,7 @@ date: "2026-03-05"
 <div class="info-panel-body">
 
 - [📋 课程大纲](syllabus.qmd)
+- [📝 作业1：PSM-DID Monte Carlo](Assignments/assignment01_psm_did_monte_carlo.qmd)
 - 第一讲：课程导论 [[课件](Quarto/lecture01_intro.html)] [[详细讲义](Quarto/lecture01_notes.html)]
 - 第二讲：概率与回归基础 [[课件](Quarto/lecture02_probability_regression.html)] [[详细讲义](Quarto/lecture02_probability_regression_notes.html)]
 - 第三讲：有向无环图 [[课件](Quarto/lecture03_dags.html)] [[详细讲义](Quarto/lecture03_dags_notes.html)]
@@ -61,6 +62,11 @@ date: "2026-03-05"
 <details class="info-panel">
 <summary class="info-panel-header">📢 最新公告</summary>
 <div class="info-panel-body">
+
+**2026-04-27** — 作业1已发布：用 Monte Carlo 模拟理解 PSM-DID。
+📝 [查看作业要求](Assignments/assignment01_psm_did_monte_carlo.qmd)
+
+---
 
 **2026-06-09** — 第十二讲课件和详细讲义已发布！
 📊 [课件：因果推断与 AI](Quarto/lecture12_ai_workflow.html) · 📖 [详细讲义](Quarto/lecture12_ai_workflow_notes.html)
@@ -226,6 +232,10 @@ date: "2026-03-05"
 
 ::: {.learning-grid-item}
 [📊 第六讲](Quarto/lecture06_panel_did.html){.btn .btn-primary .course-start-btn}
+:::
+
+::: {.learning-grid-item}
+[📝 作业1](Assignments/assignment01_psm_did_monte_carlo.qmd){.btn .btn-secondary .course-start-btn}
 :::
 
 ::: {.learning-grid-item}
